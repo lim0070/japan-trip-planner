@@ -246,7 +246,8 @@ export function estimate(a, b, mode) {
       train: [1.3, 45, 20],
       drive: [1.35, 35, 10],
     }[mode];
-  return Math.ceil(((km * detour) / speed) * 60 + allowance);
+  const minutes = Math.ceil(((km * detour) / speed) * 60 + allowance);
+  return minutes > 10080 ? null : minutes;
 }
 export const segmentKey = (x) =>
   [x.tripId, x.fromStopId, x.toStopId, x.mode].join("|");

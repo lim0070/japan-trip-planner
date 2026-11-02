@@ -81,6 +81,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -122,6 +127,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:24:47.427431+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1105/A110501/11020450/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1105/A110501/11020450/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -182,6 +201,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -231,6 +255,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:24:51.171182+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130101/13181414/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130101/13181414/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -291,6 +329,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -340,6 +383,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:24:54.990299+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1304/A130401/13000760/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1304/A130401/13000760/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -395,6 +452,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -437,6 +499,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:24:58.705847+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1311/A131105/13018604/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1311/A131105/13018604/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -492,6 +568,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -533,6 +614,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:02.437908+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tochigi/A0901/A090101/9003113/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tochigi/A0901/A090101/9003113/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -593,6 +688,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -642,6 +742,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:06.166927+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1314/A131401/13227953/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1314/A131401/13227953/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -697,6 +811,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -739,6 +858,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:09.895741+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131003/13000629/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131003/13000629/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -799,6 +932,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -848,6 +986,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:13.625507+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131004/13036030/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131004/13036030/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -903,6 +1055,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -945,6 +1102,20 @@
           "url": "https://tabelog.com/saitama/A1101/A110103/11000476/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1101/A110103/11000476/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1101/A110103/11000476/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -1000,6 +1171,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -1042,6 +1218,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:17.353661+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230103/23000374/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230103/23000374/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -1102,6 +1292,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -1151,6 +1346,20 @@
           "url": "https://tabelog.com/saitama/A1105/A110502/11001574/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1105/A110502/11001574/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1105/A110502/11001574/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -1206,6 +1415,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -1248,6 +1462,20 @@
           "url": "https://tabelog.com/tokyo/A1301/A130103/13162575/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130103/13162575/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130103/13162575/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -1303,6 +1531,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -1345,6 +1578,20 @@
           "url": "https://tabelog.com/tokyo/A1304/A130401/13234984/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1304/A130401/13234984/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1304/A130401/13234984/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -1400,6 +1647,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -1442,6 +1694,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:21.093892+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1302/A130204/13114085/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1302/A130204/13114085/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -1497,6 +1763,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -1539,6 +1810,20 @@
           "url": "https://tabelog.com/tokyo/A1312/A131201/13156107/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1312/A131201/13156107/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1312/A131201/13156107/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -1594,6 +1879,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -1636,6 +1926,20 @@
           "url": "https://tabelog.com/tokyo/A1321/A132103/13105083/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1321/A132103/13105083/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1321/A132103/13105083/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -1691,6 +1995,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -1733,6 +2042,20 @@
           "url": "https://tabelog.com/saitama/A1101/A110101/11000761/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1101/A110101/11000761/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1101/A110101/11000761/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -1788,6 +2111,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -1830,6 +2158,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:24.822243+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131002/13185500/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131002/13185500/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -1885,6 +2227,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -1926,6 +2273,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:28.629172+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1306/A130603/13224471/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1306/A130603/13224471/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -1986,6 +2347,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -2035,6 +2401,20 @@
           "url": "https://tabelog.com/tokyo/A1301/A130101/13200630/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130101/13200630/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130101/13200630/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -2090,6 +2470,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -2132,6 +2517,20 @@
           "url": "https://tabelog.com/saitama/A1102/A110202/11049204/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1102/A110202/11049204/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1102/A110202/11049204/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -2187,6 +2586,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -2229,6 +2633,20 @@
           "url": "https://tabelog.com/tokyo/A1323/A132305/13003783/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1323/A132305/13003783/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1323/A132305/13003783/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -2284,6 +2702,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -2326,6 +2749,20 @@
           "url": "https://tabelog.com/yamanashi/A1903/A190301/19000357/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/yamanashi/A1903/A190301/19000357/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/yamanashi/A1903/A190301/19000357/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -2386,6 +2823,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -2435,6 +2877,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:33.183511+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1302/A130201/13156494/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1302/A130201/13156494/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -2495,6 +2951,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -2544,6 +3005,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:36.922104+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1304/A130401/13125862/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1304/A130401/13125862/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -2599,6 +3074,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -2641,6 +3121,20 @@
           "url": "https://tabelog.com/saitama/A1101/A110102/11028299/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1101/A110102/11028299/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1101/A110102/11028299/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -2696,6 +3190,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -2737,6 +3236,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:40.752495+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1328/A132804/13080472/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1328/A132804/13080472/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -2792,6 +3305,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -2834,6 +3352,20 @@
           "url": "https://tabelog.com/saitama/A1105/A110504/11004153/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1105/A110504/11004153/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1105/A110504/11004153/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -2889,6 +3421,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -2931,6 +3468,20 @@
           "url": "https://tabelog.com/saitama/A1104/A110401/11004724/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1104/A110401/11004724/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1104/A110401/11004724/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -2986,6 +3537,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -3028,6 +3584,20 @@
           "url": "https://tabelog.com/tokyo/A1329/A132904/13025001/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1329/A132904/13025001/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1329/A132904/13025001/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -3083,6 +3653,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -3125,6 +3700,20 @@
           "url": "https://tabelog.com/tochigi/A0902/A090202/9001007/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tochigi/A0902/A090202/9001007/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tochigi/A0902/A090202/9001007/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -3180,6 +3769,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -3222,6 +3816,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:40.752837+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131004/13240246/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131004/13240246/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -3277,6 +3885,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -3319,6 +3932,20 @@
           "url": "https://tabelog.com/saitama/A1105/A110605/11017560/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1105/A110605/11017560/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1105/A110605/11017560/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -3374,6 +4001,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -3416,6 +4048,20 @@
           "url": "https://tabelog.com/yamanashi/A1903/A190301/19000136/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/yamanashi/A1903/A190301/19000136/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/yamanashi/A1903/A190301/19000136/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -3471,6 +4117,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -3513,6 +4164,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:44.577861+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1308/A130801/13024229/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1308/A130801/13024229/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -3568,6 +4233,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -3609,6 +4279,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:48.311454+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130103/13002602/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130103/13002602/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -3664,6 +4348,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -3706,6 +4395,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:52.106656+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130101/13104580/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130101/13104580/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -3761,6 +4464,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -3803,6 +4511,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:55.843510+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1314/A131401/13188754/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1314/A131401/13188754/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -3858,6 +4580,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -3900,6 +4627,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:25:59.566542+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1309/A130905/13032356/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1309/A130905/13032356/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -3955,6 +4696,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -3997,6 +4743,20 @@
           "url": "https://tabelog.com/saitama/A1104/A110403/11003505/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1104/A110403/11003505/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1104/A110403/11003505/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -4052,6 +4812,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -4094,6 +4859,20 @@
           "url": "https://tabelog.com/tokyo/A1328/A132805/13163619/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1328/A132805/13163619/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1328/A132805/13163619/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -4149,6 +4928,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -4190,6 +4974,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:04.670696+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130102/13044658/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1301/A130102/13044658/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -4245,6 +5043,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -4287,6 +5090,20 @@
           "url": "https://tabelog.com/tokyo/A1302/A130204/13216456/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1302/A130204/13216456/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1302/A130204/13216456/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -4342,6 +5159,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -4384,6 +5206,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:08.401395+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1316/A131601/13013189/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1316/A131601/13013189/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -4439,6 +5275,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -4481,6 +5322,20 @@
           "url": "https://tabelog.com/saitama/A1103/A110303/11033610/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110303/11033610/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110303/11033610/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -4536,6 +5391,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -4578,6 +5438,20 @@
           "url": "https://tabelog.com/saitama/A1106/A110602/11029324/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1106/A110602/11029324/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1106/A110602/11029324/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -4638,6 +5512,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -4687,6 +5566,20 @@
           "url": "https://tabelog.com/aichi/A2301/A230101/23039141/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230101/23039141/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230101/23039141/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -4747,6 +5640,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -4796,6 +5694,20 @@
           "url": "https://tabelog.com/saitama/A1106/A110602/11001573/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1106/A110602/11001573/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1106/A110602/11001573/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -4851,6 +5763,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -4893,6 +5810,20 @@
           "url": "https://tabelog.com/saitama/A1106/A110601/11026435/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1106/A110601/11026435/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1106/A110601/11026435/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -4953,6 +5884,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -5002,6 +5938,20 @@
           "url": "https://tabelog.com/tokyo/A1324/A132403/13022111/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1324/A132403/13022111/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1324/A132403/13022111/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -5057,6 +6007,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -5099,6 +6054,20 @@
           "url": "https://tabelog.com/saitama/A1103/A110303/11004160/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110303/11004160/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110303/11004160/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -5154,6 +6123,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -5195,6 +6169,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:12.130301+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1309/A130905/13095976/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1309/A130905/13095976/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -5250,6 +6238,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -5292,6 +6285,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:15.860511+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110302/11033420/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110302/11033420/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -5352,6 +6359,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -5401,6 +6413,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:15.861478+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1319/A131907/13018776/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1319/A131907/13018776/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -5461,6 +6487,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -5510,6 +6541,20 @@
           "url": "https://tabelog.com/tokyo/A1328/A132804/13087964/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1328/A132804/13087964/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1328/A132804/13087964/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -5565,6 +6610,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -5606,6 +6656,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:19.595321+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1306/A130602/13006991/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1306/A130602/13006991/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -5666,6 +6730,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -5715,6 +6784,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:19.595997+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/kanagawa/A1404/A140407/14061080/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/kanagawa/A1404/A140407/14061080/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -5770,6 +6853,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -5811,6 +6899,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:23.357318+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1315/A131504/13193378/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1315/A131504/13193378/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -5866,6 +6968,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -5908,6 +7015,20 @@
           "url": "https://tabelog.com/tokyo/A1320/A132002/13117283/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1320/A132002/13117283/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1320/A132002/13117283/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -5963,6 +7084,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -6004,6 +7130,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:27.087914+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230105/23013180/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230105/23013180/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -6059,6 +7199,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -6101,6 +7246,20 @@
           "url": "https://tabelog.com/tokyo/A1315/A131501/13142095/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1315/A131501/13142095/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1315/A131501/13142095/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -6156,6 +7315,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -6198,6 +7362,20 @@
           "url": "https://tabelog.com/saitama/A1103/A110302/11004258/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110302/11004258/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110302/11004258/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -6253,6 +7431,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -6295,6 +7478,20 @@
           "url": "https://tabelog.com/tokyo/A1323/A132304/13141130/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1323/A132304/13141130/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1323/A132304/13141130/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -6350,6 +7547,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -6391,6 +7593,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:30.819981+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1302/A130201/13015841/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1302/A130201/13015841/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -6446,6 +7662,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -6487,6 +7708,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:34.616468+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131002/13201863/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131002/13201863/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -6542,6 +7777,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -6583,6 +7823,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:38.362977+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230102/23007583/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230102/23007583/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -6638,6 +7892,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -6679,6 +7938,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:42.097725+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2305/A230504/23032890/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2305/A230504/23032890/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -6734,6 +8007,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -6775,6 +8053,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:45.820960+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1101/A110101/11005442/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1101/A110101/11005442/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -6830,6 +8122,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -6871,6 +8168,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:49.548137+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1319/A131904/13153065/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1319/A131904/13153065/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -6926,6 +8237,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -6967,6 +8283,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:53.334919+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1325/A132501/13126103/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1325/A132501/13126103/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -7022,6 +8352,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -7063,6 +8398,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:26:57.059485+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110303/11004070/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110303/11004070/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -7118,6 +8467,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -7159,6 +8513,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:00.970349+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1303/A130302/13045327/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1303/A130302/13045327/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -7214,6 +8582,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -7255,6 +8628,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:04.700857+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230110/23000050/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230110/23000050/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -7310,6 +8697,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -7351,6 +8743,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:08.430621+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1104/A110401/11005554/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1104/A110401/11005554/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -7406,6 +8812,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -7447,6 +8858,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:12.354953+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131002/13005072/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1310/A131002/13005072/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -7502,6 +8927,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -7543,6 +8973,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:16.086910+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230106/23001708/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230106/23001708/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -7598,6 +9042,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -7639,6 +9088,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:19.910775+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1305/A130501/13097934/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1305/A130501/13097934/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -7694,6 +9157,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -7735,6 +9203,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:23.625495+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1302/A130202/13193074/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1302/A130202/13193074/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -7790,6 +9272,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -7831,6 +9318,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:27.359170+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/yamanashi/A1903/A190301/19000243/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/yamanashi/A1903/A190301/19000243/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -7886,6 +9387,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -7927,6 +9433,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:31.102109+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1329/A132904/13022380/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1329/A132904/13022380/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -7982,6 +9502,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -8023,6 +9548,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:34.833676+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1304/A130402/13182646/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1304/A130402/13182646/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -8078,6 +9617,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -8119,6 +9663,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:38.555231+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1328/A132804/13149268/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1328/A132804/13149268/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -8174,6 +9732,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -8215,6 +9778,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:42.463305+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2306/A230601/23009617/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2306/A230601/23009617/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -8270,6 +9847,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -8311,6 +9893,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:46.196033+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/gifu/A2103/A210301/21000027/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/gifu/A2103/A210301/21000027/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -8366,6 +9962,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -8407,6 +10008,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:49.919362+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/yamanashi/A1903/A190301/19000359/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/yamanashi/A1903/A190301/19000359/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -8462,6 +10077,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -8503,6 +10123,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:53.640391+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110301/11022150/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110301/11022150/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -8558,6 +10192,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -8599,6 +10238,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:27:57.450027+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1106/A110601/11000460/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1106/A110601/11000460/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -8654,6 +10307,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -8696,6 +10354,20 @@
           "url": "https://tabelog.com/tokyo/A1305/A130503/13049983/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1305/A130503/13049983/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1305/A130503/13049983/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -8751,6 +10423,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -8792,6 +10469,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:28:01.211247+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1311/A131104/13042758/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1311/A131104/13042758/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -8847,6 +10538,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -8889,6 +10585,20 @@
           "url": "https://tabelog.com/tokyo/A1316/A131603/13111869/",
           "observedAt": "2026-11-02T00:24:43.265191+00:00",
           "note": "Visible address transcription; confidence describes transcription, not current operating status"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1316/A131603/13111869/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1316/A131603/13111869/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -8944,6 +10654,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -8985,6 +10700,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:28:04.954949+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230110/23013430/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/aichi/A2301/A230110/23013430/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -9040,6 +10769,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -9081,6 +10815,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:28:08.730764+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1321/A132103/13022818/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1321/A132103/13022818/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -9136,6 +10884,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -9177,6 +10930,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:28:12.460981+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1321/A132105/13095768/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1321/A132105/13095768/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -9232,6 +10999,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -9273,6 +11045,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:28:16.291547+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1311/A131106/13020252/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1311/A131106/13020252/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -9328,6 +11114,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -9369,6 +11160,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:28:20.135102+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110304/11017604/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1103/A110304/11017604/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -9424,6 +11229,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -9465,6 +11275,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:28:23.875648+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1329/A132901/13026307/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1329/A132901/13026307/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -9520,6 +11344,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -9561,6 +11390,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:28:27.611606+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1101/A110101/11004286/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/saitama/A1101/A110101/11004286/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -9616,6 +11459,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -9658,6 +11506,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:28:31.341040+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1317/A131701/13199054/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1317/A131701/13199054/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -9713,6 +11575,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -9754,6 +11621,20 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:28:35.074701+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1305/A130501/13003889/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1305/A130501/13003889/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     },
@@ -9809,6 +11690,11 @@
           "kind": "standalone",
           "label": "Open standalone map",
           "url": "https://japan-food-award-map-lm.wittycob1.chatgpt.site/"
+        },
+        {
+          "kind": "list",
+          "label": "食べログ うどん EAST 百名店 2024",
+          "url": "https://award.tabelog.com/hyakumeiten/udon_east/2024/"
         }
       ],
       "awards": [],
@@ -9850,10 +11736,24 @@
           "url": "https://msearch.gsi.go.jp/address-search/AddressSearch",
           "observedAt": "2026-11-02T00:28:38.858826+00:00",
           "note": "gsi"
+        },
+        {
+          "field": "membership_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1319/A131902/13156851/",
+          "observedAt": "2026-11-01",
+          "note": "Award membership check date; not venue status verification"
+        },
+        {
+          "field": "last_verified",
+          "sourceKind": "tabelog",
+          "url": "https://tabelog.com/tokyo/A1319/A131902/13156851/",
+          "observedAt": "2026-11-02",
+          "note": "Upstream record date; not a blanket verification of hours, status or entrance"
         }
       ]
     }
   ],
-  "datasetVersion": "sha256:af9bbe5f4a75b4e6489b0658de840a9584435a9c1438c755ef8eb039cd9c15bf",
-  "generatedAt": "2026-11-02T03:08:56.181805+00:00"
+  "datasetVersion": "sha256:92fab03fa3ef47f81a62c955820f788be24c3337ce1caa9e50776a6e0b5d34ba",
+  "generatedAt": "2026-11-02T03:28:51.463945+00:00"
 }
