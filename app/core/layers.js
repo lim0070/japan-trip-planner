@@ -1,3 +1,4 @@
+import { discoveryView } from "./shopping-aliases.js";
 import { filterPlaces } from "./model.js";
 export const layerId = (ns) =>
   ({ saunachelin: "sauna", tabelog: "food", shopping: "shopping" })[ns];
@@ -47,6 +48,7 @@ export function combineLayers(
   origins,
   scheduled,
   flags,
+  aliases = new Map(),
 ) {
   const rows = [],
     unknown = [],
@@ -54,12 +56,16 @@ export function combineLayers(
   for (const f of Object.values(feeds)) {
     const layer = layerId(f.source.namespace);
     if (!visibility[layer]) continue;
+    const view =
+      f.source.namespace === "shopping"
+        ? discoveryView(f, flags, scheduled, aliases)
+        : { feed: f, flags, scheduled };
     const result = filterPlaces(
-      f,
+      view.feed,
       filters[f.source.namespace],
       origins,
-      scheduled,
-      flags,
+      view.scheduled,
+      view.flags,
     );
     counts[layer] = {
       located: result.rows.length,
@@ -74,6 +80,10 @@ export function combineLayers(
 
 // Earlier saved preferences may omit Shopping. Only explicit booleans override defaults.
 export function layerPreferences(saved) {
-  return Object.fromEntries(["sauna", "food", "shopping"].map(id =>
-    [id, saved && typeof saved[id] === "boolean" ? saved[id] : true]));
+  return Object.fromEntries(
+    ["sauna", "food", "shopping"].map((id) => [
+      id,
+      saved && typeof saved[id] === "boolean" ? saved[id] : true,
+    ]),
+  );
 }

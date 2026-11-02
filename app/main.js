@@ -1,3 +1,8 @@
+import {
+  aliasIndex,
+  effectiveFlag,
+  setBranchFlag,
+} from "./core/shopping-aliases.js";
 import { zipFiles } from "./core/zip.js";
 import {
   combineLayers,
@@ -67,22 +72,34 @@ let discover = {
   open: false,
 };
 let controlsOpen = false;
-const sourceLoad = { saunachelin: "loading", tabelog: "loading", shopping: "loading" };
-let sourceLicenseTexts = {};
+const sourceLoad = {
+  saunachelin: "loading",
+  tabelog: "loading",
+  shopping: "loading",
+};
+let sourceLicenseTexts = {},
+  shoppingAliases = new Map();
 function backup(s, tripId = null) {
-  return {
-    ...makeBackup(s, tripId),
+  const data = {
+    ...makeBackup(s, tripId, shoppingAliases),
     dataLicenses: { ...(s.dataLicenses || {}), ...sourceLicenseTexts },
   };
+  parseJSON(JSON.stringify(data)); // Keep exports within the unchanged reimport guard.
+  return data;
 }
+
 const sourceFilters = {},
   selectedExport = new Map();
 let visibleLayers = layerPreferences();
 try {
-  visibleLayers = layerPreferences(JSON.parse(localStorage.getItem("japan-trip-layers") || "{}"));
+  visibleLayers = layerPreferences(
+    JSON.parse(localStorage.getItem("japan-trip-layers") || "{}"),
+  );
 } catch {}
 function saveLayers() {
-  try { localStorage.setItem("japan-trip-layers", JSON.stringify(visibleLayers)); } catch {}
+  try {
+    localStorage.setItem("japan-trip-layers", JSON.stringify(visibleLayers));
+  } catch {}
 }
 function filterFor(ns) {
   return (
@@ -919,6 +936,7 @@ function renderDiscover() {
     origins(),
     scheduled,
     state.flags,
+    shoppingAliases,
   );
   result.rows = combined.rows;
   result.unknown = combined.unknown;
@@ -1041,7 +1059,7 @@ function chips(key, values, selected) {
   return `<div class="filter-chips"><button data-chip="${key}" data-value="" aria-pressed="${!selected.length}">All</button>${values.map((v) => `<button data-chip="${key}" data-value="${esc(v)}" aria-pressed="${selected.includes(v)}">${esc(v)}</button>`).join("")}</div>`;
 }
 function card(p, km = null, local = null) {
-  const f = state.flags.find((x) => x.placeKey === p.key),
+  const f = effectiveFlag(state.flags, p.key, shoppingAliases),
     feed = Object.values(feeds).find((f) =>
       f.places.some((x) => x.key === p.key),
     ),
@@ -1053,7 +1071,7 @@ function card(p, km = null, local = null) {
     })
     .join(
       "",
-    )}</div>${p.operatingStatus.note ? `<p class="notice">${esc(p.operatingStatus.note)}</p>` : ""}${p.operatingStatus.value === "closed" ? '<p class="notice">Recorded closed — check the source notice before planning a visit.</p>' : ""}<p>${esc(p.address.ja || p.address.city || "Japanese address not supplied")}</p><span class="badge warn">${M.located(p) ? p.location.confidence + " confidence pin · check entrance" : "Location unknown"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${p.hoursText ? `<p>Hours reference: ${esc(p.hoursText)}</p>` : ""}<p class="muted">${p.hours ? "Structured hours available; checked against scheduled visits." : "Hours not checked."}</p>${p.reviewNotes.length ? `<details><summary>Location and source notes</summary><p>${esc(p.reviewNotes.join(" · "))}</p></details>` : ""}<label class="check"><input type="checkbox" data-export-key="${esc(p.key)}" ${selectedExport.has(p.key) ? "checked" : ""}>Select for Google Maps</label><p class="muted">${p.shopping ? esc(shoppingCategories[categoryFor(p.shopping.brandId)] + " · " + (Object.hasOwn(brands, p.shopping.brandId) ? brands[p.shopping.brandId] : p.shopping.brandId) + " · " + (Object.hasOwn(formats, p.shopping.formatId) ? formats[p.shopping.formatId] : p.shopping.formatId)) : p.key.startsWith("saunachelin:") ? "Sauna layer" : "Food layer"}</p><div class="actions"><button class="primary" data-action="add-place" data-id="${esc(p.key)}">Add to day</button><button data-action="save-place" data-id="${esc(p.key)}" aria-pressed="${!!f?.favourite}">${f?.favourite ? "★ Saved" : "☆ Save to Spots"}</button><button data-action="visited" data-id="${esc(p.key)}" aria-pressed="${!!f?.visited}">${f?.visited ? "✓ Visited" : "Visited"}</button>${M.located(p) ? `<button data-action="show-place" data-id="${esc(p.key)}">Show pin</button>` : ""}${local ? `<button data-action="edit-place" data-id="${local.id}">Edit saved place</button><button data-action="apply-saved" data-id="${local.id}">Apply to visits</button>` : ""}</div><details><summary>Source and navigation links</summary><div class="actions">${p.links.map((l) => (M.safeURL(l.url) ? `<a class="button" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : "")).join("")}<a class="button" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(M.name(p) + " " + (p.address.ja || p.address.city || ""))}" target="_blank" rel="noopener">Google Maps search</a></div><p>Standalone links open the source map; they do not select this place automatically.</p></details></article>`;
+    )}</div>${p.operatingStatus.note ? `<p class="notice">${esc(p.operatingStatus.note)}</p>` : ""}${p.operatingStatus.value === "closed" ? '<p class="notice">Recorded closed — check the source notice before planning a visit.</p>' : ""}<p>${esc(p.address.ja || p.address.city || "Japanese address not supplied")}</p><span class="badge warn">${M.located(p) ? p.location.confidence + " confidence pin · check entrance" : "Location unknown"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${p.hoursText ? `<p>Hours reference: ${esc(p.hoursText)}</p>` : ""}<p class="muted">${p.hours ? "Structured hours available; checked against scheduled visits." : "Hours not checked."}</p>${p.reviewNotes.length ? `<details><summary>Location and source notes</summary><p>${esc(p.reviewNotes.join(" · "))}</p></details>` : ""}<label class="check"><input type="checkbox" data-export-key="${esc(p.key)}" ${selectedExport.has(p.key) ? "checked" : ""}>Select for Google Maps</label><p class="muted">${p.shopping ? esc(shoppingCategories[categoryFor(p.shopping.brandId)] + " · " + (Object.hasOwn(brands, p.shopping.brandId) ? brands[p.shopping.brandId] : p.shopping.brandId) + " · " + (Object.hasOwn(formats, p.shopping.formatId) ? formats[p.shopping.formatId] : p.shopping.formatId)) : p.key.startsWith("saunachelin:") ? "Sauna layer" : "Food layer"}</p>${shoppingAliases.has(p.key) ? '<p class="muted">Saved and visited flags apply to this confirmed branch group; your separate visits stay unchanged.</p>' : ""}<div class="actions"><button class="primary" data-action="add-place" data-id="${esc(p.key)}">Add to day</button><button data-action="save-place" data-id="${esc(p.key)}" aria-pressed="${!!f?.favourite}">${f?.favourite ? "★ Saved" : "☆ Save to Spots"}</button><button data-action="visited" data-id="${esc(p.key)}" aria-pressed="${!!f?.visited}">${f?.visited ? "✓ Visited" : "Visited"}</button>${M.located(p) ? `<button data-action="show-place" data-id="${esc(p.key)}">Show pin</button>` : ""}${local ? `<button data-action="edit-place" data-id="${local.id}">Edit saved place</button><button data-action="apply-saved" data-id="${local.id}">Apply to visits</button>` : ""}</div><details><summary>Source and navigation links</summary><div class="actions">${p.links.map((l) => (M.safeURL(l.url) ? `<a class="button" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : "")).join("")}<a class="button" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(M.name(p) + " " + (p.address.ja || p.address.city || ""))}" target="_blank" rel="noopener">Google Maps search</a></div><p>Standalone links open the source map; they do not select this place automatically.</p></details></article>`;
 }
 function findPlace(key) {
   const local = state.places.find((x) => x.snapshot.key === key);
@@ -1498,7 +1516,7 @@ function renderSettings() {
       )
       .join(
         "",
-      )}<p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open once online, then in iPhone Safari choose Share → Add to Home Screen. The previously loaded app, bundled Discover data, trips and saved places work offline. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.2<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
+      )}<p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open once online, then in iPhone Safari choose Share → Add to Home Screen. The previously loaded app, bundled Discover data, trips and saved places work offline. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.3<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
   $("setting-theme").onchange = (e) =>
     commit((s) => (s.settings.theme = e.target.value));
   $("setting-mode").onchange = (e) =>
@@ -1808,10 +1826,10 @@ $("content").addEventListener("click", async (e) => {
       case "visited": {
         const p = findPlace(id),
           field = action === "visited" ? "visited" : "favourite",
-          value = !state.flags.find((f) => f.placeKey === id)?.[field];
+          value = !effectiveFlag(state.flags, id, shoppingAliases)[field];
         await commit((s) => {
           M.ensurePlace(s, p, sourceVersion(p));
-          M.flag(s, id, field, value);
+          setBranchFlag(s, id, field, value, shoppingAliases);
         });
         toast(
           value ? "Saved in this browser" : "Flag removed; trip visits kept.",
@@ -1900,12 +1918,15 @@ try {
       if (i === 2) config = r.value;
       else {
         feeds[r.value.value.source.namespace] = r.value.value;
-        sourceLoad[r.value.value.source.namespace] = r.value.error ? "cached" : "ready";
+        sourceLoad[r.value.value.source.namespace] = r.value.error
+          ? "cached"
+          : "ready";
         if (r.value.error)
           toast("Using previous source snapshot: " + r.value.error);
       }
     } else {
-      if (i < 2) sourceLoad[i === 0 ? "saunachelin" : "tabelog"] = "unavailable";
+      if (i < 2)
+        sourceLoad[i === 0 ? "saunachelin" : "tabelog"] = "unavailable";
       error(
         "Some source data is unavailable. Manual trip editing still works. " +
           r.reason.message,
@@ -1914,32 +1935,17 @@ try {
   });
   ready = true;
   render();
-  DB.feed("shopping", "../data/shopping.v1.json")
-    .then(async (result) => {
-      const response = await fetch("../data/shopping-LICENSES/index.json", {signal: AbortSignal.timeout(10000)});
-      if (!response.ok) throw Error("Shopping source notices unavailable");
-      const files = await response.json();
-      const notices = await Promise.all(
-        files.map(async (file) => {
-          if (!/^[A-Za-z0-9_.-]+$/.test(file))
-            throw Error("Invalid notice filename");
-          const r = await fetch("../data/shopping-LICENSES/" + file, {signal: AbortSignal.timeout(10000)});
-          if (!r.ok) throw Error("Shopping notice unavailable");
-          return [
-            "shopping-" + result.value.datasetVersion + "-" + file,
-            await r.text(),
-          ];
-        }),
-      );
-      sourceLicenseTexts = Object.fromEntries(notices);
-      feeds.shopping = result.value;
+  DB.shopping()
+    .then((result) => {
+      sourceLicenseTexts = result.notices;
+      shoppingAliases = aliasIndex(result.aliases);
+      feeds.shopping = result.feed;
       sourceLoad.shopping = result.error ? "cached" : "ready";
       if (screen === "discover" || screen === "settings") render();
     })
     .catch(() => {
       sourceLoad.shopping = "unavailable";
       if (screen === "discover") render();
-      /* Data and required notices must both load before this layer can be used. */
     });
   await serviceWorker();
 } catch (e) {
@@ -2004,12 +2010,27 @@ function originalApps() {
 }
 
 function layersHTML(counts) {
-  const layers = [["sauna", "saunachelin", "Saunas"], ["food", "tabelog", "Food"], ["shopping", "shopping", "Shopping"]];
-  return `<section class="layer-controls" aria-label="Visible map layers"><div class="toolbar"><h2>Map layers</h2><button data-action="show-all-layers">Show all three</button></div><p id="layer-help">Select any combination. Checked layers appear together on the map and in the list.</p><div class="layer-options">${layers.map(([id, ns, label]) => {
-    const status = sourceLoad[ns], feed = feeds[ns];
-    const detail = !feed ? (status === "loading" ? "Loading…" : "Unavailable — reload online") : !visibleLayers[id] ? `Off · ${feed.places.length.toLocaleString("en-US")} loaded` : `${counts[id]?.located || 0} map matches${counts[id]?.unknown ? ` · ${counts[id].unknown} without pins` : ""}${status === "cached" ? " · cached data" : ""}`;
-    return `<label class="layer-option"><span class="check"><input type="checkbox" data-layer="${id}" aria-describedby="layer-help layer-status-${id}" ${visibleLayers[id] ? "checked" : ""}>${label}</span><small id="layer-status-${id}" role="status">${esc(detail)}</small></label>`;
-  }).join("")}</div><p class="muted">Numbered itinerary stops stay visible even when these layers are off.</p><button data-action="export-selected">Google Maps · ${selectedExport.size} selected</button></section>`;
+  const layers = [
+    ["sauna", "saunachelin", "Saunas"],
+    ["food", "tabelog", "Food"],
+    ["shopping", "shopping", "Shopping"],
+  ];
+  return `<section class="layer-controls" aria-label="Visible map layers"><div class="toolbar"><h2>Map layers</h2><button data-action="show-all-layers">Show all three</button></div><p id="layer-help">Select any combination. Checked layers appear together on the map and in the list.</p><div class="layer-options">${layers
+    .map(([id, ns, label]) => {
+      const status = sourceLoad[ns],
+        feed = feeds[ns];
+      const detail = !feed
+        ? status === "loading"
+          ? "Loading…"
+          : "Unavailable — reload online"
+        : !visibleLayers[id]
+          ? `Off · ${feed.places.length.toLocaleString("en-US")} loaded`
+          : `${counts[id]?.located || 0} map matches${counts[id]?.unknown ? ` · ${counts[id].unknown} without pins` : ""}${status === "cached" ? " · cached data" : ""}`;
+      return `<label class="layer-option"><span class="check"><input type="checkbox" data-layer="${id}" aria-describedby="layer-help layer-status-${id}" ${visibleLayers[id] ? "checked" : ""}>${label}</span><small id="layer-status-${id}" role="status">${esc(detail)}</small></label>`;
+    })
+    .join(
+      "",
+    )}</div><p class="muted">Numbered itinerary stops stay visible even when these layers are off.</p><button data-action="export-selected">Google Maps · ${selectedExport.size} selected</button></section>`;
 }
 function shoppingFiltersHTML() {
   const ps = feeds.shopping?.places || [];

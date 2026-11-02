@@ -1,5 +1,7 @@
 import { blank } from "../core/model.js";
-import { validateState, verifyFeed } from "../core/contracts.js";
+import { loadBundle, readBounded } from "../core/shopping-bundle.js";
+import { emptyAliases, validateAliases } from "../core/shopping-aliases.js";
+import { validateState, verifyFeed, parseJSON } from "../core/contracts.js";
 let db,
   revision = 0;
 export function open() {
@@ -61,9 +63,9 @@ export function save(value) {
 export async function feed(namespace, path) {
   const old = await read("feeds", namespace);
   try {
-    const response = await fetch(path, {signal:AbortSignal.timeout(10000)});
-    if (!response.ok) throw Error("Source unavailable");
-    const fresh = await verifyFeed(await response.json());
+    const fresh = await verifyFeed(
+      parseJSON((await readBounded(path, 20 * 1024 * 1024)).text),
+    );
     if (fresh.source.namespace !== namespace)
       throw Error("Wrong source namespace");
     if (old?.current?.datasetVersion !== fresh.datasetVersion)
@@ -82,4 +84,84 @@ export async function feed(namespace, path) {
     if (old?.previous) return { value: old.previous, error: e.message };
     throw e;
   }
+}
+
+// A whole package (records + notices + aliases) is committed in one IDB transaction.
+// Never activate a feed before its licences or use mixed release members.
+export async function shopping(
+  bundlePath = "../data/shopping-bundle/shopping.bundle.v2.json",
+) {
+  const old = await read("feeds", "shopping-bundle");
+  let fresh,
+    error = null;
+  try {
+    fresh = await loadBundle(new URL(bundlePath, location.href));
+    validateAliases(
+      fresh.aliases,
+      fresh.feed,
+      old?.current?.aliases || emptyAliases(),
+    );
+  } catch (e) {
+    error = e.message;
+    if (old?.current) return { ...old.current, error };
+    if (old?.previous) return { ...old.previous, error };
+    fresh = await legacyShopping();
+  }
+  if (
+    old?.current?.manifest?.datasetVersion !== fresh.manifest?.datasetVersion ||
+    old?.current?.feed.datasetVersion !== fresh.feed.datasetVersion ||
+    !old?.current
+  ) {
+    try {
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction("feeds", "readwrite");
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+        tx.onabort = () =>
+          reject(tx.error || Error("Shopping activation aborted."));
+        tx.objectStore("feeds").put(
+          { current: fresh, previous: old?.current || old?.previous || null },
+          "shopping-bundle",
+        );
+      });
+    } catch (e) {
+      if (old?.current) return { ...old.current, error: e.message };
+      if (old?.previous) return { ...old.previous, error: e.message };
+      throw e;
+    }
+  }
+  return { ...fresh, error: fresh.manifest ? null : error };
+}
+async function legacyShopping() {
+  const feed = await verifyFeed(
+    parseJSON(
+      (await readBounded("../data/shopping.v1.json", 20 * 1024 * 1024)).text,
+    ),
+  );
+  if (feed.source.namespace !== "shopping")
+    throw Error("Wrong legacy shopping namespace");
+  const files = parseJSON(
+    (await readBounded("../data/shopping-LICENSES/index.json", 128 * 1024))
+      .text,
+  );
+  if (
+    !Array.isArray(files) ||
+    !files.length ||
+    files.length > 1000 ||
+    files.some(
+      (f) => typeof f !== "string" || !/^[A-Za-z0-9_-][A-Za-z0-9_.-]*$/.test(f),
+    ) ||
+    new Set(files).size !== files.length
+  )
+    throw Error("Invalid shopping notice inventory");
+  const notices = {};
+  let total = 0;
+  for (const file of files) {
+    const r = await readBounded("../data/shopping-LICENSES/" + file, 160000);
+    total += r.bytes;
+    if (total > 2 * 1024 * 1024 || r.text.length > 40000)
+      throw Error("Shopping notice limit");
+    notices["shopping-" + feed.datasetVersion + "-" + file] = r.text;
+  }
+  return { feed, aliases: emptyAliases(), notices, manifest: null };
 }

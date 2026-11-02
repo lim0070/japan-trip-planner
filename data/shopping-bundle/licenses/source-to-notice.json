@@ -1,0 +1,27 @@
+{
+  "sources": {
+    "Microsoft": [
+      "CDLA-Permissive-2.0.txt"
+    ],
+    "Overture": [
+      "CDLA-Permissive-2.0.txt"
+    ],
+    "Foursquare": [
+      "Apache-2.0.txt",
+      "Foursquare-NOTICE.txt"
+    ],
+    "AllThePlaces": [
+      "CC0 reference: https://creativecommons.org/publicdomain/zero/1.0/"
+    ],
+    "meta": [
+      "CDLA-Permissive-2.0.txt"
+    ]
+  },
+  "allRedistributedFiles": [
+    "README.txt",
+    "source-inventory.json",
+    "source-to-notice.json"
+  ],
+  "requiredVsConservative": "CDLA agreement text and Apache license/applicable NOTICE preservation are source requirements. Publishing all included notices together and the selected raw provenance source is conservative packaging for reproducibility; CC0 does not require attribution, retained voluntarily.",
+  "modifications": "Filtered and normalized Overture Places release; no official data scraped or OSM features mixed. One separately sourced brief operator closure fact is identified in feed provenance."
+}

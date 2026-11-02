@@ -59,6 +59,7 @@ const evidence = shape({
   observedAt: nullable((x) => date(x) || stamp(x)),
   note: ns,
 });
+export const validEvidence = evidence;
 const interval = shape({
   startMinute: (x) => integer(x, 0, 1439),
   endMinute: (x) => integer(x, 1, 2880),

@@ -5,25 +5,38 @@ import {
   digest,
   validateState,
 } from "./contracts.js";
-export function backup(s, tripId = null) {
+export function backup(s, tripId = null, aliases = new Map()) {
   const data = clone(s);
   delete data.imports;
   if (tripId) {
+    const allKeys = new Set([
+      ...s.places.map((p) => p.snapshot.key),
+      ...s.stops.map((x) => x.placeSnapshot.key),
+      ...s.places.map((p) => p.sourceRef?.key).filter(Boolean),
+    ]);
     data.trips = data.trips.filter((t) => t.id === tripId);
     data.days = data.days.filter((d) => d.tripId === tripId);
     data.stops = data.stops.filter((x) => x.tripId === tripId);
     data.segments = data.segments.filter((x) => x.tripId === tripId);
     const ids = new Set(data.stops.map((x) => x.placeId));
     data.places = data.places.filter((p) => ids.has(p.id));
-    const keys = new Set(data.places.map((p) => p.snapshot.key));
-    data.flags = data.flags.filter((f) => keys.has(f.placeKey));
+    const keys = new Set([
+      ...data.places.map((p) => p.snapshot.key),
+      ...data.stops.map((x) => x.placeSnapshot.key),
+      ...data.places.map((p) => p.sourceRef?.key).filter(Boolean),
+    ]);
+    for (const key of [...keys])
+      for (const member of aliases.get(key)?.memberKeys || []) keys.add(member);
+    data.flags = data.flags.filter(
+      (f) => keys.has(f.placeKey) || !allKeys.has(f.placeKey),
+    );
   }
   return {
     schemaVersion: 1,
     kind: tripId ? "trip" : "full",
     exportId: id(),
     exportedAt: now(),
-    appVersion: "2.1.0",
+    appVersion: "2.3.0",
     ...data,
   };
 }
