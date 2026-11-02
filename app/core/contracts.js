@@ -144,7 +144,7 @@ const basePlace = shape({
   sourceId: nonempty,
   ...fields,
   awards: array(award, 1000),
-  memberships: array(shape({ listId: nonempty, firstTimePick: bool }), 1000),
+  memberships: array(shape({ listId: nonempty, firstTimePick: nullable(bool) }), 1000),
   hallOfFame: nullable(
     shape({ inductedYear: nullable((y) => integer(y, 1900, 2200)) }),
   ),
