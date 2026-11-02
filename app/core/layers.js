@@ -71,3 +71,9 @@ export function combineLayers(
   rows.sort((a, b) => (a.km ?? Infinity) - (b.km ?? Infinity));
   return { rows, unknown, counts };
 }
+
+// Earlier saved preferences may omit Shopping. Only explicit booleans override defaults.
+export function layerPreferences(saved) {
+  return Object.fromEntries(["sauna", "food", "shopping"].map(id =>
+    [id, saved && typeof saved[id] === "boolean" ? saved[id] : true]));
+}
