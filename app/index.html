@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#246b72" />
+    <meta
+      name="description"
+      content="A local Japan trip notebook with itineraries, saved places and award-map discovery."
+    />
+    <title>旅のしおり · Japan Trip Planner</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon.svg" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="vendor/leaflet.css" />
+    <link rel="stylesheet" href="vendor/MarkerCluster.css" />
+    <link rel="stylesheet" href="vendor/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="vendor/leaflet.js" defer></script>
+    <script src="vendor/leaflet.markercluster.js" defer></script>
+    <script type="module" src="main.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to planner</a>
+    <header class="app-header">
+      <a class="identity" href="#trips"
+        ><span lang="ja">旅のしおり</span><small>Japan trip planner</small></a
+      ><span id="connection"></span
+      ><button id="theme" aria-label="Change colour theme">◐</button>
+    </header>
+    <div id="error" class="error" role="alert" hidden></div>
+    <div id="update" class="notice" hidden>
+      New version ready. <button id="update-now">Save and reload</button>
+    </div>
+    <main id="content" tabindex="-1">
+      <p class="loading">Opening your trip notebook…</p>
+    </main>
+    <nav class="bottom-nav" aria-label="Main">
+      <a href="#trips" data-tab="trips">Trips</a
+      ><a href="#day" data-tab="day">Itinerary</a
+      ><a href="#discover" data-tab="discover">Discover</a
+      ><a href="#spots" data-tab="spots">Saved spots</a
+      ><a href="#settings" data-tab="settings">Settings</a>
+    </nav>
+    <dialog id="dialog"><div id="dialog-body"></div></dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

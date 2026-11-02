@@ -1,0 +1,5810 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "namespace": "saunachelin",
+    "title": "SAUNACHELIN",
+    "standaloneUrl": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/",
+    "inputFiles": [
+      "saunachelin/data/saunas.json"
+    ],
+    "inputSha256": {
+      "saunachelin/data/saunas.json": "84cbceced5c6abbc9cb0ba4a490cba61bd3f9c23e442f3db6b1181178d1f3e0e"
+    },
+    "attribution": "Award facts from SAUNACHELIN; coordinates and addresses retain source provenance."
+  },
+  "lists": [],
+  "places": [
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-e87694949236",
+      "sourceId": "sauna-e87694949236",
+      "names": {
+        "ja": "ウェルビー 栄",
+        "en": "Wellbe Sakae",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "Sakae × Italian Cuisine × Anniversaries KITSUNE, 伊勢町通, 栄三丁目, 栄, 中区, 名古屋市, 愛知県, 460-0003, 日本",
+        "en": "3F, 3-13-12 Sakae, Naka-ku, Nagoya-shi, Aichi 460-0008",
+        "prefecture": "Aichi",
+        "city": "Nagoya",
+        "postalCode": "460-0008"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.1666060677125,
+        "lng": 136.905703154053,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.wellbe.co.jp/sakae/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2018"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2019"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/1.php"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/hall-of-fame/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2018,
+          "type": "ranked",
+          "rank": 1,
+          "title": null
+        },
+        {
+          "year": 2019,
+          "type": "ranked",
+          "rank": 4,
+          "title": null
+        },
+        {
+          "year": 2023,
+          "type": "ranked",
+          "rank": 1,
+          "title": null
+        },
+        {
+          "year": 2023,
+          "type": "hall_of_fame",
+          "rank": null,
+          "title": "殿堂入り"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": {
+        "inductedYear": 2023
+      },
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-6996c5a695d2",
+      "sourceId": "sauna-6996c5a695d2",
+      "names": {
+        "ja": "湯らっくす",
+        "en": "YULAX",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "湯らっくす, 722, 平成大通り, 平成二丁目, 春竹町春竹, 中央区, 熊本市, 熊本県, 860-0816, 日本",
+        "en": "722 Honjomachi, Chuo Ward, Kumamoto 860-0816",
+        "prefecture": "Kumamoto",
+        "city": "Kumamoto",
+        "postalCode": "860-0816"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 32.7853842923768,
+        "lng": 130.70228185232,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.yulax.info/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2018"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2019"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2020"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/hall-of-fame/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2018,
+          "type": "ranked",
+          "rank": 2,
+          "title": null
+        },
+        {
+          "year": 2019,
+          "type": "ranked",
+          "rank": 2,
+          "title": null
+        },
+        {
+          "year": 2020,
+          "type": "ranked",
+          "rank": 4,
+          "title": null
+        },
+        {
+          "year": 2020,
+          "type": "hall_of_fame",
+          "rank": null,
+          "title": "殿堂入り"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": {
+        "inductedYear": 2020
+      },
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-069fa8aba642",
+      "sourceId": "sauna-069fa8aba642",
+      "names": {
+        "ja": "ニューウイング",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "カプセルホテル ニューウィング, 牡丹橋通り, 江東橋三丁目, 江東橋, 墨田区, 東京, 130-0022, 日本",
+        "en": null,
+        "prefecture": "Tokyo",
+        "city": "Sumida",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.6940872,
+        "lng": 139.8129753,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "http://spa.new-wing.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2018"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2018,
+          "type": "ranked",
+          "rank": 3,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-4021c31ca749",
+      "sourceId": "sauna-4021c31ca749",
+      "names": {
+        "ja": "ニコーリフレ",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Hokkaido",
+        "city": "Sapporo",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.nikoh.info/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2018"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2019"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2018,
+          "type": "ranked",
+          "rank": 4,
+          "title": null
+        },
+        {
+          "year": 2019,
+          "type": "ranked",
+          "rank": 8,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-e060d8c40a37",
+      "sourceId": "sauna-e060d8c40a37",
+      "names": {
+        "ja": "marushin spa",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Tokyo",
+        "city": "Shibuya",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "http://marushinspa.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2018"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2018,
+          "type": "ranked",
+          "rank": 5,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed",
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-f01024c4d23f",
+      "sourceId": "sauna-f01024c4d23f",
+      "names": {
+        "ja": "Times SPA RESTA",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "タイムズ スパ・レスタ, 音羽池袋線, 東池袋一丁目, 東池袋, 豊島区, 東京, 170-0013, 日本",
+        "en": null,
+        "prefecture": "Tokyo",
+        "city": "Toshima",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.7287722,
+        "lng": 139.7174078,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "http://www.timesspa-resta.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2018"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2018,
+          "type": "ranked",
+          "rank": 6,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-69142000741b",
+      "sourceId": "sauna-69142000741b",
+      "names": {
+        "ja": "スカイスパYOKOHAMA",
+        "en": "SKYspa YOKOHAMA",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "POUR OVER, 12, 高島二丁目, 高島, 西区, 横浜市, 神奈川県, 231-0017, 日本",
+        "en": "Sky Building14F, 2−19−12, Takashima, Nishi Ward, Yokohama, Kanagawa 220-0011",
+        "prefecture": "Kanagawa",
+        "city": "Yokohama",
+        "postalCode": "220-0011"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.4647308397524,
+        "lng": 139.624638067769,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.skyspa.co.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2018"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2019"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2020"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/hall-of-fame/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2018,
+          "type": "ranked",
+          "rank": 7,
+          "title": null
+        },
+        {
+          "year": 2019,
+          "type": "ranked",
+          "rank": 6,
+          "title": null
+        },
+        {
+          "year": 2020,
+          "type": "ranked",
+          "rank": 5,
+          "title": null
+        },
+        {
+          "year": 2020,
+          "type": "hall_of_fame",
+          "rank": null,
+          "title": "殿堂入り"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": {
+        "inductedYear": 2020
+      },
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-303e3faa0282",
+      "sourceId": "sauna-303e3faa0282",
+      "names": {
+        "ja": "豊島園 庭の湯",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "豊島園 庭の湯, 豊島園通り, 練馬, 練馬区, 東京, 176-0001, 日本",
+        "en": null,
+        "prefecture": "Tokyo",
+        "city": "Nerima",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.743992,
+        "lng": 139.64797,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.seibu-leisure.co.jp/niwanoyu/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2018"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2018,
+          "type": "ranked",
+          "rank": 8,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-fbd2495b3a59",
+      "sourceId": "sauna-fbd2495b3a59",
+      "names": {
+        "ja": "舞浜ユーラシア",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "スパ&ホテル舞浜ユーラシア, 浦安市道幹線6号, 千鳥, 舞浜, 浦安市, 千葉県, 279-0032, 日本",
+        "en": null,
+        "prefecture": "Chiba",
+        "city": "Urayasu",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.6269736,
+        "lng": 139.8953052,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2018"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2018,
+          "type": "ranked",
+          "rank": 9,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source does not supply an official website URL",
+        "Source does not supply an official website URL"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-5a36f923714b",
+      "sourceId": "sauna-5a36f923714b",
+      "names": {
+        "ja": "THERMAL SPA S.WAVE",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Kanagawa",
+        "city": "Ooiso",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.my-spa.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2018"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2018,
+          "type": "ranked",
+          "rank": 10,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed",
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-846544644c13",
+      "sourceId": "sauna-846544644c13",
+      "names": {
+        "ja": "IZBA",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Fukuoka",
+        "city": "Munakata",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://izba-land.co.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2018"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2018,
+          "type": "ranked",
+          "rank": 11,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed",
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-3e2b9bbbd453",
+      "sourceId": "sauna-3e2b9bbbd453",
+      "names": {
+        "ja": "御船山楽園ホテル らかんの湯",
+        "en": "Mifuneyama Rakuen Hotel",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "御船山楽園ホテル, 国道34号, 東川登町大字永野, 武雄市, 佐賀県, 843-0233, 日本",
+        "en": "4100 Takeo-cho Takeo, Takeo-shi Saga 843-0022",
+        "prefecture": "Saga",
+        "city": "Takeo",
+        "postalCode": "843-0022"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 33.182710938564,
+        "lng": 130.016345696514,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.mifuneyama.co.jp/hotsprings_a.html"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2019"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2020"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/1.php"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/hall-of-fame/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2019,
+          "type": "ranked",
+          "rank": 1,
+          "title": null
+        },
+        {
+          "year": 2020,
+          "type": "ranked",
+          "rank": 1,
+          "title": null
+        },
+        {
+          "year": 2021,
+          "type": "ranked",
+          "rank": 1,
+          "title": null
+        },
+        {
+          "year": 2021,
+          "type": "hall_of_fame",
+          "rank": null,
+          "title": "殿堂入り"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": {
+        "inductedYear": 2021
+      },
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-a0aa44c18de4",
+      "sourceId": "sauna-a0aa44c18de4",
+      "names": {
+        "ja": "SaunaLab -サウナラボ-",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Aichi",
+        "city": "Nagoya",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "http://saunalab.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2019"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2019,
+          "type": "ranked",
+          "rank": 3,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-91fb1ce4fe72",
+      "sourceId": "sauna-91fb1ce4fe72",
+      "names": {
+        "ja": "おちあいろう 月の湯",
+        "en": "Ochiairo",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "伊東西伊豆線, 湯ケ島, 伊豆市, 静岡県, 410-3206, 日本",
+        "en": "1887-1 Yugashima, Izu, Shizuoka 410-3206",
+        "prefecture": "Shizuoka",
+        "city": "Izu",
+        "postalCode": "410-3206"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 34.8896844081854,
+        "lng": 138.927260084658,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.ochiairo.co.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2019"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2020"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/hall-of-fame/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2019,
+          "type": "ranked",
+          "rank": 5,
+          "title": null
+        },
+        {
+          "year": 2020,
+          "type": "ranked",
+          "rank": 7,
+          "title": null
+        },
+        {
+          "year": 2025,
+          "type": "ranked",
+          "rank": 7,
+          "title": null
+        },
+        {
+          "year": 2025,
+          "type": "hall_of_fame",
+          "rank": null,
+          "title": "殿堂入り"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": {
+        "inductedYear": 2025
+      },
+      "reviewNotes": [
+        "Source official URL also belongs to a different facility; verify link",
+        "Source official URL also belongs to a different facility; verify link"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-6ef16911ed33",
+      "sourceId": "sauna-6ef16911ed33",
+      "names": {
+        "ja": "東京ドーム天然温泉 スパ ラクーア",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Tokyo",
+        "city": "Bunkyo",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.laqua.jp/spa/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2019"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2019,
+          "type": "ranked",
+          "rank": 7,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-82db1f9e7dd0",
+      "sourceId": "sauna-82db1f9e7dd0",
+      "names": {
+        "ja": "琉球温泉 龍神の湯",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Okinawa",
+        "city": "Tomigusuku",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.resorts.co.jp/senaga/ryujinhotspring"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2019"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2019,
+          "type": "ranked",
+          "rank": 9,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-8aea58d17abd",
+      "sourceId": "sauna-8aea58d17abd",
+      "names": {
+        "ja": "洞爺湖万世閣ホテルレイクサイドテラス 月の湯",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Hokkaido",
+        "city": "To-yako",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.toyamanseikaku.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2019"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2019,
+          "type": "ranked",
+          "rank": 10,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-e12cc18bc85b",
+      "sourceId": "sauna-e12cc18bc85b",
+      "names": {
+        "ja": "The Sauna",
+        "en": "The Sauna",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "The Sauna, 古間停車場野尻線, 貫ノ木, 野尻, 信濃町, 上水内郡, 長野県, 389-1303, 日本",
+        "en": "379-2 Nojiriko, Shinano-cho, Kaminamizunai-gun, Nagano 389-1303",
+        "prefecture": "Nagano",
+        "city": "Nojiriko",
+        "postalCode": "389-1303"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 36.8256775732838,
+        "lng": 138.204693225291,
+        "availability": "located",
+        "confidence": "low",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://lampinc.co.jp/nojiriko/sauna/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2019"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/3.php"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/3.php"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/hall-of-fame/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2019,
+          "type": "ranked",
+          "rank": 11,
+          "title": null
+        },
+        {
+          "year": 2022,
+          "type": "ranked",
+          "rank": 3,
+          "title": null
+        },
+        {
+          "year": 2023,
+          "type": "ranked",
+          "rank": 3,
+          "title": null
+        },
+        {
+          "year": 2023,
+          "type": "hall_of_fame",
+          "rank": null,
+          "title": "殿堂入り"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": {
+        "inductedYear": 2023
+      },
+      "reviewNotes": [
+        "Printed prefecture/city not both confirmed by reverse boundary lookup",
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-f3e900534b53",
+      "sourceId": "sauna-f3e900534b53",
+      "names": {
+        "ja": "かるまる池袋",
+        "en": "Karumaru ikebukuro",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "かるまる, 劇場通り, 池袋二丁目, 池袋, 豊島区, 東京, 171-0014, 日本",
+        "en": null,
+        "prefecture": "Tokyo",
+        "city": "Ikebukuro",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.7323993,
+        "lng": 139.7085201,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://karumaru.jp/ikebukuro/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2020"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/3.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2020,
+          "type": "ranked",
+          "rank": 2,
+          "title": null
+        },
+        {
+          "year": 2021,
+          "type": "ranked",
+          "rank": 3,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-e9f74be94921",
+      "sourceId": "sauna-e9f74be94921",
+      "names": {
+        "ja": "ウェルビー福岡",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "ウェルビー福岡, はかた駅前通り, 住吉一丁目, 祇園町, 博多区, 福岡市, 福岡県, 812-0018, 日本",
+        "en": null,
+        "prefecture": "Fukuoka",
+        "city": "Fukuoka",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 33.591427,
+        "lng": 130.4110273,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.wellbe.co.jp/fukuoka/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2020"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2020,
+          "type": "ranked",
+          "rank": 3,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-1129c23ada5f",
+      "sourceId": "sauna-1129c23ada5f",
+      "names": {
+        "ja": "黄金湯",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "黄金湯, 四ツ目通り, 太平四丁目, 太平, 墨田区, 東京, 130-0012, 日本",
+        "en": null,
+        "prefecture": "Tokyo",
+        "city": "Sumida",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.7023032,
+        "lng": 139.81531,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://koganeyu.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2020"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2020,
+          "type": "ranked",
+          "rank": 6,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-1cb17436bd03",
+      "sourceId": "sauna-1cb17436bd03",
+      "names": {
+        "ja": "8HOTEL CHIGASAKI",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Kanagawa",
+        "city": "Chigasaki",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.ochiairo.co.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2020"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2020,
+          "type": "ranked",
+          "rank": 8,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source official URL also belongs to a different facility; verify link",
+        "No coordinate result; manual facility location needed",
+        "Source uses Latin-script name; Japanese name not supplied",
+        "Source official URL also belongs to a different facility; verify link"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-2c709697f55c",
+      "sourceId": "sauna-2c709697f55c",
+      "names": {
+        "ja": "森のスパリゾート 北海道ホテル",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Hokkaido",
+        "city": "Obihiro",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.hokkaidohotel.co.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2020"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2020,
+          "type": "ranked",
+          "rank": 9,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-14462d83ec3e",
+      "sourceId": "sauna-14462d83ec3e",
+      "names": {
+        "ja": "ume, sauna",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Nara",
+        "city": "Yamabe-gun",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2020"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2020,
+          "type": "ranked",
+          "rank": 10,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source does not supply an official website URL",
+        "No coordinate result; manual facility location needed",
+        "Source uses Latin-script name; Japanese name not supplied",
+        "Source does not supply an official website URL"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-9416e21209d1",
+      "sourceId": "sauna-9416e21209d1",
+      "names": {
+        "ja": "サウナスイートキャビン",
+        "en": null,
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Saitama",
+        "city": "Iruma-gun",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.ume-yamazoe.com/sauna"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2020"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2020,
+          "type": "ranked",
+          "rank": 11,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-3dbd54ea4acf",
+      "sourceId": "sauna-3dbd54ea4acf",
+      "names": {
+        "ja": "Kamakura hotel",
+        "en": "KAMAKURA HOTEL",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "Hotel Metropolitan Kamakura JR-EAST, 若宮大路, 小町一丁目, 鎌倉市, 神奈川県, 248-0006, 日本",
+        "en": null,
+        "prefecture": "Kanagawa",
+        "city": "Kamakura",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.3191033,
+        "lng": 139.5526248,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://kamakurahotel.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/11.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2021,
+          "type": "ranked",
+          "rank": 11,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-6aa4ef7b1e08",
+      "sourceId": "sauna-6aa4ef7b1e08",
+      "names": {
+        "ja": "朝日湯源泉ゆいる",
+        "en": "Yuiru",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Kanagawa",
+        "city": "Kawasaki",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "http://asahiyu1010.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/10.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2021,
+          "type": "ranked",
+          "rank": 10,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-c46e830efb6d",
+      "sourceId": "sauna-c46e830efb6d",
+      "names": {
+        "ja": "Hideaway sunset camp",
+        "en": "HIDEAWAY sunset camp",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "HIDEAWAY sunset camp, 国道202号, 福吉一丁目, 糸島市, 福岡県, 819-1631, 日本",
+        "en": null,
+        "prefecture": "Fukuoka",
+        "city": "Itoshima",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 33.5131917,
+        "lng": 130.099772,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://hideaway-sunsetcamp.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/9.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2021,
+          "type": "ranked",
+          "rank": 9,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-f1e28fa741a4",
+      "sourceId": "sauna-f1e28fa741a4",
+      "names": {
+        "ja": "Sea Sauna Shack",
+        "en": "Sea Sauna Shack",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Chiba",
+        "city": "Tateyama",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "http://sea-sauna-shack.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/8.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2021,
+          "type": "ranked",
+          "rank": 8,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed",
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-e5390b899f79",
+      "sourceId": "sauna-e5390b899f79",
+      "names": {
+        "ja": "SAUNAグリンピア",
+        "en": "Sauna grempia",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Kochi",
+        "city": "Kochi",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.grempia.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/7.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2021,
+          "type": "ranked",
+          "rank": 7,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-a9f6038c497b",
+      "sourceId": "sauna-a9f6038c497b",
+      "names": {
+        "ja": "Suiden terrasse",
+        "en": "SHONAI HOTEL SUIDEN TERRASSE",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "ショウナイホテル スイデンテラス, 1, 鶴岡市, 山形県, 997-0053, 日本",
+        "en": null,
+        "prefecture": "Yamagata",
+        "city": "Tsuruoka",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 38.7461424,
+        "lng": 139.8224564,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.suiden-terrasse.yamagata-design.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/6.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2021,
+          "type": "ranked",
+          "rank": 6,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-b81f267a4b3c",
+      "sourceId": "sauna-b81f267a4b3c",
+      "names": {
+        "ja": "サウナラボ神田",
+        "en": "SaunaLab kanda",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "SaunaLab Kanda, 神田警察通り, 神田錦町三丁目, 神田錦町, 千代田区, 東京, 102-0000, 日本",
+        "en": null,
+        "prefecture": "Tokyo",
+        "city": "Kanda",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.6922544,
+        "lng": 139.7596057,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "http://saunalab.jp/kanda/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/5.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2021,
+          "type": "ranked",
+          "rank": 5,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-1ca0dd0149cb",
+      "sourceId": "sauna-1ca0dd0149cb",
+      "names": {
+        "ja": "ソロサウナtune",
+        "en": "Solo Sauna tune",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Tokyo",
+        "city": "Kagurazaka",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.solosauna-tune.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/4.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2021,
+          "type": "ranked",
+          "rank": 4,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-4867a5730d70",
+      "sourceId": "sauna-4867a5730d70",
+      "names": {
+        "ja": "北こぶし知床 ホテル&リゾート",
+        "en": "Kitakobushi Shiretoko Hotel & Resort",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "北こぶし知床 ホテル＆リゾート, 国道334号, ウトロ東, ウトロ, 斜里町, 斜里郡, オホーツク総合振興局, 北海道, 北海道地方, 099-4352, 日本",
+        "en": "172 Utorohigashi, Shari, Shari District, Hokkaido 099-4355",
+        "prefecture": "Hokkaido",
+        "city": "Shiretoko",
+        "postalCode": "099-4355"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 44.0721796285341,
+        "lng": 144.99550402775,
+        "availability": "located",
+        "confidence": "low",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.shiretoko.co.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/2.php"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/4.php"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/hall-of-fame/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2021,
+          "type": "ranked",
+          "rank": 2,
+          "title": null
+        },
+        {
+          "year": 2022,
+          "type": "ranked",
+          "rank": 4,
+          "title": null
+        },
+        {
+          "year": 2024,
+          "type": "ranked",
+          "rank": 5,
+          "title": null
+        },
+        {
+          "year": 2024,
+          "type": "hall_of_fame",
+          "rank": null,
+          "title": "殿堂入り"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": {
+        "inductedYear": 2024
+      },
+      "reviewNotes": [
+        "Printed prefecture/city not both confirmed by reverse boundary lookup"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-a9f695e082bf",
+      "sourceId": "sauna-a9f695e082bf",
+      "names": {
+        "ja": "チームラボ & TikTok, チームラボリコネクト：アートとサウナ",
+        "en": "teamLab Reconnect",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": null,
+        "prefecture": "Tokyo",
+        "city": "Roppongi",
+        "postalCode": null
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://reconnect.teamlab.art/jp"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2021/facility/sp.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2021,
+          "type": "special",
+          "rank": null,
+          "title": "SP"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-da390bd51fb8",
+      "sourceId": "sauna-da390bd51fb8",
+      "names": {
+        "ja": "お風呂とサウナ PARADISE",
+        "en": "PARADISE",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "paradise, 牡丹橋通り, 江東橋三丁目, 江東橋, 墨田区, 東京, 130-0022, 日本",
+        "en": "5-23-16, Shiba, Minato-ku, Tokyo, 105-0014, Japan",
+        "prefecture": "Tokyo",
+        "city": "Mita",
+        "postalCode": "105-0014"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.6939139,
+        "lng": 139.8130726,
+        "availability": "located",
+        "confidence": "low",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://paradise-mita.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/11.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2022,
+          "type": "ranked",
+          "rank": 11,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Printed prefecture/city not both confirmed by reverse boundary lookup"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-e8ead679bf2c",
+      "sourceId": "sauna-e8ead679bf2c",
+      "names": {
+        "ja": "ザ ハイブ",
+        "en": "THE Hive",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": "18, Nitchuuwano, Tateyama-machi Nakaniikawa-gun , Toyama, 930-3213, Japan",
+        "prefecture": "Toyama",
+        "city": "Tateyama",
+        "postalCode": "930-3213"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://the-hive.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/10.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2022,
+          "type": "ranked",
+          "rank": 10,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-cd099c484122",
+      "sourceId": "sauna-cd099c484122",
+      "names": {
+        "ja": "サンカラホテル&スパ屋久島",
+        "en": "sankara hotel&spa",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": "553, Mugio, Yakushima-cho Kumage-gun , Kagoshima, 891-4402, Japan",
+        "prefecture": "Kagoshima",
+        "city": "Yakushima",
+        "postalCode": "891-4402"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.sankarahotel-spa.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/9.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2022,
+          "type": "ranked",
+          "rank": 9,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-f8329c57df27",
+      "sourceId": "sauna-f8329c57df27",
+      "names": {
+        "ja": "-サウナランド浅草-",
+        "en": "SAUNALAND ASAKUSA",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": "1-34-2, Asakusa, Taito-ku, Tokyo, 111-0032, Japan",
+        "prefecture": "Tokyo",
+        "city": "Asakusa",
+        "postalCode": "111-0032"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://seven-garden.com/ja/hotel/saunalandasakusa"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/8.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2022,
+          "type": "ranked",
+          "rank": 8,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-819e68f834e7",
+      "sourceId": "sauna-819e68f834e7",
+      "names": {
+        "ja": "SANAMANE",
+        "en": "SANAMANE  ［SAZAE］",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": "2182, yokofusegi, Naoshima-cho Kagawa-gun, Kagawa, 761-3110, Japan",
+        "prefecture": "Kagawa",
+        "city": "Naoshima",
+        "postalCode": "761-3110"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://sanamane.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/7.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2022,
+          "type": "ranked",
+          "rank": 7,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed",
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-5f6f0d8010c0",
+      "sourceId": "sauna-5f6f0d8010c0",
+      "names": {
+        "ja": "神戸サウナ＆スパ",
+        "en": "KOBE SAUNA & SPA",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "神戸サウナ&スパ, 生田北９６号線, 北長狭通二丁目, 中央区, 神戸市, 兵庫県, 650-0012, 日本",
+        "en": "2-2-10, Shimoyamatedori, Chuo-ku Kobe-shi, Hyogo, 650-0011, Japan",
+        "prefecture": "Hyogo",
+        "city": "Kobe",
+        "postalCode": "650-0011"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 34.6928466,
+        "lng": 135.1903693,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "http://www.kobe-sauna.co.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/6.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2022,
+          "type": "ranked",
+          "rank": 6,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-d095cd412bf9",
+      "sourceId": "sauna-d095cd412bf9",
+      "names": {
+        "ja": "エイトホテル湘南藤沢",
+        "en": "8HOTEL SHONAN FUJISAWA",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": "1-5, Kugenuma hanazawacho, Fujisawa-shi, Kanagawa, 251-0023, Japan",
+        "prefecture": "Kanagawa",
+        "city": "Fujisawa",
+        "postalCode": "251-0023"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://fujisawa.8hotel.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/5.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2022,
+          "type": "ranked",
+          "rank": 5,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-8dae2cd79390",
+      "sourceId": "sauna-8dae2cd79390",
+      "names": {
+        "ja": "サーマルクライムスタジオ富士",
+        "en": "Thermal Climb Studio Fuji",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": "3644,2255banchi, Suyama, Susono-shi, Shizuoka, 410-1231, Japan",
+        "prefecture": "Shizuoka",
+        "city": "Susono",
+        "postalCode": "410-1231"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.sauna-club.jp/institution"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/2.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2022,
+          "type": "ranked",
+          "rank": 2,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-39e70725fdf5",
+      "sourceId": "sauna-39e70725fdf5",
+      "names": {
+        "ja": "スパメッツァおおたか 竜泉寺の湯",
+        "en": "spa metsa Otaka",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": null,
+        "en": "1-15-1,Ootakanomorinishi, Nagareyama-shi, Chiba, 270-0127, Japan",
+        "prefecture": "Chiba",
+        "city": "Nagareyama",
+        "postalCode": "270-0127"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": null,
+        "lng": null,
+        "availability": "unknown",
+        "confidence": "low",
+        "method": null,
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.ryusenjinoyu.com/spametsaotaka/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/1.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2022,
+          "type": "ranked",
+          "rank": 1,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "No coordinate result; manual facility location needed"
+      ],
+      "provenance": []
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-9454d6c93eae",
+      "sourceId": "sauna-9454d6c93eae",
+      "names": {
+        "ja": "株式会社タマディック",
+        "en": "LUOVA SAUNA",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "株式会社タマディック, 25, 杉ノ町通, 丸の内三丁目, 新栄町, 中区, 名古屋市, 愛知県, 460-0002, 日本",
+        "en": "5-23-16, Shiba, Minato-ku, Tokyo, 105-0014, Japan",
+        "prefecture": "Aichi",
+        "city": "Nagoya",
+        "postalCode": "105-0014"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.1742942,
+        "lng": 136.8983154,
+        "availability": "located",
+        "confidence": "medium",
+        "method": "nominatim",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://tamadic.wixsite.com/luova-sauna"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2022/facility/sp.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2022,
+          "type": "special",
+          "rank": null,
+          "title": "特別賞"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source English address does not include stated prefecture; verify copied address",
+        "Source English address does not include stated prefecture; verify copied address"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-f4a6684532e4",
+      "sourceId": "sauna-f4a6684532e4",
+      "names": {
+        "ja": "パブリックハウス アンド サウナ 久米屋",
+        "en": "Public House and Sauna Kumeya",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "智頭勝田線, 中右手, 右手, 美作市, 岡山県, 707-0204, 日本",
+        "en": "156-1, Ute 156-1, Mimasaka-shi, Okayama 707-0204",
+        "prefecture": "Okayama",
+        "city": "Mimasaka",
+        "postalCode": "707-0204"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.1579295952923,
+        "lng": 134.239738446626,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "http://nakaute.com/nakaute_inn_sauna.html"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/11.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2023,
+          "type": "ranked",
+          "rank": 11,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-d8f17f4f56b5",
+      "sourceId": "sauna-d8f17f4f56b5",
+      "names": {
+        "ja": "ぬかとゆげ",
+        "en": "NUKA TO YUGE",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "峰山町杉谷, 峰山町, 京丹後市, 京都府, 627-0012, 日本",
+        "en": "941-1 Sugitani, Mineyama-cho, Kyotango City, Kyoto 627-0012",
+        "prefecture": "Kyoto",
+        "city": "Kyotango",
+        "postalCode": "627-0012"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.6250102207719,
+        "lng": 135.064324511744,
+        "availability": "located",
+        "confidence": "low",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://nuka-yuge.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/10.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2023,
+          "type": "ranked",
+          "rank": 10,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Printed prefecture/city not both confirmed by reverse boundary lookup"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-2dda5e417daf",
+      "sourceId": "sauna-2dda5e417daf",
+      "names": {
+        "ja": "寒の地獄旅館",
+        "en": "KAN NO JIGOKU RYOKAN",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "夢みる豚食堂, 田野, 九重町, 玖珠郡, 大分県, 879-4911, 日本",
+        "en": "257 Tano, Kokonoe-cho, Kusu-gun, Oita 879-4911",
+        "prefecture": "Oita",
+        "city": "Kokonoe",
+        "postalCode": "879-4911"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 33.1128351887285,
+        "lng": 131.226890225132,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "http://kannojigoku.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/9.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2023,
+          "type": "ranked",
+          "rank": 9,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-6694fa36c923",
+      "sourceId": "sauna-6694fa36c923",
+      "names": {
+        "ja": "亜熱帯サウナ",
+        "en": "ANETTAI SAUNA",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "亜熱帯サウナ, 県道84号名護本部線, 伊豆味, 本部町, 国頭郡, 沖縄県, 905-0221, 日本",
+        "en": "2599 Izumi, Motobu-cho, Kunigami-gun, Okinawa 905-0221",
+        "prefecture": "Okinawa",
+        "city": "Motobu",
+        "postalCode": "905-0221"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 26.6420529589624,
+        "lng": 127.952080178003,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.instagram.com/anettai_sauna/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/8.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2023,
+          "type": "ranked",
+          "rank": 8,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-51d13e76c135",
+      "sourceId": "sauna-51d13e76c135",
+      "names": {
+        "ja": "BOTANICAL POOL CLUB",
+        "en": "BOTANICAL POOL CLUB",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "字田子, 下佐久間, 鋸南町, 安房郡, 千葉県, 299-2115, 日本",
+        "en": "1510-2, Shimosakuma, Kyonan-cho, Awa-gun, Chiba, 299-2115, Japan",
+        "prefecture": "Chiba",
+        "city": "Kyonan",
+        "postalCode": "299-2115"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.1084440796315,
+        "lng": 139.84460909638,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://botanicalpoolclub.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/7.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2023,
+          "type": "ranked",
+          "rank": 7,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-55aabde16a41",
+      "sourceId": "sauna-55aabde16a41",
+      "names": {
+        "ja": "渋谷SAUNAS",
+        "en": "Shibuya SAUNAS",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "渋谷さくら坂, 桜丘町, 渋谷区, 東京, 150-0031, 日本",
+        "en": "18-9 Sakuragaoka-cho, Shibuya-ku, Tokyo 150-0031, Japan",
+        "prefecture": "Tokyo",
+        "city": "Shibuya",
+        "postalCode": "150-0031"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.6563144448377,
+        "lng": 139.700809052226,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://saunas-saunas.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/6.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2023,
+          "type": "ranked",
+          "rank": 6,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-4ca515db9691",
+      "sourceId": "sauna-4ca515db9691",
+      "names": {
+        "ja": "登別グランドホテル",
+        "en": "Noboribetsu Grand Hotel",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "祝いの宿 登別 グランド ホテル, 北海道道350号倶多楽湖公園線, 登別市, 白老郡, 胆振総合振興局, 北海道, 北海道地方, 059-0551, 日本",
+        "en": "154 Noboribetsu Onsen-cho, Noboribetsu-shi, Hokkaido 059-0551",
+        "prefecture": "Hokkaido",
+        "city": "Noboribetsu",
+        "postalCode": "059-0551"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 42.4921044192834,
+        "lng": 141.141857152983,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.nobogura.co.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/5.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2023,
+          "type": "ranked",
+          "rank": 5,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-c1d697a02288",
+      "sourceId": "sauna-c1d697a02288",
+      "names": {
+        "ja": "スパメッツァ仙台 竜泉寺の湯",
+        "en": "Spa Mezza Sendai Ryusenji no Yu",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "スパメッツァ仙台 竜泉寺の湯, 国道4号, あけの平一丁目, あけの平, 富谷市, 宮城県, 981-3329, 日本",
+        "en": "5-9, Osawa 2-chome, Izumi-ku, Sendai-shi, Miyagi 981-3137",
+        "prefecture": "Miyagi",
+        "city": "Izumi",
+        "postalCode": "981-3137"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 38.3532413244691,
+        "lng": 140.876859811867,
+        "availability": "located",
+        "confidence": "low",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://ryusenjinoyu.com/spametsasendai/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/4.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2023,
+          "type": "ranked",
+          "rank": 4,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Printed prefecture/city not both confirmed by reverse boundary lookup"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-6e8fec1bbf94",
+      "sourceId": "sauna-6e8fec1bbf94",
+      "names": {
+        "ja": "サウナ東京",
+        "en": "Sauna Tokyo",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "PASELA RESORTS, 赤坂みすじ通り, 赤坂三丁目, 赤坂, 港区, 東京, 107-0052, 日本",
+        "en": "13-4, Akasaka 3-chome, Minato City, Tokyo 107-0052",
+        "prefecture": "Tokyo",
+        "city": "Minato",
+        "postalCode": "107-0052"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.6734217343255,
+        "lng": 139.737664220434,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://sauna-tokyo.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/2.php"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/hall-of-fame/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2023,
+          "type": "ranked",
+          "rank": 2,
+          "title": null
+        },
+        {
+          "year": 2024,
+          "type": "ranked",
+          "rank": 2,
+          "title": null
+        },
+        {
+          "year": 2025,
+          "type": "ranked",
+          "rank": 2,
+          "title": null
+        },
+        {
+          "year": 2025,
+          "type": "hall_of_fame",
+          "rank": null,
+          "title": "殿堂入り"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": {
+        "inductedYear": 2025
+      },
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-f6a1c314b42a",
+      "sourceId": "sauna-f6a1c314b42a",
+      "names": {
+        "ja": "tower eleven onsen & sauna（エスコンフィールドHOKKAIDO内）",
+        "en": "tower eleven onsen & sauna (in ESCON Field HOKKAIDO)",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "エスコンフィールドHOKKAIDO, セントラルアベニュー, Fビレッジ, 共栄町, 北広島市, 石狩振興局, 北海道, 北海道地方, 061-1116, 日本",
+        "en": "3F TOWER11, 1 F-Village, Kitahiroshima-shi, Hokkaido 061-1116",
+        "prefecture": "Hokkaido",
+        "city": "Kita-Hiroshima",
+        "postalCode": "061-1116"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 42.9902153104652,
+        "lng": 141.551007139079,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.hkdballpark.com/activity/10/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2023/facility/sp.php"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2023,
+          "type": "special",
+          "rank": null,
+          "title": "SP"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-53c35c9d952c",
+      "sourceId": "sauna-53c35c9d952c",
+      "names": {
+        "ja": "泊まれるサウナ屋さん 品川サウナ",
+        "en": "Shinagawa Sauna",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "6, 大井一丁目, 大井, 品川区, 東京, 140-0005, 日本",
+        "en": "6-1 Ōi 1-Chome, Shinagawa City, Tokyo 140-0014",
+        "prefecture": "Tokyo",
+        "city": "Shinagawa",
+        "postalCode": "140-0014"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.607135412578515,
+        "lng": 139.73338548317952,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.shinagawa-sauna.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2024,
+          "type": "ranked",
+          "rank": 11,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-66494012f6d2",
+      "sourceId": "sauna-66494012f6d2",
+      "names": {
+        "ja": "塚原から風呂",
+        "en": "Tsukahara Karafuro",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "三木寒川線, 大字井戸, さぬき市, 木田郡, 香川県, 761-8281, 日本",
+        "en": "1050-4 Showa, Sanuki, Kagawa 769-2304",
+        "prefecture": "Kagawa",
+        "city": "Sanuki",
+        "postalCode": "769-2304"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 34.24821505221725,
+        "lng": 134.16614598801598,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://karaburo0.webnode.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2024,
+          "type": "ranked",
+          "rank": 10,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-2b1ff013201b",
+      "sourceId": "sauna-2b1ff013201b",
+      "names": {
+        "ja": "星野リゾート　青森屋",
+        "en": "Hoshino Resorts Aomoriya",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "星野リゾート 青森屋, 八戸野辺地線, 若葉三丁目, おいらせ町, 上北郡, 青森県, 033-0052, 日本",
+        "en": "5-6, Furumagiyama, Misawa, Aomori 033-8688",
+        "prefecture": "Aomori",
+        "city": "Misawa",
+        "postalCode": "033-8688"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 40.66193836664385,
+        "lng": 141.35540498155106,
+        "availability": "located",
+        "confidence": "low",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://hoshinoresorts.com/ja/hotels/aomoriya/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2024,
+          "type": "ranked",
+          "rank": 9,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Printed prefecture/city not both confirmed by reverse boundary lookup"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-6229f539d019",
+      "sourceId": "sauna-6229f539d019",
+      "names": {
+        "ja": "Hiki stargazing sauna",
+        "en": "Hiki stargazing sauna",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "猫屋町, 中区, 広島市, 広島県, 730-0852, 日本",
+        "en": "5F, 8-17, Nekoyacho, Naka-Ward, Hiroshima 730-0852",
+        "prefecture": "Hiroshima",
+        "city": "Nekoyacho",
+        "postalCode": "730-0852"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 34.395164592597396,
+        "lng": 132.44752716963777,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.nekoya-cho.jp/5f/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2024,
+          "type": "ranked",
+          "rank": 8,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-378bd31b1766",
+      "sourceId": "sauna-378bd31b1766",
+      "names": {
+        "ja": "CYCL",
+        "en": "CYCL",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "el colina Lake Yamanaka RV Resort, 平野, 山中湖村, 南都留郡, 山梨県, 401-0502, 日本",
+        "en": "479-107, Hirano, Yamanakako, Minamitsuru District, Yamanashi 401-0502",
+        "prefecture": "Yamanashi",
+        "city": "Yamanakako",
+        "postalCode": "401-0502"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.4152276283435,
+        "lng": 138.89553063713754,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://cycl.co.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2024,
+          "type": "ranked",
+          "rank": 7,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-9bb38d41374a",
+      "sourceId": "sauna-9bb38d41374a",
+      "names": {
+        "ja": "別邸 仙寿庵",
+        "en": "Bettei Senjuan",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "千寿庵, 水上停車場谷川線, 谷川, みなかみ町, 利根郡, 群馬県, 379-1619, 日本",
+        "en": "614, Tanigawa, Minakami, Tone District, Gunma 379-1619",
+        "prefecture": "Gunma",
+        "city": "Minakami",
+        "postalCode": "379-1619"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 36.785625645242845,
+        "lng": 138.95749469672114,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.senjyuan.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2024,
+          "type": "ranked",
+          "rank": 6,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-31701ffd15ed",
+      "sourceId": "sauna-31701ffd15ed",
+      "names": {
+        "ja": "大阪サウナDESSE",
+        "en": "DESSE",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "空陸家, 心斎橋筋北商店街, 南船場三丁目, 中央区, 大阪市, 大阪府, 542-0081, 日本",
+        "en": "4F, K's Builsing Shinsaibashi, 6-18, Minamisenba 3 Chome, Chuo Ward, Osaka 542-0081",
+        "prefecture": "Osaka",
+        "city": "Minamisenba",
+        "postalCode": "542-0081"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 34.676562090799315,
+        "lng": 135.50158116779633,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://desse.osaka/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2024,
+          "type": "ranked",
+          "rank": 4,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-72a5bd9bcace",
+      "sourceId": "sauna-72a5bd9bcace",
+      "names": {
+        "ja": "TREATMENT SAUNA SteaMs.",
+        "en": "TREATMENT SAUNA SteaMs.",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "NATURE BODY HOUSE, 赤坂通り, 赤坂九丁目, 赤坂, 港区, 東京, 107-0052, 日本",
+        "en": "B1-D, B-Building, Parkside Six, 5-12, Akasaka 9 Chome, Minato City, Tokyo 107-0052",
+        "prefecture": "Tokyo",
+        "city": "Akasaka",
+        "postalCode": "107-0052"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.6675990976661,
+        "lng": 139.72976584085418,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://steams-tokyo.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2024,
+          "type": "ranked",
+          "rank": 3,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-88be7a81f725",
+      "sourceId": "sauna-88be7a81f725",
+      "names": {
+        "ja": "TOTOPA 都立明治公園店",
+        "en": "TOTOPA",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "霞ヶ丘町, 新宿区, 東京, 160-8484, 日本",
+        "en": "5-7 Kasumigaokamachi, Shinjuku City, Tokyo 160-0013",
+        "prefecture": "Tokyo",
+        "city": "Kasumigaokamachi",
+        "postalCode": "160-0013"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.67483735090099,
+        "lng": 139.71290903900137,
+        "availability": "located",
+        "confidence": "low",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://totopa.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2024,
+          "type": "ranked",
+          "rank": 1,
+          "title": null
+        },
+        {
+          "year": 2025,
+          "type": "ranked",
+          "rank": 5,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Printed prefecture/city not both confirmed by reverse boundary lookup"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-3102ef7c2e42",
+      "sourceId": "sauna-3102ef7c2e42",
+      "names": {
+        "ja": "大谷元気炉六号基",
+        "en": "Ohya Genki-ro No.06",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "岩原町, 宇都宮市, 栃木県, 320-0061, 日本",
+        "en": "11-909, Oyamachi, Utsunomiya, Tochigi 321-0345",
+        "prefecture": "Tochigi",
+        "city": "Utsunomiya",
+        "postalCode": "321-0345"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 36.60218719201417,
+        "lng": 139.82331647976272,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.genkiro.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/archive/2024"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2024,
+          "type": "special",
+          "rank": null,
+          "title": "SP"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-733ede27c547",
+      "sourceId": "sauna-733ede27c547",
+      "names": {
+        "ja": "知内温泉　呼吸の間",
+        "en": "Shiriuchi Onsen",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "知内温泉;ユートピア和楽園, 館町福島線, 知内町, 上磯郡, 渡島総合振興局, 北海道, 北海道地方, 049-1221, 日本",
+        "en": "284 Yunosato, Shiriuchi, Kamiiso District, Hokkaido 049-1221",
+        "prefecture": "Hokkaido",
+        "city": "Shiriuchi",
+        "postalCode": "049-1221"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 41.595809877049,
+        "lng": 140.29496907901418,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://shiriuchionsen.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2025,
+          "type": "ranked",
+          "rank": 11,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-ca2f001e94ac",
+      "sourceId": "sauna-ca2f001e94ac",
+      "names": {
+        "ja": "SAUNA SAKURADO",
+        "en": "SAUNA SAKURADO",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "千代三丁目, 綱場町, 博多区, 福岡市, 福岡県, 812-0026, 日本",
+        "en": "9-5 Tsunabamachi, Hakata Ward, Fukuoka 812-0024",
+        "prefecture": "Fukuoka",
+        "city": "Hakata",
+        "postalCode": "812-0024"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 33.59749019519804,
+        "lng": 130.4071860747687,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://sauna-sakurado.spa/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2025,
+          "type": "ranked",
+          "rank": 10,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-603ef58d2a2f",
+      "sourceId": "sauna-603ef58d2a2f",
+      "names": {
+        "ja": "Janu Tokyo / Spa House Experience",
+        "en": "Janu Tokyo / Spa House Experience",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "桜麻通り, 麻布台一丁目, 麻布台, 港区, 東京, 106-0041, 日本",
+        "en": "1-2-2 Azabudai, Minato City, Tokyo 106-0041",
+        "prefecture": "Tokyo",
+        "city": "Azabudai",
+        "postalCode": "106-0041"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.6622722745254,
+        "lng": 139.74082458059868,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.janu.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2025,
+          "type": "ranked",
+          "rank": 9,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-c9088ca8d6e6",
+      "sourceId": "sauna-c9088ca8d6e6",
+      "names": {
+        "ja": "sauna kolme kylä",
+        "en": "sauna kolme kylä",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "豊成一丁目, 南区, 岡山市, 岡山県, 700-0942, 日本",
+        "en": "1−182-3 Toyonari, Minami Ward, Okayama 700-0942",
+        "prefecture": "Okayama",
+        "city": "Toyonari",
+        "postalCode": "700-0942"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 34.63247991270624,
+        "lng": 133.93020258227818,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://sauna-kolme-kyla.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2025,
+          "type": "ranked",
+          "rank": 8,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-cc29d1d397d6",
+      "sourceId": "sauna-cc29d1d397d6",
+      "names": {
+        "ja": "KIWAMI SAUNA 大須",
+        "en": "KIWAMI SAUNA Osu",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "名古屋神仏具, 岩井橘町線, 橘一丁目, 門前町, 中区, 名古屋市, 愛知県, 460-0016, 日本",
+        "en": "1-4-12 Tachibana, Naka Ward, Nagoya, Aichi 460-0016",
+        "prefecture": "Aichi",
+        "city": "Nagoya",
+        "postalCode": "460-0016"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.15537585308197,
+        "lng": 136.90040306949848,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.instagram.com/kiwamisauna2/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2025,
+          "type": "ranked",
+          "rank": 6,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-b6797578323c",
+      "sourceId": "sauna-b6797578323c",
+      "names": {
+        "ja": "SATOYAMA TERRACE",
+        "en": "SATOYAMA TERRACE",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "田原, 富津市, 千葉県, 293-8506, 日本",
+        "en": "898 Tabara, Futtsu, Chiba 299-1755",
+        "prefecture": "Chiba",
+        "city": "Futtsu",
+        "postalCode": "299-1755"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.20831305968865,
+        "lng": 139.9143245253245,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://satoyama-terrace.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2025,
+          "type": "ranked",
+          "rank": 4,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Source uses Latin-script name; Japanese name not supplied"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-5fc583dc6277",
+      "sourceId": "sauna-5fc583dc6277",
+      "names": {
+        "ja": "温泉バルコニー King & Queen",
+        "en": "Onsen Balcony King&Queen",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "King&Queen, 行政道路, 東狭山ヶ丘三丁目, 東狭山ヶ丘, 所沢市, 埼玉県, 359-1101, 日本",
+        "en": "2-271 Kitanaka, Tokorozawa, Saitama 359-1101",
+        "prefecture": "Saitama",
+        "city": "Tokorozawa",
+        "postalCode": "359-1101"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 35.81186238253307,
+        "lng": 139.43036022534935,
+        "availability": "located",
+        "confidence": "high",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": "2026-11-01"
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://king-and-queen.site/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2025,
+          "type": "ranked",
+          "rank": 3,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-1818c419a53a",
+      "sourceId": "sauna-1818c419a53a",
+      "names": {
+        "ja": "湯宿だいいち",
+        "en": "Yuyado Daiichi",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "湯宿だいいち, 養老牛計根別停車場線, 中標津町, 標津郡, 根室振興局, 北海道, 北海道地方, 日本",
+        "en": "518 Yoroushi, Nakashibetsu, Shibetsu District, Hokkaido 088-2684",
+        "prefecture": "Hokkaido",
+        "city": "Yoroushi",
+        "postalCode": "088-2684"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 43.587779695355366,
+        "lng": 144.72273453493352,
+        "availability": "located",
+        "confidence": "low",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "http://www.yoroushi.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2025,
+          "type": "ranked",
+          "rank": 1,
+          "title": null
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Printed prefecture/city not both confirmed by reverse boundary lookup"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "key": "saunachelin:sauna-439d9ff49642",
+      "sourceId": "sauna-439d9ff49642",
+      "names": {
+        "ja": "万博サウナ「太陽のつぼみ」",
+        "en": "TAIYO TSUBOMI",
+        "romaji": null,
+        "branchJa": null
+      },
+      "address": {
+        "ja": "夢洲, 此花区, 大阪市, 大阪府, 日本",
+        "en": "1Chome, Yumeshimahigashi, Konohana Ward, Osaka 554-0043",
+        "prefecture": "Osaka",
+        "city": "Expo 2025",
+        "postalCode": "554-0043"
+      },
+      "category": "Sauna",
+      "location": {
+        "lat": 34.6528834579508,
+        "lng": 135.37429589646663,
+        "availability": "located",
+        "confidence": "low",
+        "method": "page",
+        "provenance": [],
+        "verifiedAt": null
+      },
+      "operatingStatus": {
+        "value": "unknown",
+        "checkedAt": null,
+        "note": null
+      },
+      "hoursText": null,
+      "hours": null,
+      "links": [
+        {
+          "kind": "official",
+          "label": "Official",
+          "url": "https://www.taiyo-tsubomi.jp/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/"
+        },
+        {
+          "kind": "source",
+          "label": "Source",
+          "url": "https://www.saunachelin.com/en/"
+        },
+        {
+          "kind": "standalone",
+          "label": "Open standalone map",
+          "url": "https://saunachelin-field-guide.wittycob1.chatgpt.site/app/"
+        }
+      ],
+      "awards": [
+        {
+          "year": 2025,
+          "type": "special",
+          "rank": null,
+          "title": "SP"
+        }
+      ],
+      "memberships": [],
+      "hallOfFame": null,
+      "reviewNotes": [
+        "Printed prefecture/city not both confirmed by reverse boundary lookup"
+      ],
+      "provenance": [
+        {
+          "field": "address.ja",
+          "sourceKind": "upstream",
+          "url": null,
+          "observedAt": null,
+          "note": "OpenStreetMap reverse geocoding; check house number"
+        }
+      ]
+    }
+  ],
+  "datasetVersion": "sha256:b3a3017fa20c41f90cf3d8b3822a05e0a8231cbb3836387ff88721541d08319b",
+  "generatedAt": "2026-11-02T03:08:56.175176+00:00"
+}
