@@ -1766,6 +1766,7 @@ $("content").addEventListener("click", async (e) => {
         switchSource(id);
         if (action === "discover-source") {
           visibleLayers[layerId(id)] = true;
+          saveLayers();
           if (!origins().length) discover.radius = 0;
           mapMode = true;
           navigate("discover");
