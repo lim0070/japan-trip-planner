@@ -23,7 +23,7 @@ export function backup(s, tripId = null) {
     kind: tripId ? "trip" : "full",
     exportId: id(),
     exportedAt: now(),
-    appVersion: "1.0.0",
+    appVersion: "1.1.0",
     ...data,
   };
 }

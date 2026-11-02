@@ -21,14 +21,18 @@
 }
 body {
   margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  min-height: 100dvh;
 }
+:root[data-theme="dark"],
 body[data-theme="dark"] {
   --paper: #242622;
   --panel: #2c2f29;
   --ink: #f0e9de;
   --muted: #b5b2a7;
   --line: #4b5046;
-  --water: #71b8bb;
+  --water: #80c5c8;
   --soft: #344743;
   --amber: #e5b565;
   --danger: #ffaaaa;
@@ -740,4 +744,47 @@ pre {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* Give browser-native control text an explicit theme pair, including Safari. */
+input,
+select,
+textarea,
+option,
+optgroup {
+  color: var(--ink);
+  background-color: var(--panel);
+}
+input,
+textarea {
+  -webkit-text-fill-color: var(--ink);
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  -webkit-text-fill-color: var(--muted);
+  opacity: 1;
+}
+.map-entry {
+  margin: 18px 0 28px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+}
+.map-entry h2 {
+  margin-bottom: 8px;
+}
+.original-apps {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0 20px;
+}
+.original-apps a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 0;
+  margin-right: 12px;
 }
