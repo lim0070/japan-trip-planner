@@ -1,15 +1,25 @@
 {
-  "scope": "National Japan filter (explicit source address country JP, point bbox within 122–154 E / 20–46 N) of Overture Places 2026-10-21.0. Incomplete community/provider coverage, NOT a complete branch census. Listed counts are source identities; possible duplicates are retained. No non-Japan country inferred from a coordinate box.",
-  "observedAt": "2026-11-02T20:54:52.853286Z",
+  "scope": "Additive national JP source-country/geometry-box query of Oct21 Overture Places; partial source coverage, not verified unique active stores. Exact five requested chains only; other related brands quarantined.",
   "release": "2026-10-21.0",
+  "observedAt": "2026-11-02T21:13:58.129752Z",
+  "baseRecords": 5393,
   "total": {
-    "listed": 5393,
-    "located": 5393,
+    "listed": 6659,
+    "located": 6659,
     "unresolved": 0,
-    "addressKnown": 5391,
+    "addressKnown": 6657,
     "hoursKnown": 0,
     "structuredHours": 0,
-    "operationUnknown": 5392
+    "operationUnknown": 6658
+  },
+  "newRecords": {
+    "listed": 1266,
+    "located": 1266,
+    "unresolved": 0,
+    "addressKnown": 1266,
+    "hoursKnown": 0,
+    "structuredHours": 0,
+    "operationUnknown": 1266
   },
   "byBrand": {
     "outlet-mall": {
@@ -101,127 +111,572 @@
       "hoursKnown": 0,
       "structuredHours": 0,
       "operationUnknown": 20
-    }
-  },
-  "byFormat": {
-    "avail:standard": {
-      "listed": 381,
-      "located": 381,
-      "unresolved": 0,
-      "addressKnown": 380,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 381
     },
-    "birthday:standard": {
-      "listed": 348,
-      "located": 348,
+    "costco": {
+      "listed": 38,
+      "located": 38,
       "unresolved": 0,
-      "addressKnown": 348,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 348
-    },
-    "chambre:standard": {
-      "listed": 128,
-      "located": 128,
-      "unresolved": 0,
-      "addressKnown": 128,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 128
-    },
-    "divalo:standard": {
-      "listed": 20,
-      "located": 20,
-      "unresolved": 0,
-      "addressKnown": 20,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 20
-    },
-    "global-work:standard": {
-      "listed": 97,
-      "located": 97,
-      "unresolved": 0,
-      "addressKnown": 97,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 97
-    },
-    "gu:standard": {
-      "listed": 388,
-      "located": 388,
-      "unresolved": 0,
-      "addressKnown": 388,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 388
-    },
-    "outlet-mall:standard": {
-      "listed": 39,
-      "located": 39,
-      "unresolved": 0,
-      "addressKnown": 39,
+      "addressKnown": 38,
       "hoursKnown": 0,
       "structuredHours": 0,
       "operationUnknown": 38
     },
-    "shimamura:standard": {
-      "listed": 1690,
-      "located": 1690,
+    "lopia": {
+      "listed": 107,
+      "located": 107,
       "unresolved": 0,
-      "addressKnown": 1689,
+      "addressKnown": 107,
       "hoursKnown": 0,
       "structuredHours": 0,
-      "operationUnknown": 1690
+      "operationUnknown": 107
     },
-    "uniqlo:standard": {
-      "listed": 917,
-      "located": 917,
+    "life-supermarket": {
+      "listed": 162,
+      "located": 162,
       "unresolved": 0,
-      "addressKnown": 917,
+      "addressKnown": 162,
       "hoursKnown": 0,
       "structuredHours": 0,
-      "operationUnknown": 917
+      "operationUnknown": 162
     },
-    "workman:workman": {
-      "listed": 413,
-      "located": 413,
+    "nitori": {
+      "listed": 891,
+      "located": 891,
       "unresolved": 0,
-      "addressKnown": 413,
+      "addressKnown": 891,
       "hoursKnown": 0,
       "structuredHours": 0,
-      "operationUnknown": 413
+      "operationUnknown": 891
     },
-    "workman:workman-colors": {
-      "listed": 85,
-      "located": 85,
+    "hands": {
+      "listed": 68,
+      "located": 68,
       "unresolved": 0,
-      "addressKnown": 85,
+      "addressKnown": 68,
       "hoursKnown": 0,
       "structuredHours": 0,
-      "operationUnknown": 85
-    },
-    "workman:workman-girl": {
-      "listed": 29,
-      "located": 29,
+      "operationUnknown": 68
+    }
+  },
+  "newByBrand": {
+    "costco": {
+      "listed": 38,
+      "located": 38,
       "unresolved": 0,
-      "addressKnown": 29,
+      "addressKnown": 38,
       "hoursKnown": 0,
       "structuredHours": 0,
-      "operationUnknown": 29
+      "operationUnknown": 38
     },
-    "workman:workman-plus": {
-      "listed": 852,
-      "located": 852,
+    "lopia": {
+      "listed": 107,
+      "located": 107,
       "unresolved": 0,
-      "addressKnown": 852,
+      "addressKnown": 107,
       "hoursKnown": 0,
       "structuredHours": 0,
-      "operationUnknown": 852
+      "operationUnknown": 107
     },
-    "workman:workman-pro": {
+    "life-supermarket": {
+      "listed": 162,
+      "located": 162,
+      "unresolved": 0,
+      "addressKnown": 162,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 162
+    },
+    "nitori": {
+      "listed": 891,
+      "located": 891,
+      "unresolved": 0,
+      "addressKnown": 891,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 891
+    },
+    "hands": {
+      "listed": 68,
+      "located": 68,
+      "unresolved": 0,
+      "addressKnown": 68,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 68
+    }
+  },
+  "byFormat": {
+    "costco:warehouse": {
+      "listed": 38,
+      "located": 38,
+      "unresolved": 0,
+      "addressKnown": 38,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 38
+    },
+    "lopia:standard": {
+      "listed": 107,
+      "located": 107,
+      "unresolved": 0,
+      "addressKnown": 107,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 107
+    },
+    "life-supermarket:standard": {
+      "listed": 162,
+      "located": 162,
+      "unresolved": 0,
+      "addressKnown": 162,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 162
+    },
+    "nitori:nitori-express": {
+      "listed": 22,
+      "located": 22,
+      "unresolved": 0,
+      "addressKnown": 22,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 22
+    },
+    "nitori:standard": {
+      "listed": 869,
+      "located": 869,
+      "unresolved": 0,
+      "addressKnown": 869,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 869
+    },
+    "hands:standard": {
+      "listed": 68,
+      "located": 68,
+      "unresolved": 0,
+      "addressKnown": 68,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 68
+    }
+  },
+  "newByPrefecture": {
+    "北海道": {
+      "listed": 28,
+      "located": 28,
+      "unresolved": 0,
+      "addressKnown": 28,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 28
+    },
+    "青森県": {
+      "listed": 8,
+      "located": 8,
+      "unresolved": 0,
+      "addressKnown": 8,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 8
+    },
+    "岩手県": {
+      "listed": 6,
+      "located": 6,
+      "unresolved": 0,
+      "addressKnown": 6,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 6
+    },
+    "宮城県": {
+      "listed": 8,
+      "located": 8,
+      "unresolved": 0,
+      "addressKnown": 8,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 8
+    },
+    "秋田県": {
+      "listed": 4,
+      "located": 4,
+      "unresolved": 0,
+      "addressKnown": 4,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 4
+    },
+    "山形県": {
+      "listed": 2,
+      "located": 2,
+      "unresolved": 0,
+      "addressKnown": 2,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 2
+    },
+    "福島県": {
+      "listed": 2,
+      "located": 2,
+      "unresolved": 0,
+      "addressKnown": 2,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 2
+    },
+    "茨城県": {
+      "listed": 6,
+      "located": 6,
+      "unresolved": 0,
+      "addressKnown": 6,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 6
+    },
+    "栃木県": {
+      "listed": 8,
+      "located": 8,
+      "unresolved": 0,
+      "addressKnown": 8,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 8
+    },
+    "群馬県": {
+      "listed": 7,
+      "located": 7,
+      "unresolved": 0,
+      "addressKnown": 7,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 7
+    },
+    "埼玉県": {
+      "listed": 55,
+      "located": 55,
+      "unresolved": 0,
+      "addressKnown": 55,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 55
+    },
+    "千葉県": {
+      "listed": 47,
+      "located": 47,
+      "unresolved": 0,
+      "addressKnown": 47,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 47
+    },
+    "東京都": {
+      "listed": 84,
+      "located": 84,
+      "unresolved": 0,
+      "addressKnown": 84,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 84
+    },
+    "神奈川県": {
+      "listed": 72,
+      "located": 72,
+      "unresolved": 0,
+      "addressKnown": 72,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 72
+    },
+    "新潟県": {
+      "listed": 7,
+      "located": 7,
+      "unresolved": 0,
+      "addressKnown": 7,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 7
+    },
+    "富山県": {
+      "listed": 5,
+      "located": 5,
+      "unresolved": 0,
+      "addressKnown": 5,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 5
+    },
+    "石川県": {
+      "listed": 9,
+      "located": 9,
+      "unresolved": 0,
+      "addressKnown": 9,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 9
+    },
+    "福井県": {
+      "listed": 3,
+      "located": 3,
+      "unresolved": 0,
+      "addressKnown": 3,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 3
+    },
+    "山梨県": {
+      "listed": 10,
+      "located": 10,
+      "unresolved": 0,
+      "addressKnown": 10,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 10
+    },
+    "長野県": {
+      "listed": 5,
+      "located": 5,
+      "unresolved": 0,
+      "addressKnown": 5,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 5
+    },
+    "岐阜県": {
+      "listed": 15,
+      "located": 15,
+      "unresolved": 0,
+      "addressKnown": 15,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 15
+    },
+    "静岡県": {
+      "listed": 17,
+      "located": 17,
+      "unresolved": 0,
+      "addressKnown": 17,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 17
+    },
+    "愛知県": {
+      "listed": 44,
+      "located": 44,
+      "unresolved": 0,
+      "addressKnown": 44,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 44
+    },
+    "三重県": {
+      "listed": 14,
+      "located": 14,
+      "unresolved": 0,
+      "addressKnown": 14,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 14
+    },
+    "滋賀県": {
+      "listed": 9,
+      "located": 9,
+      "unresolved": 0,
+      "addressKnown": 9,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 9
+    },
+    "京都府": {
+      "listed": 19,
+      "located": 19,
+      "unresolved": 0,
+      "addressKnown": 19,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 19
+    },
+    "大阪府": {
+      "listed": 82,
+      "located": 82,
+      "unresolved": 0,
+      "addressKnown": 82,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 82
+    },
+    "兵庫県": {
+      "listed": 44,
+      "located": 44,
+      "unresolved": 0,
+      "addressKnown": 44,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 44
+    },
+    "奈良県": {
+      "listed": 5,
+      "located": 5,
+      "unresolved": 0,
+      "addressKnown": 5,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 5
+    },
+    "和歌山県": {
+      "listed": 4,
+      "located": 4,
+      "unresolved": 0,
+      "addressKnown": 4,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 4
+    },
+    "鳥取県": {
+      "listed": 1,
+      "located": 1,
+      "unresolved": 0,
+      "addressKnown": 1,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 1
+    },
+    "島根県": {
+      "listed": 1,
+      "located": 1,
+      "unresolved": 0,
+      "addressKnown": 1,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 1
+    },
+    "岡山県": {
+      "listed": 9,
+      "located": 9,
+      "unresolved": 0,
+      "addressKnown": 9,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 9
+    },
+    "広島県": {
+      "listed": 19,
+      "located": 19,
+      "unresolved": 0,
+      "addressKnown": 19,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 19
+    },
+    "山口県": {
+      "listed": 9,
+      "located": 9,
+      "unresolved": 0,
+      "addressKnown": 9,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 9
+    },
+    "徳島県": {
+      "listed": 2,
+      "located": 2,
+      "unresolved": 0,
+      "addressKnown": 2,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 2
+    },
+    "香川県": {
+      "listed": 10,
+      "located": 10,
+      "unresolved": 0,
+      "addressKnown": 10,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 10
+    },
+    "愛媛県": {
+      "listed": 4,
+      "located": 4,
+      "unresolved": 0,
+      "addressKnown": 4,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 4
+    },
+    "高知県": {
+      "listed": 2,
+      "located": 2,
+      "unresolved": 0,
+      "addressKnown": 2,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 2
+    },
+    "福岡県": {
+      "listed": 30,
+      "located": 30,
+      "unresolved": 0,
+      "addressKnown": 30,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 30
+    },
+    "佐賀県": {
+      "listed": 5,
+      "located": 5,
+      "unresolved": 0,
+      "addressKnown": 5,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 5
+    },
+    "長崎県": {
+      "listed": 6,
+      "located": 6,
+      "unresolved": 0,
+      "addressKnown": 6,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 6
+    },
+    "熊本県": {
+      "listed": 7,
+      "located": 7,
+      "unresolved": 0,
+      "addressKnown": 7,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 7
+    },
+    "大分県": {
+      "listed": 5,
+      "located": 5,
+      "unresolved": 0,
+      "addressKnown": 5,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 5
+    },
+    "宮崎県": {
+      "listed": 3,
+      "located": 3,
+      "unresolved": 0,
+      "addressKnown": 3,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 3
+    },
+    "鹿児島県": {
+      "listed": 5,
+      "located": 5,
+      "unresolved": 0,
+      "addressKnown": 5,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 5
+    },
+    "沖縄県": {
       "listed": 6,
       "located": 6,
       "unresolved": 0,
@@ -231,466 +686,104 @@
       "operationUnknown": 6
     }
   },
-  "byPrefecture": {
-    "北海道": {
-      "listed": 130,
-      "located": 130,
-      "unresolved": 0,
-      "addressKnown": 130,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 130
-    },
-    "青森県": {
-      "listed": 50,
-      "located": 50,
-      "unresolved": 0,
-      "addressKnown": 50,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 50
-    },
-    "岩手県": {
-      "listed": 44,
-      "located": 44,
-      "unresolved": 0,
-      "addressKnown": 44,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 44
-    },
-    "宮城県": {
-      "listed": 73,
-      "located": 73,
-      "unresolved": 0,
-      "addressKnown": 73,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 73
-    },
-    "秋田県": {
-      "listed": 39,
-      "located": 39,
-      "unresolved": 0,
-      "addressKnown": 39,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 39
-    },
-    "山形県": {
-      "listed": 42,
-      "located": 42,
-      "unresolved": 0,
-      "addressKnown": 42,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 42
-    },
-    "福島県": {
-      "listed": 63,
-      "located": 63,
-      "unresolved": 0,
-      "addressKnown": 63,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 63
-    },
-    "茨城県": {
-      "listed": 121,
-      "located": 121,
-      "unresolved": 0,
-      "addressKnown": 121,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 121
-    },
-    "栃木県": {
-      "listed": 76,
-      "located": 76,
-      "unresolved": 0,
-      "addressKnown": 76,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 76
-    },
-    "群馬県": {
-      "listed": 88,
-      "located": 88,
-      "unresolved": 0,
-      "addressKnown": 88,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 88
-    },
-    "埼玉県": {
-      "listed": 228,
-      "located": 228,
-      "unresolved": 0,
-      "addressKnown": 228,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 228
-    },
-    "千葉県": {
-      "listed": 172,
-      "located": 172,
-      "unresolved": 0,
-      "addressKnown": 172,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 172
-    },
-    "東京都": {
-      "listed": 175,
-      "located": 175,
-      "unresolved": 0,
-      "addressKnown": 175,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 175
-    },
-    "神奈川県": {
-      "listed": 154,
-      "located": 154,
-      "unresolved": 0,
-      "addressKnown": 154,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 154
-    },
-    "新潟県": {
-      "listed": 86,
-      "located": 86,
-      "unresolved": 0,
-      "addressKnown": 86,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 86
-    },
-    "富山県": {
-      "listed": 37,
-      "located": 37,
-      "unresolved": 0,
-      "addressKnown": 37,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 37
-    },
-    "石川県": {
-      "listed": 37,
-      "located": 37,
-      "unresolved": 0,
-      "addressKnown": 37,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 37
-    },
-    "福井県": {
-      "listed": 30,
-      "located": 30,
-      "unresolved": 0,
-      "addressKnown": 30,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 30
-    },
-    "山梨県": {
-      "listed": 33,
-      "located": 33,
-      "unresolved": 0,
-      "addressKnown": 33,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 33
-    },
-    "長野県": {
-      "listed": 74,
-      "located": 74,
-      "unresolved": 0,
-      "addressKnown": 74,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 74
-    },
-    "岐阜県": {
-      "listed": 63,
-      "located": 63,
-      "unresolved": 0,
-      "addressKnown": 63,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 63
-    },
-    "静岡県": {
-      "listed": 111,
-      "located": 111,
-      "unresolved": 0,
-      "addressKnown": 111,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 111
-    },
-    "愛知県": {
-      "listed": 158,
-      "located": 158,
-      "unresolved": 0,
-      "addressKnown": 158,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 158
-    },
-    "三重県": {
-      "listed": 43,
-      "located": 43,
-      "unresolved": 0,
-      "addressKnown": 43,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 43
-    },
-    "滋賀県": {
-      "listed": 47,
-      "located": 47,
-      "unresolved": 0,
-      "addressKnown": 47,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 47
-    },
-    "京都府": {
-      "listed": 60,
-      "located": 60,
-      "unresolved": 0,
-      "addressKnown": 60,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 60
-    },
-    "大阪府": {
-      "listed": 178,
-      "located": 178,
-      "unresolved": 0,
-      "addressKnown": 178,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 177
-    },
-    "兵庫県": {
-      "listed": 118,
-      "located": 118,
-      "unresolved": 0,
-      "addressKnown": 118,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 118
-    },
-    "奈良県": {
-      "listed": 35,
-      "located": 35,
-      "unresolved": 0,
-      "addressKnown": 35,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 35
-    },
-    "和歌山県": {
-      "listed": 29,
-      "located": 29,
-      "unresolved": 0,
-      "addressKnown": 29,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 29
-    },
-    "鳥取県": {
-      "listed": 22,
-      "located": 22,
-      "unresolved": 0,
-      "addressKnown": 22,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 22
-    },
-    "島根県": {
-      "listed": 18,
-      "located": 18,
-      "unresolved": 0,
-      "addressKnown": 18,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 18
-    },
-    "岡山県": {
-      "listed": 49,
-      "located": 49,
-      "unresolved": 0,
-      "addressKnown": 49,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 49
-    },
-    "広島県": {
-      "listed": 54,
-      "located": 54,
-      "unresolved": 0,
-      "addressKnown": 54,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 54
-    },
-    "山口県": {
-      "listed": 47,
-      "located": 47,
-      "unresolved": 0,
-      "addressKnown": 47,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 47
-    },
-    "徳島県": {
-      "listed": 18,
-      "located": 18,
-      "unresolved": 0,
-      "addressKnown": 18,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 18
-    },
-    "香川県": {
-      "listed": 28,
-      "located": 28,
-      "unresolved": 0,
-      "addressKnown": 28,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 28
-    },
-    "愛媛県": {
-      "listed": 33,
-      "located": 33,
-      "unresolved": 0,
-      "addressKnown": 33,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 33
-    },
-    "高知県": {
-      "listed": 20,
-      "located": 20,
-      "unresolved": 0,
-      "addressKnown": 20,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 20
-    },
-    "福岡県": {
-      "listed": 133,
-      "located": 133,
-      "unresolved": 0,
-      "addressKnown": 133,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 133
-    },
-    "佐賀県": {
-      "listed": 23,
-      "located": 23,
-      "unresolved": 0,
-      "addressKnown": 23,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 23
-    },
-    "長崎県": {
-      "listed": 32,
-      "located": 32,
-      "unresolved": 0,
-      "addressKnown": 32,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 32
-    },
-    "熊本県": {
-      "listed": 44,
-      "located": 44,
-      "unresolved": 0,
-      "addressKnown": 44,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 44
-    },
-    "大分県": {
-      "listed": 42,
-      "located": 42,
-      "unresolved": 0,
-      "addressKnown": 42,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 42
-    },
-    "宮崎県": {
-      "listed": 35,
-      "located": 35,
-      "unresolved": 0,
-      "addressKnown": 35,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 35
-    },
-    "鹿児島県": {
-      "listed": 45,
-      "located": 45,
-      "unresolved": 0,
-      "addressKnown": 45,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 45
-    },
-    "沖縄県": {
-      "listed": 28,
-      "located": 28,
-      "unresolved": 0,
-      "addressKnown": 28,
-      "hoursKnown": 0,
-      "structuredHours": 0,
-      "operationUnknown": 28
-    }
-  },
-  "prefectureUnknown": {
-    "listed": 2128,
-    "located": 2128,
+  "newPrefectureUnknown": {
+    "listed": 513,
+    "located": 513,
     "unresolved": 0,
-    "addressKnown": 2126,
+    "addressKnown": 513,
     "hoursKnown": 0,
     "structuredHours": 0,
-    "operationUnknown": 2128
+    "operationUnknown": 513
   },
-  "duplicateCandidatePairs": 436,
-  "rejectedFeatures": 2063,
-  "sourceLicenses": {
-    "CDLA-Permissive-2.0": 7767,
-    "Apache-2.0": 735,
-    "CC0-1.0": 2284
+  "newByCategory": {
+    "furniture-home": {
+      "listed": 891,
+      "located": 891,
+      "unresolved": 0,
+      "addressKnown": 891,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 891
+    },
+    "lifestyle-diy": {
+      "listed": 68,
+      "located": 68,
+      "unresolved": 0,
+      "addressKnown": 68,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 68
+    },
+    "supermarkets": {
+      "listed": 269,
+      "located": 269,
+      "unresolved": 0,
+      "addressKnown": 269,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 269
+    },
+    "warehouse-clubs": {
+      "listed": 38,
+      "located": 38,
+      "unresolved": 0,
+      "addressKnown": 38,
+      "hoursKnown": 0,
+      "structuredHours": 0,
+      "operationUnknown": 38
+    }
   },
-  "sourceDatasets": {
-    "meta": 2373,
-    "Overture": 5393,
-    "Foursquare": 735,
-    "AllThePlaces": 2284,
-    "Microsoft": 1
+  "expansionDuplicatePairs": 36,
+  "baselineDuplicatePairs": 436,
+  "rejectedCandidates": 1988,
+  "baselineIdentityConflicts": 16,
+  "crossBaselineConflicts": 0,
+  "rejectionReasons": {
+    "nitori-non-home-retail-category": 41,
+    "life-not-supermarket-category": 1310,
+    "hands-related-format-or-unrelated-retailer-pending-scope": 30,
+    "hands-non-retail-category": 77,
+    "nitori-unapproved-related-brand-or-nonstore": 87,
+    "lopia-not-confirmed-grocery-retail": 32,
+    "no-confident-approved-leading-chain": 198,
+    "costco-reseller-component-or-nonwarehouse": 21,
+    "existence-confidence-below-0.75-review-required": 34,
+    "hands-chain-identity-not-established": 15,
+    "audited-exclusion: Hands-named record with Varie phone-accessory business URL; unresolved source metadata conflict, quarantined for review, not asserted nonexistent or a wrong store.": 1,
+    "costco-warehouse-identity-not-established": 13,
+    "life-chain-domain-not-established": 105,
+    "costco-nonwarehouse-category": 9,
+    "audited-exclusion: Hands-named record with MOMI&TOY food business website; unresolved source metadata conflict, quarantined for review, not asserted nonexistent or a wrong store.": 1,
+    "life-unapproved-related-brand-pending-scope": 3,
+    "audited-exclusion: Nitori-named record with clothing taxonomy and unrelated RALODEMALO blog URL; unresolved source metadata conflict, quarantined for review, not asserted nonexistent or a wrong store.": 1,
+    "audited-exclusion: Scope/metadata conflict: source name 東急ハンズ梅田店 but only website handscafe.jp, cannot establish ordinary store versus cafe record. Quarantined, not asserted nonexistent.": 1,
+    "audited-exclusion: Hands-named record with Sanco Creative website, ordinary Hands branch identity not established; unresolved source metadata conflict, quarantined for review, not asserted nonexistent or a wrong store.": 1,
+    "audited-exclusion: Source brand-name versus website conflict: Nitori-labelled record links nikoand.jp. Quarantined pending independent branch identity reconciliation, not asserted wrong store.": 1,
+    "unrelated-ropia-dessert-manufacturer": 4,
+    "audited-exclusion: Temporary renovation closure as of2026-11-02; official branch notice announces reopening2026-11-06. Quarantine until actual reopening is rechecked; not permanently closed.": 1,
+    "audited-exclusion: Source name BOXOUTLET CHITOSE and hands-truck.com/shop/chitose_box indicate nonstandard/possibly historic outlet format outside approved ordinary Hands scope. Quarantined pending explicit format/current-status evidence.": 1,
+    "audited-exclusion: Hands-named record with Studio Mario photography blog URL; unresolved source metadata conflict, quarantined for review, not asserted nonexistent or a wrong store.": 1
   },
-  "classificationPolicy": "Leading chain identity plus permitted retail category; existence confidence below 0.75 quarantined; source-name audited tenant/component exclusions. Score is not coordinate accuracy.",
-  "officialBulkSourcesUsed": false,
+  "datasetVersion": "sha256:9b22826d84301f1ceb004d55e06359f8db2fe4f2786bdc0abffe9884d4c74211",
+  "feedBytes": 19766378,
+  "baselinePreservedFileSha256": "2c9a907aed161d1efd6e73273e78f1fbe6338ca4fa8bc7b76593cd0a31bccde0",
   "uncollectedSources": [
-    "Complete operator branch inventories and current official opening hours for all requested chains",
-    "A reconciled all-operator nationwide outlet-centre universe",
-    "Comprehensive closure/relocation records and entrance verification",
-    "Any source missing Japan country/address or outside this retrieval box",
-    "Low/missing metadata may prevent classification; rejected records are retained for audit"
+    "Current reconciled official operator inventories/closures/relocations",
+    "Opening hours for every expansion branch",
+    "Related brands not explicitly approved: Deco Home/N+/Hands Be/Plugs/BIO-RAL/Miniel/Central Square and unrelated operators",
+    "Ambiguous Life groceries lacking chain domain; Costco component/reseller candidates; low/incorrect taxonomy source records"
   ],
-  "license": "Source-dependent CDLA-Permissive-2.0 / Apache-2.0 / CC0-1.0, as reported by published Overture Places release",
-  "datasetVersion": "sha256:8e90ed1e3c596907680cd7da8f3bfdb414226ce44cc3815aeebc7b45124101f5",
-  "addressFreeformPresent": 5340,
-  "sourceIdentitiesInNearbyPairs": 859,
-  "providerIdentityConflictGroups": 16
+  "combinedProviderConflictGroups": 25,
+  "sourceDatasets": {
+    "meta": 3094,
+    "Overture": 6659,
+    "AllThePlaces": 2567,
+    "Foursquare": 842,
+    "Microsoft": 156
+  },
+  "sourceLicenses": {
+    "CDLA-Permissive-2.0": 9909,
+    "CC0-1.0": 2567,
+    "Apache-2.0": 842
+  }
 }

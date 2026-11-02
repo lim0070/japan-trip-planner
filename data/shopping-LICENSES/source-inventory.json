@@ -1,17 +1,17 @@
 {
   "release": "2026-10-21.0",
-  "sourceLicenses": {
-    "CDLA-Permissive-2.0": 7767,
-    "Apache-2.0": 735,
-    "CC0-1.0": 2284
-  },
+  "observedAt": "2026-11-02T21:13:58.129752Z",
   "sourceDatasets": {
-    "meta": 2373,
-    "Overture": 5393,
-    "Foursquare": 735,
-    "AllThePlaces": 2284,
-    "Microsoft": 1
+    "meta": 3094,
+    "Overture": 6659,
+    "AllThePlaces": 2567,
+    "Foursquare": 842,
+    "Microsoft": 156
   },
-  "modifications": "Filtered to selected Japan shopping brands/centres; normalized to planner schema, medium confidence point locations, added uncertainty/provenance; unknown hours remain null. Original source record IDs and source/update metadata retained as provenance.",
-  "observedAt": "2026-11-02T20:54:52.853286Z"
+  "sourceLicenses": {
+    "CDLA-Permissive-2.0": 9909,
+    "CC0-1.0": 2567,
+    "Apache-2.0": 842
+  },
+  "modifications": "Preserved base5393 records unchanged; appended five approved retail chains from same open Places release, strict identity/taxonomy filtering and uncertainty notes; no official bulk/Google/OSM data, no related-brand expansion. Complete source metadata in separate raw base and expansion caches."
 }

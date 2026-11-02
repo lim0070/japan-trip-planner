@@ -1,0 +1,227 @@
+[
+  {
+    "dataset": "meta",
+    "nativeRecordId": "154545614641398",
+    "keys": [
+      "shopping:overture:02f52d14-d874-4c3b-ac7f-7aa61ab1ef9c",
+      "shopping:overture:c7884960-ea54-4c29-9b78-a5408826e1f0"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "646125725590611",
+    "keys": [
+      "shopping:overture:059c8edd-b0d7-4631-b44d-cbcc45957540",
+      "shopping:overture:fdae002a-d579-4533-9cbe-9822944b5b5b"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "395266330858565",
+    "keys": [
+      "shopping:overture:0c90ccce-84bd-405b-845f-c3290dd4e781",
+      "shopping:overture:c0ceae1e-18a0-41ad-b272-a59b37b702ae"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "145795028791124",
+    "keys": [
+      "shopping:overture:0eb8c61b-70df-4f85-a4a9-6257f55635bb",
+      "shopping:overture:3229735c-7a36-42d5-a493-c0652279ca3c"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "AllThePlaces",
+    "nativeRecordId": "MvMcNRjBwTJ8wKNYNBoLd5d0-FU=",
+    "keys": [
+      "shopping:overture:1fcdcf86-3653-47b0-b93d-c732678b54c3",
+      "shopping:overture:ccb1a853-00d2-4b21-aa8f-33576a2dd60e"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "1114583172004955",
+    "keys": [
+      "shopping:overture:21fca760-7c5a-4dc6-9e1e-c98b098ce8c0",
+      "shopping:overture:75fb54c7-e63f-4e46-ac8e-3e91d85574a8"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "100212515374163",
+    "keys": [
+      "shopping:overture:2513e2f2-3bf1-45c6-9b37-8c03d65d756a",
+      "shopping:overture:d49296ee-03bb-495b-82fb-c02374037d6e"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "AllThePlaces",
+    "nativeRecordId": "Tm1FqpvvamXirXj_Mmm0tYz0RfM=",
+    "keys": [
+      "shopping:overture:2550f4dd-6187-44fa-9cbd-ef08d03a1d0d",
+      "shopping:overture:60d88c4f-c2e0-420a-b740-9868ebb0b638"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "929141003858577",
+    "keys": [
+      "shopping:overture:3e3f7e1f-5c3f-4b2f-ba90-cc39699043d4",
+      "shopping:overture:65c1f02b-cb53-4229-a6de-7a3ee93b5de7"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "155317547828825",
+    "keys": [
+      "shopping:overture:3f43fdcf-0ec0-4bfc-9455-ea175c44d88d",
+      "shopping:overture:6d8c6c21-dc07-4faf-9751-efc7adac2f53"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "2201873993405110",
+    "keys": [
+      "shopping:overture:4137fa21-a897-48ab-8fbf-91e040a23fd0",
+      "shopping:overture:5ec8a1f5-edee-49d0-8027-7491c8c91d3b"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "231744960215109",
+    "keys": [
+      "shopping:overture:464ad64f-b7c2-47a3-af8a-d269ce89a515",
+      "shopping:overture:a7b08b26-df23-4062-b88f-ee71db773058"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "210408895733061",
+    "keys": [
+      "shopping:overture:573c55c0-519f-4aa4-8ff8-1310293a0515",
+      "shopping:overture:6485c845-141f-4edf-b7bd-85d4e85ba383"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "AllThePlaces",
+    "nativeRecordId": "dJfrsWmndE2ucPd13MZpOYyakCw=",
+    "keys": [
+      "shopping:overture:58391e19-2f13-433c-91bf-318a18c9bf9b",
+      "shopping:overture:b23692f1-c7e0-476f-95e4-9dac828215ed"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "2181786032062250",
+    "keys": [
+      "shopping:overture:5e49cd4b-af0e-4ffb-a656-365cb8becfc3",
+      "shopping:overture:94553617-7b4a-401a-930a-a6dc0747f1f2"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "142799109661207",
+    "keys": [
+      "shopping:overture:5ea8776b-47de-490f-9101-951735586961",
+      "shopping:overture:a89abdd3-3e01-4757-b923-38eeb510672f"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "109268675160768",
+    "keys": [
+      "shopping:overture:5f89e4c0-adab-4dc8-b377-492da63d86f9",
+      "shopping:overture:65535136-8a85-437f-b3d8-2fab0d3434be"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "125595224284265",
+    "keys": [
+      "shopping:overture:7bb71f4c-c4a5-4f98-987c-85dfa3da65b5",
+      "shopping:overture:ce147933-bfe1-4711-9444-c48234ba211f"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "128568730551711",
+    "keys": [
+      "shopping:overture:8959d14e-13b8-44f6-927d-ba8c11882bfd",
+      "shopping:overture:9e57cdaf-bd8b-4637-8dd5-262272959548"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "360506721042198",
+    "keys": [
+      "shopping:overture:9772f00b-5e3b-4112-b294-3bb34cc905c8",
+      "shopping:overture:d315200c-e76e-4b13-9713-ac217ac6606f"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "289989044355266",
+    "keys": [
+      "shopping:overture:b164486b-88cc-4bcc-9586-a5499a49c5be",
+      "shopping:overture:ff9b494e-a699-466e-a95f-183a2a020cc3"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "839569812728140",
+    "keys": [
+      "shopping:overture:b4769ba6-3632-4be2-af8e-6841d3c9acee",
+      "shopping:overture:faac6e53-84f8-45bd-82f5-701eb01f1589"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "AllThePlaces",
+    "nativeRecordId": "4BiSoGFQ62avBCZdYGx_vdcfNBg=",
+    "keys": [
+      "shopping:overture:c8e97162-cc6c-404d-ab03-f0763e73fd8c",
+      "shopping:overture:fc633d51-d22c-401f-b7f4-83ce4dc3c8e4"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "100612791973016",
+    "keys": [
+      "shopping:overture:cba88af9-b5f9-4bb4-9dd9-46bdcf82b29c",
+      "shopping:overture:dee73df8-fef7-4931-9c66-cb7daf5ae787"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  },
+  {
+    "dataset": "meta",
+    "nativeRecordId": "101634509495937",
+    "keys": [
+      "shopping:overture:cd4afdbf-eae0-4024-89d2-7f762f185a29",
+      "shopping:overture:e1e2b7b6-c248-42e4-9615-918433ae75a5"
+    ],
+    "reason": "Provider-native ID appears on multiple source identities; not merged by name/address/coordinate."
+  }
+]

@@ -5,6 +5,8 @@ import {
   formats,
   badge,
   layerId,
+  shoppingCategories,
+  categoryFor,
 } from "./core/layers.js";
 import * as M from "./core/model.js";
 import { validateState, parseJSON, validHours } from "./core/contracts.js";
@@ -95,6 +97,7 @@ function filterFor(ns) {
       multi: false,
       first: false,
       brands: [],
+      shopCategories: [],
       formats: [],
     }
   );
@@ -431,7 +434,7 @@ function visitHTML(row, d, i) {
     p = M.visitPlace(st),
     current = allPlaces().find((x) => x.key === p.key),
     missing = !p.key.startsWith("manual:") && !current;
-  return `<article class="visit ${selected === st.id ? "selected" : ""}" data-stop="${st.id}"><div class="visit-head"><span class="visit-number">${i + 1}</span><div class="visit-title"><h3><button class="name-button" data-action="edit-stop" data-id="${st.id}" lang="ja">${esc(M.name(p))}</button></h3><div class="time">${row.arrival === null ? "Time unknown" : M.timeLabel(d.date, row.arrival) + " – " + M.timeLabel(d.date, row.departure)}</div><small>${st.durationMinutes} min visit</small></div><button class="drag-handle" aria-label="Drag visit ${i + 1} to reorder" data-drag="${st.id}">⠿</button></div><p>${esc(p.address.ja || "Japanese address not supplied")}</p><div><span class="badge ${M.located(p) && p.location.confidence === "high" ? "" : "warn"}">${M.located(p) ? p.location.confidence + " confidence pin" : "Location unknown · list only"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${missing ? '<span class="badge warn">Not in current source</span>' : ""}</div><p>${esc(M.hoursResult(p.hours, d.date, row.arrival, row.departure))}</p>${st.notes ? `<p>${esc(st.notes)}</p>` : ""}<div class="actions"><button data-action="up" data-id="${st.id}" ${i === 0 ? "disabled" : ""}>Move up</button><button data-action="down" data-id="${st.id}" ${i === d.stopIds.length - 1 ? "disabled" : ""}>Move down</button><button data-action="move" data-id="${st.id}">Move to day</button><button data-action="save-visit" data-id="${st.id}">Save to Spots</button><button data-action="show-stop" data-id="${st.id}">Show pin</button><button data-action="remove-stop" data-id="${st.id}">Remove</button></div></article>`;
+  return `<article class="visit ${selected === st.id ? "selected" : ""}" data-stop="${st.id}"><div class="visit-head"><span class="visit-number">${i + 1}</span><div class="visit-title"><h3><button class="name-button" data-action="edit-stop" data-id="${st.id}" lang="ja">${esc(M.name(p))}</button></h3><div class="time">${row.arrival === null ? "Time unknown" : M.timeLabel(d.date, row.arrival) + " – " + M.timeLabel(d.date, row.departure)}</div><small>${st.durationMinutes} min visit</small></div><button class="drag-handle" aria-label="Drag visit ${i + 1} to reorder" data-drag="${st.id}">⠿</button></div><p>${esc(p.address.ja || "Japanese address not supplied")}</p><div><span class="badge ${M.located(p) && p.location.confidence === "high" ? "" : "warn"}">${M.located(p) ? p.location.confidence + " confidence pin" : "Location unknown · list only"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${missing ? '<span class="badge warn">Not in current source</span>' : ""}</div>${p.operatingStatus.note ? `<p class="notice">${esc(p.operatingStatus.note)}</p>` : ""}<p>${esc(M.hoursResult(p.hours, d.date, row.arrival, row.departure))}</p>${st.notes ? `<p>${esc(st.notes)}</p>` : ""}<div class="actions"><button data-action="up" data-id="${st.id}" ${i === 0 ? "disabled" : ""}>Move up</button><button data-action="down" data-id="${st.id}" ${i === d.stopIds.length - 1 ? "disabled" : ""}>Move down</button><button data-action="move" data-id="${st.id}">Move to day</button><button data-action="save-visit" data-id="${st.id}">Save to Spots</button><button data-action="show-stop" data-id="${st.id}">Show pin</button><button data-action="remove-stop" data-id="${st.id}">Remove</button></div></article>`;
 }
 function wireContext() {
   $("trip-select")?.addEventListener("change", (e) => {
@@ -957,8 +960,12 @@ function renderDiscover() {
         "",
       )} Snapshot generated ${esc(feed.generatedAt)}. This is not a venue verification date. Shopping coverage may be incomplete; missing hours remain unknown.</p></section><aside class="map-wrap"><div id="map" class="map" aria-label="Discover map"></div><p class="map-note">Approximate pins · check the address and entrance. © OpenStreetMap contributors.</p></aside></div>`;
   wireContext();
-  $("discover-controls").querySelector("summary").onclick = (e) => { controlsOpen = !e.currentTarget.parentElement.open; };
-  document.querySelector(".layer-controls summary").onclick = (e) => { layersOpen = !e.currentTarget.parentElement.open; };
+  $("discover-controls").querySelector("summary").onclick = (e) => {
+    controlsOpen = !e.currentTarget.parentElement.open;
+  };
+  document.querySelector(".layer-controls summary").onclick = (e) => {
+    layersOpen = !e.currentTarget.parentElement.open;
+  };
   document.querySelectorAll("[data-layer]").forEach(
     (el) =>
       (el.onchange = () => {
@@ -1049,7 +1056,7 @@ function card(p, km = null, local = null) {
     })
     .join(
       "",
-    )}</div>${p.operatingStatus.note ? `<p class="notice">${esc(p.operatingStatus.note)}</p>` : ""}${p.operatingStatus.value === "closed" ? '<p class="notice">Recorded closed — historical/source record, not an active recommendation.</p>' : ""}<p>${esc(p.address.ja || p.address.city || "Japanese address not supplied")}</p><span class="badge warn">${M.located(p) ? p.location.confidence + " confidence pin · check entrance" : "Location unknown"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${p.hoursText ? `<p>Hours reference: ${esc(p.hoursText)}</p>` : ""}<p class="muted">${p.hours ? "Structured hours available; checked against scheduled visits." : "Hours not checked."}</p>${p.reviewNotes.length ? `<details><summary>Location and source notes</summary><p>${esc(p.reviewNotes.join(" · "))}</p></details>` : ""}<label class="check"><input type="checkbox" data-export-key="${esc(p.key)}" ${selectedExport.has(p.key) ? "checked" : ""}>Select for Google Maps</label><p class="muted">${p.shopping ? esc((brands[p.shopping.brandId] || p.shopping.brandId) + " · " + (formats[p.shopping.formatId] || p.shopping.formatId)) : p.key.startsWith("saunachelin:") ? "Sauna layer" : "Food layer"}</p><div class="actions"><button class="primary" data-action="add-place" data-id="${esc(p.key)}">Add to day</button><button data-action="save-place" data-id="${esc(p.key)}" aria-pressed="${!!f?.favourite}">${f?.favourite ? "★ Saved" : "☆ Save to Spots"}</button><button data-action="visited" data-id="${esc(p.key)}" aria-pressed="${!!f?.visited}">${f?.visited ? "✓ Visited" : "Visited"}</button>${M.located(p) ? `<button data-action="show-place" data-id="${esc(p.key)}">Show pin</button>` : ""}${local ? `<button data-action="edit-place" data-id="${local.id}">Edit saved place</button><button data-action="apply-saved" data-id="${local.id}">Apply to visits</button>` : ""}</div><details><summary>Source and navigation links</summary><div class="actions">${p.links.map((l) => (M.safeURL(l.url) ? `<a class="button" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : "")).join("")}<a class="button" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(M.name(p) + " " + (p.address.ja || p.address.city || ""))}" target="_blank" rel="noopener">Google Maps search</a></div><p>Standalone links open the source map; they do not select this place automatically.</p></details></article>`;
+    )}</div>${p.operatingStatus.note ? `<p class="notice">${esc(p.operatingStatus.note)}</p>` : ""}${p.operatingStatus.value === "closed" ? '<p class="notice">Recorded closed — check the source notice before planning a visit.</p>' : ""}<p>${esc(p.address.ja || p.address.city || "Japanese address not supplied")}</p><span class="badge warn">${M.located(p) ? p.location.confidence + " confidence pin · check entrance" : "Location unknown"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${p.hoursText ? `<p>Hours reference: ${esc(p.hoursText)}</p>` : ""}<p class="muted">${p.hours ? "Structured hours available; checked against scheduled visits." : "Hours not checked."}</p>${p.reviewNotes.length ? `<details><summary>Location and source notes</summary><p>${esc(p.reviewNotes.join(" · "))}</p></details>` : ""}<label class="check"><input type="checkbox" data-export-key="${esc(p.key)}" ${selectedExport.has(p.key) ? "checked" : ""}>Select for Google Maps</label><p class="muted">${p.shopping ? esc(shoppingCategories[categoryFor(p.shopping.brandId)] + " · " + (Object.hasOwn(brands, p.shopping.brandId) ? brands[p.shopping.brandId] : p.shopping.brandId) + " · " + (Object.hasOwn(formats, p.shopping.formatId) ? formats[p.shopping.formatId] : p.shopping.formatId)) : p.key.startsWith("saunachelin:") ? "Sauna layer" : "Food layer"}</p><div class="actions"><button class="primary" data-action="add-place" data-id="${esc(p.key)}">Add to day</button><button data-action="save-place" data-id="${esc(p.key)}" aria-pressed="${!!f?.favourite}">${f?.favourite ? "★ Saved" : "☆ Save to Spots"}</button><button data-action="visited" data-id="${esc(p.key)}" aria-pressed="${!!f?.visited}">${f?.visited ? "✓ Visited" : "Visited"}</button>${M.located(p) ? `<button data-action="show-place" data-id="${esc(p.key)}">Show pin</button>` : ""}${local ? `<button data-action="edit-place" data-id="${local.id}">Edit saved place</button><button data-action="apply-saved" data-id="${local.id}">Apply to visits</button>` : ""}</div><details><summary>Source and navigation links</summary><div class="actions">${p.links.map((l) => (M.safeURL(l.url) ? `<a class="button" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : "")).join("")}<a class="button" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(M.name(p) + " " + (p.address.ja || p.address.city || ""))}" target="_blank" rel="noopener">Google Maps search</a></div><p>Standalone links open the source map; they do not select this place automatically.</p></details></article>`;
 }
 function findPlace(key) {
   const local = state.places.find((x) => x.snapshot.key === key);
@@ -1494,7 +1501,7 @@ function renderSettings() {
       )
       .join(
         "",
-      )}<p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open once online, then in iPhone Safari choose Share → Add to Home Screen. The previously loaded app, bundled Discover data, trips and saved places work offline. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.0<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
+      )}<p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open once online, then in iPhone Safari choose Share → Add to Home Screen. The previously loaded app, bundled Discover data, trips and saved places work offline. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.1<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
   $("setting-theme").onchange = (e) =>
     commit((s) => (s.settings.theme = e.target.value));
   $("setting-mode").onchange = (e) =>
@@ -1765,6 +1772,9 @@ $("content").addEventListener("click", async (e) => {
       case "reset-filters":
         discover = {
           ...discover,
+          brands: [],
+          formats: [],
+          shopCategories: [],
           q: "",
           years: [],
           categories: [],
@@ -2000,21 +2010,50 @@ function layersHTML(counts) {
 }
 function shoppingFiltersHTML() {
   const ps = feeds.shopping?.places || [];
-  return `<h3>Shopping brands and formats</h3>${shoppingCoverageHTML(ps)}<p>None selected means all. Formats use both symbols and labels.</p><div class="grid2">${[
-    ...new Set(ps.map((p) => p.shopping.brandId)),
+  const categoryPlaces = ps.filter(
+    (p) =>
+      !discover.shopCategories?.length ||
+      discover.shopCategories.includes(categoryFor(p.shopping.brandId)),
+  );
+  const formatPlaces = categoryPlaces.filter(
+    (p) =>
+      !discover.brands?.length || discover.brands.includes(p.shopping.brandId),
+  );
+  return `<h3>Shopping categories</h3><div class="grid2">${Object.entries(
+    shoppingCategories,
+  )
+    .filter(
+      ([id]) =>
+        id !== "other-shopping" ||
+        ps.some((p) => categoryFor(p.shopping.brandId) === id),
+    )
+    .map(
+      ([id, label]) =>
+        `<label class="check"><input type="checkbox" data-shop-filter="shopCategories" value="${id}" ${(discover.shopCategories || []).includes(id) ? "checked" : ""}>${esc(label)} (${ps.filter((p) => categoryFor(p.shopping.brandId) === id).length})</label>`,
+    )
+    .join(
+      "",
+    )}</div><h3>Brands and formats</h3>${shoppingCoverageHTML(ps)}<p>None selected means all. Formats use both symbols and labels.</p><div class="grid2">${[
+    ...new Set([
+      ...categoryPlaces.map((p) => p.shopping.brandId),
+      ...(discover.brands || []),
+    ]),
   ]
     .sort()
     .map(
       (v) =>
-        `<label class="check"><input type="checkbox" data-shop-filter="brands" value="${esc(v)}" ${(discover.brands || []).includes(v) ? "checked" : ""}>${esc(brands[v] || v)} (${ps.filter((p) => p.shopping.brandId === v).length})</label>`,
+        `<label class="check"><input type="checkbox" data-shop-filter="brands" value="${esc(v)}" ${(discover.brands || []).includes(v) ? "checked" : ""}>${esc(Object.hasOwn(brands, v) ? brands[v] : v)} (${ps.filter((p) => p.shopping.brandId === v).length})</label>`,
     )
     .join("")}</div><div class="grid2">${[
-    ...new Set(ps.map((p) => p.shopping.formatId)),
+    ...new Set([
+      ...formatPlaces.map((p) => p.shopping.formatId),
+      ...(discover.formats || []),
+    ]),
   ]
     .sort()
     .map(
       (v) =>
-        `<label class="check"><input type="checkbox" data-shop-filter="formats" value="${esc(v)}" ${(discover.formats || []).includes(v) ? "checked" : ""}>${esc(formats[v] || v)}</label>`,
+        `<label class="check"><input type="checkbox" data-shop-filter="formats" value="${esc(v)}" ${(discover.formats || []).includes(v) ? "checked" : ""}>${esc(Object.hasOwn(formats, v) ? formats[v] : v)}</label>`,
     )
     .join(
       "",

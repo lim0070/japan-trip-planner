@@ -892,7 +892,31 @@ textarea::placeholder {
 .coverage-table th:first-child {
   width: 40%;
 }
-.layer-pin,.pin-number {min-width:44px;height:44px;}
-.leaflet-control-zoom a {width:44px!important;height:44px!important;line-height:44px!important;}
+.layer-pin,
+.pin-number {
+  min-width: 44px;
+  height: 44px;
+}
+.leaflet-control-zoom a {
+  width: 44px !important;
+  height: 44px !important;
+  line-height: 44px !important;
+}
 
-@media(max-width:760px){.discovery-workspace.show-map{height:max(340px,calc(100dvh - 470px));min-height:340px}.discovery-workspace.show-map .map{height:100%;min-height:340px}.discovery-workspace.show-map>.list-pane{height:38%;min-height:140px}.discovery-workspace.show-map .leaflet-bottom{bottom:40%}}
+@media (max-width: 760px) {
+  .discovery-workspace.show-map {
+    height: max(340px, calc(100dvh - 470px));
+    min-height: 340px;
+  }
+  .discovery-workspace.show-map .map {
+    height: 100%;
+    min-height: 340px;
+  }
+  .discovery-workspace.show-map > .list-pane {
+    height: 38%;
+    min-height: 140px;
+  }
+  .discovery-workspace.show-map .leaflet-bottom {
+    bottom: 40%;
+  }
+}

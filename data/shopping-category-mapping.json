@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "catalogueVersion": "2026-11-02-five-chains",
+  "categoryByBrand": {
+    "outlet-mall": "outlet-malls",
+    "gu": "clothing",
+    "uniqlo": "clothing",
+    "global-work": "clothing",
+    "workman": "clothing",
+    "shimamura": "clothing",
+    "avail": "clothing",
+    "birthday": "clothing",
+    "chambre": "clothing",
+    "divalo": "clothing",
+    "costco": "warehouse-clubs",
+    "lopia": "supermarkets",
+    "life-supermarket": "supermarkets",
+    "nitori": "furniture-home",
+    "hands": "lifestyle-diy"
+  },
+  "categoryLabels": {
+    "outlet-malls": "Outlet malls",
+    "clothing": "Clothing & fashion",
+    "warehouse-clubs": "Warehouse clubs",
+    "supermarkets": "Supermarkets",
+    "furniture-home": "Furniture & home",
+    "lifestyle-diy": "Lifestyle, stationery & DIY",
+    "other-shopping": "Other shopping"
+  },
+  "fallbackCategory": "other-shopping",
+  "feedFieldPolicy": "Planner derives categories from brand catalogue; root category Shopping and shopping brandId/formatId only. No groupId added."
+}

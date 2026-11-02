@@ -1,3 +1,4 @@
+import { categoryFor } from "./shopping-catalog.js";
 export const clone = (x) => structuredClone(x);
 export const id = () => crypto.randomUUID();
 export const now = () => new Date().toISOString();
@@ -459,6 +460,8 @@ export function filterPlaces(
         return false;
       if (feed.source.namespace === "shopping")
         return (
+          (!f.shopCategories?.length ||
+            f.shopCategories.includes(categoryFor(p.shopping.brandId))) &&
           (!f.brands?.length || f.brands.includes(p.shopping.brandId)) &&
           (!f.formats?.length || f.formats.includes(p.shopping.formatId))
         );

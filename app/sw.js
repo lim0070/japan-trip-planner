@@ -1,5 +1,5 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v4";
+  CACHE = PREFIX + "v5";
 const FILES = [
   "./",
   "index.html",
@@ -7,6 +7,7 @@ const FILES = [
   "main.js",
   "core/model.js",
   "core/layers.js",
+  "core/shopping-catalog.js",
   "core/zip.js",
   "core/handoff.js",
   "core/contracts.js",
@@ -27,6 +28,7 @@ const FILES = [
   "../data/shopping-LICENSES/index.json",
   "../data/shopping-LICENSES/Apache-2.0.txt",
   "../data/shopping-LICENSES/CDLA-Permissive-2.0.txt",
+  "../data/shopping-LICENSES/EXPANSION-NOTICE.txt",
   "../data/shopping-LICENSES/Foursquare-NOTICE.txt",
   "../data/shopping-LICENSES/README.txt",
   "../data/shopping-LICENSES/source-inventory.json",

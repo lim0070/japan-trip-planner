@@ -1,8 +1,5 @@
 {
   "sources": {
-    "Meta": [
-      "CDLA-Permissive-2.0.txt"
-    ],
     "Microsoft": [
       "CDLA-Permissive-2.0.txt"
     ],
@@ -15,6 +12,9 @@
     ],
     "AllThePlaces": [
       "CC0 reference: https://creativecommons.org/publicdomain/zero/1.0/"
+    ],
+    "meta": [
+      "CDLA-Permissive-2.0.txt"
     ]
   },
   "allRedistributedFiles": [
