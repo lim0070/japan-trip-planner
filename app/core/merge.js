@@ -23,7 +23,7 @@ export function backup(s, tripId = null) {
     kind: tripId ? "trip" : "full",
     exportId: id(),
     exportedAt: now(),
-    appVersion: "1.1.0",
+    appVersion: "2.0.0",
     ...data,
   };
 }
@@ -72,6 +72,10 @@ export function mergeImport(s, data, preview, flagPolicy = "merge") {
         else if (flagPolicy === "merge") old[k] ||= f[k];
     }
   } else {
+    s.dataLicenses = {
+      ...(s.dataLicenses || {}),
+      ...(data.dataLicenses || {}),
+    };
     // Compare the complete trip closure before deciding a repeated ID is identical.
     const closure = (state, t) =>
       JSON.stringify({

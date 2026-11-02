@@ -1,11 +1,14 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v3";
+  CACHE = PREFIX + "v4";
 const FILES = [
   "./",
   "index.html",
   "styles.css",
   "main.js",
   "core/model.js",
+  "core/layers.js",
+  "core/zip.js",
+  "core/handoff.js",
   "core/contracts.js",
   "core/merge.js",
   "storage/db.js",
@@ -20,6 +23,14 @@ const FILES = [
   "vendor/MarkerCluster.Default.css",
   "../data/saunas.v1.json",
   "../data/food.v1.json",
+  "../data/shopping.v1.json",
+  "../data/shopping-LICENSES/index.json",
+  "../data/shopping-LICENSES/Apache-2.0.txt",
+  "../data/shopping-LICENSES/CDLA-Permissive-2.0.txt",
+  "../data/shopping-LICENSES/Foursquare-NOTICE.txt",
+  "../data/shopping-LICENSES/README.txt",
+  "../data/shopping-LICENSES/source-inventory.json",
+  "../data/shopping-LICENSES/source-to-notice.json",
 ];
 self.addEventListener("install", (e) =>
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES))),

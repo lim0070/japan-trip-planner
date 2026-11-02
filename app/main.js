@@ -1,6 +1,18 @@
+import { zipFiles } from "./core/zip.js";
+import {
+  combineLayers,
+  brands,
+  formats,
+  badge,
+  layerId,
+} from "./core/layers.js";
 import * as M from "./core/model.js";
 import { validateState, parseJSON, validHours } from "./core/contracts.js";
-import { backup, previewImport, mergeImport } from "./core/merge.js";
+import {
+  backup as makeBackup,
+  previewImport,
+  mergeImport,
+} from "./core/merge.js";
 import * as DB from "./storage/db.js";
 const $ = (id) => document.getElementById(id),
   esc = (x) =>
@@ -51,6 +63,46 @@ let discover = {
   originLabel: "",
   open: false,
 };
+let layersOpen = false,
+  controlsOpen = false;
+let sourceLicenseTexts = {};
+function backup(s, tripId = null) {
+  return {
+    ...makeBackup(s, tripId),
+    dataLicenses: { ...(s.dataLicenses || {}), ...sourceLicenseTexts },
+  };
+}
+const sourceFilters = {},
+  selectedExport = new Map();
+let visibleLayers = { sauna: true, food: true, shopping: true };
+try {
+  Object.assign(
+    visibleLayers,
+    JSON.parse(localStorage.getItem("japan-trip-layers") || "{}"),
+  );
+} catch {}
+function filterFor(ns) {
+  return (
+    sourceFilters[ns] || {
+      ...discover,
+      source: ns,
+      years: [],
+      categories: [],
+      region: "",
+      prefecture: "",
+      listId: "",
+      hof: false,
+      multi: false,
+      first: false,
+      brands: [],
+      formats: [],
+    }
+  );
+}
+function switchSource(ns) {
+  sourceFilters[discover.source] = { ...discover };
+  discover = { ...filterFor(ns), source: ns, open: discover.open };
+}
 const trip = () => state.trips.find((t) => t.id === activeTrip),
   day = () => state.days.find((d) => d.id === activeDay),
   allPlaces = () => Object.values(feeds).flatMap((f) => f.places);
@@ -95,6 +147,7 @@ async function commit(fn, { redraw = true } = {}) {
   const next = M.clone(state);
   try {
     await fn(next);
+    next.dataLicenses = { ...(next.dataLicenses || {}), ...sourceLicenseTexts };
     next.sourceVersions = Object.fromEntries(
       Object.values(feeds).map((f) => [f.source.namespace, f.datasetVersion]),
     );
@@ -116,7 +169,7 @@ async function commit(fn, { redraw = true } = {}) {
   }
 }
 function download(value, filename) {
-  const blob = new Blob([JSON.stringify(value, null, 2)], {
+  const blob = new Blob([JSON.stringify(value)], {
       type: "application/json",
     }),
     url = URL.createObjectURL(blob),
@@ -202,6 +255,7 @@ function render() {
     ? location.hash.slice(1)
     : "trips";
   if (map) {
+    map.stop();
     map.remove();
     map = null;
   }
@@ -218,7 +272,7 @@ function render() {
 }
 function renderTrips() {
   $("content").innerHTML =
-    `<section class="narrow"><div class="toolbar"><div><h1>Your Japan trips</h1><p class="muted">A notebook for the places along the way.</p></div><button class="primary" data-action="new-trip">New trip</button></div><section class="map-entry" aria-label="Your two map apps"><h2>Your two map apps</h2><p>Find award-winning saunas and food, then save places or add them to a trip.</p><div class="actions"><button class="primary" data-action="discover-source" data-id="saunachelin">Browse saunas</button><button class="primary" data-action="discover-source" data-id="tabelog">Browse food</button></div>${originalApps()}</section>${state.trips.map((t) => `<article class="trip-row"><div><h2>${esc(t.name)}</h2><p class="muted">${esc(t.startDate)} – ${esc(t.endDate)} · Japan time</p><small>${t.dayIds.length} days · ${state.stops.filter((s) => s.tripId === t.id).length} visits${t.unassignedStopIds.length ? " · " + t.unassignedStopIds.length + " unassigned" : ""}</small></div><div class="actions"><button class="primary" data-action="open-trip" data-id="${t.id}">Open trip</button><button data-action="edit-trip" data-id="${t.id}">Edit dates</button></div></article>`).join("") || '<div class="empty"><h2>Where will you go?</h2><p>Create a trip with your dates, then add places from Discover or your own notes.</p></div>'}<div class="section-divider"><h3>Try a sample week</h3><p class="muted">January 11–17, 2027: Tokyo, Sendai, Yamagata and Matsushima. These are list-only destination placeholders, not a verified route or winter travel advice. Hakodate is a later extension.</p><button data-action="sample">Create sample week</button></div><p class="attribution">Trips stay in this browser. Export a backup before travelling or clearing browser storage.</p></section>`;
+    `<section class="narrow"><div class="toolbar"><div><h1>Your Japan trips</h1><p class="muted">A notebook for the places along the way.</p></div><button class="primary" data-action="new-trip">New trip</button></div><section class="map-entry" aria-label="Your two map apps"><h2>Your two map apps</h2><p>Find award-winning saunas and food, then save places or add them to a trip.</p><div class="actions"><button class="primary" data-action="discover-source" data-id="saunachelin">Browse saunas</button><button class="primary" data-action="discover-source" data-id="tabelog">Browse food</button><button data-action="discover-source" data-id="shopping">Browse shopping</button></div>${originalApps()}</section>${state.trips.map((t) => `<article class="trip-row"><div><h2>${esc(t.name)}</h2><p class="muted">${esc(t.startDate)} – ${esc(t.endDate)} · Japan time</p><small>${t.dayIds.length} days · ${state.stops.filter((s) => s.tripId === t.id).length} visits${t.unassignedStopIds.length ? " · " + t.unassignedStopIds.length + " unassigned" : ""}</small></div><div class="actions"><button class="primary" data-action="open-trip" data-id="${t.id}">Open trip</button><button data-action="edit-trip" data-id="${t.id}">Edit dates</button></div></article>`).join("") || '<div class="empty"><h2>Where will you go?</h2><p>Create a trip with your dates, then add places from Discover or your own notes.</p></div>'}<div class="section-divider"><h3>Try a sample week</h3><p class="muted">January 11–17, 2027: Tokyo, Sendai, Yamagata and Matsushima. These are list-only destination placeholders, not a verified route or winter travel advice. Hakodate is a later extension.</p><button data-action="sample">Create sample week</button></div><p class="attribution">Trips stay in this browser. Export a backup before travelling or clearing browser storage.</p></section>`;
 }
 function editTrip(existing) {
   $("dialog").dataset.trip = existing?.id || "";
@@ -332,7 +386,7 @@ function renderDay() {
   const rows = M.schedule(state, d),
     warnings = M.warnings(state, d, t);
   $("content").innerHTML =
-    `<div class="toolbar"><div><h1>${esc(t.name)}</h1><small>All planning times are in Japan (Asia/Tokyo).</small></div><div class="actions">${context()}<button data-action="edit-trip" data-id="${t.id}">Trip details</button><button data-action="export-trip">Export trip</button></div></div><div class="date-strip" aria-label="Trip days">${t.dayIds
+    `<div class="toolbar"><div><h1>${esc(t.name)}</h1><small>All planning times are in Japan (Asia/Tokyo).</small></div><div class="actions">${context()}<button data-action="edit-trip" data-id="${t.id}">Trip details</button><button data-action="export-trip">Export trip</button><button data-action="handoff-day">Day in Google Maps</button></div></div><div class="date-strip" aria-label="Trip days">${t.dayIds
       .map((id, i) => {
         const date = state.days.find((d) => d.id === id);
         return `<button data-action="select-day" data-id="${id}" class="${id === activeDay ? "selected" : ""}">Day ${i + 1}<small>${date.date.slice(5)}</small></button>`;
@@ -802,7 +856,15 @@ function origins() {
     .map((p) => p.location);
 }
 function renderDiscover() {
-  const feed = feeds[discover.source];
+  const feed = feeds[discover.source] || {
+    source: {
+      namespace: discover.source,
+      attribution: "Shopping feed not loaded yet",
+    },
+    places: [],
+    lists: [],
+    generatedAt: "not loaded",
+  };
   if (!feed) {
     $("content").innerHTML =
       "<h1>Source unavailable</h1><p>Your itinerary and manual entries still work. Reload online to try the bundled source again.</p>";
@@ -833,8 +895,29 @@ function renderDiscover() {
       discover.source === "tabelog"
         ? [...new Set(feed.lists.map((l) => l.region))]
         : Object.keys(M.regions);
+  sourceFilters[discover.source] = { ...discover };
+  const combined = combineLayers(
+    feeds,
+    visibleLayers,
+    Object.fromEntries(
+      Object.keys(feeds).map((ns) => [
+        ns,
+        {
+          ...filterFor(ns),
+          radius: discover.radius,
+          originMode: discover.originMode,
+          includeScheduled: discover.includeScheduled,
+        },
+      ]),
+    ),
+    origins(),
+    scheduled,
+    state.flags,
+  );
+  result.rows = combined.rows;
+  result.unknown = combined.unknown;
   $("content").innerHTML =
-    `<div class="toolbar"><div><h1>Find a place along the way</h1><p class="muted">${day() ? "Adding to " + day().date + " · " + esc(trip().name) : "Choose a trip and day when you add a place."}</p></div>${state.trips.length ? context() : ""}</div><div class="toolbar"><div class="source-tabs"><button data-action="source" data-id="saunachelin" aria-pressed="${discover.source === "saunachelin"}">Saunas</button><button data-action="source" data-id="tabelog" aria-pressed="${discover.source === "tabelog"}">Food awards</button></div><button class="map-toggle" data-action="map-toggle">${mapMode ? "Show list" : "Show map"}</button></div>${originalApps()}<details id="filters" ${discover.open ? "open" : ""}><summary>Search & filters</summary><label>Search this dataset<input id="local-search" type="search" value="${esc(discover.q)}" placeholder="Name, city or Japanese address"></label><div class="grid2"><label>Distance from<select id="origin-mode"><option value="day" ${discover.originMode === "day" ? "selected" : ""}>Selected day’s stops</option><option value="trip" ${discover.originMode === "trip" ? "selected" : ""}>Whole trip’s stops</option><option value="custom" ${discover.originMode === "custom" ? "selected" : ""}>Chosen origin</option></select></label><label>Radius<select id="radius">${[1, 3, 5, 10, 20, 50, 100, 0].map((n) => `<option value="${n}" ${discover.radius === n ? "selected" : ""}>${n ? n + " km" : "All distances"}</option>`).join("")}</select></label></div><div class="actions"><button data-action="gps">Near me</button><button data-action="origin">Choose origin</button></div><p class="muted">${discover.originMode === "custom" ? esc(discover.originLabel || "No origin selected") : origins().length + " located scheduled stops"}. Approximate straight-line distance, not access or travel time.</p><p>Award years</p>${chips("years", years, discover.years)}${categories.length ? "<p>Food categories</p>" + chips("categories", categories, discover.categories) : ""}<div class="grid2"><label>Region<select id="region"><option value="">All</option>${regions.map((x) => `<option ${discover.region === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select></label><label>Prefecture<select id="prefecture"><option value="">All</option>${prefs.map((x) => `<option ${discover.prefecture === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select></label></div>${discover.source === "tabelog" ? `<label>Award list<select id="list-filter"><option value="">All imported lists</option>${feed.lists.map((l) => `<option value="${esc(l.listId)}" ${discover.listId === l.listId ? "selected" : ""}>${esc(l.titleJa)}</option>`).join("")}</select></label>` : ""}<div class="grid2">${(discover.source ===
+    `<div class="toolbar"><div><h1>Maps & shopping</h1><button class="map-toggle" data-action="map-toggle">${mapMode ? "Expand list" : "Show map"}</button><p class="muted">${day() ? "Adding to " + day().date + " · " + esc(trip().name) : "Choose a trip and day when you add a place."}</p></div>${state.trips.length ? context() : ""}</div><details id="discover-controls" ${controlsOpen ? "open" : ""}><summary>Layers / Search</summary><div class="toolbar"><div class="source-tabs"><button data-action="source" data-id="saunachelin" aria-pressed="${discover.source === "saunachelin"}">Saunas</button><button data-action="source" data-id="tabelog" aria-pressed="${discover.source === "tabelog"}">Food awards</button><button data-action="source" data-id="shopping" aria-pressed="${discover.source === "shopping"}">Shopping</button></div><button class="map-toggle" data-action="map-toggle">${mapMode ? "Show list" : "Show map"}</button></div>${layersHTML(combined.counts)}${originalApps()}<details id="filters" ${discover.open ? "open" : ""}><summary>Layers / Search · filters for ${esc(discover.source === "shopping" ? "Shopping" : discover.source === "tabelog" ? "Food" : "Saunas")}</summary>${discover.source === "shopping" ? shoppingFiltersHTML() : ""}<label>Search this dataset<input id="local-search" type="search" value="${esc(discover.q)}" placeholder="Name, city or Japanese address"></label><div class="grid2"><label>Distance from<select id="origin-mode"><option value="day" ${discover.originMode === "day" ? "selected" : ""}>Selected day’s stops</option><option value="trip" ${discover.originMode === "trip" ? "selected" : ""}>Whole trip’s stops</option><option value="custom" ${discover.originMode === "custom" ? "selected" : ""}>Chosen origin</option></select></label><label>Radius<select id="radius">${[1, 3, 5, 10, 20, 50, 100, 0].map((n) => `<option value="${n}" ${discover.radius === n ? "selected" : ""}>${n ? n + " km" : "All distances"}</option>`).join("")}</select></label></div><div class="actions"><button data-action="gps">Near me</button><button data-action="origin">Choose origin</button></div><p class="muted">${discover.originMode === "custom" ? esc(discover.originLabel || "No origin selected") : origins().length + " located scheduled stops"}. Approximate straight-line distance, not access or travel time.</p><p>Award years</p>${chips("years", years, discover.years)}${categories.length ? "<p>Food categories</p>" + chips("categories", categories, discover.categories) : ""}<div class="grid2"><label>Region<select id="region"><option value="">All</option>${regions.map((x) => `<option ${discover.region === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select></label><label>Prefecture<select id="prefecture"><option value="">All</option>${prefs.map((x) => `<option ${discover.prefecture === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select></label></div>${discover.source === "tabelog" ? `<label>Award list<select id="list-filter"><option value="">All imported lists</option>${feed.lists.map((l) => `<option value="${esc(l.listId)}" ${discover.listId === l.listId ? "selected" : ""}>${esc(l.titleJa)}</option>`).join("")}</select></label>` : ""}<div class="grid2">${(discover.source ===
     "saunachelin"
       ? [
           ["hof", "Hall of Fame"],
@@ -854,8 +937,51 @@ function renderDiscover() {
       )
       .join(
         "",
-      )}</div><div class="actions"><button data-action="reset-filters">Reset filters</button></div></details>${!origins().length && discover.radius ? '<div class="notice">No located stops to measure from yet. Choose an origin, add a pin, or set All distances. Unknown locations stay in their own list.</div>' : ""}<p class="muted">${discover.source === "tabelog" ? "Current coverage: Udon EAST 2024 only. No Food entries in Miyagi, Yamagata or Hokkaido. Hyakumeiten is unranked." : "Historical awards, special awards and Hall of Fame. Awards do not establish current operation."}</p><div class="workspace ${mapMode ? "show-map" : ""}"><section class="list-pane"><h2>${result.rows.length} ${discover.radius ? "nearby located matches" : "located matches"}</h2>${result.rows.map(({ p, km }) => card(p, km)).join("") || '<div class="empty"><h3>No matching places</h3><p>Try another origin, widen the radius or reset filters. The current source may not cover this destination.</p><button data-action="reset-filters">Reset filters</button></div>'}${result.unknown.length ? `<div class="section-divider"><h2>Location unknown (${result.unknown.length})</h2><p>These match the other filters. Their distance cannot be checked; they are not counted nearby.</p>${result.unknown.map(({ p }) => card(p, null)).join("")}</div>` : ""}<p class="attribution">${esc(feed.source.attribution)} Snapshot generated ${esc(feed.generatedAt)}. This is not a venue verification date.</p></section><aside class="map-wrap"><div id="map" class="map" aria-label="Discover map"></div><p class="map-note">Approximate pins · check the address and entrance. © OpenStreetMap contributors.</p></aside></div>`;
+      )}</div><div class="actions"><button data-action="reset-filters">Reset filters</button></div></details></details>${!origins().length && discover.radius ? '<div class="notice">No located stops to measure from yet. Choose an origin, add a pin, or set All distances. Unknown locations stay in their own list.</div>' : ""}<p class="muted">${discover.source === "shopping" ? "Shopping is a partial source snapshot, not verified unique active stores. Hours are unknown." : discover.source === "tabelog" ? "Food coverage follows imported lists. Hyakumeiten is unranked." : "Historical sauna awards do not establish current operation."}</p><div class="workspace discovery-workspace ${mapMode ? "show-map" : ""}"><section class="list-pane"><p class="muted">Showing up to 100 rows per section. All matching located pins appear on the map.</p><h2>${result.rows.length} ${discover.radius ? "nearby located matches" : "located matches"}</h2>${
+      result.rows
+        .slice(0, 100)
+        .map(({ p, km }) => card(p, km))
+        .join("") ||
+      '<div class="empty"><h3>No matching places</h3><p>Try another origin, widen the radius or reset filters. The current source may not cover this destination.</p><button data-action="reset-filters">Reset filters</button></div>'
+    }${
+      result.unknown.length
+        ? `<div class="section-divider"><h2>Location unknown (${result.unknown.length})</h2><p>These match the other filters. Their distance cannot be checked; they are not counted nearby.</p>${result.unknown
+            .slice(0, 100)
+            .map(({ p }) => card(p, null))
+            .join("")}</div>`
+        : ""
+    }<p class="attribution">${Object.values(feeds)
+      .filter((f) => visibleLayers[layerId(f.source.namespace)])
+      .map((f) => esc(f.source.title + ": " + f.source.attribution) + "<br>")
+      .join(
+        "",
+      )} Snapshot generated ${esc(feed.generatedAt)}. This is not a venue verification date. Shopping coverage may be incomplete; missing hours remain unknown.</p></section><aside class="map-wrap"><div id="map" class="map" aria-label="Discover map"></div><p class="map-note">Approximate pins · check the address and entrance. © OpenStreetMap contributors.</p></aside></div>`;
   wireContext();
+  $("discover-controls").querySelector("summary").onclick = (e) => { controlsOpen = !e.currentTarget.parentElement.open; };
+  document.querySelector(".layer-controls summary").onclick = (e) => { layersOpen = !e.currentTarget.parentElement.open; };
+  document.querySelectorAll("[data-layer]").forEach(
+    (el) =>
+      (el.onchange = () => {
+        visibleLayers[el.dataset.layer] = el.checked;
+        try {
+          localStorage.setItem(
+            "japan-trip-layers",
+            JSON.stringify(visibleLayers),
+          );
+        } catch {}
+        render();
+      }),
+  );
+  document.querySelectorAll("[data-shop-filter]").forEach(
+    (el) =>
+      (el.onchange = () => {
+        const k = el.dataset.shopFilter;
+        discover[k] = el.checked
+          ? [...(discover[k] || []), el.value]
+          : (discover[k] || []).filter((v) => v !== el.value);
+        render();
+      }),
+  );
   $("filters").ontoggle = () => (discover.open = $("filters").open);
   $("local-search").oninput = (e) => {
     discover.q = e.target.value;
@@ -916,14 +1042,14 @@ function card(p, km = null, local = null) {
       f.places.some((x) => x.key === p.key),
     ),
     lm = new Map((feed?.lists || []).map((l) => [l.listId, l]));
-  return `<article class="place-card ${selected === p.key ? "selected" : ""}" data-place="${esc(p.key)}"><div class="place-meta"><h3 lang="ja">${esc(M.name(p))}</h3>${km !== null ? `<span class="muted">${km.toFixed(1)} km</span>` : ""}</div>${p.names.en && p.names.en !== p.names.ja ? `<p class="muted">${esc(p.names.en)}</p>` : ""}<div>${p.awards.map((a) => `<span class="badge">${a.year ?? "Year unknown"} ${a.type === "ranked" ? "No. " + a.rank : esc(a.title || a.type)}</span>`).join("")}${p.memberships
+  return `<article class="place-card ${selected === p.key ? "selected" : ""}" data-place="${esc(p.key)}"><div class="place-meta"><h3 lang="ja"><span class="brand-symbol">${esc(badge(p))}</span> ${esc(M.name(p))}</h3>${km !== null ? `<span class="muted">${km.toFixed(1)} km</span>` : ""}</div>${p.names.en && p.names.en !== p.names.ja ? `<p class="muted">${esc(p.names.en)}</p>` : ""}<div>${p.awards.map((a) => `<span class="badge">${a.year ?? "Year unknown"} ${a.type === "ranked" ? "No. " + a.rank : esc(a.title || a.type)}</span>`).join("")}${p.memberships
     .map((m) => {
       const l = lm.get(m.listId);
       return `<span class="badge">${esc(l ? l.category + " " + l.region + " " + l.year : m.listId)}${m.firstTimePick ? " · 初選出" : ""}</span>`;
     })
     .join(
       "",
-    )}</div><p>${esc(p.address.ja || p.address.city || "Japanese address not supplied")}</p><span class="badge warn">${M.located(p) ? p.location.confidence + " confidence pin · check entrance" : "Location unknown"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${p.hoursText ? `<p>Hours reference: ${esc(p.hoursText)}</p>` : ""}<p class="muted">${p.hours ? "Structured hours available; checked against scheduled visits." : "Hours not checked."}</p>${p.reviewNotes.length ? `<details><summary>Location and source notes</summary><p>${esc(p.reviewNotes.join(" · "))}</p></details>` : ""}<div class="actions"><button class="primary" data-action="add-place" data-id="${esc(p.key)}">Add to day</button><button data-action="save-place" data-id="${esc(p.key)}" aria-pressed="${!!f?.favourite}">${f?.favourite ? "★ Saved" : "☆ Save to Spots"}</button><button data-action="visited" data-id="${esc(p.key)}" aria-pressed="${!!f?.visited}">${f?.visited ? "✓ Visited" : "Visited"}</button>${M.located(p) ? `<button data-action="show-place" data-id="${esc(p.key)}">Show pin</button>` : ""}${local ? `<button data-action="edit-place" data-id="${local.id}">Edit saved place</button><button data-action="apply-saved" data-id="${local.id}">Apply to visits</button>` : ""}</div><details><summary>Source and navigation links</summary><div class="actions">${p.links.map((l) => (M.safeURL(l.url) ? `<a class="button" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : "")).join("")}<a class="button" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(M.name(p) + " " + (p.address.ja || p.address.city || ""))}" target="_blank" rel="noopener">Google Maps search</a></div><p>Standalone links open the source map; they do not select this place automatically.</p></details></article>`;
+    )}</div>${p.operatingStatus.note ? `<p class="notice">${esc(p.operatingStatus.note)}</p>` : ""}${p.operatingStatus.value === "closed" ? '<p class="notice">Recorded closed — historical/source record, not an active recommendation.</p>' : ""}<p>${esc(p.address.ja || p.address.city || "Japanese address not supplied")}</p><span class="badge warn">${M.located(p) ? p.location.confidence + " confidence pin · check entrance" : "Location unknown"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${p.hoursText ? `<p>Hours reference: ${esc(p.hoursText)}</p>` : ""}<p class="muted">${p.hours ? "Structured hours available; checked against scheduled visits." : "Hours not checked."}</p>${p.reviewNotes.length ? `<details><summary>Location and source notes</summary><p>${esc(p.reviewNotes.join(" · "))}</p></details>` : ""}<label class="check"><input type="checkbox" data-export-key="${esc(p.key)}" ${selectedExport.has(p.key) ? "checked" : ""}>Select for Google Maps</label><p class="muted">${p.shopping ? esc((brands[p.shopping.brandId] || p.shopping.brandId) + " · " + (formats[p.shopping.formatId] || p.shopping.formatId)) : p.key.startsWith("saunachelin:") ? "Sauna layer" : "Food layer"}</p><div class="actions"><button class="primary" data-action="add-place" data-id="${esc(p.key)}">Add to day</button><button data-action="save-place" data-id="${esc(p.key)}" aria-pressed="${!!f?.favourite}">${f?.favourite ? "★ Saved" : "☆ Save to Spots"}</button><button data-action="visited" data-id="${esc(p.key)}" aria-pressed="${!!f?.visited}">${f?.visited ? "✓ Visited" : "Visited"}</button>${M.located(p) ? `<button data-action="show-place" data-id="${esc(p.key)}">Show pin</button>` : ""}${local ? `<button data-action="edit-place" data-id="${local.id}">Edit saved place</button><button data-action="apply-saved" data-id="${local.id}">Apply to visits</button>` : ""}</div><details><summary>Source and navigation links</summary><div class="actions">${p.links.map((l) => (M.safeURL(l.url) ? `<a class="button" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : "")).join("")}<a class="button" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(M.name(p) + " " + (p.address.ja || p.address.city || ""))}" target="_blank" rel="noopener">Google Maps search</a></div><p>Standalone links open the source map; they do not select this place automatically.</p></details></article>`;
 }
 function findPlace(key) {
   const local = state.places.find((x) => x.snapshot.key === key);
@@ -1151,10 +1277,13 @@ function searchDialog(purpose) {
 }
 function initMap(kind, items) {
   if (!$("map") || !window.L) return;
-  map = L.map("map", { maxZoom: 19, zoomControl: true }).setView(
-    [37.5, 138],
-    5,
-  );
+  map = L.map("map", {
+    maxZoom: 19,
+    zoomControl: true,
+    zoomAnimation: false,
+    fadeAnimation: false,
+    markerZoomAnimation: false,
+  }).setView([37.5, 138], 5);
   if (config.tilesUrl && (!matchMedia("(max-width:760px)").matches || mapMode))
     L.tileLayer(config.tilesUrl, {
       attribution:
@@ -1201,7 +1330,7 @@ function initMap(kind, items) {
         icon: L.divIcon({
           className: "",
           html: `<div class="pin-number">${group.map((x) => x.n).join(", ")}</div>`,
-          iconSize: [Math.max(32, group.length * 20), 32],
+          iconSize: [Math.max(44, group.length * 24), 44],
         }),
       }).addTo(map);
       group.forEach((x) => markers.set(x.id, marker));
@@ -1236,6 +1365,7 @@ function initMap(kind, items) {
     }
   } else {
     const cluster = L.markerClusterGroup({
+      animate: false,
       maxClusterRadius: 45,
       showCoverageOnHover: false,
     });
@@ -1246,8 +1376,8 @@ function initMap(kind, items) {
       const marker = L.marker(point, {
         icon: L.divIcon({
           className: "",
-          html: `<div class="discover-pin ${p.location.confidence !== "high" ? "approx" : ""}"></div>`,
-          iconSize: [24, 24],
+          html: `<div class="layer-pin layer-${layerId(p.key.split(":")[0])}">${esc(badge(p))}</div>`,
+          iconSize: [44, 44],
         }),
       });
       markers.set(id, marker);
@@ -1267,8 +1397,41 @@ function initMap(kind, items) {
     }
     cluster.addTo(map);
     map.cluster = cluster;
+    const visits = (day()?.stopIds || []).map((id) =>
+      state.stops.find((st) => st.id === id),
+    );
+    visits.forEach((st, i) => {
+      const p = M.visitPlace(st);
+      if (!M.located(p)) return;
+      const point = [p.location.lat, p.location.lng];
+      bounds.push(point);
+      const pin = L.marker(point, {
+        zIndexOffset: 1000,
+        icon: L.divIcon({
+          className: "",
+          html: `<div class="pin-number">${i + 1}</div>`,
+          iconSize: [44, 44],
+        }),
+      }).addTo(map);
+      const label = document.createElement("span");
+      label.textContent = `Scheduled ${i + 1}: ${M.name(p)}`;
+      pin.bindPopup(label);
+    });
+    for (let i = 1; i < visits.length; i++) {
+      const a = M.visitPlace(visits[i - 1]),
+        b = M.visitPlace(visits[i]);
+      if (M.located(a) && M.located(b))
+        L.polyline(
+          [
+            [a.location.lat, a.location.lng],
+            [b.location.lat, b.location.lng],
+          ],
+          { color: "#246b72", dashArray: "5 7", interactive: false },
+        ).addTo(map);
+    }
   }
-  if (bounds.length) map.fitBounds(bounds, { padding: [30, 30], maxZoom: 13 });
+  if (bounds.length)
+    map.fitBounds(bounds, { padding: [30, 30], maxZoom: 13, animate: false });
   else if (discover.origin) {
     map.setView([discover.origin.lat, discover.origin.lng], 11);
   }
@@ -1331,7 +1494,7 @@ function renderSettings() {
       )
       .join(
         "",
-      )}<p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open once online, then in iPhone Safari choose Share → Add to Home Screen. The previously loaded app, bundled Discover data, trips and saved places work offline. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 1.1<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
+      )}<p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open once online, then in iPhone Safari choose Share → Add to Home Screen. The previously loaded app, bundled Discover data, trips and saved places work offline. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.0<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
   $("setting-theme").onchange = (e) =>
     commit((s) => (s.settings.theme = e.target.value));
   $("setting-mode").onchange = (e) =>
@@ -1569,6 +1732,17 @@ $("content").addEventListener("click", async (e) => {
       case "show-place":
         showPin(id);
         break;
+      case "handoff-day":
+        selectedExport.clear();
+        for (const id of day()?.stopIds || []) {
+          const st = state.stops.find((s) => s.id === id);
+          selectedExport.set(id, M.visitPlace(st));
+        }
+        handoffDialog();
+        break;
+      case "export-selected":
+        handoffDialog();
+        break;
       case "export-trip":
         download(backup(state, activeTrip), "japan-trip.json");
         break;
@@ -1580,22 +1754,11 @@ $("content").addEventListener("click", async (e) => {
         break;
       case "discover-source":
       case "source":
-        discover = {
-          ...discover,
-          source: id,
-          q: "",
-          years: [],
-          categories: [],
-          region: "",
-          prefecture: "",
-          listId: "",
-          first: false,
-          hof: false,
-          multi: false,
-        };
+        switchSource(id);
         if (action === "discover-source") {
+          visibleLayers[layerId(id)] = true;
           if (!origins().length) discover.radius = 0;
-          mapMode = false;
+          mapMode = true;
           navigate("discover");
         } else render();
         break;
@@ -1680,7 +1843,7 @@ async function serviceWorker() {
     const reg = await navigator.serviceWorker.register("sw.js");
     let requestedUpdate = false;
     const show = () => {
-      if (reg.waiting) {
+      if (reg.waiting && navigator.serviceWorker.controller) {
         $("update").hidden = false;
         $("update-now").onclick = () => {
           if (busy || pending) {
@@ -1735,6 +1898,30 @@ try {
   });
   ready = true;
   render();
+  DB.feed("shopping", "../data/shopping.v1.json")
+    .then(async (result) => {
+      const response = await fetch("../data/shopping-LICENSES/index.json");
+      if (!response.ok) throw Error("Shopping source notices unavailable");
+      const files = await response.json();
+      const notices = await Promise.all(
+        files.map(async (file) => {
+          if (!/^[A-Za-z0-9_.-]+$/.test(file))
+            throw Error("Invalid notice filename");
+          const r = await fetch("../data/shopping-LICENSES/" + file);
+          if (!r.ok) throw Error("Shopping notice unavailable");
+          return [
+            "shopping-" + result.value.datasetVersion + "-" + file,
+            await r.text(),
+          ];
+        }),
+      );
+      sourceLicenseTexts = Object.fromEntries(notices);
+      feeds.shopping = result.value;
+      if (screen === "discover" || screen === "settings") render();
+    })
+    .catch(() => {
+      /* Shopping data and required source notices must both load; editing remains usable. */
+    });
   await serviceWorker();
 } catch (e) {
   ready = true;
@@ -1795,4 +1982,180 @@ function applySavedDialog(placeId) {
 
 function originalApps() {
   return `<div class="original-apps" aria-label="Original standalone apps"><a href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Open original sauna app</a><a href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Open original food app</a></div>`;
+}
+
+function layersHTML(counts) {
+  return `<details class="layer-controls" aria-label="Visible map layers" ${layersOpen ? "open" : ""}><summary>Layers · Sauna / Food / Shopping</summary><strong>Show on map</strong><div class="actions">${[
+    ["sauna", "♨ Saunas"],
+    ["food", "食 Food"],
+    ["shopping", "Shopping"],
+  ]
+    .map(
+      ([id, label]) =>
+        `<label class="check"><input type="checkbox" data-layer="${id}" ${visibleLayers[id] ? "checked" : ""}>${label} (${counts[id]?.located || 0})</label>`,
+    )
+    .join(
+      "",
+    )}</div><button data-action="export-selected">Google Maps · ${selectedExport.size} selected</button><p class="muted">Numbered itinerary stops stay visible when discovery layers are off.</p></details>`;
+}
+function shoppingFiltersHTML() {
+  const ps = feeds.shopping?.places || [];
+  return `<h3>Shopping brands and formats</h3>${shoppingCoverageHTML(ps)}<p>None selected means all. Formats use both symbols and labels.</p><div class="grid2">${[
+    ...new Set(ps.map((p) => p.shopping.brandId)),
+  ]
+    .sort()
+    .map(
+      (v) =>
+        `<label class="check"><input type="checkbox" data-shop-filter="brands" value="${esc(v)}" ${(discover.brands || []).includes(v) ? "checked" : ""}>${esc(brands[v] || v)} (${ps.filter((p) => p.shopping.brandId === v).length})</label>`,
+    )
+    .join("")}</div><div class="grid2">${[
+    ...new Set(ps.map((p) => p.shopping.formatId)),
+  ]
+    .sort()
+    .map(
+      (v) =>
+        `<label class="check"><input type="checkbox" data-shop-filter="formats" value="${esc(v)}" ${(discover.formats || []).includes(v) ? "checked" : ""}>${esc(formats[v] || v)}</label>`,
+    )
+    .join(
+      "",
+    )}</div>${ps.length ? "" : "<p>Shopping data is being prepared. No nationwide completeness is claimed.</p>"}`;
+}
+document.addEventListener("change", (e) => {
+  const key = e.target.dataset.exportKey;
+  if (!key) return;
+  if (e.target.checked) selectedExport.set(key, findPlace(key));
+  else selectedExport.delete(key);
+  render();
+});
+
+async function handoffDialog() {
+  const places = [...selectedExport].map(([key, p], i) => ({
+    selectionId: key,
+    placeKey: p.key,
+    name: M.name(p),
+    address: p.address.ja,
+    location: {
+      lat: p.location.lat,
+      lng: p.location.lng,
+      confidence: p.location.confidence,
+    },
+    googlePlaceId: null,
+  }));
+  if (!places.length) {
+    toast("Select places from the results first.");
+    return;
+  }
+  modal(
+    "Selected places for Google Maps",
+    `<p>${places.length} places, in selection order. No automatic day planning or timetable calculation.</p><ol>${places.map((p) => `<li>${esc(p.name)}</li>`).join("")}</ol><label>Travel mode<select id="handoff-mode"><option value="walk">Walk</option><option value="train">Train / transit</option><option value="drive">Drive</option></select></label><div id="handoff-links"></div><div id="handoff-files"></div><p>To save a Google Maps list, open each place and choose Save in Google Maps. CSV is for manual My Maps import on a computer; it does not create a route or insert into a saved list.</p><div class="actions"><button id="selection-json">Export all as JSON</button><button id="selection-copy">Copy all places</button><button id="selection-clear">Clear selection</button></div>`,
+    () => {
+      $("selection-json").onclick = () =>
+        download(
+          {
+            schemaVersion: 1,
+            mode: $("handoff-mode").value,
+            places,
+            dataLicenses: {
+              ...(state.dataLicenses || {}),
+              ...sourceLicenseTexts,
+            },
+          },
+          "japan-selected-places.json",
+        );
+      $("selection-copy").onclick = () =>
+        copy(
+          places
+            .map((p, i) => `${i + 1}. ${p.name} ${p.address || ""}`)
+            .join("\n"),
+        );
+      $("selection-clear").onclick = () => {
+        selectedExport.clear();
+        close();
+        render();
+      };
+      const update = async () => {
+        try {
+          const module = await import("./core/handoff.js");
+          if (!$("handoff-mode") || !$("handoff-files")) return;
+          const input = {
+            schemaVersion: 1,
+            mode: $("handoff-mode").value,
+            places,
+          };
+          const files = module.buildSelectionFiles(input);
+          $("handoff-files").replaceChildren();
+          for (const warning of files.warnings) {
+            const text = document.createElement("p");
+            text.className = "notice";
+            text.textContent = warning;
+            $("handoff-files").append(text);
+          }
+          const bundleFiles = files.files.map((file) => ({
+            name: file.name,
+            content: file.name.endsWith(".json")
+              ? JSON.stringify(
+                  {
+                    ...JSON.parse(file.content),
+                    dataLicenses: sourceLicenseTexts,
+                  },
+                  null,
+                  2,
+                )
+              : file.content,
+          }));
+          for (const [name, content] of Object.entries({
+            ...state.dataLicenses,
+            ...sourceLicenseTexts,
+          }))
+            bundleFiles.push({
+              name: "licenses/" + name.replace(/[^a-zA-Z0-9_.-]/g, "_"),
+              content,
+            });
+          const button = document.createElement("button");
+          button.textContent = "Download CSV + JSON + licences (ZIP)";
+          button.onclick = () => {
+            const url = URL.createObjectURL(zipFiles(bundleFiles));
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "japan-selected-places.zip";
+            a.click();
+            setTimeout(() => URL.revokeObjectURL(url), 30000);
+          };
+          $("handoff-files").append(button);
+          for (const file of files.files)
+            for (const warning of file.warnings) {
+              const p = document.createElement("p");
+              p.className = "muted";
+              p.textContent = warning;
+              $("handoff-files").append(p);
+            }
+          const result = module.buildHandoff({
+            schemaVersion: 1,
+            mode: $("handoff-mode").value,
+            places,
+          });
+          $("handoff-links").innerHTML =
+            `${result.warnings.map((w) => `<p class="notice">${esc(w)}</p>`).join("")}${result.links.map((l) => (M.safeURL(l.url) ? `<p><a class="button" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a><small> ${l.selectionIds.length} selections covered</small>${l.warnings.map((w) => `<p class="notice">${esc(w)}</p>`).join("")}</p>` : "")).join("")}${result.unhandledSelectionIds.length ? `<p class="notice">${result.unhandledSelectionIds.length} selections need manual review; JSON and copy retain all places.</p>` : ""}`;
+        } catch {
+          $("handoff-links").textContent =
+            "Maps links could not be prepared. JSON and copy retain every selection; check the selected place details.";
+        }
+      };
+      $("handoff-mode").onchange = update;
+      update();
+    },
+  );
+}
+
+function shoppingCoverageHTML(ps) {
+  return `<details><summary>Shopping coverage and source quality</summary><p>These are sourced snapshot records, not a complete national store directory. Zero means no records in this snapshot, not no shops in Japan. Hours text is reference information, not a current opening guarantee. This staged feed has unresolved nearby duplicate and provider-ID candidates; records are not verified unique active branches.</p><div class="actions"><a class="button" href="help/shopping-coverage.md" target="_blank" rel="noopener">Coverage and data quality</a><a class="button" href="../data/shopping-LICENSES/README.txt" target="_blank" rel="noopener">Source licences</a></div><table class="coverage-table"><thead><tr><th>Brand</th><th>Records</th><th>Pins</th><th>Hours text</th></tr></thead><tbody>${Object.entries(
+    brands,
+  )
+    .map(([id, label]) => {
+      const rows = ps.filter((p) => p.shopping.brandId === id);
+      return `<tr><th>${esc(label)}</th><td>${rows.length}</td><td>${rows.filter(M.located).length}</td><td>${rows.filter((p) => p.hoursText).length}</td></tr>`;
+    })
+    .join(
+      "",
+    )}</tbody></table><p>${esc(feeds.shopping?.source.attribution || "Shopping source validation pending.")}</p></details>`;
 }

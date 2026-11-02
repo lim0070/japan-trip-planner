@@ -788,3 +788,111 @@ textarea::placeholder {
   padding: 8px 0;
   margin-right: 12px;
 }
+.layer-controls {
+  margin: 12px 0;
+  padding: 0 12px;
+  background: var(--panel);
+}
+.layer-controls .actions {
+  gap: 10px 24px;
+}
+.layer-controls p {
+  margin: 8px 0;
+}
+.layer-pin {
+  min-width: 36px;
+  height: 36px;
+  padding: 4px;
+  border-radius: 8px;
+  border: 2px solid white;
+  background: #246b72;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: 0 2px 5px #0005;
+}
+.layer-food {
+  background: #865515;
+}
+.layer-shopping {
+  background: #6c4380;
+}
+.brand-symbol {
+  display: inline-flex;
+  min-width: 32px;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  font-size: 12px;
+}
+@media (max-width: 760px) {
+  .discovery-workspace.show-map {
+    position: relative;
+    height: 70dvh;
+    min-height: 500px;
+  }
+  .discovery-workspace.show-map .map {
+    height: 70dvh;
+    min-height: 500px;
+  }
+  .discovery-workspace.show-map > .list-pane {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30dvh;
+    min-height: 180px;
+    overflow: auto;
+    z-index: 600;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 18px 18px 0 0;
+    padding: 12px 16px;
+  }
+  .discovery-workspace.show-map .leaflet-bottom {
+    bottom: 31dvh;
+  }
+  .discovery-workspace .map-note {
+    display: none;
+  }
+  .source-tabs {
+    flex-wrap: wrap;
+  }
+}
+#discover-controls > summary {
+  font-weight: 650;
+}
+.discovery-workspace .list-pane > h2 {
+  font-size: 18px;
+}
+#handoff-files {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.coverage-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.coverage-table th,
+.coverage-table td {
+  padding: 8px 3px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.coverage-table th:first-child {
+  width: 40%;
+}
+.layer-pin,.pin-number {min-width:44px;height:44px;}
+.leaflet-control-zoom a {width:44px!important;height:44px!important;line-height:44px!important;}
+
+@media(max-width:760px){.discovery-workspace.show-map{height:max(340px,calc(100dvh - 470px));min-height:340px}.discovery-workspace.show-map .map{height:100%;min-height:340px}.discovery-workspace.show-map>.list-pane{height:38%;min-height:140px}.discovery-workspace.show-map .leaflet-bottom{bottom:40%}}

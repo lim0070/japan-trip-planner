@@ -138,7 +138,7 @@ const award = (x) =>
     rank: nullable((r) => integer(r, 1, 10000)),
     title: ns,
   })(x) && (x.type === "ranked" ? x.rank !== null : x.rank === null);
-export const validPlace = shape({
+const basePlace = shape({
   schemaVersion: version,
   key: nonempty,
   sourceId: nonempty,
@@ -150,6 +150,19 @@ export const validPlace = shape({
   ),
   provenance: array(evidence, 500),
 });
+const shoppingMetadata = shape({
+  brandId: (x) => typeof x === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(x),
+  formatId: (x) =>
+    typeof x === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(x),
+});
+export const validPlace = (x) => {
+  if (!obj(x)) return false;
+  const { shopping, ...base } = x;
+  return (
+    basePlace(base) &&
+    (!Object.hasOwn(x, "shopping") || shoppingMetadata(shopping))
+  );
+};
 const sourceRef = shape({
   key: nonempty,
   sourceId: nonempty,
@@ -258,9 +271,18 @@ function unique(rows, key = "id") {
   const ids = rows.map((x) => (typeof key === "function" ? key(x) : x[key]));
   if (new Set(ids).size !== ids.length) fail("Duplicate IDs.");
 }
+const licenseTexts = (x) =>
+  record((v) => str(v, 40000))(x) && Object.keys(x).length <= 1000;
 export function validateState(s) {
   guardTree(s);
-  if (!shape({ ...stateFields, imports: record(str) })(s))
+  if (
+    !shape({ ...stateFields, imports: record(str) })(
+      Object.fromEntries(
+        Object.entries(s).filter(([k]) => k !== "dataLicenses"),
+      ),
+    ) ||
+    (Object.hasOwn(s, "dataLicenses") && !licenseTexts(s.dataLicenses))
+  )
     fail("Invalid state fields, types or limits.");
   for (const k of ["trips", "days", "stops", "places"]) unique(s[k]);
   unique(s.flags, "placeKey");
@@ -351,9 +373,9 @@ export function validateFeed(f) {
       datasetVersion: nonempty,
       generatedAt: stamp,
       source: shape({
-        namespace: one("saunachelin", "tabelog"),
+        namespace: one("saunachelin", "tabelog", "shopping"),
         title: nonempty,
-        standaloneUrl: url,
+        standaloneUrl: nullable(url),
         inputFiles: array(nonempty, 10),
         inputSha256: record((x) => str(x) && /^[0-9a-f]{64}$/.test(x)),
         attribution: str,
@@ -369,6 +391,11 @@ export function validateFeed(f) {
   for (const p of f.places) {
     if (p.key !== f.source.namespace + ":" + p.sourceId)
       fail("Invalid source identity.");
+    if (
+      f.source.namespace === "shopping" &&
+      (!p.shopping || p.awards.length || p.memberships.length)
+    )
+      fail("Invalid shopping metadata or award relationships.");
     unique(p.memberships, "listId");
     if (p.memberships.some((m) => !ids.has(m.listId)))
       fail("Missing award list.");
@@ -416,7 +443,12 @@ export function validateBackup(b) {
       exportId: nonempty,
       exportedAt: stamp,
       appVersion: nonempty,
-    })(b)
+    })(
+      Object.fromEntries(
+        Object.entries(b).filter(([k]) => k !== "dataLicenses"),
+      ),
+    ) ||
+    (Object.hasOwn(b, "dataLicenses") && !licenseTexts(b.dataLicenses))
   )
     fail("Unsupported backup version, fields or limits.");
   validateState({

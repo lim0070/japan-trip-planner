@@ -457,6 +457,11 @@ export function filterPlaces(
           .includes(q)
       )
         return false;
+      if (feed.source.namespace === "shopping")
+        return (
+          (!f.brands?.length || f.brands.includes(p.shopping.brandId)) &&
+          (!f.formats?.length || f.formats.includes(p.shopping.formatId))
+        );
       if (feed.source.namespace === "tabelog")
         return p.memberships.some((m) => {
           const l = lm.get(m.listId);

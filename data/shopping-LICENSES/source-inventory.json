@@ -1,0 +1,17 @@
+{
+  "release": "2026-10-21.0",
+  "sourceLicenses": {
+    "CDLA-Permissive-2.0": 7767,
+    "Apache-2.0": 735,
+    "CC0-1.0": 2284
+  },
+  "sourceDatasets": {
+    "meta": 2373,
+    "Overture": 5393,
+    "Foursquare": 735,
+    "AllThePlaces": 2284,
+    "Microsoft": 1
+  },
+  "modifications": "Filtered to selected Japan shopping brands/centres; normalized to planner schema, medium confidence point locations, added uncertainty/provenance; unknown hours remain null. Original source record IDs and source/update metadata retained as provenance.",
+  "observedAt": "2026-11-02T20:54:52.853286Z"
+}

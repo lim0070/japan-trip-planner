@@ -1,0 +1,3490 @@
+[
+  {
+    "keys": [
+      "shopping:overture:02e0a100-1341-4b24-864d-0dca91d248c6",
+      "shopping:overture:05d921d1-2f81-4d49-bae4-1ec3d5480544"
+    ],
+    "distanceMeters": 8.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:09a45429-de8d-4cf5-bdbd-a974e1738a50",
+      "shopping:overture:0d29459a-d4b9-40aa-9cb5-0f33886352d8"
+    ],
+    "distanceMeters": 9.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0d4389b8-8a70-4b0f-9c19-f66a5e3832fc",
+      "shopping:overture:14448638-0a7e-4de6-90e3-fab19acee83f"
+    ],
+    "distanceMeters": 1.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1399b187-21d5-44f9-9280-e7e9c4730edc",
+      "shopping:overture:1816be3d-cd69-4308-8bf6-6c135657c284"
+    ],
+    "distanceMeters": 12.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1b7ab839-65d5-4018-822f-e65d3d2fef85",
+      "shopping:overture:1d604c39-b5f6-4b16-b82f-84b6135da54d"
+    ],
+    "distanceMeters": 2.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1b3182b9-351e-43b7-8354-188494411cfc",
+      "shopping:overture:1d825fa2-4599-4113-a022-15ffcdeea04b"
+    ],
+    "distanceMeters": 2.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:05a6e65b-4884-4a35-8798-3bee29279330",
+      "shopping:overture:1db0844a-8ad5-4260-9799-d638d1fbaf77"
+    ],
+    "distanceMeters": 5.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:088d5ca0-c731-44b2-8644-448454aeb337",
+      "shopping:overture:1e5d6d63-d10e-49b1-bfb0-159e3066697a"
+    ],
+    "distanceMeters": 32.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1614430b-f7f5-409c-8b8c-ba37adf6a30b",
+      "shopping:overture:246e6ef4-38ca-44d6-98b3-224a607ea0b1"
+    ],
+    "distanceMeters": 2.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2196f5c6-859a-4597-8a13-a4796c571193",
+      "shopping:overture:265d820c-8dff-4a69-99bf-b393a86d2dd1"
+    ],
+    "distanceMeters": 1.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1d0d308c-b6d9-4355-9738-f71c40d34c45",
+      "shopping:overture:29806afb-f876-4389-ba5f-b0c6eaf1d4a8"
+    ],
+    "distanceMeters": 1.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:14f3fe22-ad4d-4b25-bfe5-70bfec3e953f",
+      "shopping:overture:2a6e33df-fdb3-4e5e-8247-29f25c521d3b"
+    ],
+    "distanceMeters": 4.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0ed7f519-11fa-4dc0-a8da-407c5793c21a",
+      "shopping:overture:2c59bf85-9c51-4c15-8674-f6e49644867f"
+    ],
+    "distanceMeters": 3.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:23d52cdd-8a62-4801-b335-4299d1b6b769",
+      "shopping:overture:2e47110f-ecda-444e-bdd9-403d3a469673"
+    ],
+    "distanceMeters": 1.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1260dd81-0f0d-4ec9-a657-b2d621d5b5ec",
+      "shopping:overture:30dae1ed-fbfd-42ff-9d8d-260e5f6f85f9"
+    ],
+    "distanceMeters": 2.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:245be2d3-7407-46a9-bcf7-03010a509501",
+      "shopping:overture:33876d7b-0614-48dd-a526-3a97c18bbb34"
+    ],
+    "distanceMeters": 2.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:162cf468-9a3b-4eb6-b6ea-09a4e7f271ce",
+      "shopping:overture:36fec324-4b8d-499b-9af2-65464544a2c9"
+    ],
+    "distanceMeters": 1.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:303487b3-4c71-4205-87b1-6029d2c9cd9c",
+      "shopping:overture:39142bd9-8237-48d2-bf89-e87ffe8ab76c"
+    ],
+    "distanceMeters": 4.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1f0c8e97-bd5a-4b0a-a7f8-3d97d22ab81a",
+      "shopping:overture:3b7ad0a3-95a6-4635-8672-65f9fffe9078"
+    ],
+    "distanceMeters": 0.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:12c3afa6-297e-404e-ad0b-85c77806545c",
+      "shopping:overture:3c4f96b6-fe41-4aa2-bbc9-96fd6a7a77b0"
+    ],
+    "distanceMeters": 3.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1924b1c9-d6d8-48ca-9e82-bf291644766b",
+      "shopping:overture:3ea75957-e0a8-44e0-a249-b87689b9a72d"
+    ],
+    "distanceMeters": 8.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:24c8f05c-a239-4dcd-a4e9-01ba49cb3b41",
+      "shopping:overture:3ef64612-5ee3-4ccd-9570-ce0935e0e0c2"
+    ],
+    "distanceMeters": 6.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:204b8c7e-80aa-4e5a-9ae6-36180634c78b",
+      "shopping:overture:3f19df83-0330-4a42-b845-788b2201efaf"
+    ],
+    "distanceMeters": 28.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:404feb80-d1d9-45e3-b52f-bec2b2de1638",
+      "shopping:overture:40d1e751-9526-4c83-896a-26ae1d69d02e"
+    ],
+    "distanceMeters": 21.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1dc5f1d9-535c-4407-bab9-c3b153e6bdf7",
+      "shopping:overture:4358d6ed-e6ed-4623-880e-b9f548a658f8"
+    ],
+    "distanceMeters": 3.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2572ede8-6fe6-4408-b1d7-ee30c02eb579",
+      "shopping:overture:43852921-1eb7-493a-ac5e-165c60f702d5"
+    ],
+    "distanceMeters": 6.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0861f14c-fded-4858-aadf-b8263e6ab8bb",
+      "shopping:overture:44540aa8-1455-4d13-aa91-2961a1a06a00"
+    ],
+    "distanceMeters": 0.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1d0fc964-0bff-491f-afd7-221e9c15c5fd",
+      "shopping:overture:46e6bad8-e355-46a5-8db7-12b8d8154cf3"
+    ],
+    "distanceMeters": 2.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0705b644-7a2f-4d7d-9961-ddda8e0f8dee",
+      "shopping:overture:471ed484-21a3-40aa-bda2-9d0c26866127"
+    ],
+    "distanceMeters": 2.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:23fbc7dd-95a0-4692-ba12-ae9672cdeafa",
+      "shopping:overture:477a5233-d6ae-4223-b926-3c144c0b82b5"
+    ],
+    "distanceMeters": 6.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:01c3b7f3-6718-4a13-bc3a-4d9a23cbeefe",
+      "shopping:overture:48c1ce2a-f843-47ee-a769-fb00d16f0cd5"
+    ],
+    "distanceMeters": 1.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0035c4a2-2faf-4bcb-8d89-ac0766fc13cc",
+      "shopping:overture:48e7e96d-62da-486f-a0e4-4a6436182f06"
+    ],
+    "distanceMeters": 29.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:16ea8951-7822-4787-9b8c-e3340ec09ecb",
+      "shopping:overture:4976f60a-bdb9-4fad-a85b-94a9a09e976a"
+    ],
+    "distanceMeters": 4.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:21808a04-fb66-4930-a1cf-2dcd70d9be9d",
+      "shopping:overture:4c5b26ff-1219-4acc-8b8c-223098815bbe"
+    ],
+    "distanceMeters": 5.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:23b8effe-2f32-42eb-a716-9edf7a38d874",
+      "shopping:overture:4e9d2e8d-1c5b-4422-b12a-dc90d9587780"
+    ],
+    "distanceMeters": 21.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0aff3828-7a1f-41df-96b4-8d0e1b837183",
+      "shopping:overture:51edb398-00ea-471c-bcd1-eb86ac26f1bb"
+    ],
+    "distanceMeters": 12.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:268bc2f5-6bd6-4c56-bdb4-3e78cd9f4e6d",
+      "shopping:overture:52216ff8-7ff8-4b36-9d53-c27d5c34d26e"
+    ],
+    "distanceMeters": 21.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:260497b9-c280-41d0-b9ce-e37aeb97a2d7",
+      "shopping:overture:551f423d-6376-4e5c-abc1-224908aa5098"
+    ],
+    "distanceMeters": 15.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:052f63ca-2213-46c4-b8b4-3ca727e9a62b",
+      "shopping:overture:56b746fb-57ef-4f49-b6d2-4da04407b9a0"
+    ],
+    "distanceMeters": 28.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:54323261-aabf-4b14-ac1b-308d9339902d",
+      "shopping:overture:585747ce-60f3-42d8-a603-8a421b4cd678"
+    ],
+    "distanceMeters": 1.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:54dcd1f5-e1c2-4975-9eff-c0f153f38945",
+      "shopping:overture:58682e49-d8ad-456f-8e36-28711887d80a"
+    ],
+    "distanceMeters": 3.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:21a75cda-2256-4bb8-96b6-880d57e953f4",
+      "shopping:overture:5883f673-d270-4afc-a347-5e1caf91abfd"
+    ],
+    "distanceMeters": 13.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3fc131cd-062c-4e9f-bdc9-d52e412d6e88",
+      "shopping:overture:58ae4869-357b-4fb1-90a1-c81502605a50"
+    ],
+    "distanceMeters": 9.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:18199083-f79c-468e-9d05-aecdd7180597",
+      "shopping:overture:5a6f63a9-290e-4f91-8800-55cd0030582b"
+    ],
+    "distanceMeters": 19.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:530a9810-7bbc-46c4-b1cd-f551565132b8",
+      "shopping:overture:5aa83485-5572-4375-90f7-e163e1da59e3"
+    ],
+    "distanceMeters": 7.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:05b28111-32d2-43b5-a4ec-680916b103e1",
+      "shopping:overture:5bc1f136-636f-4d29-981e-1f496183402e"
+    ],
+    "distanceMeters": 24.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:404feb80-d1d9-45e3-b52f-bec2b2de1638",
+      "shopping:overture:5bf8d569-8e1b-4b16-8a77-e42f5a015cfa"
+    ],
+    "distanceMeters": 4.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:40d1e751-9526-4c83-896a-26ae1d69d02e",
+      "shopping:overture:5bf8d569-8e1b-4b16-8a77-e42f5a015cfa"
+    ],
+    "distanceMeters": 17.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:05f5df09-e238-4c12-8e21-4db8ecff1853",
+      "shopping:overture:5c58600e-8458-47bd-930b-c54a91d11ab7"
+    ],
+    "distanceMeters": 12.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:40d99a36-612f-40e4-a3fe-e10894175d2c",
+      "shopping:overture:5c58806e-8e97-440b-9c69-0bbdbb7686f1"
+    ],
+    "distanceMeters": 5.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:583407b2-4735-4f33-a478-a4fad3853247",
+      "shopping:overture:5c62da40-5681-47a5-8563-1a2b5b2209ed"
+    ],
+    "distanceMeters": 3.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:40cd539a-5226-4908-9bc9-9130ae6ad6cb",
+      "shopping:overture:5c68814a-8c6f-419b-9999-9b501df7724d"
+    ],
+    "distanceMeters": 28.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0311c713-2b81-4a88-ab70-e9cfefc9b8b5",
+      "shopping:overture:5c7cc5de-7fb0-4ce8-821d-ccc70466a017"
+    ],
+    "distanceMeters": 1.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2af54519-e398-4778-b801-46db1a00401c",
+      "shopping:overture:5d8ed610-c188-46d3-8795-fb31fb8823c4"
+    ],
+    "distanceMeters": 5.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4227883d-caf8-4cbb-917a-cc920aaeb77a",
+      "shopping:overture:5e2f84f3-d85d-4185-b40e-700f7458ca83"
+    ],
+    "distanceMeters": 8.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4137fa21-a897-48ab-8fbf-91e040a23fd0",
+      "shopping:overture:5ec8a1f5-edee-49d0-8027-7491c8c91d3b"
+    ],
+    "distanceMeters": 32.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:06ce6afc-042a-4eea-a9e1-a9bdaade8b1f",
+      "shopping:overture:5f207cca-9ad6-40dc-8038-0a87a1b62b25"
+    ],
+    "distanceMeters": 13.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1540cabe-31b4-4949-a5a1-ba156ba7cd0f",
+      "shopping:overture:60585033-f2d7-4683-af30-03f53aaceff1"
+    ],
+    "distanceMeters": 2.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:28a06290-5c22-4938-92d6-ac9254c8e72c",
+      "shopping:overture:612b16b3-fa54-4f84-8c7c-9d3b6aa1264c"
+    ],
+    "distanceMeters": 3.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:391a0612-6756-4890-a0bf-0ef321508f22",
+      "shopping:overture:61ada63a-5c9b-4dad-a85f-c28bb0e8504b"
+    ],
+    "distanceMeters": 3.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4f4d9bd9-5132-431b-94cc-332546e50a7d",
+      "shopping:overture:62038674-8ba3-4cea-a6ca-65b56f1eec54"
+    ],
+    "distanceMeters": 3.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4b68210c-94b2-44b2-93ed-44134f846b63",
+      "shopping:overture:6312f4fc-eb50-4c47-91ff-9308f3909908"
+    ],
+    "distanceMeters": 3.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:295bd3e8-2e6e-4039-9123-0d8b1a4b5334",
+      "shopping:overture:6415aff9-1960-4bc4-b12c-b928999f5cc3"
+    ],
+    "distanceMeters": 18.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3f351062-8fb9-447b-8061-35b9b5a020fa",
+      "shopping:overture:64375df4-381e-49a7-9f5e-32dde6294b1b"
+    ],
+    "distanceMeters": 8.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3d6c9a0a-0e44-48ae-b4ea-7eea59e0c3e6",
+      "shopping:overture:658c9d28-9562-4563-96e9-472541f51de4"
+    ],
+    "distanceMeters": 15.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:44683337-2372-415d-b23b-75a2c0ab2055",
+      "shopping:overture:67853df8-a0d5-415b-9252-730facbdf6f5"
+    ],
+    "distanceMeters": 5.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:47c5620c-f4e7-4eb1-8055-19b39d771d54",
+      "shopping:overture:67e38614-4bb9-4861-a585-9b8fd81b9cd3"
+    ],
+    "distanceMeters": 1.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:35ecd3df-ab4d-4f78-a3f1-f7bbb76a9cb1",
+      "shopping:overture:68233373-41cb-4352-845e-27ed6c6163cc"
+    ],
+    "distanceMeters": 5.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:680e60c6-7d79-40f3-bed5-db6312dcd231",
+      "shopping:overture:68d3a231-f4f0-4c4b-adba-b405ffeac9c2"
+    ],
+    "distanceMeters": 1.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4abf33fc-6137-4100-a1cc-bf92365461da",
+      "shopping:overture:6aa4bb7b-0c65-4104-92ab-4f686976b584"
+    ],
+    "distanceMeters": 1.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:06f4b242-651c-4823-811a-0ddad549fa3c",
+      "shopping:overture:6bca1fa7-3626-4858-a239-44d58e3b9a35"
+    ],
+    "distanceMeters": 5.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:52bb7601-b5cb-481a-8839-6e03081f9c37",
+      "shopping:overture:6bca1fa7-3626-4858-a239-44d58e3b9a35"
+    ],
+    "distanceMeters": 34.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:55928514-c4d4-4ecc-aafc-5770e2cdf8ee",
+      "shopping:overture:6c8a0684-7a79-4b43-b66e-288d4ac44956"
+    ],
+    "distanceMeters": 20.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3ab27352-218a-4219-b404-3c0530b1828a",
+      "shopping:overture:6d030adf-bada-4ac3-91d5-136e4d3aaaee"
+    ],
+    "distanceMeters": 29.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:606da439-2cbb-40c5-b733-578cc339d8fc",
+      "shopping:overture:6d1e9ae5-de34-4533-b9e1-1334c6877405"
+    ],
+    "distanceMeters": 1.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3f43fdcf-0ec0-4bfc-9455-ea175c44d88d",
+      "shopping:overture:6d8c6c21-dc07-4faf-9751-efc7adac2f53"
+    ],
+    "distanceMeters": 25.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:38160a05-01de-46cc-9110-e7e48b270c74",
+      "shopping:overture:6dcc5f59-1533-42d0-ab2f-f6b7fdc9e292"
+    ],
+    "distanceMeters": 0.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:01d57681-9cf4-40e2-b698-2c14a8715f01",
+      "shopping:overture:6de9a0d0-23cc-4102-9094-72a4b0a0b1a8"
+    ],
+    "distanceMeters": 3.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:01bd207b-3a8d-4c2f-93b9-88ada62ee35a",
+      "shopping:overture:704e2793-9ab1-48c5-93b9-cc2e2c460cc4"
+    ],
+    "distanceMeters": 21.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4820def5-9ffc-42c7-8fad-ecc9c88891d6",
+      "shopping:overture:707e3502-42fc-4256-8637-bbce9f51ddf9"
+    ],
+    "distanceMeters": 32.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:196d4a05-ff6a-4411-b75c-30f981b22580",
+      "shopping:overture:7183ce62-e9d5-400d-b603-9fc83a222b7d"
+    ],
+    "distanceMeters": 7.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:30639292-6ccc-4ce3-ad8f-2f6d25f434ad",
+      "shopping:overture:728844a6-9374-4ec2-8172-18ee2241e309"
+    ],
+    "distanceMeters": 16.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:27a054b7-e676-4d7a-93cc-d007423a98e2",
+      "shopping:overture:729b962c-6e6b-43f8-af9e-7fc336b5f65f"
+    ],
+    "distanceMeters": 1.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:39a484e9-e465-4bf3-9568-efaf5ffe2a39",
+      "shopping:overture:73ecc98e-2120-4879-ac7b-6ed8459e29fa"
+    ],
+    "distanceMeters": 16.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0b0ab945-7a2f-418c-b946-04078d46452b",
+      "shopping:overture:7428cd71-6237-48b4-8c63-3e9d7223916f"
+    ],
+    "distanceMeters": 3.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4dfd7fff-12af-4e59-a645-7fd10e18e2ad",
+      "shopping:overture:748bada2-0387-40b7-b69d-eb84380e9106"
+    ],
+    "distanceMeters": 7.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:003fe5b9-9310-4f5c-aeff-168caf48fffe",
+      "shopping:overture:74f01d7d-4123-4fe0-b5cd-4e92dcb73dd2"
+    ],
+    "distanceMeters": 14.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:03b64965-fd2d-4941-a133-c12578b60398",
+      "shopping:overture:74fe3b49-8a63-4da2-b499-255b5f1e2d12"
+    ],
+    "distanceMeters": 0.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3fe714e2-e8f5-49ca-a710-d7c42ef4181f",
+      "shopping:overture:751c90f2-a549-4031-9b52-c385c7417c80"
+    ],
+    "distanceMeters": 8.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2102e196-56c0-444f-b346-6332a79208f7",
+      "shopping:overture:77c17959-ad6e-4c08-8c54-a2d88b790948"
+    ],
+    "distanceMeters": 5.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2db58d0e-0114-4b18-80ef-bbbbc01e2b99",
+      "shopping:overture:77e4c8d5-e162-4625-b212-5a17dccf1afa"
+    ],
+    "distanceMeters": 28.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7057e860-b5ef-4415-92ea-f2573a93154d",
+      "shopping:overture:7937eef0-22ca-4fd3-b56e-f3b3598b0e17"
+    ],
+    "distanceMeters": 4.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1b905519-c00a-4fd1-ab86-f276cb61dbcf",
+      "shopping:overture:7ab01f75-0e3e-4989-bd38-74e00c9cc5b1"
+    ],
+    "distanceMeters": 5.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:19e2b213-857b-4522-bc62-199278f466ff",
+      "shopping:overture:7ac9e628-38a9-489e-a509-514ec5d1b9db"
+    ],
+    "distanceMeters": 2.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:13cd8d7b-07dc-42f4-811f-b284ca8cc640",
+      "shopping:overture:7b5c3a23-38a7-41dc-a0fe-65903256e2e9"
+    ],
+    "distanceMeters": 9.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:419edae3-3714-4887-aa62-6d588fab45fe",
+      "shopping:overture:7bd3ca6f-eee5-44d8-855d-002adb860da0"
+    ],
+    "distanceMeters": 12.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:20f7b6cf-e2ff-4cd3-afd5-f0d46e26623e",
+      "shopping:overture:7d0e8f1c-c778-4e6e-a54e-eee3b7533010"
+    ],
+    "distanceMeters": 13.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5585f9a4-6e59-4fab-a57e-3cc4bfd78150",
+      "shopping:overture:7d73864a-4314-4b9a-b715-bd76c042ade3"
+    ],
+    "distanceMeters": 11.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:17486949-8595-4b97-8eab-68e7cdc5abae",
+      "shopping:overture:7d83866d-83d2-4224-8c65-34271be0822a"
+    ],
+    "distanceMeters": 12.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:36545f35-ece1-4c87-a0ad-ba3633320591",
+      "shopping:overture:7ed580ed-bc1f-4473-a9aa-6c7aed4fdfc1"
+    ],
+    "distanceMeters": 16.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:725bfdc3-cfc7-436d-91db-b306739da42a",
+      "shopping:overture:7f19efc0-2abb-404b-9ee7-2d58d812c211"
+    ],
+    "distanceMeters": 2.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3e9f56b3-6a15-43f1-add2-03a9830065f5",
+      "shopping:overture:7f7fb8c8-83e3-4aa5-98be-f8ecd072ed73"
+    ],
+    "distanceMeters": 3.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2443b012-2bfc-4b6d-b475-195a2a99a6b5",
+      "shopping:overture:7f8c0a47-df53-4b17-ada7-dbb1279a2586"
+    ],
+    "distanceMeters": 5.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:749be5b9-7cc2-4c3e-a1bd-002680139e7c",
+      "shopping:overture:8056f106-c614-40e4-89ea-abd0e13e18b8"
+    ],
+    "distanceMeters": 2.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:21d8bc01-217d-476a-a4b9-c02325241e6f",
+      "shopping:overture:8302a53d-c372-4714-9bd8-3579eb145631"
+    ],
+    "distanceMeters": 1.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2f1aae1b-8c63-42a5-8a3a-74a0ad107008",
+      "shopping:overture:8323586e-a6f1-44f6-8ed2-0b07e3d65c62"
+    ],
+    "distanceMeters": 3.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:6c4d0f26-6bf2-4893-badc-8915a3941284",
+      "shopping:overture:85429662-701e-4b8e-9877-7f8e89265438"
+    ],
+    "distanceMeters": 32.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:26d76d25-be08-41ff-b8ca-921cb5ac2a3f",
+      "shopping:overture:85d8e2d8-8d71-4f88-9d9a-884bc8ba397b"
+    ],
+    "distanceMeters": 2.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:001bd7f9-7038-4ba7-a381-2ee5ef48caac",
+      "shopping:overture:86746e83-33cb-4e05-a53a-9da15f2ea88e"
+    ],
+    "distanceMeters": 10.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3a4c203a-a90f-4fd2-8766-a6c760b87069",
+      "shopping:overture:8736ae3e-2786-48d9-bed2-a3f38e5c3a1b"
+    ],
+    "distanceMeters": 13.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:07649601-e3ac-4c6c-8337-e4e09a340f79",
+      "shopping:overture:87ce5c01-c5e3-407e-8cc6-a5ba68f31eef"
+    ],
+    "distanceMeters": 14.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4e16e2e3-348f-4d92-ab2c-f3a16b202ecf",
+      "shopping:overture:88c6d3fd-ae6a-4523-9648-1c43fa2b0b37"
+    ],
+    "distanceMeters": 16.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:68333094-9c85-4728-ab9f-1fb4af88f8fc",
+      "shopping:overture:8970605c-e0cd-414d-8a82-2999b2d4a6e9"
+    ],
+    "distanceMeters": 3.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:094c7cdf-fcf0-475b-836c-a73fc8911040",
+      "shopping:overture:8a1b6b6b-19cd-4e7e-a6be-551e3c81c6df"
+    ],
+    "distanceMeters": 28.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5a3bb0d4-3974-472f-ab30-8c15094b1ead",
+      "shopping:overture:8a1c7c2c-f4f7-4a46-8ab4-7a49616f5da0"
+    ],
+    "distanceMeters": 6.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2b9385cb-ab3a-4dc5-9591-ce58e423b972",
+      "shopping:overture:8a24298b-2d35-4de8-82ae-20bc95705641"
+    ],
+    "distanceMeters": 10.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0ca47920-cfb5-4e62-a56a-9d03e831ba45",
+      "shopping:overture:8a6ca1b5-a130-4064-9bff-6764919d591e"
+    ],
+    "distanceMeters": 7.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0cdb3584-839d-4ecf-8a72-b866742ab495",
+      "shopping:overture:8acd5ff9-51bd-493a-85e9-f2229069fa86"
+    ],
+    "distanceMeters": 10.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7ac2d3e7-a15c-4566-84d1-bff3ef3da212",
+      "shopping:overture:8b6857d8-1e85-4f59-9e2f-1661e002ab8d"
+    ],
+    "distanceMeters": 11.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1c1e86e6-4998-4cdb-a19a-740c143d1ae1",
+      "shopping:overture:8b7711ba-bf1c-4895-ace3-148fd36e6e98"
+    ],
+    "distanceMeters": 30.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:47c32eba-ce4f-4a84-a989-57bf412faa4a",
+      "shopping:overture:8bd7548a-cee6-4d04-ad1f-796b15e0fdbc"
+    ],
+    "distanceMeters": 22.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2ec80f72-a2ec-4786-8ea8-2ad9287d1187",
+      "shopping:overture:8bf768be-50c5-4d2b-b4e6-139d5bc9efa3"
+    ],
+    "distanceMeters": 11.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3c6c8bd6-eca4-4833-add2-1e62e92baec1",
+      "shopping:overture:8c2fd6a4-20a5-4d3f-a042-605acfbec57c"
+    ],
+    "distanceMeters": 4.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:6543430a-a07b-4633-9f1e-8555040ac0a9",
+      "shopping:overture:8c91e55e-bad6-419b-935f-a8e49b34eedc"
+    ],
+    "distanceMeters": 15.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:35ca183d-dfe2-43be-884e-1b47611b73c8",
+      "shopping:overture:8cbd9831-1985-4a5a-97b0-f63aef80b3b9"
+    ],
+    "distanceMeters": 13.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:84fd0a19-6870-49d0-83ad-3f3873fc6430",
+      "shopping:overture:8ccf32b1-e983-4360-9fd9-537978adaa68"
+    ],
+    "distanceMeters": 20.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:639dd598-9693-48ed-b62b-c4b0ce2df6e0",
+      "shopping:overture:8ce75daa-ca51-4789-8a22-c92cabea5ce3"
+    ],
+    "distanceMeters": 4.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7f974c00-a2b2-43b3-971e-3e0b854e668a",
+      "shopping:overture:8e0f43e7-b4e3-4c9c-adf0-1febeab227e5"
+    ],
+    "distanceMeters": 9.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5bb48afd-7fb7-4134-bdfb-00a2927d621d",
+      "shopping:overture:8e97e96f-e11d-4eda-978f-99702c540b85"
+    ],
+    "distanceMeters": 1.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:50807c94-688f-4f50-b2f8-fdc8d9f78764",
+      "shopping:overture:91336e88-1235-4d42-9ce4-c5dee9ec223e"
+    ],
+    "distanceMeters": 12.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:853422e4-67e4-4df1-94ae-efb9aed087cb",
+      "shopping:overture:91888cf3-973d-424e-85a8-c3febd855c93"
+    ],
+    "distanceMeters": 7.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:801f02db-9704-419a-8131-f13f3265de9a",
+      "shopping:overture:91bc74d7-ef57-4162-afbe-49c0018b0fa0"
+    ],
+    "distanceMeters": 34.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:459e7ba4-e645-4bc5-869a-ca5843e4eabc",
+      "shopping:overture:91d7850d-0f3e-4360-8cfa-b32610d97f5f"
+    ],
+    "distanceMeters": 1.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7ce1801d-2397-478a-ac70-51b4d0f402b1",
+      "shopping:overture:929e4c81-0875-4ad9-95d9-72bb2f81e742"
+    ],
+    "distanceMeters": 2.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0a18e8f6-7117-49d7-bde7-a95513f6d191",
+      "shopping:overture:92bc5875-d5dc-4146-948a-ee7b507327ff"
+    ],
+    "distanceMeters": 2.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:33195f16-0834-47ab-bdad-b6e0d858be34",
+      "shopping:overture:92eabf31-054e-4d63-8039-a7bc42bdba4d"
+    ],
+    "distanceMeters": 14.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3985360f-3e04-45df-87e4-7bfc95f3da62",
+      "shopping:overture:932f4f83-250d-4245-837c-e001d9775e67"
+    ],
+    "distanceMeters": 6.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:582f6c5a-60d9-4b76-a44f-0aea5d5fdcf4",
+      "shopping:overture:93aae6c5-0f79-4c1e-a0ca-37caadf4f994"
+    ],
+    "distanceMeters": 1.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:6681e7a2-f9e7-48e7-970a-fe3cc2713bb0",
+      "shopping:overture:93d8fe7a-9730-4b1d-8eb6-ae7d55ed62e2"
+    ],
+    "distanceMeters": 4.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5e49cd4b-af0e-4ffb-a656-365cb8becfc3",
+      "shopping:overture:94553617-7b4a-401a-930a-a6dc0747f1f2"
+    ],
+    "distanceMeters": 0.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:46f4846f-263f-40bc-9198-69d576a14fee",
+      "shopping:overture:95178048-d214-43ca-bb3d-d0356d2288b9"
+    ],
+    "distanceMeters": 6.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:6a4c61de-ca64-431d-80a0-52eaa16ebf08",
+      "shopping:overture:955bf864-d192-427e-bc65-0f35a26bb50e"
+    ],
+    "distanceMeters": 5.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:93e23467-2ae9-419b-8283-d4cc65fb6c64",
+      "shopping:overture:958b5fb8-36b4-4ae9-bdd3-078fdba3b91c"
+    ],
+    "distanceMeters": 3.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:02f7f466-6f2c-44fd-a3fc-bcacc124eacf",
+      "shopping:overture:967f48a6-600a-4fb3-b066-bc4638307531"
+    ],
+    "distanceMeters": 4.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:89e6743e-2491-475e-93d8-e61c27dbdda7",
+      "shopping:overture:98dfe08f-719a-4b74-b4a0-8ea47549b4b8"
+    ],
+    "distanceMeters": 26.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:868e247f-16ff-47c8-9e86-21e655c5e417",
+      "shopping:overture:994b406d-e4ad-40cb-a25f-e2489e9fe158"
+    ],
+    "distanceMeters": 9.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7353694a-c578-4692-8241-69b85f8d424f",
+      "shopping:overture:9992ad5e-b8d8-4177-8eae-1b9f269754cf"
+    ],
+    "distanceMeters": 5.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3208daec-20da-4924-8c3f-59915f8953c9",
+      "shopping:overture:99cc77a9-41b2-4f01-8f69-fcc1e82131f8"
+    ],
+    "distanceMeters": 1.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:8c0b791e-4889-4833-bc64-10cd09c92a0f",
+      "shopping:overture:99cf51ee-3a5f-4079-8873-6aa9d2211e21"
+    ],
+    "distanceMeters": 3.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:6eac0691-b5d5-4e6e-8b52-5ec4f30f0629",
+      "shopping:overture:99e38e7a-8282-4a90-87a2-5d8a96d08517"
+    ],
+    "distanceMeters": 1.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5db349d3-5acb-4c16-939c-31562225f7fa",
+      "shopping:overture:9b5d0a4f-a1d4-47cd-bf8f-7e216b9517b8"
+    ],
+    "distanceMeters": 17.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2757e0a1-de9c-4099-a590-37ead1c27d67",
+      "shopping:overture:9b65addd-e458-4fad-8e27-57fad8538359"
+    ],
+    "distanceMeters": 6.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:6a062c40-8011-41c9-a79b-dd3f97d04721",
+      "shopping:overture:9bb3a97a-9ba6-42f3-8167-89b4698a7881"
+    ],
+    "distanceMeters": 29.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3d0f3d24-cd02-4e75-a0db-b9d08b27a2ba",
+      "shopping:overture:9bf331e0-1db8-480b-98f3-b8bb2489d103"
+    ],
+    "distanceMeters": 0.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2407c3ac-f33c-4ed5-9654-8b0a8fc560f6",
+      "shopping:overture:9c37d3bf-8c2f-424f-b1ca-03f39aff7037"
+    ],
+    "distanceMeters": 16.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:08dadbc1-481e-4bfb-aa23-006226399efa",
+      "shopping:overture:9c3f47e5-ea99-449c-9e6b-948605966193"
+    ],
+    "distanceMeters": 13.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4f814248-8729-4b3a-9ae4-eb1c40dcc3e9",
+      "shopping:overture:9c67db80-322a-4c73-806c-ca7b04e0c5fe"
+    ],
+    "distanceMeters": 7.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7eb51ff3-a182-48e7-8f96-8e2d8e02c793",
+      "shopping:overture:9cadcd5f-24de-4e1c-b468-b706bf9ecf5d"
+    ],
+    "distanceMeters": 6.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2c6636e9-7ff7-4ffd-8fa7-0895b77b54a5",
+      "shopping:overture:9e5751d5-07c0-4dbc-aa92-3a3068c014db"
+    ],
+    "distanceMeters": 3.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:8cc8ca71-f070-4f16-a2ae-492dc28e4794",
+      "shopping:overture:9f810143-9d9d-4337-97fc-988a076e9501"
+    ],
+    "distanceMeters": 2.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:8a3f539e-346a-4752-86b7-78d80c3611ec",
+      "shopping:overture:a0bce680-71cc-4d37-b50b-75cf29402646"
+    ],
+    "distanceMeters": 0.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2d7b03ef-8986-4fc1-96ad-a701a4b8ce7b",
+      "shopping:overture:a10fbb23-cc55-48f8-9ef2-5cccd0a75163"
+    ],
+    "distanceMeters": 5.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:91f21de0-0d81-4587-b779-cd0f01520df2",
+      "shopping:overture:a20f10c5-f5a4-4e74-befc-24e99fc8b178"
+    ],
+    "distanceMeters": 4.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5342029a-a4bf-42ff-b92a-b1b940d1e2a5",
+      "shopping:overture:a2735303-9de7-4e18-89b7-7abc1da05729"
+    ],
+    "distanceMeters": 10.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:02f52d14-d874-4c3b-ac7f-7aa61ab1ef9c",
+      "shopping:overture:a3896d5b-e26f-4484-b39c-a294cc8a184d"
+    ],
+    "distanceMeters": 34.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:6baa2501-b4f2-4b81-9cd9-621d1bafcf57",
+      "shopping:overture:a67b1e03-1c1c-4a7e-aa37-63c7027495ba"
+    ],
+    "distanceMeters": 20.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5c9f7a56-580d-49b5-a606-f142353fff9f",
+      "shopping:overture:a6b35a66-51e4-4db0-9934-4498f76e5c03"
+    ],
+    "distanceMeters": 21.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:312ac24f-f6fd-4bc3-a3ea-7a0f8f909fe4",
+      "shopping:overture:a79b80cb-5de8-4918-b75f-ff58aca24da5"
+    ],
+    "distanceMeters": 0.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:8bd7558c-26e4-4bb9-bbc4-64669817f673",
+      "shopping:overture:a7c63805-8f65-4f82-80ea-00f1516c90bb"
+    ],
+    "distanceMeters": 12.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9c604425-cfb6-4085-9f39-5b189a85ca96",
+      "shopping:overture:a8234988-75ec-4a91-b25a-32550bcc1969"
+    ],
+    "distanceMeters": 9.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:12cc08eb-183b-437f-89af-39f0bf0030d2",
+      "shopping:overture:a8dd9f97-fdfb-481d-b436-4ab27a57f7c9"
+    ],
+    "distanceMeters": 4.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5d43073b-3571-4a49-ba8b-c3d000330ae5",
+      "shopping:overture:a9350b23-f3a6-4906-b3f9-a57f9a36e3dd"
+    ],
+    "distanceMeters": 20.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:8c96ab5e-e0e3-43d8-914a-cd4b9c3b81e0",
+      "shopping:overture:aa290847-c61f-4d83-bd93-76db35f806f9"
+    ],
+    "distanceMeters": 1.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:952c3df8-72d2-40b9-9c58-7583bdef8bac",
+      "shopping:overture:aa897751-7ced-46ee-99e0-0aee55100c66"
+    ],
+    "distanceMeters": 24.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3c59b268-a1e9-43b1-a071-b2066afc24a2",
+      "shopping:overture:aaade9d4-a859-4235-9070-f085013e975d"
+    ],
+    "distanceMeters": 3.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:25cff8b0-6186-4553-82a3-e1c8a7a2d04c",
+      "shopping:overture:aaf8063d-f71e-4c03-8689-9ce5273802f6"
+    ],
+    "distanceMeters": 17.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7f1a9792-4de7-4334-827a-d09f2359d334",
+      "shopping:overture:ab48d900-2101-4a6e-b49f-7ea364ee2c24"
+    ],
+    "distanceMeters": 12.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:8e4e59d4-4475-470e-ad24-c663426f3ea6",
+      "shopping:overture:ab6c6d0c-ee19-405a-b28d-7b30d8cfef4e"
+    ],
+    "distanceMeters": 34.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:81958714-91d3-4f4b-8573-0bc8e0605f3c",
+      "shopping:overture:abf943ec-a79f-4056-8661-d8bb1295e531"
+    ],
+    "distanceMeters": 9.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3462467b-e33e-44bc-bbbc-6c02d8182b85",
+      "shopping:overture:ae7083eb-017e-4b67-8f24-46c993933964"
+    ],
+    "distanceMeters": 9.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3c1ab96a-3561-4a9b-adaf-3fbd62c4ef74",
+      "shopping:overture:ae77a3a8-6a34-46e6-ac98-cceb4167e48e"
+    ],
+    "distanceMeters": 3.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4f2852c8-363b-449a-b4c5-06498848ed23",
+      "shopping:overture:afd4a165-1c95-479f-9eca-eb5bbc8ac0d2"
+    ],
+    "distanceMeters": 3.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:01bc75a6-1cac-4c9c-a53b-245773945e26",
+      "shopping:overture:b06f9e63-076e-4d23-ac12-dd842d53b64f"
+    ],
+    "distanceMeters": 5.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1ae5309d-4bbc-4a58-9f41-a0e1787c01a0",
+      "shopping:overture:b11245d6-c69d-4bd8-a977-216143f5fb7f"
+    ],
+    "distanceMeters": 21.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9af71247-7bab-4fe6-ba8c-48fe08f88edc",
+      "shopping:overture:b1425649-17ff-49e5-b870-135fc081081b"
+    ],
+    "distanceMeters": 33.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9cbbb95f-2fa4-4a60-8fdb-da1516ecfdf4",
+      "shopping:overture:b1554218-0349-4662-9857-cea6f199dc84"
+    ],
+    "distanceMeters": 21.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3f9cb414-3263-4258-a7e1-27bf3513c067",
+      "shopping:overture:b1db1ce6-96b3-4112-9b1f-6bdd8723d198"
+    ],
+    "distanceMeters": 8.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:58391e19-2f13-433c-91bf-318a18c9bf9b",
+      "shopping:overture:b23692f1-c7e0-476f-95e4-9dac828215ed"
+    ],
+    "distanceMeters": 0.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:44cbc613-ad74-4e69-8806-fd5e8be3b1be",
+      "shopping:overture:b2681642-d080-4720-ad5e-dd1138f610c5"
+    ],
+    "distanceMeters": 30.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a8f892d4-5ea1-4301-85bb-da4e47efa587",
+      "shopping:overture:b280edc2-9286-4a54-b39a-a7abaeb34fd6"
+    ],
+    "distanceMeters": 7.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:6c4c697f-91d4-45e7-98cb-73250ac4cb9d",
+      "shopping:overture:b2938f81-694a-4804-9928-32af1fca8304"
+    ],
+    "distanceMeters": 24.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:27cc207b-9d70-40a2-91e5-1b72a9a7319b",
+      "shopping:overture:b2cc6d75-7747-4aec-b968-f0f8592b18d2"
+    ],
+    "distanceMeters": 6.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:79148d3a-ab9b-42a2-87cc-a73ceb04ddc9",
+      "shopping:overture:b2e38d7d-bd93-4023-9090-8d41f36f428c"
+    ],
+    "distanceMeters": 14.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:87a625fe-a16d-4556-b43a-8260bbe52461",
+      "shopping:overture:b36d8bad-8fd9-4361-84a6-cb447b1a1433"
+    ],
+    "distanceMeters": 5.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:990b1690-e491-45c5-af7a-1894701b5863",
+      "shopping:overture:b4128be4-6c01-4ebe-b1e4-429591fb5df0"
+    ],
+    "distanceMeters": 12.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:af0ad490-a6f9-4ec5-bdca-559fab93549a",
+      "shopping:overture:b5176be7-8a39-4a4f-bcf6-5fec1c04a746"
+    ],
+    "distanceMeters": 13.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:408d6868-363d-4a4a-a235-8b0bb7908789",
+      "shopping:overture:b59b043c-a2e3-456d-b506-81467c2689fd"
+    ],
+    "distanceMeters": 2.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:82b0541e-3070-4942-95a6-8f91b0d0ffa1",
+      "shopping:overture:b59f26fd-4130-4d55-8015-c4d525c4c375"
+    ],
+    "distanceMeters": 6.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:91dd6ea5-1756-4826-acb1-8635effa077a",
+      "shopping:overture:b5b47b0a-e4dc-4d6e-8066-7e27f7a7cc3e"
+    ],
+    "distanceMeters": 3.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:256e5c96-7acb-4c79-a5a1-4981b8e1c8c0",
+      "shopping:overture:b65ab139-e5fc-4ffe-8ea2-4eb0d8537668"
+    ],
+    "distanceMeters": 4.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:6ba5f6ed-20a2-4f6b-a33a-36f35f7ac93e",
+      "shopping:overture:b68a1e07-a600-4bd7-857f-08a8d47353a9"
+    ],
+    "distanceMeters": 1.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:96038467-44c5-4174-9ac2-401d4b5b595e",
+      "shopping:overture:b6b47aa8-b0a6-4b31-ada5-2200756b192b"
+    ],
+    "distanceMeters": 10.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0724d3a8-248d-493f-8578-8e373b81e2d6",
+      "shopping:overture:b6bddf93-dd1f-4972-a8e7-643c4c73e56f"
+    ],
+    "distanceMeters": 18.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:467c63f3-69d0-4fb4-9fe2-79e63ab4e71b",
+      "shopping:overture:b6bf3581-329c-45ea-baed-de7d8228657f"
+    ],
+    "distanceMeters": 34.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:13823a72-9599-439c-961c-ac9d941fc0fc",
+      "shopping:overture:b7fd3d80-af3c-4448-b65d-638264462c5b"
+    ],
+    "distanceMeters": 10.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9ee5c1df-9899-457c-8683-0ddb2e55793a",
+      "shopping:overture:b87c020b-38be-494a-a8b3-bbe7d94a9f7c"
+    ],
+    "distanceMeters": 11.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b217661b-5b7d-4aac-8927-a028f86e8109",
+      "shopping:overture:b88565dd-112f-4165-b94b-8f34753f69f1"
+    ],
+    "distanceMeters": 4.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:25430628-f6ef-4563-a7bc-6e4240f526ac",
+      "shopping:overture:b8caca5a-6ef9-4b1f-8a28-e20469541d02"
+    ],
+    "distanceMeters": 19.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:19b294fb-fe9f-448c-b440-90ab7d8a72fc",
+      "shopping:overture:b8cfcb57-d6f2-4784-8ae2-46700aec20df"
+    ],
+    "distanceMeters": 11.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3be8a296-4fed-4210-8fc7-f3583e25ff17",
+      "shopping:overture:b952c847-e4f2-4b70-932a-ae0436b1f383"
+    ],
+    "distanceMeters": 3.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a59feccb-6b5f-44e4-b7f6-7f7f1b5011ef",
+      "shopping:overture:b95deb7b-91ab-4605-bd86-a4823b5b6b0d"
+    ],
+    "distanceMeters": 27.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a9f74457-a2ef-4918-9ee3-e5d362cf08dc",
+      "shopping:overture:b99a747c-ba35-43bd-85e4-05ef4cbbe1fb"
+    ],
+    "distanceMeters": 1.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:051d990f-7531-47fc-a7e1-a087a6555a3e",
+      "shopping:overture:ba15cfdc-bb60-4908-9aec-3d7d2cda01c8"
+    ],
+    "distanceMeters": 11.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:17df6548-f5b8-45ac-b1a4-76f79bf899dc",
+      "shopping:overture:bad4a053-edd8-48df-a0e8-c358b27132f9"
+    ],
+    "distanceMeters": 6.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:09c8c293-ad2a-4c80-ae60-7bdd92fa3bfc",
+      "shopping:overture:baf5d061-3adf-4089-80af-e15873be776a"
+    ],
+    "distanceMeters": 30.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1114a4af-3881-46dd-918c-bacca19d95a6",
+      "shopping:overture:bb6f7b1c-4c0d-4e1c-8d48-8f2456fd7f12"
+    ],
+    "distanceMeters": 5.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:80366785-fed8-461d-bdcb-165e945b441a",
+      "shopping:overture:bb763001-65a9-48f4-85e7-785d5c9d76b1"
+    ],
+    "distanceMeters": 14.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:22597b93-73ec-49ae-b4c3-9283d3612f51",
+      "shopping:overture:bbce8036-8010-4917-937f-609cde381602"
+    ],
+    "distanceMeters": 6.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7afe6e01-e5c8-4724-bd5f-74508cd130c8",
+      "shopping:overture:bc20e151-f314-49e0-ba37-e4c63264b43e"
+    ],
+    "distanceMeters": 1.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0433e955-a714-4d3d-a63f-cccac784e29d",
+      "shopping:overture:bc3eb1a6-7ee1-4753-87d9-2c3ff2f363e4"
+    ],
+    "distanceMeters": 18.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b754ffed-182f-46f0-82a0-56c2aebdcf17",
+      "shopping:overture:bc6eb283-7831-4984-8be3-6a541adb87d8"
+    ],
+    "distanceMeters": 7.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:30505e0a-7110-4a47-82ae-268621ecb76f",
+      "shopping:overture:bca52f0d-6ea7-4715-86a0-115ce74b35bb"
+    ],
+    "distanceMeters": 8.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:bd2fb884-7a72-402f-aa96-7790258318ac",
+      "shopping:overture:be38ecd0-967e-4e59-b6e6-0a3850f66e3a"
+    ],
+    "distanceMeters": 6.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:89315b83-523c-451a-a510-624b2d9047da",
+      "shopping:overture:bf9503a7-8231-45d1-979c-6f90bf1066f5"
+    ],
+    "distanceMeters": 3.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:6d207532-916b-4038-b0fa-81bb0c3739f7",
+      "shopping:overture:bfa66d5e-2ece-42f2-985e-889d6883e645"
+    ],
+    "distanceMeters": 10.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0c90ccce-84bd-405b-845f-c3290dd4e781",
+      "shopping:overture:c0ceae1e-18a0-41ad-b272-a59b37b702ae"
+    ],
+    "distanceMeters": 14.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a97695c2-d604-42e2-bd5e-af9c55d3bccd",
+      "shopping:overture:c0f42cc9-a610-42ab-af55-61efc3d574e7"
+    ],
+    "distanceMeters": 19.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4c4bbb4a-7136-4668-a25c-6e31cb03de53",
+      "shopping:overture:c18f7287-494e-4c52-a3b2-2fac88ac8fae"
+    ],
+    "distanceMeters": 3.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:94eeb6d5-f98b-49e0-b70d-561937321f4d",
+      "shopping:overture:c2e183b8-10fa-4dac-9958-70eeae05e57e"
+    ],
+    "distanceMeters": 7.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:25379d25-fd27-45bf-90a1-53f8a6dc1848",
+      "shopping:overture:c305b852-efc0-4032-8662-0e03cd119564"
+    ],
+    "distanceMeters": 5.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4f449bf4-c2d7-41cc-a159-c91bb27f189d",
+      "shopping:overture:c3134075-ac32-49ef-a3b9-6749c48b3212"
+    ],
+    "distanceMeters": 2.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:74f6e830-8d55-4901-bba4-3def4c4356c6",
+      "shopping:overture:c3193f81-eadb-41a8-a513-be2a7ed13b1b"
+    ],
+    "distanceMeters": 3.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4d2447c4-071d-4f4e-9001-9e46e2e76e08",
+      "shopping:overture:c3d39e4c-f637-4592-a465-7020c0ed801f"
+    ],
+    "distanceMeters": 5.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:42760b1d-be69-4643-92c2-69249791df73",
+      "shopping:overture:c4294f26-9091-410d-9982-9d5d8c78c537"
+    ],
+    "distanceMeters": 3.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b2ea49c4-4beb-4d46-86a8-aa837aca3632",
+      "shopping:overture:c4935328-b7e7-4a1d-914a-34b459ad9423"
+    ],
+    "distanceMeters": 15.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:605b789a-c0eb-4e0f-8fd8-95150cfdb7ad",
+      "shopping:overture:c4de89f9-552d-4e8d-8b00-af4feca2b63b"
+    ],
+    "distanceMeters": 1.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:bea13b77-1b05-4665-99ec-23c9ec69b2a4",
+      "shopping:overture:c5198668-2a18-4af7-9ba7-75ed3d562796"
+    ],
+    "distanceMeters": 17.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:35aace5d-df5d-4220-9f64-476f50a91376",
+      "shopping:overture:c5d7b814-0e47-4fb7-9cad-b534b6936a9e"
+    ],
+    "distanceMeters": 1.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:86c24a08-78ef-4259-9a4a-a4ce16350a42",
+      "shopping:overture:c6862073-75e7-468e-9b69-db833a76b167"
+    ],
+    "distanceMeters": 4.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:bf6dce79-fca5-49c9-99cb-b2560886fc5e",
+      "shopping:overture:c6c8ba28-4b8c-47d0-98bd-f73c8b41b0f8"
+    ],
+    "distanceMeters": 11.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:003fe4c2-72bf-478f-8492-66ff31fb7d89",
+      "shopping:overture:c75e8745-bf62-4f97-8654-bedcf37e90f4"
+    ],
+    "distanceMeters": 24.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2f19504e-9a0d-4df4-b3a5-4aa836f1cf5b",
+      "shopping:overture:c7876663-32aa-4274-ae10-9eb77a11a88c"
+    ],
+    "distanceMeters": 5.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:20243670-ee2a-4899-a10b-eb72d8ea7e12",
+      "shopping:overture:c7b27c04-9047-41cd-962c-81543149d113"
+    ],
+    "distanceMeters": 12.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3a96b540-ec62-4a2e-a814-8069f9f389cc",
+      "shopping:overture:c7cb0e79-ffdd-4bce-9473-95a1cd1e06a4"
+    ],
+    "distanceMeters": 13.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:34f3e5ae-1a71-4f99-b851-41b348845a25",
+      "shopping:overture:c8261a6a-c6dc-4d7a-a9f9-133876c397c3"
+    ],
+    "distanceMeters": 32.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:93bff079-bf40-47d8-9d01-294e3418e071",
+      "shopping:overture:c8410721-8dad-43b4-9375-50d09e873c57"
+    ],
+    "distanceMeters": 4.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:ba06eec1-c188-4cdf-b8bb-46f67553fdd9",
+      "shopping:overture:c85a70fd-2012-4758-a93f-7bc444d4cfb2"
+    ],
+    "distanceMeters": 3.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:af3d0e04-3e81-4627-aef6-ed93c72b18e4",
+      "shopping:overture:c8e8c06c-d202-4d64-b4a8-94ad1341a328"
+    ],
+    "distanceMeters": 16.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b2fec217-2ee7-499b-9054-1cf7aea20e77",
+      "shopping:overture:c91c4d7e-e769-4c28-96aa-c595d5663a99"
+    ],
+    "distanceMeters": 2.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5ab0a3f3-015b-4fbd-9d0e-acd96000f684",
+      "shopping:overture:ca8598f0-7eee-4e62-80b6-2e601eea190d"
+    ],
+    "distanceMeters": 12.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1bdfa184-3111-490c-b1b9-8255929fb7e9",
+      "shopping:overture:ca85b6a0-35b3-4f99-a278-9ad31843f9dd"
+    ],
+    "distanceMeters": 29.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9e795aea-6444-4137-9e53-ae6001433c73",
+      "shopping:overture:cab16957-ba5a-4412-aac6-f7885253e6b9"
+    ],
+    "distanceMeters": 4.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:bbdfa891-5b90-459b-be5b-9c3ffac45035",
+      "shopping:overture:cb062d44-eb1e-4293-981b-b3644d2b7c28"
+    ],
+    "distanceMeters": 24.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:52563581-e3b9-421f-8eef-7dbb6cb45272",
+      "shopping:overture:cbf90889-42f2-4335-a69b-09bd071e4511"
+    ],
+    "distanceMeters": 18.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9ac27305-f133-4214-a39a-942547f11043",
+      "shopping:overture:cc98ad1f-125c-4697-9649-547d7acd51d2"
+    ],
+    "distanceMeters": 0.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9c836069-6281-4504-bd38-8b3db604ad7c",
+      "shopping:overture:cca3f086-e869-470c-83ad-5032bcbcb409"
+    ],
+    "distanceMeters": 9.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:312ac24f-f6fd-4bc3-a3ea-7a0f8f909fe4",
+      "shopping:overture:ccf735fc-cd2e-4d0e-bf60-c36d15f1e212"
+    ],
+    "distanceMeters": 13.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a79b80cb-5de8-4918-b75f-ff58aca24da5",
+      "shopping:overture:ccf735fc-cd2e-4d0e-bf60-c36d15f1e212"
+    ],
+    "distanceMeters": 13.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:abb0105b-2efe-4916-8999-66daf5388230",
+      "shopping:overture:cddce14d-2abf-47a7-9512-21222de2dddd"
+    ],
+    "distanceMeters": 3.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:be43ad51-e51d-4ff3-96e9-61a615edcaf3",
+      "shopping:overture:ce354d38-c15d-42b4-9e14-62b71005f1b4"
+    ],
+    "distanceMeters": 3.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5adbb289-b595-419d-88de-dc1ba26cfc03",
+      "shopping:overture:ce432764-8c6f-4ca7-81eb-ca32eaf8bc30"
+    ],
+    "distanceMeters": 10.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9b38936d-4d5b-4b52-ad31-9b968e54b9da",
+      "shopping:overture:cee63c45-bd19-4b9a-804a-27714a4381fc"
+    ],
+    "distanceMeters": 19.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:386b3636-581a-498a-b4b2-0b380bc41e17",
+      "shopping:overture:cf600fc4-1730-44ad-ba89-fa5420b1d0b8"
+    ],
+    "distanceMeters": 18.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:ae667265-3654-4bd1-9eb8-7f3e89a39805",
+      "shopping:overture:cf86f57e-2b8a-4c26-960a-50d64c89336b"
+    ],
+    "distanceMeters": 5.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2ba79a49-c6ce-49e8-a57f-2910305a43e3",
+      "shopping:overture:cfaaa6bb-1015-455f-a7e8-1166076ac02d"
+    ],
+    "distanceMeters": 19.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1d42f778-d4a6-4e6e-a5a2-05fa8be35221",
+      "shopping:overture:d09f1c04-2d17-4648-a9a4-e647c8a177ef"
+    ],
+    "distanceMeters": 4.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:407b8892-4306-4766-a83d-f28b83403364",
+      "shopping:overture:d0f3c361-90a8-4b5e-95fe-e92fc38873db"
+    ],
+    "distanceMeters": 5.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4177dc65-45fe-45eb-bc4d-074b834a874b",
+      "shopping:overture:d0fc0d68-6700-4828-b85c-6d4893de41e5"
+    ],
+    "distanceMeters": 2.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9ee596d1-917e-479e-ba21-98327d4bf16f",
+      "shopping:overture:d0fe49a6-876a-4431-9398-2318ee9d4159"
+    ],
+    "distanceMeters": 4.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2c96989c-0f08-44a8-b29e-9e00661caaa1",
+      "shopping:overture:d1411694-6d33-4453-b4a8-2a3060800912"
+    ],
+    "distanceMeters": 25.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4ddc0866-152a-405b-8d77-5910c9101b6a",
+      "shopping:overture:d146ebd5-5f1a-4424-a941-0061760d8bae"
+    ],
+    "distanceMeters": 20.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:23097260-5df8-40a9-90fe-2680d5b19dcc",
+      "shopping:overture:d1570b94-4a88-4605-844c-ebc529968496"
+    ],
+    "distanceMeters": 1.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9cd2ddc3-38b5-43e4-9fbe-5ae01ace61c5",
+      "shopping:overture:d2652259-e6a7-43b0-8d39-0bea860ab6bd"
+    ],
+    "distanceMeters": 2.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:52d25e2b-9867-4cb0-af46-d87eadc844d4",
+      "shopping:overture:d2d92dc0-a9d3-44dc-a5fe-e94e30f12f9a"
+    ],
+    "distanceMeters": 4.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0e16ee86-5624-4ebd-92e4-d79c2132c558",
+      "shopping:overture:d3024b6f-178f-4d9d-8b34-4f036fefd866"
+    ],
+    "distanceMeters": 3.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:d4075eae-a9cc-4f58-bff0-0eb45442cf85",
+      "shopping:overture:d4d35eea-2ae7-4f0f-9947-9161fcaeec00"
+    ],
+    "distanceMeters": 27.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:cc4ebe4d-8a23-40b2-a773-77833951ee57",
+      "shopping:overture:d5044eec-1862-47f6-bee0-da28513818c6"
+    ],
+    "distanceMeters": 0.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:23a7418d-f616-4b02-93b8-7c5b395af501",
+      "shopping:overture:d5740a5a-e9d1-45b0-82c9-42c2578dd14e"
+    ],
+    "distanceMeters": 6.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7148a2c0-91ea-4b5e-bae6-a6f968886001",
+      "shopping:overture:d5bb937c-02da-4118-9d85-6508abeb899b"
+    ],
+    "distanceMeters": 2.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2cf32891-3dd2-40e0-8d75-a42162ee5164",
+      "shopping:overture:d5c38e07-4af2-467b-9c1d-31607a49b8f0"
+    ],
+    "distanceMeters": 13.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:081fe74f-cda3-4e1f-99a1-f8b4b3acca43",
+      "shopping:overture:d5d138d2-8148-47f5-9110-10aefa9c3e00"
+    ],
+    "distanceMeters": 2.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:78ba51ce-24f4-4093-8d0b-7ad34cac8769",
+      "shopping:overture:d665f721-fd8c-48c3-a232-ece2bede2b15"
+    ],
+    "distanceMeters": 0.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:57893892-fdc9-497d-b938-592080437e50",
+      "shopping:overture:d669d019-8074-4e81-9cd1-c33647c73ba6"
+    ],
+    "distanceMeters": 27.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:d27685f5-0b00-403e-a0c1-8da9747ff84d",
+      "shopping:overture:d678957b-f250-47bc-9c5c-07ec130ee6ba"
+    ],
+    "distanceMeters": 20.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a5d701a1-0522-4aae-b1ba-bf2fe113aeab",
+      "shopping:overture:d6cf4e4d-2bb1-48fc-ad18-bc3b8a712496"
+    ],
+    "distanceMeters": 11.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:48b92ce8-de1d-4104-9072-db14c9432589",
+      "shopping:overture:d6e61cef-b7cf-408e-8b4d-64d870ced98c"
+    ],
+    "distanceMeters": 5.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:ac90ec32-1193-4a20-9946-d1a8d3457595",
+      "shopping:overture:d7c2c2f8-d799-4ac0-9549-b718830d493e"
+    ],
+    "distanceMeters": 17.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:bf670e37-3440-4439-a1d1-da2f646c3c5a",
+      "shopping:overture:d829d45f-c0c1-4587-b1c3-2c7546329275"
+    ],
+    "distanceMeters": 0.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0fdbc5ec-586f-48b1-bb56-5d152d568fe6",
+      "shopping:overture:d849de4c-3669-41fa-9293-c38535fed02e"
+    ],
+    "distanceMeters": 18.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0bd30aa0-fb49-4fa8-9fc3-ff3f729632e1",
+      "shopping:overture:d8a86aaa-bf77-4439-b016-90fbbc2c1193"
+    ],
+    "distanceMeters": 23.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9e9dd35f-a808-44b8-a31c-c7cabf8568c8",
+      "shopping:overture:d90f91ce-4f68-43d0-9f59-5c8cb3e9b4c5"
+    ],
+    "distanceMeters": 22.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:64342e69-b0e1-4589-9f7a-fa83237b9c51",
+      "shopping:overture:da30852e-9e4c-4dd6-b654-4ce8f8a51953"
+    ],
+    "distanceMeters": 6.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:af856e84-d73a-4705-8f91-9598bf2b3cf2",
+      "shopping:overture:da6114cc-0c98-4769-b9fd-cf67f879bf2a"
+    ],
+    "distanceMeters": 17.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:31d5577e-ed06-43be-ae38-c0afaa41cf89",
+      "shopping:overture:da8b0bfd-92b1-4e27-841b-1f8c812c1aee"
+    ],
+    "distanceMeters": 6.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:340b4cfd-f6bb-4b21-ad2c-5a4667c5a82c",
+      "shopping:overture:daa21b56-8510-4ed5-8052-6c59e4e9be04"
+    ],
+    "distanceMeters": 2.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a1f36053-9258-4d0f-adb7-2067910d3376",
+      "shopping:overture:db276af7-6c28-40ab-ae08-d8c4f91ff20a"
+    ],
+    "distanceMeters": 2.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:61a9113e-cd72-4b05-9218-1bcfe6f2352b",
+      "shopping:overture:db425ea4-2a46-4ce5-a5b2-b078ebc52211"
+    ],
+    "distanceMeters": 23.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a2ceeb1f-f618-4562-809c-ca2bfd2081de",
+      "shopping:overture:db67358b-6257-4de7-9587-b76303e00e5b"
+    ],
+    "distanceMeters": 4.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9f56876a-b7a1-49f1-aa22-d23eb2a98154",
+      "shopping:overture:db8fc87a-2829-465e-9b7b-f1da2c792be1"
+    ],
+    "distanceMeters": 12.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:05e88d5c-8092-4da6-a517-a1aadf2debe7",
+      "shopping:overture:db9d7b5c-c882-4673-a1e3-95dcf38b4576"
+    ],
+    "distanceMeters": 17.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b7117652-8963-4e57-ab70-813232075da9",
+      "shopping:overture:dbbb49c5-e994-46ac-bde2-c2e3fe2f5b53"
+    ],
+    "distanceMeters": 1.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:96f41476-9668-40b7-8202-385902815578",
+      "shopping:overture:dbda5f46-90f2-4e45-9223-2c807087e3a3"
+    ],
+    "distanceMeters": 1.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:cef71e83-db84-4000-a900-19b38d6e4ac6",
+      "shopping:overture:dbf6a82e-7912-49b2-ae75-daa19eaa4256"
+    ],
+    "distanceMeters": 4.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5f149864-924c-4f3d-9479-3cdbee480ff4",
+      "shopping:overture:dc17b966-fc69-4adc-a1b6-9b4ef529d20f"
+    ],
+    "distanceMeters": 1.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:c23f2a95-33f8-4d9d-9dcb-acee5b6f0023",
+      "shopping:overture:dcbacfc2-7aef-4a05-b3c7-5f53d360afd8"
+    ],
+    "distanceMeters": 3.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b6b24c8e-e094-4ab2-8d81-7fa6b462d444",
+      "shopping:overture:dcdd696e-21ff-4c98-91da-fe8ff00e873d"
+    ],
+    "distanceMeters": 21.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a1f743e2-74ee-4793-8e94-7f6f9907784f",
+      "shopping:overture:dd1dc3dc-9912-4004-9284-1fa2745d3c4c"
+    ],
+    "distanceMeters": 0.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:6cef4d6e-8da6-4c91-87f3-d48c29730698",
+      "shopping:overture:dda31b6a-963d-4a6e-8ed2-1ff0ddbbfcf8"
+    ],
+    "distanceMeters": 32.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b10145a6-f262-4b7a-ac60-361f17af4c41",
+      "shopping:overture:de5fbf05-0865-480b-8a83-d6a85e9cffb7"
+    ],
+    "distanceMeters": 16.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:d691f276-6a79-4bf1-8a1b-1b65c1a573f8",
+      "shopping:overture:de9e63fe-89bd-4eb9-a230-bba805680574"
+    ],
+    "distanceMeters": 2.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a8771bf9-c607-4514-85d6-e0beae090ab1",
+      "shopping:overture:deb7f95f-6153-4b54-a74c-366a29e1192b"
+    ],
+    "distanceMeters": 17.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:aa0b4410-ac9b-40be-be47-c55688729cd7",
+      "shopping:overture:df4b5c86-fe2a-42bf-9962-91b44add92d8"
+    ],
+    "distanceMeters": 5.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:40813a3f-1923-4dcc-a888-666c4638355e",
+      "shopping:overture:df8aa7a6-5c55-4e22-a3a9-8b226608e6e8"
+    ],
+    "distanceMeters": 25.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:cdf52b83-8fe9-47f5-9a14-8a9eca3947d3",
+      "shopping:overture:e01c001b-4204-44b1-b251-77367a0251f9"
+    ],
+    "distanceMeters": 8.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:dccadab4-8b22-40b1-ba6e-d031663ed033",
+      "shopping:overture:e081c1c4-cfc3-430d-b7bd-c09ccf2768cf"
+    ],
+    "distanceMeters": 2.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3606f409-ad60-4157-9255-dda290df8c09",
+      "shopping:overture:e092689a-22d8-4ec8-a9f8-7dc8f475eefc"
+    ],
+    "distanceMeters": 10.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:ddcc06ca-cad8-4bd3-97dc-3a712a3df958",
+      "shopping:overture:e152271e-a8df-4f13-8079-6379697bd936"
+    ],
+    "distanceMeters": 1.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:067104c7-2871-4e41-8c67-4eb9cf77a32b",
+      "shopping:overture:e15e02a9-995b-417a-825e-6300c58dde35"
+    ],
+    "distanceMeters": 18.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:aa897751-7ced-46ee-99e0-0aee55100c66",
+      "shopping:overture:e1673674-dc2f-4016-9932-ea6cfd7b13f2"
+    ],
+    "distanceMeters": 18.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:952c3df8-72d2-40b9-9c58-7583bdef8bac",
+      "shopping:overture:e1673674-dc2f-4016-9932-ea6cfd7b13f2"
+    ],
+    "distanceMeters": 7.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:31f9a98a-de83-40f6-be4b-dd9f4df5316d",
+      "shopping:overture:e1ad20ff-bf31-43b0-b896-db29057cf024"
+    ],
+    "distanceMeters": 28.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:cc9750d5-89a2-4dd6-ae3f-716a6bde87ca",
+      "shopping:overture:e2088519-af6e-4f61-839a-f7f61ad0cff2"
+    ],
+    "distanceMeters": 0.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:876fcbe2-e45b-4c73-83b4-9f3503b3444a",
+      "shopping:overture:e2390aa4-1178-487e-82c1-76d6cf26030c"
+    ],
+    "distanceMeters": 28.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:cb062d44-eb1e-4293-981b-b3644d2b7c28",
+      "shopping:overture:e24376e4-c90a-4f2c-8df8-f49c2e0a5680"
+    ],
+    "distanceMeters": 19.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:bbdfa891-5b90-459b-be5b-9c3ffac45035",
+      "shopping:overture:e24376e4-c90a-4f2c-8df8-f49c2e0a5680"
+    ],
+    "distanceMeters": 4.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:9f02d1b2-f950-4fa2-af1b-92e2459165f2",
+      "shopping:overture:e2c2828b-9fea-4c27-810d-9145e5d56752"
+    ],
+    "distanceMeters": 6.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:867f05d1-0835-41f2-a9d5-4007ceb85b24",
+      "shopping:overture:e2c6efa5-fa7d-4df5-80c2-dbe101016963"
+    ],
+    "distanceMeters": 18.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1175ae7d-2ea3-4764-924f-d6a59c9d4ac0",
+      "shopping:overture:e2edf915-8331-4a31-891c-160affe58375"
+    ],
+    "distanceMeters": 3.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5d7a4874-d07c-441b-b4ed-252255c2c733",
+      "shopping:overture:e331090e-85e8-4653-9b75-3bb9ea4ee02f"
+    ],
+    "distanceMeters": 19.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3a95c790-4007-4366-8908-885653314e16",
+      "shopping:overture:e35e0696-dc05-4d60-bc54-9fe73f2be984"
+    ],
+    "distanceMeters": 13.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a2c24049-d4af-4a35-aad6-b9bce9742d34",
+      "shopping:overture:e3d88516-d45a-4261-90aa-c20ffcbdff57"
+    ],
+    "distanceMeters": 17.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:78a8d6eb-a884-4095-9510-927dcf5ff298",
+      "shopping:overture:e3f6a813-b127-4865-b371-65b9c40b74b3"
+    ],
+    "distanceMeters": 16.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3f9c73a3-078a-46d6-baff-44770e5f01a8",
+      "shopping:overture:e3f9f1a4-c969-447e-914d-6c0804836c1e"
+    ],
+    "distanceMeters": 5.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3df21b57-e74c-4543-9117-9091987b0e00",
+      "shopping:overture:e4875530-e6e1-4dec-961b-ef50eb557b6d"
+    ],
+    "distanceMeters": 12.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:137dcdea-a6c2-4dea-9051-ffeaed06e185",
+      "shopping:overture:e5447b9e-9164-4d25-aadd-0cf8e9cd5d0f"
+    ],
+    "distanceMeters": 8.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:be2402f1-338a-4875-8edc-ccf17f82ce0f",
+      "shopping:overture:e55eea5e-e5ae-48f0-a783-85b223686c5f"
+    ],
+    "distanceMeters": 11.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2dd8afd9-6ad7-4ed3-b0f5-dbb413a89368",
+      "shopping:overture:e56e0fca-2df8-40be-988c-f6c841f44884"
+    ],
+    "distanceMeters": 4.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b76e2c83-8c2a-4005-99ce-2e739d44ca93",
+      "shopping:overture:e5969da1-11a4-4c6d-b8ed-d21b2766e76c"
+    ],
+    "distanceMeters": 9.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0d7abbb7-8a24-40e7-a62b-f102be644ee7",
+      "shopping:overture:e6b0512a-505f-4db1-8513-31b6347bfca8"
+    ],
+    "distanceMeters": 1.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0cb24b9e-e7e5-4305-907b-646f55c3bcd0",
+      "shopping:overture:e7002079-0ce8-4f66-8b2c-589098d7c630"
+    ],
+    "distanceMeters": 17.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b978462d-beac-4284-9a8c-bf4daca3ec6a",
+      "shopping:overture:e71af17e-28cb-4f04-b6a6-1cc05b27b3e7"
+    ],
+    "distanceMeters": 5.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:ac94af72-1e3e-4488-abb9-893bd5b572ce",
+      "shopping:overture:e73df479-04b3-4ae1-b0f2-e1b730a6ff13"
+    ],
+    "distanceMeters": 20.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:e20b558a-1678-41bd-a288-7efbb3855212",
+      "shopping:overture:e77f4a27-6e91-46ff-9d4d-b9ad396c82cb"
+    ],
+    "distanceMeters": 4.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:663eb2e0-77bd-4cc2-8495-2faceeb7cfbf",
+      "shopping:overture:e7df767e-e2e7-460e-bfe4-653172e94131"
+    ],
+    "distanceMeters": 1.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:c10fafab-5f23-4028-8373-47751de64589",
+      "shopping:overture:e7edaf09-d224-41e5-8c41-8203a1fb7c77"
+    ],
+    "distanceMeters": 0.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:596d5b38-d7e5-45e6-ad3b-f562b1ea08df",
+      "shopping:overture:e839a90e-135e-44a8-9bd2-e48b87569a36"
+    ],
+    "distanceMeters": 9.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:607a2a7d-cc45-4e4a-a160-63f3093f6c2f",
+      "shopping:overture:e856ad19-9598-488b-bc26-f3585c64e38c"
+    ],
+    "distanceMeters": 3.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2f6f3d9d-1dea-4bb8-8e80-88dcd6d9df73",
+      "shopping:overture:e88630ac-cd34-4d7b-bf7a-1a2984f8245f"
+    ],
+    "distanceMeters": 8.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:e30e1d69-610b-4833-bc53-6778607b2709",
+      "shopping:overture:e8b0bc66-8bae-42e4-b61a-31ab1352f68a"
+    ],
+    "distanceMeters": 5.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:e81e76b4-53a7-4971-9fe8-68cf6f51ce67",
+      "shopping:overture:e8f00365-3555-403f-81c5-8f6c685b0b22"
+    ],
+    "distanceMeters": 1.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:080edf78-c403-4356-befd-c2b87df096de",
+      "shopping:overture:e9b72e6d-6a23-4b44-a6d4-380feed9eaad"
+    ],
+    "distanceMeters": 4.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:e9ec7b6b-3859-4b7a-8669-4182494654c1",
+      "shopping:overture:ea104a98-3c88-4c8c-88ad-f5b447cfe088"
+    ],
+    "distanceMeters": 2.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:06e42743-7dd2-48f0-8137-083c64790a74",
+      "shopping:overture:ea324a12-a419-4e05-b06d-b50b4c807570"
+    ],
+    "distanceMeters": 8.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:d946589a-4f2f-4dcc-a430-c1b607f64eba",
+      "shopping:overture:ea4a290e-78fd-467c-9d7c-393f28548d80"
+    ],
+    "distanceMeters": 3.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:e95b1549-7485-42bb-ac99-7e9050682dce",
+      "shopping:overture:eb3f4d94-ffb3-468b-9eb1-4ad9de428a22"
+    ],
+    "distanceMeters": 10.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:02039cb2-9354-411d-b57c-935387492b2c",
+      "shopping:overture:ebb02e11-0c02-42cb-985e-e5a08cc86688"
+    ],
+    "distanceMeters": 0.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:72828d4e-6706-4c26-944c-912549c7f053",
+      "shopping:overture:ebcb55e7-7eaf-4dc6-aecd-0fea75e5b54a"
+    ],
+    "distanceMeters": 1.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:23061fc1-34d1-4199-80dc-fa180c65ce61",
+      "shopping:overture:ec28b3e4-c34b-4243-a795-b11d3bec92da"
+    ],
+    "distanceMeters": 0.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:645c28fb-abe3-47ed-a700-b99813fdb9fe",
+      "shopping:overture:ec89f1f9-f4a1-453d-9b02-a9272d8feec9"
+    ],
+    "distanceMeters": 3.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:8685f041-605f-4b46-b944-cf5903ee9c19",
+      "shopping:overture:ecf729e0-27ae-49be-9d86-aa89085baa21"
+    ],
+    "distanceMeters": 5.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:e05f90b2-e18d-429f-9e03-c4a6c59ca7a6",
+      "shopping:overture:ed28f794-c66e-4060-90de-61bf6914602c"
+    ],
+    "distanceMeters": 4.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b48af22e-6994-421b-a47a-d53f6934cf23",
+      "shopping:overture:ed3cb9fb-a556-479e-b016-a8c128d895ed"
+    ],
+    "distanceMeters": 2.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:db819a06-d996-4fe2-ba14-b8cb9eb43a7b",
+      "shopping:overture:ed3ecd90-ef8f-4117-84d6-ef5de9cbad8e"
+    ],
+    "distanceMeters": 22.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0bc1107c-e4c4-49ea-b6af-7bf0a95878c9",
+      "shopping:overture:ed404e9e-08e3-489b-b8a9-100270971d36"
+    ],
+    "distanceMeters": 0.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7eed4f3e-42ad-4c02-a589-d7c101eddf36",
+      "shopping:overture:ed5f2b6b-69bc-4931-b5b6-84824ee3e57e"
+    ],
+    "distanceMeters": 10.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:72c9b5bb-21c7-473c-acd6-34adb178bebe",
+      "shopping:overture:ed948d5e-7eb5-4fca-9ab0-2ea544602c69"
+    ],
+    "distanceMeters": 10.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:65fdd3fa-b5d8-414c-bd95-e7e3f1dac633",
+      "shopping:overture:edfa469f-7852-4ee1-a091-8a8a789dff90"
+    ],
+    "distanceMeters": 2.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:60a4e1c0-1ec3-4dd7-a23a-75fafa4032e4",
+      "shopping:overture:ee5249f7-c4da-401a-a3c1-7a5b108a70a3"
+    ],
+    "distanceMeters": 2.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7bf728d7-ebd2-4977-b500-365da2d54f88",
+      "shopping:overture:ee9e1bdd-2417-4b74-a4fc-dd1999f2b25b"
+    ],
+    "distanceMeters": 5.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3888ad0b-4c30-4a1d-82a1-0fdd92ae60e1",
+      "shopping:overture:eec088ce-c9aa-4172-a32c-cef5212561c7"
+    ],
+    "distanceMeters": 9.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b7f3481f-f783-497c-af92-36a8d6f24ba1",
+      "shopping:overture:efe342d9-277c-4b57-b22f-a37ef7eddf33"
+    ],
+    "distanceMeters": 21.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:ebf4e8fa-cf1a-479f-b276-3fde6494a46c",
+      "shopping:overture:f0a5ac56-4349-482d-ae17-b176b087de68"
+    ],
+    "distanceMeters": 10.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:812c3192-06ba-4f9e-bc30-dfa7ff94aabd",
+      "shopping:overture:f0aec86c-f0d6-4de1-aabb-fd19ea97b440"
+    ],
+    "distanceMeters": 1.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:786f2ada-c88c-4b1c-91bf-c1d9a9008b77",
+      "shopping:overture:f0f7f7a9-921b-487c-a4e8-b93b8f2234c3"
+    ],
+    "distanceMeters": 9.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:42967d97-5487-4a92-9d44-caaae00fac29",
+      "shopping:overture:f154b110-87c2-48db-a2ba-a983eca57411"
+    ],
+    "distanceMeters": 8.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:ce8cb74b-1c47-488a-999a-ea25c43cf11f",
+      "shopping:overture:f17bfd9b-1364-4307-bc2a-34306f4a6ae6"
+    ],
+    "distanceMeters": 4.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:a4fdae36-f75f-4466-8791-9d2bd0cdf55f",
+      "shopping:overture:f1a2871d-6d5a-4451-9223-34d8d9bacd1c"
+    ],
+    "distanceMeters": 12.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:8d2bfcb7-0027-40c6-99d9-f327309382db",
+      "shopping:overture:f1ffefae-339b-4512-a06f-eaceb4a41d9a"
+    ],
+    "distanceMeters": 3.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:567f166b-7c68-4812-aa0f-e3059b31cc44",
+      "shopping:overture:f23c6a94-15db-4b09-8447-b68dd74737d0"
+    ],
+    "distanceMeters": 4.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:8d0841d0-dd4e-45b1-b306-d9008872e3bf",
+      "shopping:overture:f27463c3-6e29-4000-9549-aae2028e4a16"
+    ],
+    "distanceMeters": 4.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:7ec28aec-e893-4f8b-8bb6-a13211844101",
+      "shopping:overture:f289eef2-3e5c-4154-a417-d8f941fb3e95"
+    ],
+    "distanceMeters": 3.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:ea75e886-5c5e-46f9-b57c-d2888bc9ee57",
+      "shopping:overture:f28bbfe6-7de6-4a07-8b66-2b5101cb19d5"
+    ],
+    "distanceMeters": 8.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:be0dcc9b-174d-4c7b-8f86-84e2257f6ce3",
+      "shopping:overture:f2c87af6-2af5-438f-9a5c-7b810a4ac2a5"
+    ],
+    "distanceMeters": 2.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:378f3d69-e3e2-4e78-82ca-9efeca83bfb0",
+      "shopping:overture:f301593d-a7ad-49f4-a491-37cef033942b"
+    ],
+    "distanceMeters": 14.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:f1986207-6a96-48a4-a031-03b8291a9615",
+      "shopping:overture:f33d7df5-3caf-4af8-bc17-02b8ac25e6be"
+    ],
+    "distanceMeters": 6.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5949cbc7-1412-410e-a680-bc328c76fb26",
+      "shopping:overture:f37c84c0-19ff-492c-bee9-a82db045ba8e"
+    ],
+    "distanceMeters": 19.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:99ef3771-117b-4d7b-9c01-7f1e08d3704d",
+      "shopping:overture:f37f3583-2b05-4245-9803-7e81050c0a23"
+    ],
+    "distanceMeters": 31.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4d8440e7-fdb6-41a3-b022-1e49d8b4646d",
+      "shopping:overture:f42d3b0e-74f0-4724-b5c5-d2f2d6098018"
+    ],
+    "distanceMeters": 14.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:d0516e9a-c857-4c30-87bf-a898a71650d1",
+      "shopping:overture:f475eff6-0e50-4303-be69-6f9847f44f06"
+    ],
+    "distanceMeters": 3.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:742d0366-78bd-4bd8-8faf-d3e5e7ae279d",
+      "shopping:overture:f4fb4324-fc5d-4103-a6b9-2b356e9e9466"
+    ],
+    "distanceMeters": 25.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2f1a1923-96fa-48b7-a80d-b7e730be5895",
+      "shopping:overture:f5b010a0-3e3c-4858-8613-de95fe5a5644"
+    ],
+    "distanceMeters": 8.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5c3969d6-120e-41c1-b23a-8735663a7109",
+      "shopping:overture:f646092b-6bba-4584-b8c7-5ff29df7ef62"
+    ],
+    "distanceMeters": 14.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:04c48809-4986-4d04-b4cb-1514b51fd930",
+      "shopping:overture:f6df70cc-a7e4-48be-9df0-9a422b3ba122"
+    ],
+    "distanceMeters": 19.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:e68dc0ce-22ad-497e-ab01-2c7b068cdd40",
+      "shopping:overture:f7021d29-267e-4666-9daf-144427e448d7"
+    ],
+    "distanceMeters": 31.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:21614504-b859-46a5-ba2e-031044e85fa5",
+      "shopping:overture:f711e573-cb33-4b94-bc69-3907f0f8fdc2"
+    ],
+    "distanceMeters": 4.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:25ca0118-3c76-40df-beba-0281aa61f55a",
+      "shopping:overture:f74bbdc2-fb7b-4cea-b1f8-2d85d8c6f78c"
+    ],
+    "distanceMeters": 11.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:8d4d711f-b5aa-46d2-a97b-bf0019fa8e94",
+      "shopping:overture:f7756849-e25a-45f2-9283-b543ed39bc63"
+    ],
+    "distanceMeters": 6.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:87e86d5c-ef2b-4059-b431-1a5e99de6d5b",
+      "shopping:overture:f7f34db4-ebc7-404a-be9c-afcdbe810230"
+    ],
+    "distanceMeters": 5.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b5a30c0a-87b5-493d-9278-12062feff3a3",
+      "shopping:overture:f86a91b4-5d6f-4080-94ff-7ab51b8c8971"
+    ],
+    "distanceMeters": 14.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:1ea4b7ca-7ee3-424b-b1bb-87da1c8ffa8d",
+      "shopping:overture:f89af62f-15ce-4f5c-a196-bb23bb157bed"
+    ],
+    "distanceMeters": 0.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:34ef6c5f-c429-4562-8e8d-c5835dce136c",
+      "shopping:overture:f8abc923-4bed-4fe6-80f9-4a62a0e4b448"
+    ],
+    "distanceMeters": 30.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:5c727841-9dfb-40f5-a2d1-3011d71c02c8",
+      "shopping:overture:f8e259da-eae2-4c81-ad97-e5383d17edad"
+    ],
+    "distanceMeters": 14.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:3cc30535-4fbb-432c-a0f3-6e822274d94b",
+      "shopping:overture:f9074ff1-5fcc-409c-89c0-1a96bab6da4e"
+    ],
+    "distanceMeters": 4.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:8cddf280-8890-4e6f-989a-c4f27a1f13d4",
+      "shopping:overture:f952da44-e46d-4095-9749-bae6fcddaf78"
+    ],
+    "distanceMeters": 8.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:49e29a7a-d269-4263-ad9a-7d949b4f4b73",
+      "shopping:overture:f9fdb234-bbdb-461a-bb3c-deb8445c2e17"
+    ],
+    "distanceMeters": 3.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:c13645fe-7b59-43fe-b573-ae71466ef2ca",
+      "shopping:overture:fa009f32-4e87-4c77-820d-a9febfc739d3"
+    ],
+    "distanceMeters": 19.9,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4786875d-0286-4103-8e5b-1fff0b9e65fe",
+      "shopping:overture:fa1e2e07-971a-487c-9635-f4be1dc24848"
+    ],
+    "distanceMeters": 1.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:33a6fae4-83ca-466a-9fd6-5330888c214b",
+      "shopping:overture:fa402fdb-3548-4c5a-80b7-9da008dd15f2"
+    ],
+    "distanceMeters": 31.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:0774251a-88a3-4948-a6b2-4f51a6fd5345",
+      "shopping:overture:fad19b9a-1cd3-4460-a251-ba3b513fb978"
+    ],
+    "distanceMeters": 2.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:12d59c9d-ea0d-4633-9d8d-d1ba2dc20a9d",
+      "shopping:overture:fad7d9c2-4253-4778-81ab-5a5790eae074"
+    ],
+    "distanceMeters": 15.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:62853659-c1e0-460f-9915-4cd51f4e2c5b",
+      "shopping:overture:fb47372d-dcea-431c-9fc5-612a5753382d"
+    ],
+    "distanceMeters": 0.3,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:067b6b69-bd2f-4b2c-9319-c41c4cbf60e1",
+      "shopping:overture:fb4df5ef-fba1-4f4f-931e-19b11d9faaf4"
+    ],
+    "distanceMeters": 2.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:c3ba9b56-16de-44b2-9b84-dffd17a76f87",
+      "shopping:overture:fb87cdd9-b173-4704-a4d6-e9b68e99e744"
+    ],
+    "distanceMeters": 0.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:dc9ba6bc-129a-4244-adc4-5e6f66808988",
+      "shopping:overture:fbf96925-29ce-412d-bbdd-63089a571395"
+    ],
+    "distanceMeters": 31.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:90dfd703-3bcd-431c-960d-37fb116ade15",
+      "shopping:overture:fc0d3610-bc39-40f5-acfb-a38298d00889"
+    ],
+    "distanceMeters": 25.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:c8e97162-cc6c-404d-ab03-f0763e73fd8c",
+      "shopping:overture:fc633d51-d22c-401f-b7f4-83ce4dc3c8e4"
+    ],
+    "distanceMeters": 0.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:78d2a9bc-e754-4f62-a9d5-ab17d2bb5539",
+      "shopping:overture:fcbe1f03-58a2-4c6f-8c4e-7cf58918e39d"
+    ],
+    "distanceMeters": 14.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:fc82d1b5-88a3-4ad1-b05c-1a424b7412bf",
+      "shopping:overture:fcc68e98-31be-4cfe-b3bf-c3beec2d8a33"
+    ],
+    "distanceMeters": 29.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:753eec33-ebe5-4b2d-bdf4-df8b7d325f72",
+      "shopping:overture:fd1e3209-728f-496e-8da6-e7ae31894dcf"
+    ],
+    "distanceMeters": 25.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:2f4e6bd0-99e8-4566-b3f8-015be8d42cc7",
+      "shopping:overture:fd4adb91-fe2a-4c92-b892-2d7d31abca2b"
+    ],
+    "distanceMeters": 3.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:d82ff533-9c32-4d51-882d-259f05f66dc8",
+      "shopping:overture:fd69028f-75cc-4612-b590-4f9db1d798c1"
+    ],
+    "distanceMeters": 6.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:baa97dbc-6282-4dbe-8ad8-644472ba4e4a",
+      "shopping:overture:fdb686be-3e71-4c7e-913e-553bd22c4f22"
+    ],
+    "distanceMeters": 7.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:808b66ff-6220-4819-ab1f-8530718f87d9",
+      "shopping:overture:fde1be4b-b574-4e91-b003-3075e46fd281"
+    ],
+    "distanceMeters": 9.8,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:01de9ccf-150b-4139-a603-975b80f26636",
+      "shopping:overture:fdef81ef-724b-49ae-88c2-3b16b026f928"
+    ],
+    "distanceMeters": 2.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:c4f675eb-9c70-42b9-a504-87bc7dfa16b4",
+      "shopping:overture:fdf56b3d-fb03-46f0-a23b-ec8be6dc797c"
+    ],
+    "distanceMeters": 23.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:db61b3a7-fdbb-49f0-bcb3-8a4df9858bd7",
+      "shopping:overture:fe122d15-9536-41ce-a084-7359fc9f207f"
+    ],
+    "distanceMeters": 13.4,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:c54582ef-e59f-469a-9ce5-82f03ec1cf5d",
+      "shopping:overture:fe289a87-6cca-44e1-8221-af8dea02463d"
+    ],
+    "distanceMeters": 3.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:f743cb34-9909-494e-919a-772d0de414a2",
+      "shopping:overture:fe3b6833-72f9-4863-93d4-db60e2733945"
+    ],
+    "distanceMeters": 1.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:447501e9-665e-4b27-b7a1-f998e4cbf44b",
+      "shopping:overture:fe60ed6d-a612-442b-a106-2948768f5b3d"
+    ],
+    "distanceMeters": 3.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:902f6a7d-73fa-4e9a-be4b-59e27b02d366",
+      "shopping:overture:feb9914f-0ffd-4b48-a6e6-73ea3a4b09d4"
+    ],
+    "distanceMeters": 2.7,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:d15b45f6-c50e-4511-a4fc-46e74fd70221",
+      "shopping:overture:fedb3675-4f96-412d-8e68-3dfce3b8f600"
+    ],
+    "distanceMeters": 3.1,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:d4a13e81-46ee-4727-beb2-fa2096648797",
+      "shopping:overture:ff45c819-d56a-430d-893f-eb2272df152f"
+    ],
+    "distanceMeters": 6.6,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:ba25d3d1-9913-4c40-9396-d06e8d09fc76",
+      "shopping:overture:ff8227e8-5285-4256-854e-92b1d7f8529b"
+    ],
+    "distanceMeters": 16.5,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:b164486b-88cc-4bcc-9586-a5499a49c5be",
+      "shopping:overture:ff9b494e-a699-466e-a95f-183a2a020cc3"
+    ],
+    "distanceMeters": 0.0,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:17e6bb28-22f1-4b5e-a91c-f6f4daebefc4",
+      "shopping:overture:ffa3dd2b-db69-4013-acd4-b9cd57f1fb6b"
+    ],
+    "distanceMeters": 10.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  },
+  {
+    "keys": [
+      "shopping:overture:4385ca86-fa06-49c8-aa0d-a4c0e3be67a6",
+      "shopping:overture:ffe51de1-2c71-44db-b5d0-5b360d7e9f9d"
+    ],
+    "distanceMeters": 2.2,
+    "reason": "Nearby same-brand source features; possible duplicate or co-located branches. No silent merge."
+  }
+]

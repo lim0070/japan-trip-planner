@@ -61,7 +61,7 @@ export function save(value) {
 export async function feed(namespace, path) {
   const old = await read("feeds", namespace);
   try {
-    const response = await fetch(path);
+    const response = await fetch(path, {signal:AbortSignal.timeout(10000)});
     if (!response.ok) throw Error("Source unavailable");
     const fresh = await verifyFeed(await response.json());
     if (fresh.source.namespace !== namespace)
