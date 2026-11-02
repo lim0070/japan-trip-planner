@@ -251,6 +251,9 @@ function navigate(next) {
 }
 function render() {
   if (!ready) return;
+  if($("discover-controls"))controlsOpen=$("discover-controls").open;
+  if($("filters"))discover.open=$("filters").open;
+  const liveLayers=document.querySelector(".layer-controls");if(liveLayers)layersOpen=liveLayers.open;
   pickContext();
   screen = ["trips", "day", "discover", "spots", "settings"].includes(
     location.hash.slice(1),
@@ -989,7 +992,7 @@ function renderDiscover() {
         render();
       }),
   );
-  $("filters").ontoggle = () => (discover.open = $("filters").open);
+  $("filters").ontoggle = e => { if(e.target.isConnected)discover.open=e.target.open; };
   $("local-search").oninput = (e) => {
     discover.q = e.target.value;
     clearTimeout(renderDiscover.timer);
