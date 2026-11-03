@@ -102,96 +102,114 @@ export async function feed(namespace, path) {
 
 // A whole package (records + notices + aliases) is committed in one IDB transaction.
 // Never activate a feed before its licences or use mixed release members.
-const packageKey = (id) => (id === "osm" ? "shopping-osm" : "shopping-bundle");
+const REGISTRY_KEY = "shopping-codec-registry";
+const packageKey = (id) => id === "osm" ? "shopping-codec-osm" : "shopping-codec-bundle";
+const legacyKey = (id) => id === "osm" ? "shopping-osm" : "shopping-bundle";
 const artifact = (p) => p?.manifest?.datasetVersion || p?.feed?.datasetVersion;
+const isReference = (p) => p?.kind === "shopping-legacy-reference";
+function resolvePackage(value, legacy) {
+  if (!isReference(value)) return value || null;
+  if (!["shopping-bundle", "shopping-osm"].includes(value.key)) return null;
+  return [legacy?.current, legacy?.previous].find(p =>
+    p && !isReference(p) && artifact(p) === value.artifact) || null;
+}
+function resolvedRow(owned, legacy) {
+  if (!owned) return {current: legacy?.current || null,
+    previous: legacy?.previous || null, revision: 0};
+  return {...owned, current: resolvePackage(owned.current, legacy),
+    previous: resolvePackage(owned.previous, legacy)};
+}
+function storedPackage(value, id, legacy) {
+  if (!value) return null;
+  if ([legacy?.current, legacy?.previous].some(p =>
+      p && !isReference(p) && artifact(p) === artifact(value)))
+    return {kind:"shopping-legacy-reference", key:legacyKey(id), artifact:artifact(value)};
+  return value;
+}
+function sameStored(a, b) {
+  return a === b || (isReference(a) && isReference(b) &&
+    a.key === b.key && a.artifact === b.artifact);
+}
+function compactRow(owned, id, legacy) {
+  if (!owned) return owned;
+  const current = storedPackage(resolvePackage(owned.current, legacy), id, legacy),
+    previous = storedPackage(resolvePackage(owned.previous, legacy), id, legacy);
+  // Preserve unresolved historical references, rather than substituting a version.
+  return {...owned, current: current || owned.current,
+    previous: previous || owned.previous};
+}
+function feedRows(keys) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("feeds"), store = tx.objectStore("feeds"), rows = {};
+    for (const key of keys) {
+      const r = store.get(key); r.onsuccess = () => rows[key] = r.result;
+    }
+    tx.oncomplete = () => resolve(rows);
+    tx.onerror = () => reject(tx.error);
+  });
+}
+export async function shoppingCacheState(id) {
+  const key = packageKey(id), oldKey = legacyKey(id), rows = await feedRows([key, oldKey]);
+  return resolvedRow(rows[key], rows[oldKey]);
+}
 async function currentPackage(key, error) {
-  const row = await read("feeds", key);
-  const p = row?.current || row?.previous;
-  if (p) return { ...p, error };
+  const row = await shoppingCacheState(key === packageKey("osm") ? "osm" : "overture");
+  const p = row.current || row.previous;
+  if (p) return {...p, error};
   throw Error(error || "Source unavailable");
 }
-// Compare generations and derive previous inside the same transaction as activation.
-export function activateShoppingPackage(
-  id,
-  fresh,
-  expectedRevision,
-  registry = null,
-) {
-  const key = packageKey(id),
-    otherKey = packageKey(id === "osm" ? "overture" : "osm");
+// Cohort-specific pointers isolate cached old code. Legacy rows are read-only;
+// references reuse exact legacy artifacts instead of duplicating hydrated history.
+export function activateShoppingPackage(id, fresh, expectedRevision, registry = null) {
+  const peer = id === "osm" ? "overture" : "osm", key = packageKey(id),
+    otherKey = packageKey(peer), oldKey = legacyKey(id), oldPeer = legacyKey(peer),
+    keys = [key, otherKey, oldKey, oldPeer, REGISTRY_KEY];
   return new Promise((resolve, reject) => {
-    const tx = db.transaction("feeds", "readwrite"),
-      store = tx.objectStore("feeds"),
-      rows = {};
-    let count = 0,
-      result,
-      message;
+    const tx = db.transaction("feeds", "readwrite"), store = tx.objectStore("feeds"), rows = {};
+    let count = 0, result, message;
     tx.oncomplete = () => resolve(result);
     tx.onerror = () => reject(tx.error || Error(message));
     tx.onabort = () => reject(Error(message || "Shopping activation aborted"));
-    const stop = (m) => {
-      message = m;
-      tx.abort();
-    };
-    for (const k of [key, otherKey, "shopping-registry"]) {
+    const stop = m => {message = m; tx.abort()};
+    for (const k of keys) {
       const r = store.get(k);
       r.onsuccess = () => {
         rows[k] = r.result;
-        if (++count !== 3) return;
+        if (++count !== keys.length) return;
         try {
-          const old = rows[key],
-            current = old?.current;
-          if (
-            registry &&
-            (rows["shopping-registry"]?.current?.datasetVersion !==
-              registry.datasetVersion ||
-              rows["shopping-registry"].current.generation !==
-                registry.generation)
-          )
+          const owned = rows[key], row = resolvedRow(owned, rows[oldKey]),
+            current = row.current, other = resolvedRow(rows[otherKey], rows[oldPeer]);
+          if (registry && (rows[REGISTRY_KEY]?.current?.datasetVersion !== registry.datasetVersion ||
+              rows[REGISTRY_KEY].current.generation !== registry.generation))
             return stop("Stale shopping registry generation");
-          if ((old?.revision || 0) !== expectedRevision) {
-            if (artifact(current) === artifact(fresh)) {
-              result = current;
-              return;
-            }
+          if ((owned?.revision || 0) !== expectedRevision) {
+            if (artifact(current) === artifact(fresh)) {result = current; return;}
             return stop("Stale shopping package generation");
           }
           if (registry) {
-            const d = registry.packages.find((p) => p.id === id);
+            const d = registry.packages.find(p => p.id === id);
             if (!d || canonical(d.metrics) !== canonical(packageMetrics(fresh)))
               return stop("Package metrics do not match registry");
           }
-          if (id === "overture")
-            validateAliases(
-              fresh.aliases,
-              fresh.feed,
-              current?.aliases || emptyAliases(),
-            );
-          const metrics = [
-            packageMetrics(fresh),
-            ...(rows[otherKey]?.current
-              ? [packageMetrics(rows[otherKey].current)]
-              : []),
-            { ancillary: 128 * 1024 },
-          ];
-          checkTotals(metrics);
-          const next = {
-            current: fresh,
-            previous: current || old?.previous || null,
-            revision: (old?.revision || 0) + 1,
-          };
-          if (bytes(next) + bytes(rows[otherKey] || {}) > GLOBAL.storage)
+          if (id === "overture") validateAliases(fresh.aliases, fresh.feed,
+            current?.aliases || emptyAliases());
+          checkTotals([packageMetrics(fresh), ...(other.current ? [packageMetrics(other.current)] : []),
+            {ancillary:128*1024}]);
+          const same = artifact(current) === artifact(fresh), next = {
+            current: storedPackage(fresh, id, rows[oldKey]),
+            previous: storedPackage(same ? row.previous : current, id, rows[oldKey]),
+            revision: owned ? (owned.revision || 0) + (same ? 0 : 1) : 1,
+          }, peerRow = compactRow(rows[otherKey], peer, rows[oldPeer]);
+          // Count actual stored bytes of BOTH cohorts, including both histories.
+          if ([next, peerRow, rows[oldKey], rows[oldPeer]].reduce((n,p)=>n+bytes(p||{}),0) > GLOBAL.storage)
             return stop("Shopping storage budget");
-          if (artifact(current) === artifact(fresh)) {
-            result = current;
-            return;
-          }
-          store.put(next, key);
-          if (id === "overture" && fresh.manifest) store.delete("shopping");
-          result = fresh;
-        } catch (e) {
-          stop(e.message);
-        }
+          if (!owned || next.revision !== owned.revision ||
+              !sameStored(next.current, owned.current) || !sameStored(next.previous, owned.previous))
+            store.put(next, key);
+          if (peerRow && (!sameStored(peerRow.current, rows[otherKey].current) ||
+              !sameStored(peerRow.previous, rows[otherKey].previous))) store.put(peerRow, otherKey);
+          result = same ? current : fresh;
+        } catch (e) {stop(e.message)}
       };
       r.onerror = () => stop("Shopping pointer read failed");
     }
@@ -199,7 +217,8 @@ export function activateShoppingPackage(
 }
 export async function shopping(bundlePath = null, registry = null) {
   if (!bundlePath) {
-    registry = registry || (await read("feeds", "shopping-registry"))?.current;
+    registry = registry || (await read("feeds", REGISTRY_KEY))?.current ||
+      (await read("feeds", "shopping-registry"))?.current;
     bundlePath = registry
       ? new URL(
           registry.packages.find((p) => p.id === "overture").path,
@@ -207,7 +226,7 @@ export async function shopping(bundlePath = null, registry = null) {
         ).href
       : "../data/shopping-bundle/shopping.bundle.v2.json";
   }
-  const old = await read("feeds", "shopping-bundle");
+  const old = await shoppingCacheState("overture");
   let fresh,
     error = null;
   try {
@@ -227,7 +246,7 @@ export async function shopping(bundlePath = null, registry = null) {
   } catch (e) {
     error = e.message;
     if (old?.current || old?.previous)
-      return currentPackage("shopping-bundle", error);
+      return currentPackage(packageKey("overture"), error);
     if (registry) throw e;
     fresh = await legacyShopping();
   }
@@ -240,11 +259,11 @@ export async function shopping(bundlePath = null, registry = null) {
     );
     return { ...fresh, error: fresh.manifest ? null : error };
   } catch (e) {
-    return currentPackage("shopping-bundle", e.message);
+    return currentPackage(packageKey("overture"), e.message);
   }
 }
 export async function osmPackage(path, registry) {
-  const old = await read("feeds", "shopping-osm");
+  const old = await shoppingCacheState("osm");
   try {
     const expected = registry.packages.find((p) => p.id === "osm");
     const fresh = await loadOSM(new URL(path, location.href), { expected });
@@ -256,7 +275,7 @@ export async function osmPackage(path, registry) {
     );
     return { ...active, error: null };
   } catch (e) {
-    return currentPackage("shopping-osm", e.message);
+    return currentPackage(packageKey("osm"), e.message);
   }
 }
 export async function beginShoppingRegistry(registry) {
@@ -268,7 +287,7 @@ export async function beginShoppingRegistry(registry) {
     tx.oncomplete = () => resolve(registry);
     tx.onerror = () => reject(tx.error);
     tx.onabort = () => reject(Error(message || "Registry activation aborted"));
-    const r = store.get("shopping-registry");
+    const r = store.get(REGISTRY_KEY);
     r.onsuccess = () => {
       const old = r.result?.current;
       if (
@@ -281,7 +300,7 @@ export async function beginShoppingRegistry(registry) {
         tx.abort();
         return;
       }
-      store.put({ current: registry }, "shopping-registry");
+      store.put({ current: registry }, REGISTRY_KEY);
     };
   });
 }
@@ -295,7 +314,8 @@ export async function shoppingSources(
       await readRegistry(new URL(path, location.href)),
     );
   } catch (e) {
-    registry = (await read("feeds", "shopping-registry"))?.current;
+    registry = (await read("feeds", REGISTRY_KEY))?.current ||
+      (await read("feeds", "shopping-registry"))?.current;
   }
   if (!registry) {
     try {
@@ -321,12 +341,9 @@ export async function shoppingSources(
   return registry;
 }
 export async function osmVersion(version) {
-  const row = await read("feeds", "shopping-osm");
-  return (
-    [row?.current, row?.previous].find(
-      (p) => p?.feed.datasetVersion === version,
-    ) || null
-  );
+  const row = await shoppingCacheState("osm"), legacy = await read("feeds", legacyKey("osm"));
+  return [row.current, row.previous, legacy?.current, legacy?.previous].find(
+    p => p?.feed?.datasetVersion === version) || null;
 }
 async function legacyShopping() {
   const feed = await verifyFeed(
