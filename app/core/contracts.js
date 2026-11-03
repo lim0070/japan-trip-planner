@@ -118,6 +118,7 @@ const link = shape({
   label: str,
   url,
 });
+export const validLink = link;
 const fields = {
   names,
   address,

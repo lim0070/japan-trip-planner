@@ -6,6 +6,9 @@ import {
   validateFeed,
   verifyFeed,
   validEvidence,
+  validPlace,
+  validLink,
+  guardTree,
 } from "./contracts.js";
 export const LIMITS = Object.freeze({
   manifest: 128 * 1024,
@@ -224,92 +227,158 @@ export async function validateManifest(m) {
   if ((await digest(content)) !== datasetVersion) fail("manifest checksum");
   return m;
 }
-function arraySize(refs, sizes) {
-  if (
-    !Array.isArray(refs) ||
-    refs.length > 500 ||
-    !refs.every((i) => int(i, sizes.length - 1))
-  )
-    fail("invalid evidence reference");
-  return (
-    2 + refs.reduce((n, i) => n + sizes[i], 0) + Math.max(0, refs.length - 1)
-  );
-}
-// Preflight all expansion arithmetic before allocating any hydrated SourcePlace/evidence copy.
-export function preflightChunk(c, d, m) {
-  if (
-    !exact(c, [
-      "schemaVersion",
-      "kind",
-      "brandId",
-      "part",
-      "evidence",
-      "places",
-    ]) ||
-    c.schemaVersion !== 2 ||
-    c.kind !== "shopping-place-chunk" ||
-    c.brandId !== d.brandId ||
-    c.part !== d.part ||
-    !Array.isArray(c.evidence) ||
-    c.evidence.length > 20000 ||
-    !c.evidence.every(validEvidence) ||
-    !Array.isArray(c.places) ||
-    c.places.length !== d.placeCount
-  )
-    fail("chunk shape");
-  const sizes = c.evidence.map((e) => bytes(e));
-  let n =
-    bytes(makeFeed(m.source, m.generatedAt, [], d.feedDatasetVersion)) + 1;
-  let previous = "";
-  const dictionary = c.evidence.map(canonical);
-  if (dictionary.some((s, i) => i && byteOrder(dictionary[i - 1], s) >= 0))
-    fail("dictionary ordering/duplicates");
-  for (const p of c.places) {
-    if (
-      !p ||
-      !p.location ||
-      Object.hasOwn(p, "provenance") ||
-      Object.hasOwn(p.location, "provenance") ||
-      typeof p.key !== "string" ||
-      (previous && byteOrder(previous, p.key) >= 0) ||
-      p.shopping?.brandId !== d.brandId
-    )
-      fail("wire record identity/order");
-    previous = p.key;
-    const a = arraySize(p.provenanceRefs, sizes),
-      b = arraySize(p.location.provenanceRefs, sizes);
-    n +=
-      bytes(p) -
-      bytes(p.provenanceRefs) -
-      bytes(p.location.provenanceRefs) -
-      8 +
-      a +
-      b;
-    if (n > LIMITS.expandedChunk || n > d.expandedBytes || n > m.expandedBytes)
-      fail("expanded chunk budget");
+// JSON transport cannot contain sparse arrays or extra array properties. Check
+// direct decoder calls too, rather than relying on Array.every skipping holes.
+function denseTree(value, depth = 0) {
+  if (depth > 32) fail("chunk nesting");
+  if (Array.isArray(value)) {
+    if (value.length > 20000 || Object.keys(value).length !== value.length)
+      fail("sparse/extra array fields");
+    for (let i = 0; i < value.length; i++) {
+      if (!Object.hasOwn(value, i)) fail("sparse array");
+      denseTree(value[i], depth + 1);
+    }
+  } else if (value && typeof value === "object") {
+    for (const v of Object.values(value)) denseTree(v, depth + 1);
   }
-  n += Math.max(0, c.places.length - 1);
-  if (n !== d.expandedBytes || n > LIMITS.expandedChunk)
-    fail("expanded byte mismatch");
+}
+function dictionarySizes(values, valid, label) {
+  if (!Array.isArray(values) || values.length > 20000)
+    fail(label + " dictionary");
+  let previous = null;
+  const sizes = [];
+  for (const value of values) {
+    if (!valid(value)) fail(label + " dictionary entry");
+    // Canonical JSON escapes lone surrogates; raw-string UTF8 would conflate them.
+    const raw = enc.encode(canonical(value));
+    if (previous) {
+      let cmp = 0;
+      for (let i = 0; i < Math.min(previous.length, raw.length); i++) {
+        if (previous[i] !== raw[i]) { cmp = previous[i] - raw[i]; break; }
+      }
+      if (!cmp) cmp = previous.length - raw.length;
+      if (cmp >= 0) fail(label + " dictionary ordering/duplicates");
+    }
+    sizes.push(raw.byteLength);
+    previous = raw;
+  }
+  return sizes;
+}
+const placeKeys = ["schemaVersion", "key", "sourceId", "names", "address",
+  "category", "location", "operatingStatus", "hoursText", "hours", "awards",
+  "memberships", "hallOfFame", "shopping", "provenanceRefs"];
+const locationKeys = ["lat", "lng", "availability", "confidence", "method",
+  "verifiedAt", "provenanceRefs"];
+function checkedAdd(a, b, cap) {
+  const n = a + b;
+  if (!Number.isSafeInteger(n) || n < 0 || n > cap)
+    fail("expanded chunk budget");
+  return n;
+}
+function arraySize(refs, sizes, max, cap) {
+  if (!Array.isArray(refs) || refs.length > max)
+    fail("invalid reference array");
+  let n = 2;
+  for (let i = 0; i < refs.length; i++) {
+    const ref = refs[i];
+    if (!Object.hasOwn(refs, i) || !int(ref, sizes.length - 1))
+      fail("invalid dictionary reference");
+    n = checkedAdd(n, sizes[ref] + (i ? 1 : 0), cap);
+  }
+  return n;
+}
+// Validate and count exact UTF8 expansion before allocating referenced arrays
+// or copying dictionary objects. Empty validation placeholders never expand refs.
+export function preflightChunk(c, d, m) {
+  const v3 = c?.schemaVersion === 3;
+  if (!exact(c, ["schemaVersion", "kind", "brandId", "part", "evidence",
+      ...(v3 ? ["texts", "links"] : []), "places"]) ||
+      ![2, 3].includes(c.schemaVersion) || c.kind !== "shopping-place-chunk" ||
+      !brand(c.brandId) || c.brandId !== d.brandId ||
+      !int(c.part, 128, 1) || c.part !== d.part ||
+      !int(d.placeCount, 500, 1) || !int(d.expandedBytes, LIMITS.expandedChunk, 1) ||
+      !int(m.expandedBytes, LIMITS.expanded, 1) ||
+      !Array.isArray(c.places) || c.places.length !== d.placeCount)
+    fail("chunk shape");
+  denseTree(c);
+  guardTree(c);
+  const cap = Math.min(LIMITS.expandedChunk, d.expandedBytes, m.expandedBytes);
+  let n = bytes(makeFeed(m.source, m.generatedAt, [], d.feedDatasetVersion)) + 1;
+  n = checkedAdd(n, 0, cap);
+  const evidenceSizes = dictionarySizes(c.evidence, validEvidence, "evidence"),
+    textSizes = v3 ? dictionarySizes(c.texts,
+      (x) => typeof x === "string" && x.length <= 2000, "text") : null,
+    linkSizes = v3 ? dictionarySizes(c.links, validLink, "link") : null;
+  let previous = "";
+  const empty = [];
+  for (let i = 0; i < c.places.length; i++) {
+    const p = c.places[i];
+    if (!exact(p, [...placeKeys, ...(v3 ? ["reviewNoteRefs", "linkRefs"] :
+        ["reviewNotes", "links"])]) || !exact(p.location, locationKeys) ||
+        !exact(p.operatingStatus, ["value", "checkedAt", v3 ? "noteRef" : "note"]) ||
+        typeof p.key !== "string" || (previous && byteOrder(previous, p.key) >= 0) ||
+        p.shopping?.brandId !== d.brandId)
+      fail("wire record shape/identity/order");
+    // Reuse existing logical validators without allocating anything referenced.
+    const {provenanceRefs, location, ...base} = p;
+    const {provenanceRefs: locRefs, ...loc} = location;
+    const logical = {...base, provenance: empty, location: {...loc, provenance: empty}};
+    if (v3) {
+      delete logical.reviewNoteRefs; delete logical.linkRefs;
+      logical.reviewNotes = empty; logical.links = empty;
+      logical.operatingStatus = {value: p.operatingStatus.value,
+        checkedAt: p.operatingStatus.checkedAt, note: null};
+    }
+    if (!validPlace(logical)) fail("wire logical fields");
+    previous = p.key;
+    const a = arraySize(provenanceRefs, evidenceSizes, 500, cap),
+      b = arraySize(locRefs, evidenceSizes, 500, cap);
+    let size = bytes(p) - bytes(provenanceRefs) - bytes(locRefs) - 8;
+    let review, links, note;
+    if (v3) {
+      note = p.operatingStatus.noteRef;
+      if (note !== null && !int(note, textSizes.length - 1))
+        fail("invalid note reference");
+      review = arraySize(p.reviewNoteRefs, textSizes, 500, cap);
+      links = arraySize(p.linkRefs, linkSizes, 100, cap);
+      size -= bytes(p.reviewNoteRefs) + bytes(p.linkRefs) + bytes(note) + 9;
+    }
+    // Subtract every packed field first: subsequent additions are monotonic,
+    // including cases where a multi-digit reference is longer than empty text.
+    size = checkedAdd(size, 0, cap);
+    size = checkedAdd(size, a, cap);
+    size = checkedAdd(size, b, cap);
+    if (v3) {
+      size = checkedAdd(size, review, cap);
+      size = checkedAdd(size, links, cap);
+      size = checkedAdd(size, note === null ? 4 : textSizes[note], cap);
+    }
+    n = checkedAdd(n, size + (i ? 1 : 0), cap);
+  }
+  if (n !== d.expandedBytes) fail("expanded byte mismatch");
   return n;
 }
 export async function hydrateChunk(c, d, m) {
   preflightChunk(c, d, m);
-  const places = c.places.map((p) => {
-    const { provenanceRefs, location, ...rest } = p;
-    const { provenanceRefs: locRefs, ...loc } = location;
-    return {
-      ...rest,
-      provenance: provenanceRefs.map((i) => ({ ...c.evidence[i] })),
-      location: {
-        ...loc,
-        provenance: locRefs.map((i) => ({ ...c.evidence[i] })),
-      },
-    };
+  const places = c.places.map((wire) => {
+    const p = structuredClone(wire), refs = p.provenanceRefs,
+      locRefs = p.location.provenanceRefs;
+    delete p.provenanceRefs; delete p.location.provenanceRefs;
+    p.provenance = refs.map((i) => ({...c.evidence[i]}));
+    p.location.provenance = locRefs.map((i) => ({...c.evidence[i]}));
+    if (c.schemaVersion === 3) {
+      const review = p.reviewNoteRefs, links = p.linkRefs,
+        note = p.operatingStatus.noteRef;
+      delete p.reviewNoteRefs; delete p.linkRefs; delete p.operatingStatus.noteRef;
+      p.reviewNotes = review.map((i) => c.texts[i]);
+      p.links = links.map((i) => ({...c.links[i]}));
+      p.operatingStatus.note = note === null ? null : c.texts[note];
+    }
+    return p;
   });
-  return verifyFeed(
-    makeFeed(m.source, m.generatedAt, places, d.feedDatasetVersion),
-  );
+  const feed = makeFeed(m.source, m.generatedAt, places, d.feedDatasetVersion);
+  if (bytes(feed) + 1 !== d.expandedBytes) fail("hydrated byte mismatch");
+  return verifyFeed(feed);
 }
 export async function loadBundle(
   url,

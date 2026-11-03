@@ -287,7 +287,7 @@ export async function beginShoppingRegistry(registry) {
 }
 export async function shoppingSources(
   onPackage = () => {},
-  path = "../data/shopping-sources.v1.json",
+  path = "../data/shopping-sources.codec.v1.json",
 ) {
   let registry;
   try {
