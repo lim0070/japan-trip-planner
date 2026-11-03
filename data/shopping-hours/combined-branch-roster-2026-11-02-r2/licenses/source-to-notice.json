@@ -1,0 +1,72 @@
+{
+  "sources": {
+    "Microsoft": [
+      "CDLA-Permissive-2.0.txt"
+    ],
+    "Overture": [
+      "CDLA-Permissive-2.0.txt"
+    ],
+    "Foursquare": [
+      "Apache-2.0.txt",
+      "Foursquare-NOTICE.txt"
+    ],
+    "AllThePlaces": [
+      "CC0 reference: https://creativecommons.org/publicdomain/zero/1.0/"
+    ],
+    "meta": [
+      "CDLA-Permissive-2.0.txt"
+    ],
+    "AllThePlaces-direct-weekly-hours-2026-10-24-13-32-37": [
+      "ATP-CC0-NOTICE.txt",
+      "ATP-DATA-WAIVER.txt",
+      "CC0 reference: https://creativecommons.org/publicdomain/zero/1.0/"
+    ],
+    "WORKMAN-minimal-branch-identity-and-format-facts": [
+      "OFFICIAL-FACTS-NOTICE.txt"
+    ],
+    "Direct-minimal-operator-numeric-facts": [
+      "DIRECT-NUMERIC-FACTS-NOTICE.txt"
+    ],
+    "Combined-current-operator-contact-identity-facts": [
+      "CONTACT-IDENTITY-NOTICE.txt"
+    ],
+    "GU-specific-minimal-numeric-reference": [
+      "DIRECT-NUMERIC-FACTS-NOTICE.txt"
+    ],
+    "Later-direct-minimal-numerical-and-branch-identity-facts": [
+      "LATER-BRANCH-ROSTER-NOTICE.txt",
+      "later-reconciliation-summary.json"
+    ],
+    "AllThePlaces-costco_jp-2026-10-24-13-32-37": [
+      "ATP-DATA-WAIVER.txt",
+      "LATER-BRANCH-ROSTER-NOTICE.txt",
+      "costco-licensed-input-37-part1.json",
+      "costco-licensed-input-37-part2.json",
+      "costco-operator-roster-matches.json"
+    ]
+  },
+  "allRedistributedNoticeFiles": [
+    "ATP-CC0-NOTICE.txt",
+    "ATP-DATA-WAIVER.txt",
+    "Apache-2.0.txt",
+    "BASELINE-README.txt",
+    "BASELINE-source-inventory.json",
+    "CDLA-Permissive-2.0.txt",
+    "CONTACT-IDENTITY-NOTICE.txt",
+    "DIRECT-NUMERIC-FACTS-NOTICE.txt",
+    "EXPANSION-NOTICE.txt",
+    "Foursquare-NOTICE.txt",
+    "LATER-BRANCH-ROSTER-NOTICE.txt",
+    "OFFICIAL-FACTS-NOTICE.txt",
+    "README.txt",
+    "costco-licensed-input-37-part1.json",
+    "costco-licensed-input-37-part2.json",
+    "costco-operator-roster-matches.json",
+    "later-reconciliation-summary.json",
+    "source-input-inventory.json",
+    "source-inventory.json",
+    "source-to-notice.json"
+  ],
+  "modifications": "Current mixed main package contains6696source records:all6659legacyOverture keys/names/addresses/points/statuses/formats preserved, plus37complete licensed ATP Costco warehouse records. Earlier2264ATPweekly-reference fills,56direct numerical fills and72reviewed alias groups remain. This batch adds164null-only direct numerical references and13reviewed groups (2Hands,11Costco), for2521reference rows/85groups/171members/6610presentation rows. No source keys are retired, raw contacts or operator tables copied, OSM values blended, current operation/calendar inferred or entrances verified. Costco75rawsource IDs/64presentation rows are not64warehouses; datedoperator/native roster37and27unresolvedlegacy IDs are explicit. Historicalbaseline source/license counts and per-increment statistics remain labelled by stage.",
+  "requiredVsConservative": "Original CDLA/Apache agreement and applicable notice texts retained. CC0 source/waiver attribution retained voluntarily. Minimal WORKMAN fact reconciliation is separately identified, with no open licence asserted for protected site content."
+}
