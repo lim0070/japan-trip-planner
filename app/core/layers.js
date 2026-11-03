@@ -52,30 +52,47 @@ export function combineLayers(
 ) {
   const rows = [],
     unknown = [],
-    counts = {};
-  for (const f of Object.values(feeds)) {
+    counts = {},
+    sourceCounts = {};
+  for (const [sourceKey, f] of Object.entries(feeds)) {
     const layer = layerId(f.source.namespace);
     if (!visibility[layer]) continue;
+    const settings = filters[sourceKey] || filters[f.source.namespace];
+    const packageId = sourceKey === "shopping:osm" ? "osm" : "overture";
+    if (
+      layer === "shopping" &&
+      settings.packageVisibility?.[packageId] === false
+    )
+      continue;
     const view =
       f.source.namespace === "shopping"
-        ? discoveryView(f, flags, scheduled, aliases)
+        ? discoveryView(
+            f,
+            flags,
+            scheduled,
+            packageId === "osm" ? new Map() : aliases,
+          )
         : { feed: f, flags, scheduled };
     const result = filterPlaces(
       view.feed,
-      filters[f.source.namespace],
+      settings,
       origins,
       view.scheduled,
       view.flags,
     );
-    counts[layer] = {
+    sourceCounts[sourceKey] = {
       located: result.rows.length,
       unknown: result.unknown.length,
+    };
+    counts[layer] = {
+      located: (counts[layer]?.located || 0) + result.rows.length,
+      unknown: (counts[layer]?.unknown || 0) + result.unknown.length,
     };
     rows.push(...result.rows);
     unknown.push(...result.unknown);
   }
   rows.sort((a, b) => (a.km ?? Infinity) - (b.km ?? Infinity));
-  return { rows, unknown, counts };
+  return { rows, unknown, counts, sourceCounts };
 }
 
 // Earlier saved preferences may omit Shopping. Only explicit booleans override defaults.

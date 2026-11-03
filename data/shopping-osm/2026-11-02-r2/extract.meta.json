@@ -1,0 +1,92 @@
+{
+  "url": "https://download.geofabrik.de/asia/japan-261101.osm.pbf",
+  "bytes": 2566575684,
+  "md5": "a49fa3af3d11e1702d236cd86dde67fb",
+  "observedAt": "2026-11-02T22:39:03.885866+00:00",
+  "sourceDataAsOf": "2026-11-01T21:21:36Z",
+  "license": "ODbL-1.0",
+  "attribution": "\u00a9 OpenStreetMap contributors; extract by Geofabrik",
+  "elapsedSeconds": 648.74,
+  "notificationEvents": [
+    {
+      "line": "10% Japan OSM download (256901120/2566575684 bytes), 3.6 MiB/s",
+      "bytes": 256901120,
+      "total": 2566575684,
+      "percent": 10,
+      "observedAt": "2026-11-02T22:29:23.354575+00:00",
+      "notification": "fallback-command-exit-0"
+    },
+    {
+      "line": "20% Japan OSM download (513802240/2566575684 bytes), 3.6 MiB/s",
+      "bytes": 513802240,
+      "total": 2566575684,
+      "percent": 20,
+      "observedAt": "2026-11-02T22:30:30.685802+00:00",
+      "notification": "fallback-command-exit-0"
+    },
+    {
+      "line": "30% Japan OSM download (770703360/2566575684 bytes), 3.7 MiB/s",
+      "bytes": 770703360,
+      "total": 2566575684,
+      "percent": 30,
+      "observedAt": "2026-11-02T22:31:31.644338+00:00",
+      "notification": "fallback-command-exit-0"
+    },
+    {
+      "line": "40% Japan OSM download (1027604480/2566575684 bytes), 4.0 MiB/s",
+      "bytes": 1027604480,
+      "total": 2566575684,
+      "percent": 40,
+      "observedAt": "2026-11-02T22:32:23.190951+00:00",
+      "notification": "fallback-command-exit-0"
+    },
+    {
+      "line": "50% Japan OSM download (1283457024/2566575684 bytes), 4.0 MiB/s",
+      "bytes": 1283457024,
+      "total": 2566575684,
+      "percent": 50,
+      "observedAt": "2026-11-02T22:33:18.758492+00:00",
+      "notification": "fallback-command-exit-0"
+    },
+    {
+      "line": "60% Japan OSM download (1540358144/2566575684 bytes), 3.9 MiB/s",
+      "bytes": 1540358144,
+      "total": 2566575684,
+      "percent": 60,
+      "observedAt": "2026-11-02T22:34:27.058554+00:00",
+      "notification": "fallback-command-exit-0"
+    },
+    {
+      "line": "70% Japan OSM download (1797259264/2566575684 bytes), 3.8 MiB/s",
+      "bytes": 1797259264,
+      "total": 2566575684,
+      "percent": 70,
+      "observedAt": "2026-11-02T22:35:45.228501+00:00",
+      "notification": "fallback-command-exit-0"
+    },
+    {
+      "line": "80% Japan OSM download (2054160384/2566575684 bytes), 3.8 MiB/s",
+      "bytes": 2054160384,
+      "total": 2566575684,
+      "percent": 80,
+      "observedAt": "2026-11-02T22:36:49.256766+00:00",
+      "notification": "fallback-command-exit-0"
+    },
+    {
+      "line": "90% Japan OSM download (2310012928/2566575684 bytes), 3.8 MiB/s",
+      "bytes": 2310012928,
+      "total": 2566575684,
+      "percent": 90,
+      "observedAt": "2026-11-02T22:37:53.249955+00:00",
+      "notification": "fallback-command-exit-0"
+    },
+    {
+      "line": "100% Japan OSM download (2566575684/2566575684 bytes), 3.8 MiB/s",
+      "bytes": 2566575684,
+      "total": 2566575684,
+      "percent": 100,
+      "observedAt": "2026-11-02T22:38:59.374856+00:00",
+      "notification": "fallback-command-exit-0"
+    }
+  ]
+}

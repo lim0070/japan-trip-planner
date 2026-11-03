@@ -1,0 +1,28 @@
+{
+  "license": "ODbL-1.0",
+  "sourceUrl": "https://download.geofabrik.de/asia/japan-261101.osm.pbf",
+  "sourceDataTimestamp": "2026-11-01T21:21:36Z",
+  "sourceMd5": "a49fa3af3d11e1702d236cd86dde67fb",
+  "changes": [
+    "Selected approved retail source-tag candidates and conservative brand/format/taxonomy scope; no cross-source field joins.",
+    "Retained native OSM IDs/version/edit times and raw business hours, address/building/floor strings and lifecycle conflicts/uncertainty.",
+    "Way/relation positions approximated by direct member-node bounds centre, low confidence, entrance unverified."
+  ],
+  "algorithmFiles": [
+    "algorithms/extract_reconciliation_osm.py",
+    "algorithms/scope_reconciliation_osm.py",
+    "algorithms/build_separate_osm_candidate.py",
+    "algorithms/build.py"
+  ],
+  "algorithmRuntime": "Python3.9+, pyosmium4.3.2; scripts document original workspace layout. Complete selected derivative is bundled and does not require rerunning the algorithms.",
+  "machineReadableDerivative": "osm-derivative.v1.json",
+  "dataAccess": {
+    "kind": "bundled-relative-file",
+    "path": "osm-derivative.v1.json",
+    "sha256": "bf7b368b9c7fc91d842ce432d725f1a815305bf4abc73a94914c8bd81cbd0cfd",
+    "bytes": 3625162,
+    "resolveAgainst": "this package or export root; retain this file with exported source snapshots"
+  },
+  "fullLicense": "ODbL-1.0.txt",
+  "attribution": "ATTRIBUTION.txt"
+}

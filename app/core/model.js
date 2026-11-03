@@ -188,6 +188,7 @@ export function addStop(s, day, p, version) {
       tripId: day.tripId,
       placeId: l.id,
       placeSnapshot: effective(l),
+      sourceDatasetVersion: l.sourceRef?.datasetVersion || null,
       placeOverrides: {},
       notes: "",
       durationMinutes: 60,
@@ -458,13 +459,16 @@ export function filterPlaces(
           .includes(q)
       )
         return false;
-      if (feed.source.namespace === "shopping")
+      if (feed.source.namespace === "shopping") {
+        if (f.includeClosed === false && p.operatingStatus.value === "closed")
+          return false;
         return (
           (!f.shopCategories?.length ||
             f.shopCategories.includes(categoryFor(p.shopping.brandId))) &&
           (!f.brands?.length || f.brands.includes(p.shopping.brandId)) &&
           (!f.formats?.length || f.formats.includes(p.shopping.formatId))
         );
+      }
       if (feed.source.namespace === "tabelog")
         return p.memberships.some((m) => {
           const l = lm.get(m.listId);

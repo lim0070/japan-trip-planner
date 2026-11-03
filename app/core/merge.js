@@ -36,7 +36,7 @@ export function backup(s, tripId = null, aliases = new Map()) {
     kind: tripId ? "trip" : "full",
     exportId: id(),
     exportedAt: now(),
-    appVersion: "2.3.0",
+    appVersion: "2.4.0",
     ...data,
   };
 }
@@ -89,6 +89,7 @@ export function mergeImport(s, data, preview, flagPolicy = "merge") {
       ...(s.dataLicenses || {}),
       ...(data.dataLicenses || {}),
     };
+    s.sourceVersions = { ...data.sourceVersions, ...s.sourceVersions };
     // Compare the complete trip closure before deciding a repeated ID is identical.
     const closure = (state, t) =>
       JSON.stringify({

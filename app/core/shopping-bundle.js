@@ -311,11 +311,13 @@ export async function hydrateChunk(c, d, m) {
     makeFeed(m.source, m.generatedAt, places, d.feedDatasetVersion),
   );
 }
-export async function loadBundle(url, { fetcher = fetch } = {}) {
+export async function loadBundle(
+  url,
+  { fetcher = fetch, expected = null } = {},
+) {
   const root = new URL("./", url),
-    m = await validateManifest(
-      parseJSON((await readBounded(url, LIMITS.manifest, null, fetcher)).text),
-    );
+    manifestData = await readBounded(url, LIMITS.manifest, expected, fetcher),
+    m = await validateManifest(parseJSON(manifestData.text));
   const get = (d, limit) =>
     readBounded(new URL(d.path, root), limit, d, fetcher);
   const records = [];
@@ -395,8 +397,18 @@ export async function loadBundle(url, { fetcher = fetch } = {}) {
     const text = (await get(d, LIMITS.ancillary)).text;
     if (text.length > 40000) fail("notice text limit");
     notices[
-      "shopping-" + m.logicalDatasetVersion + "-" + d.path.split("/").at(-1)
+      "shopping:overture-" +
+        m.logicalDatasetVersion +
+        "-" +
+        d.path.split("/").at(-1)
     ] = text;
   }
-  return { feed, aliases, notices, manifest: m };
+  return {
+    feed,
+    aliases,
+    notices,
+    manifest: m,
+    manifestBytes: manifestData.bytes,
+    offerRoot: root.href,
+  };
 }

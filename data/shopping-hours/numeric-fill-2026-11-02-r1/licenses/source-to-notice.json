@@ -1,0 +1,48 @@
+{
+  "sources": {
+    "Microsoft": [
+      "CDLA-Permissive-2.0.txt"
+    ],
+    "Overture": [
+      "CDLA-Permissive-2.0.txt"
+    ],
+    "Foursquare": [
+      "Apache-2.0.txt",
+      "Foursquare-NOTICE.txt"
+    ],
+    "AllThePlaces": [
+      "CC0 reference: https://creativecommons.org/publicdomain/zero/1.0/"
+    ],
+    "meta": [
+      "CDLA-Permissive-2.0.txt"
+    ],
+    "AllThePlaces-direct-weekly-hours-2026-10-24-13-32-37": [
+      "ATP-CC0-NOTICE.txt",
+      "ATP-DATA-WAIVER.txt",
+      "CC0 reference: https://creativecommons.org/publicdomain/zero/1.0/"
+    ],
+    "WORKMAN-minimal-branch-identity-and-format-facts": [
+      "OFFICIAL-FACTS-NOTICE.txt"
+    ],
+    "Direct-minimal-operator-numeric-facts": [
+      "DIRECT-NUMERIC-FACTS-NOTICE.txt"
+    ]
+  },
+  "allRedistributedNoticeFiles": [
+    "ATP-CC0-NOTICE.txt",
+    "ATP-DATA-WAIVER.txt",
+    "Apache-2.0.txt",
+    "BASELINE-README.txt",
+    "BASELINE-source-inventory.json",
+    "CDLA-Permissive-2.0.txt",
+    "DIRECT-NUMERIC-FACTS-NOTICE.txt",
+    "EXPANSION-NOTICE.txt",
+    "Foursquare-NOTICE.txt",
+    "OFFICIAL-FACTS-NOTICE.txt",
+    "README.txt",
+    "source-inventory.json",
+    "source-to-notice.json"
+  ],
+  "modifications": "Preserved all6659source identities and original names/addresses/coordinates. Added2264exact-native/full-address-matched raw ATP weekly-hours references;4dated WORKMAN primary format corrections;13member-bound WORKMAN discovery alias groups retain26rawmembers;2source-dated closure-reference warnings keep year/hours/operation explicitly unresolved. No OSM, new coordinates, structured calendars, inferred live-operation or UNIQLO converted weekly hours. Historical baseline source/license counts retained separately and are not new-field/unique-branch totals. Later increment fills55previously null numeric references without replacing2264CC0reference values.",
+  "requiredVsConservative": "Original CDLA/Apache agreement and applicable notice texts retained. CC0 source/waiver attribution retained voluntarily. Minimal WORKMAN fact reconciliation is separately identified, with no open licence asserted for protected site content."
+}

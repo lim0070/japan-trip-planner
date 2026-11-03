@@ -145,7 +145,10 @@ const basePlace = shape({
   sourceId: nonempty,
   ...fields,
   awards: array(award, 1000),
-  memberships: array(shape({ listId: nonempty, firstTimePick: nullable(bool) }), 1000),
+  memberships: array(
+    shape({ listId: nonempty, firstTimePick: nullable(bool) }),
+    1000,
+  ),
   hallOfFame: nullable(
     shape({ inductedYear: nullable((y) => integer(y, 1900, 2200)) }),
   ),
@@ -214,7 +217,7 @@ const day = shape({
   startMinute: (x) => integer(x, 0, 1439),
   stopIds: array(identifier),
 });
-const stop = shape({
+const stopBase = shape({
   schemaVersion: version,
   id: identifier,
   tripId: identifier,
@@ -224,6 +227,15 @@ const stop = shape({
   notes: (x) => str(x, 20000),
   durationMinutes: minutes,
 });
+const stop = (x) => {
+  if (!obj(x)) return false;
+  const { sourceDatasetVersion, ...base } = x;
+  return (
+    stopBase(base) &&
+    (!Object.hasOwn(x, "sourceDatasetVersion") ||
+      nullable(nonempty)(sourceDatasetVersion))
+  );
+};
 const segment = shape({
   schemaVersion: version,
   tripId: identifier,

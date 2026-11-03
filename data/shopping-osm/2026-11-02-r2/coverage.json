@@ -1,0 +1,35 @@
+{
+  "sourceFeatureCount": 3720,
+  "located": 3720,
+  "referenceHours": 535,
+  "sourceClosedTags": 12,
+  "currentOperationUnknown": 3708,
+  "addressStrings": 568,
+  "addressStringQuality": "Unverified community strings; may contain only a city/building/floor. Not verified postal addresses.",
+  "withoutFullHouseOrBlockTags": 82,
+  "lifecycleConflictKeys": [
+    "shopping:osm:node:3318306961",
+    "shopping:osm:node:3651188482",
+    "shopping:osm:node:6953439403"
+  ],
+  "prefectureKnown": 501,
+  "byBrand": {
+    "shimamura": 1014,
+    "gu": 264,
+    "nitori": 428,
+    "uniqlo": 612,
+    "birthday": 134,
+    "costco": 37,
+    "workman": 563,
+    "life-supermarket": 231,
+    "lopia": 93,
+    "outlet-mall": 23,
+    "avail": 176,
+    "hands": 63,
+    "chambre": 41,
+    "divalo": 5,
+    "global-work": 36
+  },
+  "uniqueNationalBranches": null,
+  "publicActivation": false
+}
