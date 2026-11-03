@@ -105,7 +105,8 @@ export async function feed(namespace, path) {
 const REGISTRY_KEY = "shopping-codec-registry";
 const packageKey = (id) => id === "osm" ? "shopping-codec-osm" : "shopping-codec-bundle";
 const legacyKey = (id) => id === "osm" ? "shopping-osm" : "shopping-bundle";
-const artifact = (p) => p?.manifest?.datasetVersion || p?.feed?.datasetVersion;
+const artifact = (p) => p?.kind === "shopping-legacy-reference" ? p.artifact :
+  p?.manifest?.datasetVersion || p?.feed?.datasetVersion;
 const isReference = (p) => p?.kind === "shopping-legacy-reference";
 function resolvePackage(value, legacy) {
   if (!isReference(value)) return value || null;
@@ -195,9 +196,10 @@ export function activateShoppingPackage(id, fresh, expectedRevision, registry = 
             current?.aliases || emptyAliases());
           checkTotals([packageMetrics(fresh), ...(other.current ? [packageMetrics(other.current)] : []),
             {ancillary:128*1024}]);
-          const same = artifact(current) === artifact(fresh), next = {
+          const same = artifact(current || owned?.current) === artifact(fresh), next = {
             current: storedPackage(fresh, id, rows[oldKey]),
-            previous: storedPackage(same ? row.previous : current, id, rows[oldKey]),
+            previous: storedPackage(same ? row.previous : current, id, rows[oldKey]) ||
+              (same ? owned?.previous : owned?.current) || null,
             revision: owned ? (owned.revision || 0) + (same ? 0 : 1) : 1,
           }, peerRow = compactRow(rows[otherKey], peer, rows[oldPeer]);
           // Count actual stored bytes of BOTH cohorts, including both histories.
@@ -208,7 +210,7 @@ export function activateShoppingPackage(id, fresh, expectedRevision, registry = 
             store.put(next, key);
           if (peerRow && (!sameStored(peerRow.current, rows[otherKey].current) ||
               !sameStored(peerRow.previous, rows[otherKey].previous))) store.put(peerRow, otherKey);
-          result = same ? current : fresh;
+          result = same ? (current || fresh) : fresh;
         } catch (e) {stop(e.message)}
       };
       r.onerror = () => stop("Shopping pointer read failed");
