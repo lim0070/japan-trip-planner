@@ -1,0 +1,70 @@
+{
+  "baselineOverture": {
+    "release": "2026-10-21.0",
+    "observedAt": "2026-11-02T21:13:58.129752Z",
+    "sourceDatasets": {
+      "meta": 3094,
+      "Overture": 6659,
+      "AllThePlaces": 2567,
+      "Foursquare": 842,
+      "Microsoft": 156
+    },
+    "sourceLicenses": {
+      "CDLA-Permissive-2.0": 9909,
+      "CC0-1.0": 2567,
+      "Apache-2.0": 842
+    },
+    "modifications": "Preserved base5393 records unchanged; appended five approved retail chains from same open Places release, strict identity/taxonomy filtering and uncertainty notes; no official bulk/Google/OSM data, no related-brand expansion. Complete source metadata in separate raw base and expansion caches."
+  },
+  "enrichment": {
+    "source": "AllThePlaces directly acquired CC0 output",
+    "runId": "2026-10-24-13-32-37",
+    "weeklyHoursFieldOccurrences": 2264,
+    "byBrand": {
+      "workman": 654,
+      "shimamura": 892,
+      "birthday": 314,
+      "avail": 266,
+      "chambre": 118,
+      "divalo": 19,
+      "life-supermarket": 1
+    },
+    "dates": "Per-spider stats Oct25–30,2026; raw collection_time timezone not stated",
+    "uniquePhysicalBranches": null
+  },
+  "officialFactCorrections": {
+    "formatFields": 4,
+    "aliasGroups": 13,
+    "aliasedRawMembers": 26,
+    "closureReferenceWarnings": 2,
+    "source": "WORKMAN public branch fact listings, observed2026-11-02",
+    "notice": "OFFICIAL-FACTS-NOTICE.txt"
+  },
+  "modifications": "Preserved all6659source identities and original names/addresses/coordinates. Added2264exact-native/full-address-matched raw ATP weekly-hours references;4dated WORKMAN primary format corrections;13member-bound WORKMAN discovery alias groups retain26rawmembers;2source-dated closure-reference warnings keep year/hours/operation explicitly unresolved. No OSM, new coordinates, structured calendars, inferred live-operation or UNIQLO converted weekly hours. Historical baseline source/license counts retained separately and are not new-field/unique-branch totals. Later increment fills55previously null numeric references without replacing2264CC0reference values. Later identity increment adds59branch groups and22current primary formats without new source IDs, raw contact values, hours, names, addresses or positions. One independently reviewed GU numeric reference added; allother11GUcases unjoined.",
+  "directNumericFactIncrement": {
+    "fields": 55,
+    "byBrand": {
+      "workman": 47,
+      "uniqlo": 8
+    },
+    "policyBasis": "Minimal independently arranged numerical facts, not a copied protected work/layout/database structure and not a new open licence. Source-specific conditions separately assessed.",
+    "calendarVerified": false,
+    "venueVerifiedAt": null
+  },
+  "contactIdentityIncrement": {
+    "additionalGroups": 59,
+    "totalGroups": 72,
+    "primaryFormatCorrections": 22,
+    "rawContactValuesPublished": false,
+    "sourceRecordsAdded": 0,
+    "coordinateOrHoursChanges": 0,
+    "identityBasis": "Combined current native/unique-contact/full-address/separate-anchor evidence; private source verification, public fingerprints/page hashes only."
+  },
+  "guNotationFill": {
+    "records": 1,
+    "nativeBranchId": "10100644",
+    "sourceKey": "shopping:overture:8a1f0872-eae4-48b6-be8d-b4586508f660",
+    "semantics": "Explicit full property-address notation equivalence only; no source address/name/coordinates change.",
+    "referenceHoursOnly": true
+  }
+}

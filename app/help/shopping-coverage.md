@@ -2,7 +2,7 @@
 
 November 2, 2026. The planner presents independent source records, not a verified nationwide directory of unique active shops. Overture and OpenStreetMap can describe the same physical branch. Both sources are selected by default; change them independently in **Search & filters → Shopping → Shopping sources**. The three main Sauna, Food and Shopping layers remain independent.
 
-The active primary package is the reviewed numeric-fill-r1 increment: 6,659 preserved source identities across the 15 approved brand groups, with 2,319 sourced raw-hours references. Thirteen reviewed within-package identity groups keep all 26 member records but show their retained primary in discovery. Flags may be shared across these confirmed groups; saved keys, snapshots and repeated itinerary visits are never merged. Other duplicate candidates remain unresolved. There are no cross-source aliases.
+The active primary package is the reviewed GU-notation-fill-r1 increment: 6,659 preserved source identities across the 15 approved brand groups, with 2,320 sourced raw-hours references. Seventy-two reviewed within-package identity groups keep all member records but show their retained primary in discovery. Flags may be shared across these confirmed groups; saved keys, snapshots and repeated itinerary visits are never merged. Other duplicate candidates remain unresolved. There are no cross-source aliases.
 
 The separate OSM-r2 package has 3,720 source features: 2,403 medium-confidence nodes and 1,317 low-confidence way/relation centres, not verified entrances. It has 535 raw-hours references, 568 partial community address strings and 501 prefecture values. An address string may contain only a city, building or floor. Missing addresses stay unknown. Three conflicting live/disused-tag cases remain unknown operation, with explicit source warnings.
 
@@ -14,4 +14,4 @@ The Overture-based component retains its CDLA/Apache/CC0 and source-specific fac
 
 A complete offline ZIP requires the exact originating OSM source version. Current/previous source caches are bounded; if an older version is absent, the app refuses to substitute current data. JSON backups retain original snapshots, complete stored notices and immutable source offers. JSON backup/import remains limited to 20MiB and source-complete ZIPs to 30MiB; oversized exports must use smaller selections rather than drop records or notices.
 
-Full national inventory, hours/status and duplicate reconciliation remains ongoing. The separately reviewed Costco and later contact/GU increments are not part of this frozen release.
+Full national inventory, hours/status and duplicate reconciliation remains ongoing. The separately reviewed Costco and later hours/Hands/outlet batches are not part of this frozen release. The prior numeric-fill package remains published as historical source evidence.
