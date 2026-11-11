@@ -10,6 +10,7 @@ import { bytes } from "../core/shopping-bundle.js";
 import { blank } from "../core/model.js";
 import { loadBundle, readBounded } from "../core/shopping-bundle.js";
 import { emptyAliases, validateAliases } from "../core/shopping-aliases.js";
+import { makeShoppingOverlay, readShoppingOverlay } from "./shopping-overlay.js";
 import {
   validateState,
   verifyFeed,
@@ -103,6 +104,9 @@ export async function feed(namespace, path) {
 // A whole package (records + notices + aliases) is committed in one IDB transaction.
 // Never activate a feed before its licences or use mixed release members.
 const REGISTRY_KEY = "shopping-codec-registry";
+const OVERLAY_KEY = "shopping-region-overlay";
+const REGION_REGISTRY = "../data/shopping-sources.region.v1.json";
+const REGION_BASE = "sha256:2d3dfb2122c4918a17446b79585706e27fa43f687b9c0c943452c002dd96b668";
 const packageKey = (id) => id === "osm" ? "shopping-codec-osm" : "shopping-codec-bundle";
 const legacyKey = (id) => id === "osm" ? "shopping-osm" : "shopping-bundle";
 const artifact = (p) => p?.kind === "shopping-legacy-reference" ? p.artifact :
@@ -138,6 +142,13 @@ function compactRow(owned, id, legacy) {
   // Preserve unresolved historical references, rather than substituting a version.
   return {...owned, current: current || owned.current,
     previous: previous || owned.previous};
+}
+function checkIndependentShopping(pkg) {
+  if (pkg.feed.places.some(p =>
+    p.key.startsWith("shopping:osm:") ||
+    [...p.provenance, ...p.location.provenance].some(
+      e => e.sourceKind === "openstreetmap")))
+    throw Error("OSM fields must remain in their independent source package");
 }
 function feedRows(keys) {
   return new Promise((resolve, reject) => {
@@ -235,16 +246,7 @@ export async function shopping(bundlePath = null, registry = null) {
     fresh = await loadBundle(new URL(bundlePath, location.href), {
       expected: registry?.packages.find((p) => p.id === "overture") || null,
     });
-    if (
-      fresh.feed.places.some(
-        (p) =>
-          p.key.startsWith("shopping:osm:") ||
-          [...p.provenance, ...p.location.provenance].some(
-            (e) => e.sourceKind === "openstreetmap",
-          ),
-      )
-    )
-      throw Error("OSM fields must remain in their independent source package");
+    checkIndependentShopping(fresh);
   } catch (e) {
     error = e.message;
     if (old?.current || old?.previous)
@@ -342,6 +344,106 @@ export async function shoppingSources(
   }
   return registry;
 }
+
+const regionRows = [
+  OVERLAY_KEY,
+  packageKey("overture"),
+  packageKey("osm"),
+  legacyKey("overture"),
+  legacyKey("osm"),
+];
+
+function regionBase(rows) {
+  const row = rows[packageKey("overture")];
+  return [row?.current, row?.previous].find(p =>
+    !isReference(p) && p?.manifest?.datasetVersion === REGION_BASE);
+}
+
+function saveRegionOverlay(overlay, registry) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("feeds", "readwrite");
+    const store = tx.objectStore("feeds");
+    const rows = {};
+    let pending = regionRows.length;
+    let error;
+    tx.oncomplete = () => resolve();
+    tx.onabort = () => reject(error || tx.error || Error("Shopping overlay was not committed"));
+    for (const key of regionRows) {
+      const request = store.get(key);
+      request.onsuccess = () => {
+        rows[key] = request.result;
+        if (--pending) return;
+        try {
+          if (regionBase(rows)?.manifest.datasetVersion !== overlay.baseArtifact)
+            throw Error("Shopping overlay base changed");
+          const existing = rows[OVERLAY_KEY];
+          if (existing && existing.registryVersion !== registry.datasetVersion)
+            throw Error("Shopping overlay cannot replace retained history");
+          const next = { registryVersion: registry.datasetVersion, overlay };
+          const total = regionRows.reduce((sum, key) =>
+            sum + bytes((key === OVERLAY_KEY ? next : rows[key]) || {}), 0);
+          if (total > GLOBAL.storage) throw Error("Shopping storage budget");
+          if (!existing) store.put(next, OVERLAY_KEY);
+        } catch (e) {
+          error = e;
+          tx.abort();
+        }
+      };
+    }
+  });
+}
+
+async function regionPackage(baseline, baselineRegistry, path) {
+  const rows = await feedRows(regionRows);
+  const base = regionBase(rows);
+  const cached = rows[OVERLAY_KEY];
+  try {
+    const url = new URL(path, location.href);
+    const registry = await readRegistry(url);
+    if (baselineRegistry?.generation !== 6 || registry.generation !== 7 ||
+        canonical(registry.packages[1]) !== canonical(baselineRegistry.packages[1]))
+      throw Error("Shopping region registry does not match the pinned base release");
+    if (cached?.registryVersion === registry.datasetVersion)
+      return { ...await readShoppingOverlay(base, cached.overlay), error: null };
+    if (cached || !base) throw Error("Shopping region base or retained history unavailable");
+
+    const expected = registry.packages[0];
+    const fresh = await loadBundle(new URL(expected.path, url), { expected });
+    if (canonical(packageMetrics(fresh)) !== canonical(expected.metrics))
+      throw Error("Package metrics do not match registry");
+    checkIndependentShopping(fresh);
+    validateAliases(fresh.aliases, fresh.feed, base.aliases);
+    const overlay = makeShoppingOverlay(base, fresh);
+    await readShoppingOverlay(base, overlay);
+    await saveRegionOverlay(overlay, registry);
+    return { ...fresh, error: null };
+  } catch (e) {
+    if (cached) {
+      try {
+        return { ...await readShoppingOverlay(base, cached.overlay), error: e.message };
+      } catch {
+        // If the exact base cannot be read, show the last complete base package.
+      }
+    }
+    if (baseline) return { ...baseline, error: e.message };
+    throw e;
+  }
+}
+
+export async function shoppingSourcesWithRegion(onPackage, path = REGION_REGISTRY) {
+  let baseline;
+  const registry = await shoppingSources((id, pkg) => {
+    if (id === "overture") baseline = pkg;
+    else onPackage(id, pkg);
+  });
+  try {
+    onPackage("overture", await regionPackage(baseline, registry, path));
+  } catch (e) {
+    onPackage("overture", null, e.message);
+  }
+  return registry;
+}
+
 export async function osmVersion(version) {
   const row = await shoppingCacheState("osm"), legacy = await read("feeds", legacyKey("osm"));
   return [row.current, row.previous, legacy?.current, legacy?.previous].find(
