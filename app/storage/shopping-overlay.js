@@ -76,3 +76,15 @@ export function readShoppingSuccessor(base, overlay) {
     package: { ...overlay.package, notices },
   });
 }
+
+export function makeCompactShoppingSuccessor(base, next) {
+  const overlay = makeShoppingSuccessor(base, next);
+  if (canonical(base.aliases) === canonical(next.aliases))
+    overlay.package.aliases = null;
+  return overlay;
+}
+
+export function readCompactShoppingSuccessor(base, overlay) {
+  const aliases = overlay.package.aliases ?? base.aliases;
+  return readShoppingSuccessor(base, { ...overlay, package: { ...overlay.package, aliases } });
+}

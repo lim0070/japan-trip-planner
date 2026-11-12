@@ -13,8 +13,10 @@ import { emptyAliases, validateAliases } from "../core/shopping-aliases.js";
 import {
   makeShoppingOverlay,
   makeShoppingSuccessor,
+  makeCompactShoppingSuccessor,
   readShoppingOverlay,
   readShoppingSuccessor,
+  readCompactShoppingSuccessor,
 } from "./shopping-overlay.js";
 import {
   validateState,
@@ -111,8 +113,12 @@ export async function feed(namespace, path) {
 const REGISTRY_KEY = "shopping-codec-registry";
 const OVERLAY_KEY = "shopping-region-overlay";
 const SUCCESSOR_KEY = "shopping-region-history";
+const COMPACT_KEY = "shopping-region-compact-history";
 const REGION_REGISTRY = "../data/shopping-sources.region.v1.json";
 const SUCCESSOR_REGISTRY = "../data/shopping-sources.successor.v1.json";
+const COMPACT_REGISTRY = "../data/shopping-sources.successor.v2.json";
+const COMPACT_BASE_REGISTRY_VERSION =
+  "sha256:2cce080f64be5966d0992fd99c1fcf1d5bc7695437803ca35ca26d545b0d22ef";
 const REGION_REGISTRY_VERSION = "sha256:ef3a33a3478309280c86c47da998ca20515b5e3201a5861ecc5acd4bcdcbcd45";
 const REGION_BASE = "sha256:2d3dfb2122c4918a17446b79585706e27fa43f687b9c0c943452c002dd96b668";
 const packageKey = (id) => id === "osm" ? "shopping-codec-osm" : "shopping-codec-bundle";
@@ -183,7 +189,7 @@ async function currentPackage(key, error) {
 export function activateShoppingPackage(id, fresh, expectedRevision, registry = null) {
   const peer = id === "osm" ? "overture" : "osm", key = packageKey(id),
     otherKey = packageKey(peer), oldKey = legacyKey(id), oldPeer = legacyKey(peer),
-    keys = [key, otherKey, oldKey, oldPeer, OVERLAY_KEY, SUCCESSOR_KEY, REGISTRY_KEY];
+    keys = [key, otherKey, oldKey, oldPeer, OVERLAY_KEY, SUCCESSOR_KEY, COMPACT_KEY, REGISTRY_KEY];
   return new Promise((resolve, reject) => {
     const tx = db.transaction("feeds", "readwrite"), store = tx.objectStore("feeds"), rows = {};
     let count = 0, result, message;
@@ -357,6 +363,7 @@ export async function shoppingSources(
 const regionRows = [
   OVERLAY_KEY,
   SUCCESSOR_KEY,
+  COMPACT_KEY,
   packageKey("overture"),
   packageKey("osm"),
   legacyKey("overture"),
@@ -473,19 +480,50 @@ function generationSeven(rows) {
   return readShoppingOverlay(base, row.overlay);
 }
 
-function appendShoppingSuccessor(base, overlay, registry, expectedHead) {
+function compactBaseEntry(rows) {
+  return rows[SUCCESSOR_KEY]?.find(entry =>
+    entry.generation === 12 && entry.registryVersion === COMPACT_BASE_REGISTRY_VERSION);
+}
+
+async function generationTwelve(rows) {
+  const entry = compactBaseEntry(rows);
+  if (!entry) throw Error("Pinned Shopping generation 12 is unavailable");
+  return readShoppingSuccessor(await generationSeven(rows), entry.overlay);
+}
+
+// A separate row and endpoint keep generation 12 readable by v2.5.3.
+// Each compact entry references generation 12 directly, so a later entry
+// remains readable independently of the other compact entries.
+const standardSuccessors = {
+  key: SUCCESSOR_KEY,
+  baseGeneration: 7,
+  baseEntry: rows => rows[OVERLAY_KEY],
+  readBase: generationSeven,
+  makeOverlay: makeShoppingSuccessor,
+  readOverlay: readShoppingSuccessor,
+};
+const compactSuccessors = {
+  key: COMPACT_KEY,
+  baseGeneration: 12,
+  baseEntry: compactBaseEntry,
+  readBase: generationTwelve,
+  makeOverlay: makeCompactShoppingSuccessor,
+  readOverlay: readCompactShoppingSuccessor,
+};
+
+function appendShoppingSuccessor(base, overlay, registry, expectedHead, format) {
   return writeRegionRows(rows => {
-    const prior = rows[OVERLAY_KEY];
-    if (!regionBase(rows) || prior?.registryVersion !== REGION_REGISTRY_VERSION ||
-        prior.overlay.package.manifest.datasetVersion !== artifact(base))
+    const prior = format.baseEntry(rows);
+    if (!regionBase(rows) || rows[OVERLAY_KEY]?.registryVersion !== REGION_REGISTRY_VERSION ||
+        artifact(prior?.overlay.package) !== artifact(base))
       throw Error("Shopping successor base changed");
-    const history = rows[SUCCESSOR_KEY] || [];
+    const history = rows[format.key] || [];
     const head = history.at(-1);
     if (head?.registryVersion === registry.datasetVersion) return;
     if (head?.registryVersion !== expectedHead?.registryVersion ||
-        registry.generation <= (head?.generation ?? 7))
+        registry.generation <= (head?.generation ?? format.baseGeneration))
       throw Error("Stale Shopping successor generation");
-    return [SUCCESSOR_KEY, [...history, {
+    return [format.key, [...history, {
       generation: registry.generation,
       registryVersion: registry.datasetVersion,
       overlay,
@@ -493,38 +531,38 @@ function appendShoppingSuccessor(base, overlay, registry, expectedHead) {
   });
 }
 
-async function successorPackage(fallback, baselineRegistry, path) {
+async function successorPackage(fallback, baselineRegistry, path, format) {
   const rows = await feedRows(regionRows);
-  const head = rows[SUCCESSOR_KEY]?.at(-1);
+  const head = rows[format.key]?.at(-1);
   let base;
   try {
-    base = await generationSeven(rows);
+    base = await format.readBase(rows);
     const url = new URL(path, location.href);
     const registry = await readRegistry(url);
-    if (baselineRegistry?.generation !== 6 || registry.generation <= 7 ||
+    if (baselineRegistry?.generation !== 6 || registry.generation <= format.baseGeneration ||
         canonical(registry.packages[1]) !== canonical(baselineRegistry.packages[1]))
       throw Error("Shopping successor registry does not match the pinned OSM release");
     if (head?.registryVersion === registry.datasetVersion)
-      return { ...await readShoppingSuccessor(base, head.overlay), error: null };
-    if (registry.generation <= (head?.generation ?? 7))
+      return { ...await format.readOverlay(base, head.overlay), error: null };
+    if (registry.generation <= (head?.generation ?? format.baseGeneration))
       throw Error("Stale Shopping successor generation");
     const expected = registry.packages[0];
     const fresh = await loadBundle(new URL(expected.path, url), { expected });
     if (canonical(packageMetrics(fresh)) !== canonical(expected.metrics))
       throw Error("Package metrics do not match registry");
     checkIndependentShopping(fresh);
-    const previous = head ? await readShoppingSuccessor(base, head.overlay) : base;
+    const previous = head ? await format.readOverlay(base, head.overlay) : base;
     validateAliases(fresh.aliases, fresh.feed, previous.aliases);
-    const overlay = makeShoppingSuccessor(base, fresh);
-    await readShoppingSuccessor(base, overlay);
-    await appendShoppingSuccessor(base, overlay, registry, head);
+    const overlay = format.makeOverlay(base, fresh);
+    await format.readOverlay(base, overlay);
+    await appendShoppingSuccessor(base, overlay, registry, head, format);
     return { ...fresh, error: null };
   } catch (e) {
     if (base && head) {
       try {
-        return { ...await readShoppingSuccessor(base, head.overlay), error: e.message };
+        return { ...await format.readOverlay(base, head.overlay), error: e.message };
       } catch {
-        // Fall back to the last complete generation 7 package.
+        // Fall back to the last complete base package.
       }
     }
     if (fallback) return { ...fallback, error: e.message };
@@ -532,18 +570,26 @@ async function successorPackage(fallback, baselineRegistry, path) {
   }
 }
 
-export async function shoppingSourcesWithRegionHistory(onPackage, path = SUCCESSOR_REGISTRY) {
+async function shoppingSourcesWithSuccessor(onPackage, path, prior, format) {
   let fallback;
-  const registry = await shoppingSourcesWithRegion((id, pkg) => {
+  const registry = await prior((id, pkg) => {
     if (id === "overture") fallback = pkg;
     else onPackage(id, pkg);
   });
   try {
-    onPackage("overture", await successorPackage(fallback, registry, path));
+    onPackage("overture", await successorPackage(fallback, registry, path, format));
   } catch (e) {
     onPackage("overture", null, e.message);
   }
   return registry;
+}
+
+export function shoppingSourcesWithRegionHistory(onPackage, path = SUCCESSOR_REGISTRY) {
+  return shoppingSourcesWithSuccessor(onPackage, path, shoppingSourcesWithRegion, standardSuccessors);
+}
+
+export function shoppingSourcesWithCompactHistory(onPackage, path = COMPACT_REGISTRY) {
+  return shoppingSourcesWithSuccessor(onPackage, path, shoppingSourcesWithRegionHistory, compactSuccessors);
 }
 
 export async function shoppingRegionVersion(version) {
@@ -551,14 +597,17 @@ export async function shoppingRegionVersion(version) {
   if (!rows[OVERLAY_KEY]) return null;
   const base = await generationSeven(rows);
   if (artifact(base) === version) return base;
-  const history = rows[SUCCESSOR_KEY] || [];
+  const history = [...(rows[SUCCESSOR_KEY] || []), ...(rows[COMPACT_KEY] || [])];
   let entry = history.find(({ overlay }) => artifact(overlay.package) === version);
   if (!entry) {
     const matches = history.filter(({ overlay }) => overlay.package.feed.datasetVersion === version);
     if (base.feed.datasetVersion === version) return matches.length ? null : base;
     if (matches.length === 1) entry = matches[0];
   }
-  return entry ? readShoppingSuccessor(base, entry.overlay) : null;
+  if (!entry) return null;
+  if (rows[COMPACT_KEY]?.includes(entry))
+    return readCompactShoppingSuccessor(await generationTwelve(rows), entry.overlay);
+  return readShoppingSuccessor(base, entry.overlay);
 }
 
 export async function osmVersion(version) {
