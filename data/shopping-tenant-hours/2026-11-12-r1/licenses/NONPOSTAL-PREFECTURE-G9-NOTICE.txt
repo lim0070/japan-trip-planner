@@ -1,0 +1,1 @@
+15 previously empty prefectures filled from individual geographic facts matched to the retained native records. See nonpostal-prefecture-field-decisions-g9.json for the exact field, source citation and review timestamp for each update. Earlier notices document their original increments. This increment covers prefecture labels and their source citations.
