@@ -1,0 +1,17 @@
+{
+  "release": "2026-10-21.0",
+  "observedAt": "2026-11-02T21:13:58.129752Z",
+  "sourceDatasets": {
+    "meta": 3094,
+    "Overture": 6659,
+    "AllThePlaces": 2567,
+    "Foursquare": 842,
+    "Microsoft": 156
+  },
+  "sourceLicenses": {
+    "CDLA-Permissive-2.0": 9909,
+    "CC0-1.0": 2567,
+    "Apache-2.0": 842
+  },
+  "modifications": "Preserved base5393 records unchanged; appended five approved retail chains from same open Places release, strict identity/taxonomy filtering and uncertainty notes; no official bulk/Google/OSM data, no related-brand expansion. Complete source metadata in separate raw base and expansion caches."
+}
