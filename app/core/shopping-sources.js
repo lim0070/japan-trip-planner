@@ -36,7 +36,7 @@ const stamp = (s) =>
 const fail = (m) => {
   throw Error("Shopping sources: " + m);
 };
-export function checkTotals(metrics) {
+export function checkTotals(metrics, expandedLimit = GLOBAL.expanded) {
   for (const field of [
     "records",
     "expanded",
@@ -46,7 +46,8 @@ export function checkTotals(metrics) {
   ]) {
     if (metrics.some((m) => !int(m[field] ?? 0, GLOBAL[field])))
       fail(field + " metrics");
-    if (metrics.reduce((n, m) => n + (m[field] || 0), 0) > GLOBAL[field])
+    const limit = field === "expanded" ? expandedLimit : GLOBAL[field];
+    if (metrics.reduce((n, m) => n + (m[field] || 0), 0) > limit)
       fail(field + " aggregate limit");
   }
 }
@@ -67,7 +68,7 @@ export function packageMetrics(pkg) {
       : bytes(pkg.notices),
   };
 }
-export async function validateRegistry(r) {
+export async function validateRegistry(r, expandedLimit = GLOBAL.expanded) {
   if (
     !exact(r, [
       "schemaVersion",
@@ -106,7 +107,7 @@ export async function validateRegistry(r) {
     )
       fail("package descriptor");
   if (r.packages[0].path === r.packages[1].path) fail("package paths");
-  checkTotals([...r.packages.map((p) => p.metrics), { ancillary: 128 * 1024 }]);
+  checkTotals([...r.packages.map((p) => p.metrics), { ancillary: 128 * 1024 }], expandedLimit);
   const { datasetVersion, generatedAt, ...content } = r;
   if ((await digest(content)) !== datasetVersion) fail("registry checksum");
   return r;

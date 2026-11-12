@@ -1,0 +1,1 @@
+5 previously empty hours references filled with branch-specific numeric intervals from tenant listings. Days, holiday applicability and dated exceptions are unverified. See tenant-hours-field-decisions-g17.json for the exact field, source citation and observation timestamp for each update. Earlier notices document their original increments.
