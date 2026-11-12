@@ -1,0 +1,335 @@
+[
+  {
+    "nativeId": "costcoJapanKawasakiWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanSapporoWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanTomiyaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanKaminoyamaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanShinmisatoWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanIrumaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanMakuhariWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanKanazawaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanZamaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanHitachinakaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanMaebashiWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanTamasakaiWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanTsukubaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanChibaNewtownWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanNonoichiWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanChubuWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanGifuHashimaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanHamamatsuWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanKyotoYawataWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanImizuWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanAmagasakiWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanIzumiWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanKobeWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanHiroshimaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanHisayamaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanKitakyushuWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanKisarazuWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanKumamotoMifuneWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanIshikariWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "costcoJapanMoriyamaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "CostcoJapanMibuWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "CostcoJapanMeiwaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "CostcoJapanKadomaWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "CostcoJapanOkinawaNanjoWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "CostcoJapanHigashiomiWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "CostcoJapanOgoriiWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  },
+  {
+    "nativeId": "CostcoJapanMinamiAlpsiWarehouse",
+    "operatorIdMatched": true,
+    "operatorNameMatched": true,
+    "sourcePointExactlyAgrees": true,
+    "operatorObservedAt": "2026-11-02T23:17:38.426424Z",
+    "operatorSourceUrl": "https://www.costco.co.jp/rest/v2/japan/stores?fields=FULL&radius=3000000&returnAllStores=true&pageSize=999",
+    "venueVerifiedAt": null
+  }
+]
