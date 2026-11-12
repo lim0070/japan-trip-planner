@@ -240,6 +240,8 @@ export function distance(a, b) {
   );
 }
 export const fingerprint = (a, b) => JSON.stringify([a.location, b.location]);
+export const routeEndpoints = (a, b) =>
+  JSON.stringify([a, b].map((p) => [name(p), p.address.ja, p.location.lat, p.location.lng]));
 export function estimate(a, b, mode) {
   if (!located(a) || !located(b)) return null;
   const km = distance(a.location, b.location),
@@ -292,7 +294,12 @@ export function setMode(s, seg, mode) {
   seg.mode = mode;
   seg.manualMinutes = null;
   seg.overrideFingerprint = null;
+  delete seg.routeCheck;
   reconcile(s);
+}
+export function checkedRouteApplies(check, date, minute, endpoints) {
+  return minute !== null && check.date === date &&
+    check.departMinute >= minute && check.endpoints === endpoints;
 }
 export function schedule(s, day) {
   let minute = day.startMinute;
@@ -303,13 +310,27 @@ export function schedule(s, day) {
             (x) => x.fromStopId === day.stopIds[i - 1] && x.toStopId === stopId,
           )
         : null;
+    const check = segment?.routeCheck;
+    const missed = check && !checkedRouteApplies(
+      check, day.date, minute,
+      routeEndpoints(visitPlace(s.stops.find((x) => x.id === segment.fromStopId)), visitPlace(stop)),
+    );
     const travel = segment
-      ? (segment.manualMinutes ?? segment.estimatedMinutes)
+      ? (missed ? segment.estimatedMinutes : (segment.manualMinutes ?? segment.estimatedMinutes))
       : 0;
+    const routeWait = check && !missed ? check.departMinute - minute : 0;
+    if (minute !== null) minute += routeWait;
     minute = minute === null || travel === null ? null : minute + travel;
     const arrival = minute;
-    minute = minute === null ? null : minute + stop.durationMinutes;
-    return { stop, segment, travel, arrival, departure: minute };
+    const start = arrival === null ? null : (
+      day.planEndMinute === undefined ? Math.max(arrival, stop.fixedStartMinute ?? arrival)
+        : planningStart(stop, visitPlace(stop), day.date, arrival, day.planEndMinute)
+    );
+    // Keep displaying the computed itinerary if later edits introduce conflicts.
+    const visitStart = start ?? arrival;
+    minute = visitStart === null ? null : visitStart + stop.durationMinutes;
+    return { stop, segment, travel, arrival, visitStart, departure: minute,
+      routeWait, missed, timingConflict: start === null && arrival !== null };
   });
 }
 export function timeLabel(date, minutes) {
@@ -321,8 +342,7 @@ export function timeLabel(date, minutes) {
       : "") + stamp.toISOString().slice(11, 16)
   );
 }
-export function hoursResult(hours, date, start, end) {
-  if (!hours || start === null || end === null) return "Hours not checked";
+function hoursSpans(hours, date, start, end) {
   const base = Date.parse(date + "T00:00:00Z"),
     week = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
   let spans = [],
@@ -364,6 +384,11 @@ export function hoursResult(hours, date, start, end) {
       );
     }
   }
+  return { spans, unknown };
+}
+export function hoursResult(hours, date, start, end) {
+  if (!hours || start === null || end === null) return "Hours not checked";
+  const { spans, unknown } = hoursSpans(hours, date, start, end);
   const target = end === start ? end + 0.001 : end;
   const covers = (ranges) => {
     let at = start;
@@ -379,6 +404,26 @@ export function hoursResult(hours, date, start, end) {
   if (covers([...spans, ...unknown])) return "Hours not checked";
   return "Outside recorded hours";
 }
+export function planningStart(stop, place, date, arrival, finishBy) {
+  const fixed = stop.fixedStartMinute;
+  const earliest = fixed ?? arrival;
+  const latest = finishBy - stop.durationMinutes;
+  if (earliest < arrival || earliest > latest ||
+      ["closed", "relocated"].includes(place.operatingStatus.value)) return null;
+  const hours = place.hours;
+  const trusted = hours && (hours.checkedAt || Object.hasOwn(stop.placeOverrides, "hours"));
+  if (!trusted) return earliest;
+  const candidates = fixed !== undefined ? [fixed] : [
+    earliest,
+    ...hoursSpans(hours, date, earliest, finishBy).spans
+      .map(([start]) => start)
+      .filter((start) => start > earliest && start <= latest)
+      .sort((a, b) => a - b),
+  ];
+  return candidates.find((start) =>
+    hoursResult(hours, date, start, start + stop.durationMinutes) !== "Outside recorded hours",
+  ) ?? null;
+}
 export function warnings(s, day, trip) {
   const rows = schedule(s, day),
     out = [];
@@ -390,6 +435,8 @@ export function warnings(s, day, trip) {
       out.push("Long day — review the planned duration.");
     if (end > trip.thresholds.lateFinishMinute)
       out.push("Late finish in Japan time.");
+    if (day.planEndMinute !== undefined && end > day.planEndMinute)
+      out.push("The itinerary exceeds your finish-by time.");
     const next = s.days.find(
       (d) =>
         d.tripId === trip.id &&
@@ -402,6 +449,14 @@ export function warnings(s, day, trip) {
       out.push("This day overlaps the next day’s start.");
   }
   for (const row of rows) {
+    const p = visitPlace(row.stop);
+    if (row.timingConflict || (row.arrival !== null && row.stop.fixedStartMinute !== undefined &&
+        row.arrival > row.stop.fixedStartMinute))
+      out.push("Review the timing for " + name(p) + ".");
+    if (hoursResult(p.hours, day.date, row.visitStart, row.departure) === "Outside recorded hours" ||
+        ["closed", "relocated"].includes(p.operatingStatus.value))
+      out.push("Opening conflict at " + name(p) + ".");
+    if (row.missed) out.push("A checked route needs review after a timing or location change.");
     if (!row.segment) continue;
     const a = visitPlace(s.stops.find((x) => x.id === row.segment.fromStopId)),
       b = visitPlace(row.stop),

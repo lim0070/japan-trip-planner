@@ -26,6 +26,15 @@ const shape = (fields) => (x) =>
   obj(x) &&
   Object.keys(x).length === Object.keys(fields).length &&
   Object.entries(fields).every(([k, v]) => Object.hasOwn(x, k) && v(x[k]));
+const optionalFields = (base, fields) => (x) => {
+  if (!obj(x)) return false;
+  const core = { ...x };
+  for (const [key, check] of Object.entries(fields)) {
+    if (Object.hasOwn(x, key) && !check(x[key])) return false;
+    delete core[key];
+  }
+  return base(core);
+};
 const date = (x) =>
   str(x) &&
   /^\d{4}-\d{2}-\d{2}$/.test(x) &&
@@ -210,14 +219,15 @@ const trip = shape({
   createdAt: stamp,
   updatedAt: stamp,
 });
-const day = shape({
+const clockMinute = (x) => integer(x, 0, 1439);
+const day = optionalFields(shape({
   schemaVersion: version,
   id: identifier,
   tripId: identifier,
   date,
   startMinute: (x) => integer(x, 0, 1439),
   stopIds: array(identifier),
-});
+}), { planEndMinute: clockMinute });
 const stopBase = shape({
   schemaVersion: version,
   id: identifier,
@@ -228,16 +238,21 @@ const stopBase = shape({
   notes: (x) => str(x, 20000),
   durationMinutes: minutes,
 });
-const stop = (x) => {
-  if (!obj(x)) return false;
-  const { sourceDatasetVersion, ...base } = x;
-  return (
-    stopBase(base) &&
-    (!Object.hasOwn(x, "sourceDatasetVersion") ||
-      nullable(nonempty)(sourceDatasetVersion))
-  );
-};
-const segment = shape({
+const stop = optionalFields(stopBase, {
+  sourceDatasetVersion: nullable(nonempty),
+  planLocked: bool,
+  fixedStartMinute: clockMinute,
+});
+const routeCheck = shape({
+  provider: one("google", "jorudan"),
+  date,
+  departMinute: clockMinute,
+  minutes,
+  access: minutes,
+  egress: minutes,
+  endpoints: (x) => str(x, 20000),
+});
+const segment = optionalFields(shape({
   schemaVersion: version,
   tripId: identifier,
   fromStopId: identifier,
@@ -248,7 +263,7 @@ const segment = shape({
   estimateModel: one("rough-v1"),
   coordinateFingerprint: (x) => str(x, 20000),
   overrideFingerprint: nullable((x) => str(x, 20000)),
-});
+}), { routeCheck });
 const settings = shape({
   theme: one("system", "light", "dark"),
   defaultMode: one("walk", "train", "drive"),
@@ -365,6 +380,15 @@ export function validateState(s) {
     seen.add(key);
     if ((seg.manualMinutes === null) !== (seg.overrideFingerprint === null))
       fail("Invalid manual travel provenance.");
+    if (seg.routeCheck) {
+      const { provider, minutes, access, egress } = seg.routeCheck;
+      if (
+        seg.manualMinutes !== minutes + access + egress ||
+        (provider === "jorudan" && seg.mode !== "train") ||
+        (provider === "google" && (access !== 0 || egress !== 0))
+      )
+        fail("Invalid checked route.");
+    }
   }
   if (seen.size !== pairs.size) fail("Missing travel segments.");
   return s;
