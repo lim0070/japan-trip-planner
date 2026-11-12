@@ -49,3 +49,30 @@ export async function readShoppingOverlay(base, overlay) {
   validateAliases(result.aliases, result.feed);
   return result;
 }
+
+// Notice keys include the logical version even when the notice text is identical.
+// Keep new keys and reference identical text from the immutable generation 7 base.
+export function makeShoppingSuccessor(base, next) {
+  const overlay = makeShoppingOverlay(base, next);
+  const baseKeys = new Map(Object.entries(base.notices).map(([key, text]) => [text, key]));
+  const notices = {};
+  const sharedNotices = {};
+  for (const [key, text] of Object.entries(next.notices)) {
+    if (baseKeys.has(text)) sharedNotices[key] = baseKeys.get(text);
+    else notices[key] = text;
+  }
+  return { ...overlay, package: { ...overlay.package, notices }, sharedNotices };
+}
+
+export function readShoppingSuccessor(base, overlay) {
+  const notices = { ...overlay.package.notices };
+  for (const [key, baseKey] of Object.entries(overlay.sharedNotices)) {
+    if (!Object.hasOwn(base.notices, baseKey) || Object.hasOwn(notices, key))
+      throw Error("Exact Shopping notice is unavailable");
+    notices[key] = base.notices[baseKey];
+  }
+  return readShoppingOverlay(base, {
+    ...overlay,
+    package: { ...overlay.package, notices },
+  });
+}
