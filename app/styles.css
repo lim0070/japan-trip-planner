@@ -984,3 +984,12 @@ dialog:has(.plan-dialog) { width: min(900px, calc(100vw - 24px)); }
   .day-planning { display: none; }
   .plan-comparison { grid-template-columns: 1fr; }
 }
+.visit-hours {
+  display: block;
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+}
+.visit-hours-warning {
+  color: var(--ink);
+  font-weight: 600;
+}

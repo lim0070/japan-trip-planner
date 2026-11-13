@@ -354,9 +354,16 @@ function hoursSpans(hours, date, start, end) {
   ) {
     const dt = new Date(base + offset * 86400000),
       key = dt.toISOString().slice(0, 10),
-      rule = Object.hasOwn(hours.exceptions, key)
+      exception = Object.hasOwn(hours.exceptions, key),
+      rule = exception
         ? hours.exceptions[key]
         : hours.weekly[week[dt.getUTCDay()]];
+    // A dated rule replaces the whole date, including any previous-day spill.
+    if (exception) {
+      const midnight = offset * 1440;
+      spans = spans.map(([a, b]) => [a, Math.min(b, midnight)])
+        .filter(([a, b]) => a < b);
+    }
     if (rule === null) unknown.push([offset * 1440, (offset + 1) * 1440]);
     else
       for (const r of rule)
@@ -364,25 +371,6 @@ function hoursSpans(hours, date, start, end) {
           offset * 1440 + r.startMinute,
           offset * 1440 + r.endMinute,
         ]);
-  }
-  // Date-specific closure clips all overnight spill into that calendar date.
-  for (let o = Math.floor(start / 1440); o <= Math.floor(end / 1440); o++) {
-    const key = new Date(base + o * 86400000).toISOString().slice(0, 10);
-    if (
-      Array.isArray(hours.exceptions[key]) &&
-      hours.exceptions[key].length === 0
-    ) {
-      const l = o * 1440,
-        r = l + 1440;
-      spans = spans.flatMap(([a, b]) =>
-        b <= l || a >= r
-          ? [[a, b]]
-          : [
-              [a, Math.min(b, l)],
-              [Math.max(a, r), b],
-            ].filter(([x, y]) => x < y),
-      );
-    }
   }
   return { spans, unknown };
 }
@@ -404,6 +392,62 @@ export function hoursResult(hours, date, start, end) {
   if (covers([...spans, ...unknown])) return "Hours not checked";
   return "Outside recorded hours";
 }
+const NEAR_CLOSING_MINUTES = 30;
+
+export function visitHoursNotice(place, date, { arrival, visitStart, departure }) {
+  const { hours, operatingStatus } = place;
+  const check = "Check hours";
+  if (!hours?.checkedAt || !Number.isInteger(arrival) ||
+      ["closed", "relocated"].includes(operatingStatus.value)) return check;
+
+  const target = departure ?? visitStart ?? arrival;
+  // Include the following date so that midnight rules and continuous hours
+  // can qualify the closing boundary of an overnight interval.
+  const { spans, unknown } = hoursSpans(hours, date, arrival, target + 1440);
+  const ranges = [];
+  for (const [open, close] of spans.sort((a, b) => a[0] - b[0])) {
+    const last = ranges.at(-1);
+    if (last && open <= last[1]) last[1] = Math.max(last[1], close);
+    else ranges.push([open, close]);
+  }
+  const isUnknown = (minute) => unknown.some(([start, end]) => start <= minute && minute < end);
+  const slotAt = (minute) => ranges.find(([open, close]) => open <= minute && minute < close);
+  const label = (minute) => timeLabel(date, minute);
+  const arrivalSlot = slotAt(arrival);
+  let arrivalNotice;
+  if (!arrivalSlot) {
+    if (isUnknown(arrival)) return check;
+    const midnight = Math.floor(arrival / 1440) * 1440;
+    const next = ranges.find(([open]) => arrival < open && open < midnight + 1440);
+    const previous = ranges.findLast(([, close]) => midnight < close && close <= arrival);
+    if (previous) {
+      arrivalNotice = `Arrive at or after closing at ${label(previous[1])}`;
+      if (next) arrivalNotice += ` · reopens at ${label(next[0])}`;
+    } else if (next) arrivalNotice = `Arrive before opening at ${label(next[0])}`;
+    else arrivalNotice = "Closed on the visit date";
+  }
+
+  if (Number.isInteger(visitStart) && Number.isInteger(departure)) {
+    const slot = slotAt(visitStart);
+    if (!slot && isUnknown(visitStart)) return check;
+    if (slot && departure > slot[1]) {
+      if (isUnknown(slot[1])) return check;
+      const remaining = slot[1] - visitStart;
+      const overrun = `Visit ends after closing at ${label(slot[1])} · ${remaining} min of ${departure - visitStart} available`;
+      return arrivalNotice ? arrivalNotice + ". " + overrun : overrun;
+    }
+    if (!slot && arrivalSlot) {
+      const close = arrivalSlot[1];
+      if (visitStart >= close && !isUnknown(close))
+        return `Visit starts at or after closing at ${label(close)}`;
+    }
+  }
+  if (arrivalNotice) return arrivalNotice;
+  const close = arrivalSlot[1];
+  if (close - arrival <= NEAR_CLOSING_MINUTES)
+    return isUnknown(close) ? check : `Arrive ${close - arrival} min before closing at ${label(close)}`;
+  return null;
+}
 export function planningStart(stop, place, date, arrival, finishBy) {
   const fixed = stop.fixedStartMinute;
   const earliest = fixed ?? arrival;
@@ -411,8 +455,7 @@ export function planningStart(stop, place, date, arrival, finishBy) {
   if (earliest < arrival || earliest > latest ||
       ["closed", "relocated"].includes(place.operatingStatus.value)) return null;
   const hours = place.hours;
-  const trusted = hours && (hours.checkedAt || Object.hasOwn(stop.placeOverrides, "hours"));
-  if (!trusted) return earliest;
+  if (!hours?.checkedAt) return earliest;
   const candidates = fixed !== undefined ? [fixed] : [
     earliest,
     ...hoursSpans(hours, date, earliest, finishBy).spans
@@ -450,12 +493,11 @@ export function warnings(s, day, trip) {
   }
   for (const row of rows) {
     const p = visitPlace(row.stop);
-    if (row.timingConflict || (row.arrival !== null && row.stop.fixedStartMinute !== undefined &&
-        row.arrival > row.stop.fixedStartMinute))
+    const missedBooking = row.arrival !== null && row.stop.fixedStartMinute !== undefined &&
+      row.arrival > row.stop.fixedStartMinute;
+    const notice = row.timingConflict ? visitHoursNotice(p, day.date, row) : null;
+    if (missedBooking || (row.timingConflict && (!notice || notice === "Check hours")))
       out.push("Review the timing for " + name(p) + ".");
-    if (hoursResult(p.hours, day.date, row.visitStart, row.departure) === "Outside recorded hours" ||
-        ["closed", "relocated"].includes(p.operatingStatus.value))
-      out.push("Opening conflict at " + name(p) + ".");
     if (row.missed) out.push("A checked route needs review after a timing or location change.");
     if (!row.segment) continue;
     const a = visitPlace(s.stops.find((x) => x.id === row.segment.fromStopId)),
