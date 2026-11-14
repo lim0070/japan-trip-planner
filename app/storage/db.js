@@ -14,6 +14,7 @@ import { approvedShopping, validateApprovedShoppingChanges } from "./shopping-ap
 import { decodeShoppingHistory, encodeShoppingHistory } from "./shopping-history.js";
 import { closureRegistry, normalizeClosureParent, validateClosureUpdate } from "./shopping-closure.js";
 import { reviewedClosureRegistry, validateReviewedClosures } from "./shopping-reviewed-closures.js";
+import { reviewedFactsRegistry, validateReviewedFacts } from "./shopping-reviewed-facts.js";
 import {
   makeShoppingOverlay,
   makeShoppingSuccessor,
@@ -123,6 +124,7 @@ const APPROVED_KEY = "shopping-region-approved-history";
 const HISTORY_ARCHIVE_KEY = "shopping-history-archive-v1";
 const CLOSURE_KEY = "shopping-region-closure-history";
 const REVIEWED_CLOSURES_KEY = "shopping-region-reviewed-closures";
+const REVIEWED_FACTS_KEY = "shopping-region-reviewed-facts";
 const REGION_REGISTRY = "../data/shopping-sources.region.v1.json";
 const SUCCESSOR_REGISTRY = "../data/shopping-sources.successor.v1.json";
 const COMPACT_REGISTRY = "../data/shopping-sources.successor.v2.json";
@@ -130,6 +132,7 @@ const CHAIN_REGISTRY = "../data/shopping-sources.successor.v3.json";
 const APPROVED_REGISTRY = "../data/shopping-sources.successor.v4.json";
 const CLOSURE_REGISTRY = "../data/shopping-sources.successor.v5.json";
 const REVIEWED_CLOSURES_REGISTRY = "../data/shopping-sources.successor.v6.json";
+const REVIEWED_FACTS_REGISTRY = "../data/shopping-sources.successor.v7.json";
 const COMPACT_BASE_REGISTRY_VERSION =
   "sha256:2cce080f64be5966d0992fd99c1fcf1d5bc7695437803ca35ca26d545b0d22ef";
 const CHAIN_BASE_REGISTRY_VERSION =
@@ -387,6 +390,7 @@ const regionRows = [
   HISTORY_ARCHIVE_KEY,
   CLOSURE_KEY,
   REVIEWED_CLOSURES_KEY,
+  REVIEWED_FACTS_KEY,
   packageKey("overture"),
   packageKey("osm"),
   legacyKey("overture"),
@@ -680,6 +684,26 @@ const reviewedClosures = {
   validateUpdate: validateReviewedClosures,
 };
 
+const reviewedFacts = {
+  ...compactSuccessors,
+  key: REVIEWED_FACTS_KEY,
+  baseGeneration: 19,
+  baseEntry: rows => rows[REVIEWED_CLOSURES_KEY]?.find(entry => entry.generation === 19 &&
+    entry.registryVersion === "sha256:f8b940c5f2dbcab0c2be027306675c9dae2ac1f10801abc6faf8136451e50a67"),
+  async readBase(rows) {
+    const entry = this.baseEntry(rows);
+    if (!entry) throw Error("Pinned Shopping generation 19 is unavailable");
+    return readCompactShoppingSuccessor(await reviewedClosures.readBase(rows), entry.overlay);
+  },
+  async readRegistry(url) {
+    const { text } = await readBounded(url, 128 * 1024, reviewedFactsRegistry);
+    const registry = await validateRegistry(parseJSON(text));
+    if (registry.generation !== 20) throw Error("Unexpected Shopping facts registry");
+    return registry;
+  },
+  validateUpdate: validateReviewedFacts,
+};
+
 async function readSuccessorHistory(base, history, format) {
   if (format.chained) {
     for (const entry of history) base = await format.readOverlay(base, entry.overlay);
@@ -796,6 +820,10 @@ export function shoppingSourcesWithReviewedClosures(onPackage, path = REVIEWED_C
   return shoppingSourcesWithSuccessor(onPackage, path, shoppingSourcesWithRecoveredHistory, reviewedClosures);
 }
 
+export function shoppingSourcesWithReviewedFacts(onPackage, path = REVIEWED_FACTS_REGISTRY) {
+  return shoppingSourcesWithSuccessor(onPackage, path, shoppingSourcesWithReviewedClosures, reviewedFacts);
+}
+
 export async function shoppingRegionVersion(version) {
   const rows = await feedRows(regionRows);
   if (!rows[OVERLAY_KEY]) return null;
@@ -805,6 +833,7 @@ export async function shoppingRegionVersion(version) {
   const approved = rows[APPROVED_KEY] || [];
   const closure = rows[CLOSURE_KEY] || [];
   const reviewed = rows[REVIEWED_CLOSURES_KEY] || [];
+  const facts = rows[REVIEWED_FACTS_KEY] || [];
   const archive = rows[HISTORY_ARCHIVE_KEY];
   const [standard, compact] = await Promise.all(archivableKeys.map(async key => {
     const active = rows[key] || [];
@@ -816,7 +845,7 @@ export async function shoppingRegionVersion(version) {
       return active;
     }
   }));
-  const history = [...standard, ...compact, ...chain, ...approved, ...closure, ...reviewed];
+  const history = [...standard, ...compact, ...chain, ...approved, ...closure, ...reviewed, ...facts];
   let entry = history.find(({ overlay }) => artifact(overlay.package) === version);
   if (!entry) {
     const matches = history.filter(({ overlay }) => overlay.package.feed.datasetVersion === version);
@@ -824,6 +853,8 @@ export async function shoppingRegionVersion(version) {
     if (matches.length === 1) entry = matches[0];
   }
   if (!entry) return null;
+  if (facts.includes(entry))
+    return readCompactShoppingSuccessor(await reviewedFacts.readBase(rows), entry.overlay);
   if (reviewed.includes(entry))
     return readCompactShoppingSuccessor(await reviewedClosures.readBase(rows), entry.overlay);
   if (closure.includes(entry))
