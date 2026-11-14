@@ -1,0 +1,1 @@
+2 exact retained source members now carry a recorded closure with a verified event date. Historical identities remain available for saved places and visits. See shopping-lifecycle-field-decisions-g11.json for the exact field, source citation and observation timestamp for each update. Earlier notices document their original increments.

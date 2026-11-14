@@ -11,6 +11,8 @@ import { blank } from "../core/model.js";
 import { loadBundle, readBounded } from "../core/shopping-bundle.js";
 import { emptyAliases, validateAliases } from "../core/shopping-aliases.js";
 import { approvedShopping, validateApprovedShoppingChanges } from "./shopping-approved.js";
+import { decodeShoppingHistory, encodeShoppingHistory } from "./shopping-history.js";
+import { closureRegistry, normalizeClosureParent, validateClosureUpdate } from "./shopping-closure.js";
 import {
   makeShoppingOverlay,
   makeShoppingSuccessor,
@@ -117,11 +119,14 @@ const SUCCESSOR_KEY = "shopping-region-history";
 const COMPACT_KEY = "shopping-region-compact-history";
 const CHAIN_KEY = "shopping-region-parent-history";
 const APPROVED_KEY = "shopping-region-approved-history";
+const HISTORY_ARCHIVE_KEY = "shopping-history-archive-v1";
+const CLOSURE_KEY = "shopping-region-closure-history";
 const REGION_REGISTRY = "../data/shopping-sources.region.v1.json";
 const SUCCESSOR_REGISTRY = "../data/shopping-sources.successor.v1.json";
 const COMPACT_REGISTRY = "../data/shopping-sources.successor.v2.json";
 const CHAIN_REGISTRY = "../data/shopping-sources.successor.v3.json";
 const APPROVED_REGISTRY = "../data/shopping-sources.successor.v4.json";
+const CLOSURE_REGISTRY = "../data/shopping-sources.successor.v5.json";
 const COMPACT_BASE_REGISTRY_VERSION =
   "sha256:2cce080f64be5966d0992fd99c1fcf1d5bc7695437803ca35ca26d545b0d22ef";
 const CHAIN_BASE_REGISTRY_VERSION =
@@ -198,7 +203,7 @@ async function currentPackage(key, error) {
 export function activateShoppingPackage(id, fresh, expectedRevision, registry = null) {
   const peer = id === "osm" ? "overture" : "osm", key = packageKey(id),
     otherKey = packageKey(peer), oldKey = legacyKey(id), oldPeer = legacyKey(peer),
-    keys = [key, otherKey, oldKey, oldPeer, OVERLAY_KEY, SUCCESSOR_KEY, COMPACT_KEY, CHAIN_KEY, APPROVED_KEY, REGISTRY_KEY];
+    keys = [...regionRows, REGISTRY_KEY];
   return new Promise((resolve, reject) => {
     const tx = db.transaction("feeds", "readwrite"), store = tx.objectStore("feeds"), rows = {};
     let count = 0, result, message;
@@ -376,6 +381,8 @@ const regionRows = [
   COMPACT_KEY,
   CHAIN_KEY,
   APPROVED_KEY,
+  HISTORY_ARCHIVE_KEY,
+  CLOSURE_KEY,
   packageKey("overture"),
   packageKey("osm"),
   legacyKey("overture"),
@@ -413,6 +420,64 @@ function writeRegionRows(update, storageLimit = GLOBAL.storage) {
           if (regionStorageBytes({ ...rows, [key]: row }) > storageLimit)
             throw Error("Shopping storage budget");
           store.put(row, key);
+        } catch (e) {
+          error = e;
+          tx.abort();
+        }
+      };
+    }
+  });
+}
+
+// Keep each previously released reader's active row and exact pinned parent.
+// The earlier entries of these two rows are independently based on gen 7 / 12.
+const pinnedHistory = new Map([[SUCCESSOR_KEY, 12], [COMPACT_KEY, 15]]);
+const archivableKeys = [...pinnedHistory.keys()];
+
+export async function compactShoppingHistory() {
+  const keys = [...archivableKeys, HISTORY_ARCHIVE_KEY];
+  const rows = await feedRows(keys);
+  const archive = { ...rows[HISTORY_ARCHIVE_KEY] };
+  const replacements = {};
+  for (const key of archivableKeys) {
+    const row = rows[key];
+    if (!Array.isArray(row) || row.at(-1)?.generation !== pinnedHistory.get(key) ||
+        row.length < 2) continue;
+    const previous = archive[key] ? await decodeShoppingHistory(archive[key]) : [];
+    const entries = [...previous, ...row.slice(0, -1)];
+    if (entries.some((entry, index) => !Number.isSafeInteger(entry.generation) ||
+        entry.generation >= row.at(-1).generation ||
+        (index > 0 && entry.generation <= entries[index - 1].generation)))
+      throw Error("Shopping history generations are out of order");
+    const encoded = await encodeShoppingHistory(entries);
+    const restored = await decodeShoppingHistory(encoded);
+    if (JSON.stringify(restored) !== JSON.stringify(entries))
+      throw Error("Shopping history round trip failed");
+    archive[key] = encoded;
+    replacements[key] = row.slice(-1);
+  }
+  if (!Object.keys(replacements).length) return false;
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("feeds", "readwrite");
+    const store = tx.objectStore("feeds"), current = {};
+    let remaining = regionRows.length, changed = false, error;
+    tx.oncomplete = () => resolve(changed);
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(error || tx.error || Error("Shopping history migration aborted"));
+    for (const key of regionRows) {
+      const get = store.get(key);
+      get.onsuccess = () => {
+        current[key] = get.result;
+        if (--remaining) return;
+        try {
+          if (keys.some((k) => JSON.stringify(current[k]) !== JSON.stringify(rows[k]))) return;
+          const next = { ...current, ...replacements, [HISTORY_ARCHIVE_KEY]: archive };
+          const size = regionStorageBytes(next);
+          if (size > GLOBAL.storage || size >= regionStorageBytes(current))
+            throw Error("Shopping history migration exceeds the storage budget");
+          for (const [k, row] of Object.entries(replacements)) store.put(row, k);
+          store.put(archive, HISTORY_ARCHIVE_KEY);
+          changed = true;
         } catch (e) {
           error = e;
           tx.abort();
@@ -572,6 +637,25 @@ const approvedSuccessors = {
   validateUpdate: validateApprovedShoppingChanges,
 };
 
+const closureSuccessors = {
+  ...compactSuccessors,
+  key: CLOSURE_KEY,
+  baseGeneration: 17,
+  baseEntry: rows => rows[APPROVED_KEY]?.find(entry => entry.generation === 17),
+  async readBase(rows) {
+    const entry = this.baseEntry(rows);
+    if (!entry) throw Error("Pinned Shopping generation 17 is unavailable");
+    return normalizeClosureParent(await readCompactShoppingSuccessor(await generationSixteen(rows), entry.overlay));
+  },
+  async readRegistry(url) {
+    const { text } = await readBounded(url, 128 * 1024, closureRegistry);
+    const registry = await validateRegistry(parseJSON(text));
+    if (registry.generation !== 18) throw Error("Unexpected Shopping closure registry");
+    return registry;
+  },
+  validateUpdate: validateClosureUpdate,
+};
+
 async function readSuccessorHistory(base, history, format) {
   if (format.chained) {
     for (const entry of history) base = await format.readOverlay(base, entry.overlay);
@@ -629,7 +713,7 @@ async function successorPackage(fallback, baselineRegistry, path, format) {
     validateAliases(fresh.aliases, fresh.feed, previous.aliases);
     const parent = format.chained ? previous : base;
     const overlay = format.makeOverlay(parent, fresh);
-    format.validateUpdate?.(parent, fresh, overlay);
+    await format.validateUpdate?.(parent, fresh, overlay);
     await format.readOverlay(parent, overlay);
     await appendShoppingSuccessor(base, overlay, registry, head, format);
     return { ...fresh, error: null };
@@ -666,8 +750,22 @@ export function shoppingSourcesWithParentHistory(onPackage, path = CHAIN_REGISTR
   return shoppingSourcesWithSuccessor(onPackage, path, shoppingSourcesWithCompactHistory, chainedSuccessors);
 }
 
-export function shoppingSourcesWithApprovedHistory(onPackage, path = APPROVED_REGISTRY) {
+export async function shoppingSourcesWithApprovedHistory(onPackage, path = APPROVED_REGISTRY) {
   return shoppingSourcesWithSuccessor(onPackage, path, shoppingSourcesWithParentHistory, approvedSuccessors);
+}
+
+export async function shoppingSourcesWithRecoveredHistory(onPackage, path = CLOSURE_REGISTRY) {
+  // Allow the pinned approved release to load before recovering storage.
+  return shoppingSourcesWithSuccessor(onPackage, path, async receive => {
+    const registry = await shoppingSourcesWithApprovedHistory(receive);
+    try {
+      await compactShoppingHistory();
+    } catch (error) {
+      // IDB abort leaves the old rows usable even on engines lacking gzip streams.
+      console.warn("Shopping history could not be compacted:", error.message);
+    }
+    return registry;
+  }, closureSuccessors);
 }
 
 export async function shoppingRegionVersion(version) {
@@ -677,7 +775,19 @@ export async function shoppingRegionVersion(version) {
   if (artifact(base) === version) return base;
   const chain = rows[CHAIN_KEY] || [];
   const approved = rows[APPROVED_KEY] || [];
-  const history = [...(rows[SUCCESSOR_KEY] || []), ...(rows[COMPACT_KEY] || []), ...chain, ...approved];
+  const closure = rows[CLOSURE_KEY] || [];
+  const archive = rows[HISTORY_ARCHIVE_KEY];
+  const [standard, compact] = await Promise.all(archivableKeys.map(async key => {
+    const active = rows[key] || [];
+    try {
+      return archive?.[key] ? [...await decodeShoppingHistory(archive[key]), ...active] : active;
+    } catch (error) {
+      // A damaged archive cannot replace or hide a live rollback head.
+      console.warn("Shopping history archive unavailable:", error.message);
+      return active;
+    }
+  }));
+  const history = [...standard, ...compact, ...chain, ...approved, ...closure];
   let entry = history.find(({ overlay }) => artifact(overlay.package) === version);
   if (!entry) {
     const matches = history.filter(({ overlay }) => overlay.package.feed.datasetVersion === version);
@@ -685,12 +795,14 @@ export async function shoppingRegionVersion(version) {
     if (matches.length === 1) entry = matches[0];
   }
   if (!entry) return null;
+  if (closure.includes(entry))
+    return readCompactShoppingSuccessor(await closureSuccessors.readBase(rows), entry.overlay);
   if (approved.includes(entry))
     return readCompactShoppingSuccessor(await generationSixteen(rows), entry.overlay);
   const chainIndex = chain.indexOf(entry);
   if (chainIndex >= 0)
     return readSuccessorHistory(await generationFifteen(rows), chain.slice(0, chainIndex + 1), chainedSuccessors);
-  if (rows[COMPACT_KEY]?.includes(entry))
+  if (compact.includes(entry))
     return readCompactShoppingSuccessor(await generationTwelve(rows), entry.overlay);
   return readShoppingSuccessor(base, entry.overlay);
 }
