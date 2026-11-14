@@ -1,5 +1,5 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v25";
+  CACHE = PREFIX + "v26";
 const FILES = [
   "./",
   "index.html",
@@ -22,6 +22,7 @@ const FILES = [
   "storage/shopping-overlay.js",
   "storage/shopping-history.js",
   "storage/shopping-closure.js",
+  "storage/shopping-reviewed-closures.js",
   "manifest.webmanifest",
   "icons/icon.svg",
   "icons/icon-192.png",
