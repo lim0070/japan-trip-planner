@@ -14,6 +14,7 @@ import { approvedShopping, validateApprovedShoppingChanges } from "./shopping-ap
 import { decodeShoppingHistory, encodeShoppingHistory } from "./shopping-history.js";
 import { closureRegistry, normalizeClosureParent, validateClosureUpdate } from "./shopping-closure.js";
 import { reviewedClosureRegistry, validateReviewedClosures } from "./shopping-reviewed-closures.js";
+import { tenantHoursRegistry, validateTenantHoursUpdate } from "./shopping-hours.js";
 import { mixedRegistry, validateMixedUpdate } from "./shopping-mixed.js";
 import { sanoRegistry, validateSanoUpdate } from "./shopping-sano.js";
 import { reviewedFactsRegistry, validateReviewedFacts } from "./shopping-reviewed-facts.js";
@@ -126,6 +127,7 @@ const APPROVED_KEY = "shopping-region-approved-history";
 const HISTORY_ARCHIVE_KEY = "shopping-history-archive-v1";
 const CLOSURE_KEY = "shopping-region-closure-history";
 const REVIEWED_CLOSURES_KEY = "shopping-region-reviewed-closures";
+const TENANT_HOURS_KEY = "shopping-region-tenant-hours";
 const MIXED_KEY = "shopping-region-mixed";
 const SANO_KEY = "shopping-region-sano";
 const REVIEWED_FACTS_KEY = "shopping-region-reviewed-facts";
@@ -397,6 +399,7 @@ const regionRows = [
   REVIEWED_FACTS_KEY,
   SANO_KEY,
   MIXED_KEY,
+  TENANT_HOURS_KEY,
   packageKey("overture"),
   packageKey("osm"),
   legacyKey("overture"),
@@ -750,6 +753,26 @@ const mixedSuccessor = {
   validateUpdate: validateMixedUpdate,
 };
 
+const tenantHoursSuccessor = {
+  ...compactSuccessors,
+  key: TENANT_HOURS_KEY,
+  baseGeneration: 22,
+  baseEntry: rows => rows[MIXED_KEY]?.find(entry => entry.generation === 22 &&
+    entry.registryVersion === "sha256:46e6e4ce39766bbad8ad96799a3b8d46ee58d37287dd99352852f350f891ce21"),
+  async readBase(rows) {
+    const entry = this.baseEntry(rows);
+    if (!entry) throw Error("Pinned Shopping generation 22 is unavailable");
+    return readCompactShoppingSuccessor(await mixedSuccessor.readBase(rows), entry.overlay);
+  },
+  async readRegistry(url) {
+    const { text } = await readBounded(url, 128 * 1024, tenantHoursRegistry);
+    const registry = await validateRegistry(parseJSON(text));
+    if (registry.generation !== 23) throw Error("Unexpected Shopping tenant hours registry");
+    return registry;
+  },
+  validateUpdate: validateTenantHoursUpdate,
+};
+
 async function readSuccessorHistory(base, history, format) {
   if (format.chained) {
     for (const entry of history) base = await format.readOverlay(base, entry.overlay);
@@ -878,6 +901,10 @@ export function shoppingSourcesWithMixedUpdate(onPackage, path = "../data/shoppi
   return shoppingSourcesWithSuccessor(onPackage, path, shoppingSourcesWithSano, mixedSuccessor);
 }
 
+export function shoppingSourcesWithTenantHours(onPackage, path = "../data/shopping-sources.successor.v10.json") {
+  return shoppingSourcesWithSuccessor(onPackage, path, shoppingSourcesWithMixedUpdate, tenantHoursSuccessor);
+}
+
 export async function shoppingRegionVersion(version) {
   const rows = await feedRows(regionRows);
   if (!rows[OVERLAY_KEY]) return null;
@@ -890,6 +917,7 @@ export async function shoppingRegionVersion(version) {
   const facts = rows[REVIEWED_FACTS_KEY] || [];
   const sano = rows[SANO_KEY] || [];
   const mixed = rows[MIXED_KEY] || [];
+  const hours = rows[TENANT_HOURS_KEY] || [];
   const archive = rows[HISTORY_ARCHIVE_KEY];
   const [standard, compact] = await Promise.all(archivableKeys.map(async key => {
     const active = rows[key] || [];
@@ -901,7 +929,7 @@ export async function shoppingRegionVersion(version) {
       return active;
     }
   }));
-  const history = [...standard, ...compact, ...chain, ...approved, ...closure, ...reviewed, ...facts, ...sano, ...mixed];
+  const history = [...standard, ...compact, ...chain, ...approved, ...closure, ...reviewed, ...facts, ...sano, ...mixed, ...hours];
   let entry = history.find(({ overlay }) => artifact(overlay.package) === version);
   if (!entry) {
     const matches = history.filter(({ overlay }) => overlay.package.feed.datasetVersion === version);
@@ -909,6 +937,8 @@ export async function shoppingRegionVersion(version) {
     if (matches.length === 1) entry = matches[0];
   }
   if (!entry) return null;
+  if (hours.includes(entry))
+    return readCompactShoppingSuccessor(await tenantHoursSuccessor.readBase(rows), entry.overlay);
   if (mixed.includes(entry))
     return readCompactShoppingSuccessor(await mixedSuccessor.readBase(rows), entry.overlay);
   if (sano.includes(entry))
