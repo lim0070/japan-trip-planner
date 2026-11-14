@@ -14,6 +14,7 @@ import { approvedShopping, validateApprovedShoppingChanges } from "./shopping-ap
 import { decodeShoppingHistory, encodeShoppingHistory } from "./shopping-history.js";
 import { closureRegistry, normalizeClosureParent, validateClosureUpdate } from "./shopping-closure.js";
 import { reviewedClosureRegistry, validateReviewedClosures } from "./shopping-reviewed-closures.js";
+import { mixedRegistry, validateMixedUpdate } from "./shopping-mixed.js";
 import { sanoRegistry, validateSanoUpdate } from "./shopping-sano.js";
 import { reviewedFactsRegistry, validateReviewedFacts } from "./shopping-reviewed-facts.js";
 import {
@@ -125,6 +126,7 @@ const APPROVED_KEY = "shopping-region-approved-history";
 const HISTORY_ARCHIVE_KEY = "shopping-history-archive-v1";
 const CLOSURE_KEY = "shopping-region-closure-history";
 const REVIEWED_CLOSURES_KEY = "shopping-region-reviewed-closures";
+const MIXED_KEY = "shopping-region-mixed";
 const SANO_KEY = "shopping-region-sano";
 const REVIEWED_FACTS_KEY = "shopping-region-reviewed-facts";
 const REGION_REGISTRY = "../data/shopping-sources.region.v1.json";
@@ -394,6 +396,7 @@ const regionRows = [
   REVIEWED_CLOSURES_KEY,
   REVIEWED_FACTS_KEY,
   SANO_KEY,
+  MIXED_KEY,
   packageKey("overture"),
   packageKey("osm"),
   legacyKey("overture"),
@@ -727,6 +730,26 @@ const sanoSuccessor = {
   validateUpdate: validateSanoUpdate,
 };
 
+const mixedSuccessor = {
+  ...compactSuccessors,
+  key: MIXED_KEY,
+  baseGeneration: 21,
+  baseEntry: rows => rows[SANO_KEY]?.find(entry => entry.generation === 21 &&
+    entry.registryVersion === "sha256:65fa82c59479aeaf7a696ef537f3fbfc25fb696335c05df69d83f250b98a62c1"),
+  async readBase(rows) {
+    const entry = this.baseEntry(rows);
+    if (!entry) throw Error("Pinned Shopping generation 21 is unavailable");
+    return readCompactShoppingSuccessor(await sanoSuccessor.readBase(rows), entry.overlay);
+  },
+  async readRegistry(url) {
+    const { text } = await readBounded(url, 128 * 1024, mixedRegistry);
+    const registry = await validateRegistry(parseJSON(text));
+    if (registry.generation !== 22) throw Error("Unexpected Shopping mixed registry");
+    return registry;
+  },
+  validateUpdate: validateMixedUpdate,
+};
+
 async function readSuccessorHistory(base, history, format) {
   if (format.chained) {
     for (const entry of history) base = await format.readOverlay(base, entry.overlay);
@@ -851,6 +874,10 @@ export function shoppingSourcesWithSano(onPackage, path = "../data/shopping-sour
   return shoppingSourcesWithSuccessor(onPackage, path, shoppingSourcesWithReviewedFacts, sanoSuccessor);
 }
 
+export function shoppingSourcesWithMixedUpdate(onPackage, path = "../data/shopping-sources.successor.v9.json") {
+  return shoppingSourcesWithSuccessor(onPackage, path, shoppingSourcesWithSano, mixedSuccessor);
+}
+
 export async function shoppingRegionVersion(version) {
   const rows = await feedRows(regionRows);
   if (!rows[OVERLAY_KEY]) return null;
@@ -862,6 +889,7 @@ export async function shoppingRegionVersion(version) {
   const reviewed = rows[REVIEWED_CLOSURES_KEY] || [];
   const facts = rows[REVIEWED_FACTS_KEY] || [];
   const sano = rows[SANO_KEY] || [];
+  const mixed = rows[MIXED_KEY] || [];
   const archive = rows[HISTORY_ARCHIVE_KEY];
   const [standard, compact] = await Promise.all(archivableKeys.map(async key => {
     const active = rows[key] || [];
@@ -873,7 +901,7 @@ export async function shoppingRegionVersion(version) {
       return active;
     }
   }));
-  const history = [...standard, ...compact, ...chain, ...approved, ...closure, ...reviewed, ...facts, ...sano];
+  const history = [...standard, ...compact, ...chain, ...approved, ...closure, ...reviewed, ...facts, ...sano, ...mixed];
   let entry = history.find(({ overlay }) => artifact(overlay.package) === version);
   if (!entry) {
     const matches = history.filter(({ overlay }) => overlay.package.feed.datasetVersion === version);
@@ -881,6 +909,8 @@ export async function shoppingRegionVersion(version) {
     if (matches.length === 1) entry = matches[0];
   }
   if (!entry) return null;
+  if (mixed.includes(entry))
+    return readCompactShoppingSuccessor(await mixedSuccessor.readBase(rows), entry.overlay);
   if (sano.includes(entry))
     return readCompactShoppingSuccessor(await sanoSuccessor.readBase(rows), entry.overlay);
   if (facts.includes(entry))
