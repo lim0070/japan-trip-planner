@@ -14,6 +14,7 @@ import { approvedShopping, validateApprovedShoppingChanges } from "./shopping-ap
 import { decodeShoppingHistory, encodeShoppingHistory } from "./shopping-history.js";
 import { closureRegistry, normalizeClosureParent, validateClosureUpdate } from "./shopping-closure.js";
 import { reviewedClosureRegistry, validateReviewedClosures } from "./shopping-reviewed-closures.js";
+import { currentShoppingRelease, shoppingRelease } from "./shopping-release.js";
 import { tenantHoursRegistry, validateTenantHoursUpdate } from "./shopping-hours.js";
 import { mixedRegistry, validateMixedUpdate } from "./shopping-mixed.js";
 import { sanoRegistry, validateSanoUpdate } from "./shopping-sano.js";
@@ -412,7 +413,7 @@ export async function shoppingSources(
   return registry;
 }
 
-const regionRows = [
+const legacyHistoryRows = [
   OVERLAY_KEY,
   SUCCESSOR_KEY,
   COMPACT_KEY,
@@ -425,6 +426,10 @@ const regionRows = [
   SANO_KEY,
   MIXED_KEY,
   TENANT_HOURS_KEY,
+];
+const legacyRegistryRows = [REGISTRY_KEY, "shopping-registry"];
+const regionRows = [
+  ...legacyHistoryRows,
   packageKey("overture"),
   packageKey("osm"),
   legacyKey("overture"),
@@ -441,16 +446,17 @@ function regionBase(rows) {
     !isReference(p) && p?.manifest?.datasetVersion === REGION_BASE);
 }
 
-function writeRegionRows(update, storageLimit = GLOBAL.storage) {
+function writeRegionRows(update, storageLimit = GLOBAL.storage, extraKeys = []) {
   return new Promise((resolve, reject) => {
     const tx = db.transaction("feeds", "readwrite");
     const store = tx.objectStore("feeds");
     const rows = {};
-    let pending = regionRows.length;
+    const keys = [...regionRows, ...extraKeys];
+    let pending = keys.length;
     let error;
     tx.oncomplete = () => resolve();
     tx.onabort = () => reject(error || tx.error || Error("Shopping overlay was not committed"));
-    for (const key of regionRows) {
+    for (const key of keys) {
       const request = store.get(key);
       request.onsuccess = () => {
         rows[key] = request.result;
@@ -930,8 +936,7 @@ export function shoppingSourcesWithTenantHours(onPackage, path = "../data/shoppi
   return shoppingSourcesWithSuccessor(onPackage, path, shoppingSourcesWithMixedUpdate, tenantHoursSuccessor);
 }
 
-export async function shoppingRegionVersion(version) {
-  const rows = await feedRows(regionRows);
+async function retainedShoppingVersion(version, rows) {
   if (!rows[OVERLAY_KEY]) return null;
   const base = await generationSeven(rows);
   if (artifact(base) === version) return base;
@@ -982,6 +987,144 @@ export async function shoppingRegionVersion(version) {
   if (compact.includes(entry))
     return readCompactShoppingSuccessor(await generationTwelve(rows), entry.overlay);
   return readShoppingSuccessor(base, entry.overlay);
+}
+
+// The exact gen23 registry was approved through the parent-based loader.
+// Keep its network verification, while using the materialized snapshot on cold start.
+const shoppingDataRoot = () => new URL("../data/", location.href);
+
+function isDirectShopping(pkg) {
+  return artifact(pkg) === currentShoppingRelease.artifact &&
+    pkg.feed?.datasetVersion === currentShoppingRelease.feedVersion;
+}
+
+async function readReleasedShopping(expected) {
+  const candidate = await loadBundle(new URL(expected.path, shoppingDataRoot()), { expected });
+  checkIndependentShopping(candidate);
+  checkTotals([packageMetrics(candidate)]);
+  return candidate;
+}
+
+async function retainedCurrentShopping(primary = null) {
+  const row = primary || await shoppingCacheState("overture");
+  const direct = [row.current, row.previous].find(isDirectShopping);
+  if (direct) {
+    await verifyFeed(direct.feed);
+    validateAliases(direct.aliases, direct.feed);
+    checkIndependentShopping(direct);
+    return direct;
+  }
+  const history = await read("feeds", TENANT_HOURS_KEY);
+  const head = history?.at(-1);
+  if (head?.registryVersion !== currentShoppingRelease.registryVersion) return null;
+  const rows = await feedRows(regionRows);
+  const candidate = await readCompactShoppingSuccessor(
+    await tenantHoursSuccessor.readBase(rows), head.overlay,
+  );
+  return isDirectShopping(candidate) ? candidate : null;
+}
+
+function hasLegacyShoppingRows() {
+  const keys = [...legacyHistoryRows, ...legacyRegistryRows];
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("feeds"), store = tx.objectStore("feeds");
+    let historical = false;
+    for (const key of keys) {
+      const request = store.getKey(key);
+      request.onsuccess = () => { historical ||= request.result !== undefined; };
+    }
+    tx.oncomplete = () => resolve(historical);
+    tx.onabort = () => reject(tx.error || Error("Shopping history lookup interrupted"));
+  });
+}
+
+function storeDirectShopping(candidate) {
+  return writeRegionRows(rows => {
+    const key = packageKey("overture");
+    const row = resolvedRow(rows[key], rows[legacyKey("overture")]);
+    if ((row.current && !isDirectShopping(row.current)) || row.previous ||
+        [...legacyHistoryRows, ...legacyRegistryRows].some(key => rows[key] !== undefined))
+      throw Error("Shopping history appeared during the cold download");
+    const osm = resolvedRow(rows[packageKey("osm")], rows[legacyKey("osm")]).current;
+    checkTotals([packageMetrics(candidate), ...(osm ? [packageMetrics(osm)] : []),
+      { ancillary: 128 * 1024 }]);
+    // Existing loaders count this row. An older open tab cannot exceed the
+    // retained budget by writing history alongside the direct snapshot.
+    return [key, { current: candidate, previous: null, revision: row.revision + 1 }];
+  }, GLOBAL.storage, legacyRegistryRows);
+}
+
+export async function shoppingCurrentSources(onPackage) {
+  const oldPrimary = await shoppingCacheState("overture");
+  const retained = await retainedCurrentShopping(oldPrimary).catch(() => null);
+  if (!retained && ([oldPrimary.current, oldPrimary.previous].some(p => p && !isDirectShopping(p)) ||
+      await hasLegacyShoppingRows()))
+    return shoppingSourcesWithTenantHours(onPackage);
+
+  const osmRow = await shoppingCacheState("osm");
+  const previousOsm = [osmRow.current, osmRow.previous].find(p =>
+    p?.feed?.datasetVersion === currentShoppingRelease.osmVersion);
+  if (retained) onPackage("overture", retained);
+  if (previousOsm) onPackage("osm", previousOsm);
+  if (retained && previousOsm) return;
+
+  const registry = tenantHoursSuccessor.readRegistry(
+    new URL(currentShoppingRelease.registryPath, shoppingDataRoot()),
+  ).then(value => {
+    if (value.datasetVersion !== currentShoppingRelease.registryVersion)
+      throw Error("Wrong current Shopping registry");
+    return value;
+  });
+  const load = async (id, prior, action) => {
+    if (prior) return;
+    try {
+      const descriptor = (await registry).packages.find(p => p.id === id);
+      onPackage(id, await action(descriptor));
+    } catch (error) {
+      // A concurrent legacy activation may have completed while we waited.
+      const cached = id === "overture"
+        ? await retainedCurrentShopping().catch(() => null)
+        : await osmVersion(currentShoppingRelease.osmVersion);
+      onPackage(id, cached ? { ...cached, error: error.message } : null, error.message);
+    }
+  };
+  await Promise.all([
+    load("overture", retained, async expected => {
+      const candidate = await readReleasedShopping(expected);
+      if (!isDirectShopping(candidate) ||
+          canonical(packageMetrics(candidate)) !== canonical(expected.metrics))
+        throw Error("Current Shopping package differs from its reviewed registry");
+      await storeDirectShopping(candidate);
+      return candidate;
+    }),
+    load("osm", previousOsm, async expected => {
+      const candidate = await loadOSM(new URL(expected.path, shoppingDataRoot()), { expected });
+      if (candidate.feed.datasetVersion !== currentShoppingRelease.osmVersion ||
+          canonical(packageMetrics(candidate)) !== canonical(expected.metrics))
+        throw Error("OSM package differs from its reviewed registry");
+      return activateShoppingPackage("osm", candidate, osmRow.revision);
+    }),
+  ]);
+}
+
+export async function shoppingRegionVersion(version) {
+  const rows = await feedRows(regionRows);
+  const direct = [rows[packageKey("overture")]?.current, rows[packageKey("overture")]?.previous]
+    .find(p => isDirectShopping(p) && [artifact(p), p.feed.datasetVersion].includes(version));
+  if (direct) return direct;
+  const retained = await retainedShoppingVersion(version, rows);
+  if (retained) return retained;
+
+  const expected = shoppingRelease(version);
+  if (!expected || !navigator.onLine) return null;
+  try {
+    const candidate = await readReleasedShopping(expected);
+    if (artifact(candidate) !== expected.artifact || candidate.feed.datasetVersion !== expected.feedVersion)
+      throw Error("Historical Shopping version differs from the pinned release");
+    return candidate;
+  } catch {
+    return null;
+  }
 }
 
 export async function osmVersion(version) {
