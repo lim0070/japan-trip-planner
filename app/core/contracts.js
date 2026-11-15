@@ -220,6 +220,26 @@ const trip = shape({
   updatedAt: stamp,
 });
 const clockMinute = (x) => integer(x, 0, 1439);
+const routeCheck = shape({
+  provider: one("google", "jorudan"),
+  date,
+  departMinute: clockMinute,
+  minutes,
+  access: minutes,
+  egress: minutes,
+  endpoints: (x) => str(x, 20000),
+});
+const planAnchorShape = optionalFields(shape({
+  place: validPlace,
+  mode: one("walk", "train", "drive"),
+}), { sourceVersion: nonempty, routeCheck, stopId: identifier, allowEstimates: bool });
+const planAnchor = (anchor) => {
+  if (!planAnchorShape(anchor)) return false;
+  const check = anchor.routeCheck;
+  if (!check) return anchor.stopId === undefined;
+  return check.minutes + check.access + check.egress <= 10080 &&
+    (check.provider === "jorudan" ? anchor.mode === "train" : check.access === 0 && check.egress === 0);
+};
 const day = optionalFields(shape({
   schemaVersion: version,
   id: identifier,
@@ -227,7 +247,7 @@ const day = optionalFields(shape({
   date,
   startMinute: (x) => integer(x, 0, 1439),
   stopIds: array(identifier),
-}), { planEndMinute: clockMinute });
+}), { planEndMinute: clockMinute, planStartAnchor: planAnchor, planEndAnchor: planAnchor });
 const stopBase = shape({
   schemaVersion: version,
   id: identifier,
@@ -242,15 +262,6 @@ const stop = optionalFields(stopBase, {
   sourceDatasetVersion: nullable(nonempty),
   planLocked: bool,
   fixedStartMinute: clockMinute,
-});
-const routeCheck = shape({
-  provider: one("google", "jorudan"),
-  date,
-  departMinute: clockMinute,
-  minutes,
-  access: minutes,
-  egress: minutes,
-  endpoints: (x) => str(x, 20000),
 });
 const segment = optionalFields(shape({
   schemaVersion: version,

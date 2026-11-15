@@ -301,6 +301,45 @@ export function checkedRouteApplies(check, date, minute, endpoints) {
   return minute !== null && check.date === date &&
     check.departMinute >= minute && check.endpoints === endpoints;
 }
+export function sameRoutingPlace(a, b) {
+  return a.key === b.key && routeEndpoints(a, a) === routeEndpoints(b, b);
+}
+
+export function anchorLeg(anchor, from, to, day, minute, stopId) {
+  if (minute === null) return { leave: null, arrival: null, minutes: null, kind: null };
+  const check = anchor.routeCheck;
+  const checked = anchor.stopId === stopId &&
+    checkedRouteApplies(check || {}, day.date, minute, routeEndpoints(from, to));
+  const same = sameRoutingPlace(from, to);
+  const leave = checked ? check.departMinute : minute;
+  const minutes = checked ? check.minutes + check.access + check.egress
+    : same ? 0 : anchor.allowEstimates === false ? null : estimate(from, to, anchor.mode);
+  return {
+    leave, minutes,
+    arrival: minutes === null ? null : leave + minutes,
+    kind: checked ? check.provider : same ? "same" : minutes === null ? null : "estimate",
+    stale: !!check && !checked,
+  };
+}
+
+export function dayTravel(day, rows) {
+  const last = rows.at(-1);
+  const start = day.planStartAnchor, end = day.planEndAnchor;
+  const inbound = end && (last || start)
+    ? anchorLeg(end, last ? visitPlace(last.stop) : start.place, end.place,
+        day, last ? last.departure : day.startMinute, last?.stop.id)
+    : null;
+  const outbound = rows[0]?.outbound || null;
+  const finish = inbound ? inbound.arrival : last ? last.departure : day.startMinute;
+  const travel = [...rows.map(row => row.travel), ...(inbound ? [inbound.minutes] : [])];
+  return {
+    outbound, inbound, finish,
+    travel: travel.includes(null) ? null : travel.reduce((sum, minutes) => sum + minutes, 0),
+    estimates: outbound?.kind === "estimate" || inbound?.kind === "estimate" ||
+      rows.some(row => row.segment && (row.segment.manualMinutes === null || row.missed)),
+  };
+}
+
 export function schedule(s, day) {
   let minute = day.startMinute;
   return day.stopIds.map((stopId, i) => {
@@ -315,10 +354,13 @@ export function schedule(s, day) {
       check, day.date, minute,
       routeEndpoints(visitPlace(s.stops.find((x) => x.id === segment.fromStopId)), visitPlace(stop)),
     );
+    const outbound = i === 0 && day.planStartAnchor
+      ? anchorLeg(day.planStartAnchor, day.planStartAnchor.place, visitPlace(stop), day, minute, stop.id)
+      : null;
     const travel = segment
       ? (missed ? segment.estimatedMinutes : (segment.manualMinutes ?? segment.estimatedMinutes))
-      : 0;
-    const routeWait = check && !missed ? check.departMinute - minute : 0;
+      : outbound ? outbound.minutes : 0;
+    const routeWait = outbound ? outbound.leave - minute : check && !missed ? check.departMinute - minute : 0;
     if (minute !== null) minute += routeWait;
     minute = minute === null || travel === null ? null : minute + travel;
     const arrival = minute;
@@ -329,7 +371,7 @@ export function schedule(s, day) {
     // Keep displaying the computed itinerary if later edits introduce conflicts.
     const visitStart = start ?? arrival;
     minute = visitStart === null ? null : visitStart + stop.durationMinutes;
-    return { stop, segment, travel, arrival, visitStart, departure: minute,
+    return { stop, segment, travel, arrival, visitStart, departure: minute, outbound,
       routeWait, missed, timingConflict: start === null && arrival !== null };
   });
 }
@@ -470,16 +512,21 @@ export function planningStart(stop, place, date, arrival, finishBy) {
 export function warnings(s, day, trip) {
   const rows = schedule(s, day),
     out = [];
-  if (!rows.length) return out;
-  const end = rows.at(-1).departure;
-  if (end === null) out.push("Finish unknown — enter missing travel times.");
+  const summary = dayTravel(day, rows);
+  if (summary.outbound?.stale || summary.inbound?.stale)
+    out.push("A checked hotel leg needs review after a timing or place change.");
+  if (!rows.length && !summary.inbound) return out;
+  const end = summary.finish;
+  if (end === null) out.push(day.planEndAnchor
+    ? "Return time unknown. Check the travel legs in Auto-plan."
+    : "Finish unknown — enter missing travel times.");
   else {
     if (end - day.startMinute > trip.thresholds.dayMinutes)
       out.push("Long day — review the planned duration.");
     if (end > trip.thresholds.lateFinishMinute)
       out.push("Late finish in Japan time.");
     if (day.planEndMinute !== undefined && end > day.planEndMinute)
-      out.push("The itinerary exceeds your finish-by time.");
+      out.push(day.planEndAnchor ? "Return is after your return-by time." : "The itinerary exceeds your finish-by time.");
     const next = s.days.find(
       (d) =>
         d.tripId === trip.id &&

@@ -3,6 +3,8 @@ import * as M from "./model.js";
 export const MAX_PLAN_STOPS = 16;
 export const MAX_ROUTE_CHECKS = 64;
 const SEARCH_WIDTH = 48;
+export const START_ANCHOR = "@departure";
+export const END_ANCHOR = "@end";
 
 export function daySnapshot(state, day) {
   const ids = new Set(day.stopIds);
@@ -32,6 +34,9 @@ export function createRouteProvider(snapshot, checks, defaultMode, allowEstimate
   const routes = new Map();
   return ({ from, to, date, departMinute }) => {
     const pair = from.id + "|" + to.id;
+    const isAnchor = from.id === START_ANCHOR || to.id === END_ANCHOR;
+    if (isAnchor && M.sameRoutingPlace(from.place, to.place))
+      return [{ kind: "same", mode: defaultMode, minutes: 0 }];
     const key = pair + "|" + date;
     if (!routes.has(key)) {
       const segment = saved.get(pair);
@@ -72,10 +77,27 @@ function compare(a, b) {
     a.departure - b.departure || a.moved - b.moved;
 }
 
-export function suggestDay(snapshot, { finishBy, constraints, getRoutes }) {
+export function suggestDay(snapshot, {
+  finishBy, constraints, getRoutes, startMinute = snapshot.day.startMinute,
+  startAnchor = null, endAnchor = null, allowEstimates = true,
+}) {
   const { day, stops } = snapshot;
-  if (!day.stopIds.length || day.stopIds.length > MAX_PLAN_STOPS ||
-      finishBy < day.startMinute) return null;
+  if (day.stopIds.length > MAX_PLAN_STOPS || finishBy < startMinute) return null;
+  const start = startAnchor && { id: START_ANCHOR, place: startAnchor.place };
+  const end = endAnchor && { id: END_ANCHOR, place: endAnchor.place };
+  function finish(plan, from) {
+    if (!end || !from) return [plan];
+    return getRoutes({ from, to: end, date: day.date, departMinute: plan.departure })
+      .flatMap(route => {
+        const leave = route.check?.departMinute ?? plan.departure;
+        const arrival = leave + route.minutes;
+        return arrival > finishBy ? [] : [{
+          ...plan, departure: arrival, travel: plan.travel + route.minutes,
+          estimates: plan.estimates + Number(route.kind === "estimate"),
+          endLeg: { leave, arrival, route, from },
+        }];
+      });
+  }
   const byId = new Map(stops.map((stop) => [stop.id, stop]));
   const visits = day.stopIds.map((id) => {
     const stop = byId.get(id);
@@ -93,13 +115,14 @@ export function suggestDay(snapshot, { finishBy, constraints, getRoutes }) {
   }
   if (group.length) groups.push(group);
   let beam = [{ rows: [], used: new Set(), travel: 0, estimates: 0,
-    departure: day.startMinute, moved: 0 }];
+    departure: startMinute, moved: 0, startMinute, startAnchor, endAnchor, allowEstimates }];
+  if (!visits.length) return finish(beam[0], start).sort(compare)[0] || null;
   let position = 0;
   for (const choices of groups) {
     for (let i = 0; i < choices.length; i++, position++) {
       const next = [];
       for (const plan of beam) {
-        const from = plan.rows.at(-1)?.stop;
+        const from = plan.rows.at(-1)?.stop ?? start;
         for (const stop of choices) {
           if (plan.used.has(stop.id)) continue;
           const routes = from ? getRoutes({ from, to: stop, date: day.date,
@@ -110,14 +133,16 @@ export function suggestDay(snapshot, { finishBy, constraints, getRoutes }) {
             const start = M.planningStart(stop, stop.place, day.date, arrival, finishBy);
             if (start === null) continue;
             const departure = start + stop.durationMinutes;
-            next.push({
+            const candidate = {
+              ...plan,
               rows: [...plan.rows, { stop, leave, arrival, start, departure, route }],
               used: new Set([...plan.used, stop.id]),
               travel: plan.travel + (route?.minutes ?? 0),
               estimates: plan.estimates + Number(route?.kind === "estimate"),
               departure,
               moved: plan.moved + Number(day.stopIds[position] !== stop.id),
-            });
+            };
+            next.push(...(position === visits.length - 1 ? finish(candidate, stop) : [candidate]));
           }
         }
       }
@@ -137,10 +162,28 @@ export function suggestDay(snapshot, { finishBy, constraints, getRoutes }) {
   return beam[0];
 }
 
+function saveAnchor(day, key, anchor, route, stopId, defaultMode, allowEstimates) {
+  if (!anchor) {
+    delete day[key];
+    return;
+  }
+  day[key] = {
+    place: anchor.place,
+    mode: route?.mode ?? anchor.mode ?? defaultMode,
+    allowEstimates,
+    ...(anchor.sourceVersion ? { sourceVersion: anchor.sourceVersion } : {}),
+    ...(route?.check ? { routeCheck: route.check, ...(stopId ? { stopId } : {}) } : {}),
+  };
+}
+
 export function applyDayPlan(state, dayId, finishBy, plan) {
   const day = state.days.find((day) => day.id === dayId);
   day.stopIds = plan.rows.map(({ stop }) => stop.id);
   day.planEndMinute = finishBy;
+  day.startMinute = plan.startMinute;
+  const first = plan.rows[0], last = plan.rows.at(-1);
+  saveAnchor(day, "planStartAnchor", plan.startAnchor, first?.route, first?.stop.id, state.settings.defaultMode, plan.allowEstimates);
+  saveAnchor(day, "planEndAnchor", plan.endAnchor, plan.endLeg?.route, last?.stop.id, state.settings.defaultMode, plan.allowEstimates);
   const stops = new Map(state.stops.map((stop) => [stop.id, stop]));
   for (const { stop } of plan.rows) {
     const saved = stops.get(stop.id);

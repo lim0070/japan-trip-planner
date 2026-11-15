@@ -30,7 +30,7 @@ import {
 import * as M from "./core/model.js";
 import {
   daySnapshot, restoreDay, createRouteProvider, suggestDay, applyDayPlan,
-  MAX_PLAN_STOPS, MAX_ROUTE_CHECKS,
+  MAX_PLAN_STOPS, MAX_ROUTE_CHECKS, START_ANCHOR, END_ANCHOR,
 } from "./core/day-plan.js";
 import {
   validateState,
@@ -479,18 +479,18 @@ async function sample() {
 const context = () =>
   `<label class="inline-field">Trip<select id="trip-select">${state.trips.map((t) => `<option value="${t.id}" ${t.id === activeTrip ? "selected" : ""}>${esc(t.name)}</option>`).join("")}</select></label>`;
 function dayPlanningHTML(rows, d) {
-  if (!rows.length) return "";
-  const finish = rows.at(-1).departure;
-  const travel = rows.every((row) => row.travel !== null)
-    ? rows.reduce((sum, row) => sum + row.travel, 0) + " min travel"
-    : "Some travel times unknown";
-  const estimates = rows.some((row) => row.segment &&
-    (row.segment.manualMinutes === null || row.missed));
+  const { outbound, inbound, finish, travel, estimates } = M.dayTravel(d, rows);
+  const target = d.planEndAnchor ? "return-by" : "finish-by";
   const slack = finish === null || d.planEndMinute === undefined ? "" :
     finish > d.planEndMinute ? ` · ${finish - d.planEndMinute} min over` :
-      ` · ${d.planEndMinute - finish} min before finish-by`;
+      ` · ${d.planEndMinute - finish} min before ${target}`;
+  const summary = !rows.length && !inbound ? "No visits or travel legs" :
+    `${rows.length} visits · ${travel === null ? "Some travel times unknown" : travel + " min travel"}${estimates ? " (includes estimates)" : ""} · ${finish === null ? "Arrival unknown" : (inbound ? "Arrive " : "Finish ") + M.timeLabel(d.date, finish)}${slack}`;
+  const leg = (anchor, timing, label) => anchor ? `<p><strong>${label} ${esc(M.name(anchor.place))}</strong>${timing ? ` · ${timing.minutes === null ? "Travel time unknown" : timing.minutes + " min · " + routeNames[timing.kind]}` : ""}</p>` : "";
+  const anchors = leg(d.planStartAnchor, outbound, "From") +
+    leg(d.planEndAnchor, inbound, "To");
   return `<section class="day-planning" aria-label="Day planning">
-    <div><h2>Day planning</h2><p>${rows.length} visits · ${travel}${estimates ? " (includes estimates)" : ""} · ${finish === null ? "Finish unknown" : "Finish " + M.timeLabel(d.date, finish)}${slack}</p></div>
+    <div><h2>Day planning</h2><p>${summary}</p>${anchors}</div>
     <div class="actions"><button data-action="auto-plan">Auto-plan day</button>${planUndo.get(d.id)?.applied === canonical(daySnapshot(state, d)) ? '<button data-action="undo-plan">Undo auto-plan</button>' : ""}</div>
   </section>`;
 }
@@ -500,36 +500,51 @@ const routeNames = {
   jorudan: "Jorudan + access",
   manual: "Manual minutes",
   estimate: "Rough estimate",
+  same: "Same place",
 };
 const jorudanURL = "https://www.jorudan.co.jp/norikae/";
 
 function autoPlanDialog() {
   const d = day();
-  if (!d?.stopIds.length) return;
+  if (!d) return;
   if (d.stopIds.length > MAX_PLAN_STOPS) {
     modal("Auto-plan day", `<p>Auto-plan supports up to ${MAX_PLAN_STOPS} visits per day. Use the timeline to move visits to another day or plan this day manually.</p>`);
     return;
   }
   const snapshot = daySnapshot(state, d);
   const original = canonical(snapshot);
+  const originalBackup = backup(state, d.tripId);
+  const defaultMode = state.settings.defaultMode;
   const stops = d.stopIds.map((id) => snapshot.stops.find((stop) => stop.id === id));
   const places = new Map(stops.map((stop) => [stop.id, M.visitPlace(stop)]));
   const names = (id) => esc(M.name(places.get(id)));
   const current = M.schedule(state, d);
+  const existing = M.dayTravel(d, current);
   const { dayMinutes, lateFinishMinute } = trip().thresholds;
   const settings = {
+    startMinute: d.startMinute,
+    startAnchor: d.planStartAnchor ?? null,
+    endAnchor: d.planEndAnchor ?? null,
     finishBy: d.planEndMinute ?? Math.max(d.startMinute, Math.min(lateFinishMinute, d.startMinute + dayMinutes)),
-    allowEstimates: true,
+    allowEstimates: d.planStartAnchor?.allowEstimates ?? d.planEndAnchor?.allowEstimates ?? true,
     constraints: Object.fromEntries(stops.map((stop) => [stop.id, {
       planLocked: !!stop.planLocked, fixedStartMinute: stop.fixedStartMinute,
     }])),
   };
   const checks = [];
+  if (d.planStartAnchor?.routeCheck && places.has(d.planStartAnchor.stopId))
+    checks.push({ from: START_ANCHOR, to: d.planStartAnchor.stopId,
+      mode: d.planStartAnchor.mode, ...d.planStartAnchor.routeCheck });
+  if (d.planEndAnchor?.routeCheck && (places.has(d.planEndAnchor.stopId) ||
+      (!stops.length && d.planStartAnchor && !d.planEndAnchor.stopId)))
+    checks.push({ from: d.planEndAnchor.stopId ?? START_ANCHOR, to: END_ANCHOR,
+      mode: d.planEndAnchor.mode, ...d.planEndAnchor.routeCheck });
   const stillCurrent = (s) => {
     const saved = s.days.find((item) => item.id === d.id);
-    return saved && canonical(daySnapshot(s, saved)) === original;
+    return saved && s.settings.defaultMode === defaultMode && canonical(daySnapshot(s, saved)) === original;
   };
   const readSettings = (f) => {
+    settings.startMinute = timeMinute(val(f, "start"));
     settings.finishBy = timeMinute(val(f, "finish"));
     settings.allowEstimates = f.has("estimates");
     for (const stop of stops) {
@@ -541,9 +556,16 @@ function autoPlanDialog() {
     }
   };
   function controls() {
+    if (settings.startAnchor) places.set(START_ANCHOR, settings.startAnchor.place);
+    else places.delete(START_ANCHOR);
+    if (settings.endAnchor) places.set(END_ANCHOR, settings.endAnchor.place);
+    else places.delete(END_ANCHOR);
+    const anchorControl = (side, label) => `<div><p>${label}${settings[side + "Anchor"] ? " · " + esc(M.name(settings[side + "Anchor"].place)) : ""}</p><button type="button" id="plan-${side}-anchor">Choose ${label.toLowerCase()}</button></div>`;
     modal("Auto-plan day", `<form class="plan-dialog">
-      <p>${d.date} · Japan time · Start ${hhmm(d.startMinute)}</p>
-      <div class="plan-options"><label>Finish by<input type="time" name="finish" required value="${hhmm(settings.finishBy)}"></label>
+      <p>${d.date} · Japan time</p>
+      <div class="plan-options">${anchorControl("start", "Departure place")}${anchorControl("end", "End place")}</div>
+      <div class="plan-options"><label>Depart at<input type="time" name="start" required value="${hhmm(settings.startMinute)}"></label>
+      <label>${settings.endAnchor ? "Return by" : "Finish by"}<input type="time" name="finish" required value="${hhmm(settings.finishBy)}"></label>
       <label class="check"><input type="checkbox" name="estimates" ${settings.allowEstimates ? "checked" : ""}>Allow rough estimates</label></div>
       <p class="muted">Lock a visit’s position to keep the stops on either side in their own groups. Enter a booking time to hold its start.</p>
       <div class="plan-constraints">${stops.map(({ id, durationMinutes }, i) => {
@@ -552,7 +574,7 @@ function autoPlanDialog() {
           <label class="check"><input name="lock-${id}" aria-label="Lock position ${i + 1}" type="checkbox" ${constraint.planLocked ? "checked" : ""}>Lock</label>
           <label><span>Booking</span><input name="fixed-${id}" aria-label="Booking time ${i + 1}" type="time" value="${constraint.fixedStartMinute === undefined ? "" : hhmm(constraint.fixedStartMinute)}"></label></div>`;
       }).join("")}</div>
-      ${stops.length > 1 ? `<details ${checks.length ? "open" : ""}><summary>Route checks${checks.length ? " (" + checks.length + ")" : ""}</summary>
+      ${places.size > 1 ? `<details ${checks.length ? "open" : ""}><summary>Route checks${checks.length ? " (" + checks.length + ")" : ""}</summary>
         <p class="muted">Look up a directed leg in Google Maps or Jorudan and enter the time you found. Add different departure times to compare them.</p>
         ${checks.length ? `<ul class="plan-check-list">${checks.map((c, i) => `<li><span>${names(c.from)} → ${names(c.to)} · ${hhmm(c.departMinute)} · ${c.minutes + c.access + c.egress} min · ${routeNames[c.provider]}</span><button type="button" data-remove-check="${i}" aria-label="Remove route check ${i + 1}">Remove</button></li>`).join("")}</ul>` : ""}
         <button type="button" id="plan-add-check" ${checks.length >= MAX_ROUTE_CHECKS ? "disabled" : ""}>Add route check</button></details>` : ""}
@@ -566,6 +588,8 @@ function autoPlanDialog() {
           formError(err);
         }
       };
+      $("plan-start-anchor").onclick = () => editChecks(() => anchorForm("start"));
+      $("plan-end-anchor").onclick = () => editChecks(() => anchorForm("end"));
       $("plan-add-check")?.addEventListener("click", () => editChecks(routeForm));
       form.querySelectorAll("[data-remove-check]").forEach((button) => {
         button.onclick = () => editChecks(() => {
@@ -576,22 +600,88 @@ function autoPlanDialog() {
       setupForm((f) => {
         if (!stillCurrent(state)) throw Error("The itinerary changed. Reopen Auto-plan day.");
         readSettings(f);
-        if (settings.finishBy < d.startMinute) throw Error("Finish-by time must be at or after the day start.");
-        const getRoutes = createRouteProvider(snapshot, checks, state.settings.defaultMode, settings.allowEstimates);
+        if (settings.finishBy < settings.startMinute)
+          throw Error(settings.endAnchor ? "Return-by time must be at or after departure." : "Finish-by time must be at or after departure.");
+        const getRoutes = createRouteProvider(snapshot, checks, defaultMode, settings.allowEstimates);
         const suggestion = suggestDay(snapshot, { ...settings, getRoutes });
-        if (!suggestion) throw Error("No schedule found within these limits. Check route times, opening hours, bookings, locked positions and the finish-by time.");
+        if (!suggestion) throw Error(settings.endAnchor
+          ? "Auto-plan found no schedule that meets the return-by time. Check travel times, hours, bookings and locks."
+          : "No schedule found within these limits. Check route times, opening hours, bookings, locked positions and the finish-by time.");
         preview(suggestion);
       });
     });
   }
+  function anchorForm(side) {
+    const key = side + "Anchor";
+    const anchor = settings[key];
+    const p = anchor?.place;
+    const end = side === "end";
+    modal(end ? "Choose end place" : "Choose departure place", `<form class="plan-dialog">
+      <label>Place<select name="choice" aria-label="Place">
+        <option value="">No ${end ? "end" : "departure"} place</option>
+        ${p ? `<option value="keep" selected>Keep ${esc(M.name(p))}</option>` : ""}
+        ${end && settings.startAnchor ? '<option value="same">Same as departure place</option>' : ""}
+        <option value="manual">Enter a place</option>
+        ${state.places.map(saved => `<option value="${saved.id}">${esc(M.name(M.effective(saved)))}</option>`).join("")}
+      </select></label>
+      <div id="anchor-manual" hidden>
+        <label>Place name<input name="name" maxlength="250" value="${esc(p ? M.name(p) : "")}"></label>
+        <label>Address (optional)<input name="address" maxlength="500" value="${esc(p?.address.ja ?? "")}"></label>
+        <label>Coordinates or Google Maps link (optional)<input name="position" value="${p && M.located(p) ? p.location.lat + "," + p.location.lng : ""}"></label>
+        <p class="muted">Coordinates enable rough travel estimates. An address can be used for a route you check yourself.</p>
+      </div>
+      <p id="form-error" class="form-error" role="alert"></p>
+      <div class="dialog-footer"><button type="button" id="plan-anchor-back">Back</button><button type="submit" class="primary">Use this place</button></div>
+    </form>`, () => {
+      const form = $("dialog-body").querySelector("form");
+      form.elements.choice.onchange = () => {
+        const manual = form.elements.choice.value === "manual";
+        $("anchor-manual").hidden = !manual;
+        form.elements.name.required = manual;
+      };
+      $("plan-anchor-back").onclick = controls;
+      setupForm(f => {
+        const choice = val(f, "choice");
+        let next = null;
+        if (choice === "keep") next = anchor;
+        else if (choice === "same") {
+          const { place, sourceVersion } = settings.startAnchor;
+          next = { place, sourceVersion };
+        } else if (choice === "manual") {
+          const name = val(f, "name"), position = val(f, "position");
+          if (!name) throw Error("Enter a place name.");
+          const coords = position && (M.parseCoordinates(position) || M.parseMapURL(position));
+          if (position && !coords) throw Error("Enter valid latitude and longitude or a Google Maps coordinates link.");
+          const place = M.manualPlace();
+          place.names.en = name;
+          place.address.ja = val(f, "address") || null;
+          if (coords) Object.assign(place.location, coords, { availability: "located", method: "manual" });
+          next = { place };
+        } else if (choice) {
+          const saved = state.places.find(item => item.id === choice);
+          if (!saved) throw Error("That saved place is unavailable.");
+          next = { place: M.effective(saved), sourceVersion: saved.sourceRef?.datasetVersion };
+        }
+        if (canonical(next?.place ?? null) !== canonical(anchor?.place ?? null)) {
+          const id = end ? END_ANCHOR : START_ANCHOR;
+          for (let i = checks.length - 1; i >= 0; i--)
+            if (checks[i].from === id || checks[i].to === id) checks.splice(i, 1);
+        }
+        settings[key] = next;
+        controls();
+      });
+    });
+  }
   function routeForm() {
-    const options = stops.map(({ id }) => `<option value="${id}">${names(id)}</option>`).join("");
+    const ids = [...(settings.startAnchor ? [START_ANCHOR] : []), ...stops.map(stop => stop.id),
+      ...(settings.endAnchor ? [END_ANCHOR] : [])];
+    const options = (values) => values.map(id => `<option value="${id}">${names(id)}</option>`).join("");
     modal("Add a route check", `<form class="plan-dialog">
-      <div class="plan-options"><label>From<select name="from">${options}</select></label>
-      <label>To<select name="to">${options}</select></label>
+      <div class="plan-options"><label>From<select name="from">${options(ids.filter(id => id !== END_ANCHOR))}</select></label>
+      <label>To<select name="to">${options(ids.filter(id => id !== START_ANCHOR))}</select></label>
       <label>Provider<select name="provider"><option value="google">Google Maps</option><option value="jorudan">Jorudan</option></select></label>
-      <label>Travel mode<select name="mode">${["walk","train","drive"].map((mode) => `<option ${mode === state.settings.defaultMode ? "selected" : ""}>${mode}</option>`).join("")}</select></label></div>
-      <div class="plan-options"><label>Leave the first place at<input name="depart" type="time" required value="${hhmm(d.startMinute)}"></label>
+      <label>Travel mode<select name="mode">${["walk","train","drive"].map((mode) => `<option ${mode === defaultMode ? "selected" : ""}>${mode}</option>`).join("")}</select></label></div>
+      <div class="plan-options"><label>Leave the first place at<input name="depart" type="time" required value="${hhmm(settings.startMinute)}"></label>
       <label><span id="plan-duration-label">Door-to-door minutes</span><input type="number" name="minutes" min="0" max="10080" step="1" required></label></div>
       <div class="plan-options" id="plan-station-fields" hidden>
         <label>To departure station (min)<input name="access" type="number" min="0" max="10080" step="1" placeholder="0 if none"></label>
@@ -603,7 +693,7 @@ function autoPlanDialog() {
       <div class="dialog-footer"><button type="button" id="plan-route-back">Back</button><button class="primary" type="submit">Add to preview</button></div>
     </form>`, () => {
       const form = $("dialog-body").querySelector("form");
-      form.elements.to.selectedIndex = 1;
+      if (form.elements.from.value === form.elements.to.value) form.elements.to.selectedIndex = 1;
       const refreshLink = () => {
         const isTrain = form.elements.provider.value === "jorudan";
         if (isTrain) form.elements.mode.value = "train";
@@ -627,7 +717,7 @@ function autoPlanDialog() {
       $("plan-route-back").onclick = controls;
       setupForm((f) => {
         const from = val(f, "from"), to = val(f, "to"), provider = val(f, "provider");
-        if (from === to) throw Error("Choose two different visits.");
+        if (from === to) throw Error("Choose two different places.");
         const mode = provider === "jorudan" ? "train" : val(f, "mode");
         const departMinute = timeMinute(val(f, "depart"));
         const minutes = int(f, "minutes");
@@ -647,24 +737,29 @@ function autoPlanDialog() {
   function preview(plan) {
     const time = (n) => M.timeLabel(d.date, n);
     const timing = (start, finish) => start === null ? "Time unknown" : `${time(start)}–${time(finish)}`;
-    const oldTravel = current.every((row) => row.travel !== null)
-      ? current.reduce((sum, row) => sum + row.travel, 0) + " min travel" : "Travel time incomplete";
+    const oldTravel = existing.travel === null ? "Travel time incomplete" : existing.travel + " min travel";
+    const finishLabel = (finish, returns) => finish === null ? "Arrival unknown" :
+      (returns ? "Arrive " : "Finish ") + time(finish);
+    const routeText = (route, leave) => `Leave ${time(leave)} · ${route.minutes} min ${route.mode} · ${routeNames[route.kind]}`;
     modal("Compare day schedules", `<div class="plan-dialog">
       <div class="plan-comparison">
-        <section><h3>Current</h3><p>${oldTravel} · ${current.at(-1).departure === null ? "Finish unknown" : "Finish " + time(current.at(-1).departure)}</p>
+        <section><h3>Current</h3><p>${oldTravel} · ${finishLabel(existing.finish, existing.inbound)}</p>
         <ol>${current.map((r) => `<li><strong>${names(r.stop.id)}</strong><br>${timing(r.visitStart, r.departure)}${r.segment ? `<br><small>${r.travel === null ? "Unknown travel" : r.travel + " min travel"}</small>` : ""}${visitHoursHTML(places.get(r.stop.id), d.date, r)}</li>`).join("")}</ol></section>
-        <section><h3>Suggested</h3><p>${plan.travel} min travel · Finish ${time(plan.departure)} · ${settings.finishBy - plan.departure} min free</p>
+        <section><h3>Suggested</h3><p>${plan.travel} min travel · ${plan.departure - settings.startMinute} min elapsed · ${finishLabel(plan.departure, plan.endLeg)} · ${settings.finishBy - plan.departure} min free</p>
+        ${settings.startAnchor ? `<p>Depart ${names(START_ANCHOR)} at ${time(settings.startMinute)}</p>` : ""}
         <ol>${plan.rows.map((r, i) => `<li><strong>${names(r.stop.id)}</strong><br>${timing(r.start, r.departure)}
-          ${r.route ? `<br><small>Leave ${time(r.leave)} · ${r.route.minutes} min ${r.route.mode} · ${routeNames[r.route.kind]}${r.leave > plan.rows[i - 1].departure ? ` · Wait ${r.leave - plan.rows[i - 1].departure} min` : ""}</small>` : ""}
+          ${r.route ? `<br><small>${routeText(r.route, r.leave)}${r.leave > (plan.rows[i - 1]?.departure ?? settings.startMinute) ? ` · Wait ${r.leave - (plan.rows[i - 1]?.departure ?? settings.startMinute)} min` : ""}</small>` : ""}
           ${r.start > r.arrival ? `<br><small>Arrive ${time(r.arrival)} · Wait ${r.start - r.arrival} min before visit</small>` : ""}
-          ${visitHoursHTML(places.get(r.stop.id), d.date, { ...r, visitStart: r.start })}</li>`).join("")}</ol></section>
+          ${visitHoursHTML(places.get(r.stop.id), d.date, { ...r, visitStart: r.start })}</li>`).join("")}</ol>
+        ${plan.endLeg ? `<p><strong>Arrive at ${names(END_ANCHOR)} at ${time(plan.endLeg.arrival)}</strong><br><small>${routeText(plan.endLeg.route, plan.endLeg.leave)}</small></p>` : ""}
+        ${!plan.rows.length && !plan.endLeg ? "<p>No visits or travel legs to time.</p>" : ""}</section>
       </div>
       <p class="muted">${plan.estimates ? `${plan.estimates} leg(s) use rough estimates. ` : ""}The search favors checked legs, then shorter travel. Confirm hours and time-sensitive routes before travel.</p>
       <p class="muted">Undo is available in this tab until you edit this day or reload. Export the original trip to keep a backup.</p>
       <div class="dialog-footer"><button id="plan-back">Back</button><button id="plan-export">Export original trip</button><button class="primary" id="plan-apply">Apply schedule</button></div>
     </div>`, () => {
       $("plan-back").onclick = controls;
-      $("plan-export").onclick = () => download(backup(state, d.tripId), "japan-trip-before-auto-plan.json");
+      $("plan-export").onclick = () => download(originalBackup, "japan-trip-before-auto-plan.json");
       $("plan-apply").onclick = async () => {
         if (await commit((s) => {
           if (!stillCurrent(s)) throw Error("The itinerary changed. Reopen Auto-plan day.");
@@ -1884,7 +1979,7 @@ function renderSettings() {
     last = localStorage.getItem("japan-trip-last-export") || last;
   } catch {}
   $("content").innerHTML =
-    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div><p class="backup-date">Last export prepared: ${esc(last)}. Confirm that you saved the downloaded file.</p><details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.6.10<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
+    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div><p class="backup-date">Last export prepared: ${esc(last)}. Confirm that you saved the downloaded file.</p><details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.6.11<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
   $("setting-theme").onchange = (e) =>
     commit((s) => (s.settings.theme = e.target.value));
   $("setting-mode").onchange = (e) =>

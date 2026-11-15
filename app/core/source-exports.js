@@ -54,6 +54,14 @@ export function savedOSMVersions(state) {
       );
     versions.add(p.sourceRef.datasetVersion);
   }
+  for (const day of state.days) {
+    for (const anchor of [day.planStartAnchor, day.planEndAnchor]) {
+      if (!anchor || !isOSM(anchor.place)) continue;
+      if (!anchor.sourceVersion)
+        throw Error("Historical OSM anchor version is unknown; JSON preserves the place snapshot.");
+      versions.add(anchor.sourceVersion);
+    }
+  }
   for (const st of state.stops.filter((st) => isOSM(st.placeSnapshot))) {
     const local = state.places.find((p) => p.id === st.placeId);
     const v =
