@@ -1,3 +1,4 @@
+import { readBounded } from "./core/shopping-bundle.js";
 import {
   shoppingPreferences,
   preserveSourceVersions,
@@ -1538,12 +1539,7 @@ function searchDialog(purpose) {
             throw Error(
               "Search needs a connection. Use manual entry or cached results.",
             );
-          const c = await fetch("config.json", { cache: "no-store" });
-          if (!c.ok)
-            throw Error(
-              "Cannot check current search configuration. Use manual entry.",
-            );
-          const cfg = await c.json();
+          const cfg = await loadConfig();
           if (
             !cfg.personalSingleDevice ||
             !cfg.nominatimUrl ||
@@ -1575,6 +1571,7 @@ function searchDialog(purpose) {
               });
               const r = await fetch(u, {
                 referrerPolicy: "strict-origin-when-cross-origin",
+                signal: AbortSignal.timeout(10000),
               });
               if (!r.ok) throw Error("Search unavailable. Use manual entry.");
               const data = await r.json();
@@ -1645,6 +1642,16 @@ function searchDialog(purpose) {
       }),
   );
 }
+function addBasemap() {
+  if (!map) return;
+  if (config.tilesUrl && (!matchMedia("(max-width:760px)").matches || mapMode))
+    L.tileLayer(config.tilesUrl, {
+      attribution:
+        '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+      keepBuffer: 0,
+    }).addTo(map);
+}
 function initMap(kind, items) {
   if (!$("map") || !window.L) return;
   map = L.map("map", {
@@ -1654,13 +1661,7 @@ function initMap(kind, items) {
     fadeAnimation: false,
     markerZoomAnimation: false,
   }).setView([37.5, 138], 5);
-  if (config.tilesUrl && (!matchMedia("(max-width:760px)").matches || mapMode))
-    L.tileLayer(config.tilesUrl, {
-      attribution:
-        '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 19,
-      keepBuffer: 0,
-    }).addTo(map);
+  addBasemap();
   const osmOnMap =
     items.some((x) => isOSM(x.p)) ||
     (kind === "discover" &&
@@ -1860,13 +1861,13 @@ function showPin(id) {
       ),
     );
 }
-function renderSettings() {
-  let last = "No backup exported from this browser yet";
-  try {
-    last = localStorage.getItem("japan-trip-last-export") || last;
-  } catch {}
-  $("content").innerHTML =
-    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div><p class="backup-date">Last export prepared: ${esc(last)}. Confirm that you saved the downloaded file.</p><details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary>${Object.values(
+function renderSourceStatus() {
+  return `${Object.entries({
+      saunachelin: "Saunas", tabelog: "Food", shopping: "Shopping", "shopping:osm": "Shopping OSM",
+    }).filter(([key]) => sourceLoad[key] !== "ready")
+      .map(([key, label]) => `<p class="muted">${label} · ${{
+        loading: "Loading…", cached: "Using cached data", unavailable: "Unavailable · reopen online to retry",
+      }[sourceLoad[key]]}</p>`).join("")}${Object.values(
       feeds,
     )
       .map(
@@ -1875,7 +1876,15 @@ function renderSettings() {
       )
       .join(
         "",
-      )}<p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open once online, then in iPhone Safari choose Share → Add to Home Screen. The previously loaded app, bundled Discover data, trips and saved places work offline. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.6.8<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
+      )}`;
+}
+function renderSettings() {
+  let last = "No backup exported from this browser yet";
+  try {
+    last = localStorage.getItem("japan-trip-last-export") || last;
+  } catch {}
+  $("content").innerHTML =
+    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div><p class="backup-date">Last export prepared: ${esc(last)}. Confirm that you saved the downloaded file.</p><details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.6.9<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
   $("setting-theme").onchange = (e) =>
     commit((s) => (s.settings.theme = e.target.value));
   $("setting-mode").onchange = (e) =>
@@ -2277,9 +2286,18 @@ async function serviceWorker() {
       }
     };
     show();
-    reg.addEventListener("updatefound", () =>
-      reg.installing?.addEventListener("statechange", show),
-    );
+    const watchInstall = () => {
+      const worker = reg.installing;
+      const check = () => {
+        show();
+        if (worker?.state === "redundant" && !reg.waiting)
+          toast("Offline setup did not finish. Reopen online to retry.");
+      };
+      worker?.addEventListener("statechange", check);
+      check();
+    };
+    watchInstall();
+    reg.addEventListener("updatefound", watchInstall);
     let reloading = false;
     navigator.serviceWorker.addEventListener("controllerchange", () => {
       if (requestedUpdate && !reloading) {
@@ -2291,40 +2309,67 @@ async function serviceWorker() {
     toast("Offline shell setup failed. Local trips still save; retry online.");
   }
 }
-try {
-  await DB.open();
-  state = await DB.load();
-  theme();
-  const responses = await Promise.allSettled([
-    DB.feed("saunachelin", "../data/saunas.v1.json"),
-    DB.feed("tabelog", "../data/food.v1.json"),
-    fetch("config.json").then((r) => {
-      if (!r.ok) throw Error("Configuration unavailable");
-      return r.json();
-    }),
-  ]);
-  responses.forEach((r, i) => {
-    if (r.status === "fulfilled") {
-      if (i === 2) config = r.value;
-      else {
-        feeds[r.value.value.source.namespace] = r.value.value;
-        sourceLoad[r.value.value.source.namespace] = r.value.error
-          ? "cached"
-          : "ready";
-        if (r.value.error)
-          toast("Using previous source snapshot: " + r.value.error);
-      }
-    } else {
-      if (i < 2)
-        sourceLoad[i === 0 ? "saunachelin" : "tabelog"] = "unavailable";
-      error(
-        "Some source data is unavailable. Manual trip editing still works. " +
-          r.reason.message,
-      );
-    }
-  });
-  ready = true;
-  render();
+async function loadConfig() {
+  const fetchConfig = (url, options) => fetch(url, { ...options, cache: "no-store" });
+  const { text } = await readBounded("config.json", 16 * 1024, null, fetchConfig, 5000);
+  const value = parseJSON(text);
+  if (!value || typeof value !== "object" || Array.isArray(value))
+    throw Error("Invalid service configuration");
+  return {
+    tilesUrl: serviceUrl(value.tilesUrl),
+    nominatimUrl: serviceUrl(value.nominatimUrl),
+    personalSingleDevice: value.personalSingleDevice === true,
+  };
+}
+
+function serviceUrl(value) {
+  if (typeof value !== "string" || !value.trim()) return null;
+  try {
+    const url = new URL(value, location.href);
+    return ["https:", "http:"].includes(url.protocol) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function refreshSourceView() {
+  if (screen === "settings") {
+    $("source-status").innerHTML = renderSourceStatus();
+    return;
+  }
+  if (!["discover", "spots"].includes(screen)) return;
+  const field = document.activeElement;
+  if (field?.matches("#local-search, #spots-search")) {
+    const start = field.selectionStart, end = field.selectionEnd;
+    render();
+    const input = $(field.id);
+    input?.focus({ preventScroll: true });
+    input?.setSelectionRange(start, end);
+  } else render();
+}
+
+async function refreshFeed(namespace, path) {
+  const show = (feed, status) => {
+    feeds[namespace] = feed;
+    sourceLoad[namespace] = status;
+    refreshSourceView();
+  };
+  try {
+    const { value, error } = await DB.feed(namespace, path, cached => show(cached, "cached"));
+    show(value, error ? "cached" : "ready");
+  } catch {
+    sourceLoad[namespace] = "unavailable";
+    refreshSourceView();
+  }
+}
+
+function refreshSources() {
+  void refreshFeed("saunachelin", "../data/saunas.v1.json");
+  void refreshFeed("tabelog", "../data/food.v1.json");
+  void loadConfig().then(value => {
+    config = value;
+    addBasemap();
+  }).catch(() => {});
   DB.shoppingSourcesWithTenantHours((id, result) => {
     const key = id === "osm" ? "shopping:osm" : "shopping";
     if (result) {
@@ -2338,12 +2383,22 @@ try {
       if (id === "overture") shoppingAliases = aliasIndex(result.aliases);
       sourceLoad[key] = result.error ? "cached" : "ready";
     } else sourceLoad[key] = "unavailable";
-    if (screen === "discover" || screen === "settings") render();
+    refreshSourceView();
   }).catch(() => {
-    sourceLoad["shopping:osm"] = "unavailable";
-    if (screen === "discover" || screen === "settings") render();
+    for (const key of ["shopping", "shopping:osm"])
+      if (sourceLoad[key] === "loading") sourceLoad[key] = "unavailable";
+    refreshSourceView();
   });
-  await serviceWorker();
+}
+
+try {
+  await DB.open();
+  state = await DB.load();
+  theme();
+  ready = true;
+  render();
+  void serviceWorker();
+  refreshSources();
 } catch (e) {
   ready = true;
   $("content").innerHTML =

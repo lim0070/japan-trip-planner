@@ -1,5 +1,5 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v30";
+  CACHE = PREFIX + "v31";
 const FILES = [
   "./",
   "index.html",
@@ -36,20 +36,20 @@ const FILES = [
   "vendor/leaflet.markercluster.js",
   "vendor/MarkerCluster.css",
   "vendor/MarkerCluster.Default.css",
-  "../data/saunas.v1.json",
-  "../data/food.v1.json",
-  "../data/shopping.v1.json",
-  "../data/shopping-LICENSES/index.json",
-  "../data/shopping-LICENSES/Apache-2.0.txt",
-  "../data/shopping-LICENSES/CDLA-Permissive-2.0.txt",
-  "../data/shopping-LICENSES/EXPANSION-NOTICE.txt",
-  "../data/shopping-LICENSES/Foursquare-NOTICE.txt",
-  "../data/shopping-LICENSES/README.txt",
-  "../data/shopping-LICENSES/source-inventory.json",
-  "../data/shopping-LICENSES/source-to-notice.json",
 ];
 self.addEventListener("install", (e) =>
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES))),
+  e.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+    try {
+      const signal = AbortSignal.timeout(20000);
+      await cache.addAll(FILES.map(path => new Request(
+        new URL(path, self.location.href), { cache: "reload", signal },
+      )));
+    } catch (error) {
+      await caches.delete(CACHE);
+      throw error;
+    }
+  })()),
 );
 self.addEventListener("message", (e) => {
   if (e.data?.type === "ACTIVATE") self.skipWaiting();
@@ -90,15 +90,6 @@ self.addEventListener("fetch", (e) => {
           (await cache.match(new URL("index.html", base).href)) ||
           fetch(e.request)
         );
-      if (u.pathname.endsWith(".v1.json")) {
-        try {
-          const r = await fetch(e.request);
-          if (r.ok) return r;
-          throw Error("Source unavailable");
-        } catch {
-          return (await cache.match(e.request)) || Response.error();
-        }
-      }
       return (await cache.match(e.request)) || fetch(e.request);
     })(),
   );

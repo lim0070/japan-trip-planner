@@ -90,28 +90,53 @@ export function save(value) {
       reject(Error(message || tx.error?.message || "Save was not committed."));
   });
 }
-export async function feed(namespace, path) {
+async function verifiedCachedFeed(row, namespace) {
+  for (const value of [row?.current, row?.previous]) {
+    if (value?.source?.namespace !== namespace) continue;
+    try {
+      return await verifyFeed(value);
+    } catch {
+      // A damaged current entry cannot hide a valid previous feed.
+    }
+  }
+  return null;
+}
+
+export async function feed(namespace, path, onCached) {
   const old = await read("feeds", namespace);
+  const cached = await verifiedCachedFeed(old, namespace);
+  if (cached) onCached?.(cached);
   try {
     const fresh = await verifyFeed(
       parseJSON((await readBounded(path, 20 * 1024 * 1024)).text),
     );
     if (fresh.source.namespace !== namespace)
       throw Error("Wrong source namespace");
-    if (old?.current?.datasetVersion !== fresh.datasetVersion)
-      await new Promise((resolve, reject) => {
-        const tx = db.transaction("feeds", "readwrite");
-        tx.objectStore("feeds").put(
-          { current: fresh, previous: old?.current || null },
-          namespace,
-        );
-        tx.oncomplete = resolve;
-        tx.onerror = () => reject(tx.error);
-      });
-    return { value: fresh, error: null };
+    if (cached && cached === old?.current && cached.datasetVersion === fresh.datasetVersion)
+      return { value: fresh, error: null };
+    const winner = await new Promise((resolve, reject) => {
+      const tx = db.transaction("feeds", "readwrite");
+      const store = tx.objectStore("feeds");
+      const get = store.get(namespace);
+      let other;
+      get.onsuccess = () => {
+        const row = get.result;
+        if (row?.revision === old?.revision &&
+            row?.current?.datasetVersion === old?.current?.datasetVersion)
+          store.put({
+            current: fresh,
+            previous: cached,
+            revision: (old?.revision || 0) + 1,
+          }, namespace);
+        else other = row;
+      };
+      tx.oncomplete = () => resolve(other);
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error || Error("Source cache update aborted"));
+    });
+    return { value: (await verifiedCachedFeed(winner, namespace)) || fresh, error: null };
   } catch (e) {
-    if (old?.current) return { value: old.current, error: e.message };
-    if (old?.previous) return { value: old.previous, error: e.message };
+    if (cached) return { value: cached, error: e.message };
     throw e;
   }
 }

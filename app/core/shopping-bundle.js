@@ -67,10 +67,10 @@ export const byteOrder = (a, b) => {
   return x.length - y.length;
 };
 // Count bytes from the decoded HTTP body (before UTF8 decoding), never Content-Length.
-export async function readBounded(url, max, expected = null, fetcher = fetch) {
+export async function readBounded(url, max, expected = null, fetcher = fetch, timeout = 15000) {
   const r = await fetcher(url, {
     redirect: "error",
-    signal: AbortSignal.timeout(15000),
+    signal: AbortSignal.timeout(timeout),
   });
   if (!r.ok || !r.body) fail("resource unavailable");
   const reader = r.body.getReader(),
