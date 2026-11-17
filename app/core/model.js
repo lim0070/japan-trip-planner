@@ -595,7 +595,7 @@ export function filterPlaces(
       const q = (f.q || "").normalize("NFKC").toLowerCase();
       if (
         q &&
-        !Object.values({ ...p.names, ...p.address })
+        ![...Object.values(p.names || {}), ...Object.values(p.address || {})]
           .filter(Boolean)
           .join(" ")
           .normalize("NFKC")

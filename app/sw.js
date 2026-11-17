@@ -1,5 +1,5 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v33";
+  CACHE = PREFIX + "v34";
 const FILES = [
   "./",
   "index.html",
