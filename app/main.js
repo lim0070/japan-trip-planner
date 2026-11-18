@@ -28,6 +28,7 @@ import {
   layerPreferences,
 } from "./core/layers.js";
 import * as M from "./core/model.js";
+import { placeMatcher } from "./core/place-search.js";
 import {
   daySnapshot, restoreDay, createRouteProvider, suggestDay, applyDayPlan,
   MAX_PLAN_STOPS, MAX_ROUTE_CHECKS, START_ANCHOR, END_ANCHOR,
@@ -1449,16 +1450,9 @@ function renderDiscover() {
   $("filters").ontoggle = (e) => {
     if (e.target.isConnected) discover.open = e.target.open;
   };
-  $("local-search").oninput = (e) => {
-    discover.q = e.target.value;
-    clearTimeout(renderDiscover.timer);
-    renderDiscover.timer = setTimeout(() => {
-      const pos = e.target.selectionStart;
-      render();
-      $("local-search").focus();
-      $("local-search").setSelectionRange(pos, pos);
-    }, 220);
-  };
+  searchBox($("local-search"), 220, (value) => {
+    discover.q = value;
+  }, keepCaret(render));
   for (const [el, key] of [
     ["origin-mode", "originMode"],
     ["region", "region"],
@@ -1521,34 +1515,54 @@ function findPlace(key) {
   const local = state.places.find((x) => x.snapshot.key === key);
   return local ? M.effective(local) : allPlaces().find((x) => x.key === key);
 }
+// Saved Spots rows for a query, matched like Discover: every stored name,
+// address part, Shopping brand and confirmed alias group, best match first.
+function spotsResultsHTML(query, visited) {
+  const flags = state.flags.filter((f) => (visited ? f.visited : f.favourite));
+  let rows = flags.map((f) => ({
+    flag: f,
+    p: findPlace(f.placeKey),
+    local: state.places.find((p) => p.snapshot.key === f.placeKey),
+  }));
+  const match = placeMatcher(query, {
+    aliases: shoppingAliases,
+    places: new Map(allPlaces().map((p) => [p.key, p])),
+  });
+  if (match)
+    rows = rows
+      .map((x) => ({ ...x, rank: match(x.p) }))
+      .filter((x) => x.rank >= 0)
+      .sort((a, b) => a.rank - b.rank);
+  return (
+    rows
+      .map(({ flag, p, local }) =>
+        p
+          ? card(p, null, local)
+          : `<article class="place-card"><h3>Waiting for source match</h3><p>${esc(flag.placeKey)}</p><p class="muted">Flags retained. This ID is not in the current source snapshots.</p></article>`,
+      )
+      .join("") ||
+    (match && flags.length
+      ? '<div class="empty"><h2>No saved places match</h2><p>Try a stored name, brand, city or part of the address.</p></div>'
+      : '<div class="empty"><h2>No saved places yet</h2><p>Use Save to Spots in Discover, or import saved flags from a standalone map.</p><button data-action="discover">Open Discover</button></div>')
+  );
+}
+function refreshSpotsResults() {
+  const box = $("spots-results");
+  if (!box) return false;
+  box.innerHTML = spotsResultsHTML(
+    pref("japan-spots-query") || "",
+    pref("japan-spots-visited") === "true",
+  );
+  return true;
+}
 function renderSpots() {
   const query = pref("japan-spots-query") || "",
-    visited = pref("japan-spots-visited") === "true",
-    flags = state.flags.filter((f) => (visited ? f.visited : f.favourite)),
-    rows = flags
-      .map((f) => ({
-        flag: f,
-        p: findPlace(f.placeKey),
-        local: state.places.find((p) => p.snapshot.key === f.placeKey),
-      }))
-      .filter(
-        (x) =>
-          !query ||
-          M.name(x.p || { names: {}, address: {} })
-            .normalize("NFKC")
-            .toLowerCase()
-            .includes(query.normalize("NFKC").toLowerCase()),
-      );
+    visited = pref("japan-spots-visited") === "true";
   $("content").innerHTML =
-    `<section class="narrow"><div class="toolbar"><div><h1>Saved Spots</h1><p class="muted">Your places, independent of any trip.</p></div><button data-action="import">Import saved flags</button></div><label>Search saved places<input id="spots-search" type="search" value="${esc(query)}"></label><label class="check"><input id="spots-visited" type="checkbox" ${visited ? "checked" : ""}>Show visited instead of favourites</label>${rows.map(({ flag, p, local }) => (p ? card(p, null, local) : `<article class="place-card"><h3>Waiting for source match</h3><p>${esc(flag.placeKey)}</p><p class="muted">Flags retained. This ID is not in the current source snapshots.</p></article>`)).join("") || '<div class="empty"><h2>No saved places yet</h2><p>Use Save to Spots in Discover, or import saved flags from a standalone map.</p><button data-action="discover">Open Discover</button></div>'}</section>`;
-  $("spots-search").oninput = (e) => {
-    pref("japan-spots-query", e.target.value);
-    clearTimeout(renderSpots.timer);
-    renderSpots.timer = setTimeout(() => {
-      render();
-      $("spots-search").focus();
-    }, 250);
-  };
+    `<section class="narrow"><div class="toolbar"><div><h1>Saved Spots</h1><p class="muted">Your places, independent of any trip.</p></div><button data-action="import">Import saved flags</button></div><label>Search saved places<input id="spots-search" type="search" value="${esc(query)}" placeholder="Name, brand, city or address"></label><label class="check"><input id="spots-visited" type="checkbox" ${visited ? "checked" : ""}>Show visited instead of favourites</label><div id="spots-results">${spotsResultsHTML(query, visited)}</div></section>`;
+  // Only the results are replaced while typing, so the input, its caret and
+  // any Japanese composition are never touched.
+  searchBox($("spots-search"), 250, (value) => pref("japan-spots-query", value), refreshSpotsResults);
   $("spots-visited").onchange = (e) => {
     pref("japan-spots-visited", String(e.target.checked));
     render();
@@ -1979,7 +1993,7 @@ function renderSettings() {
     last = localStorage.getItem("japan-trip-last-export") || last;
   } catch {}
   $("content").innerHTML =
-    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div><p class="backup-date">Last export prepared: ${esc(last)}. Confirm that you saved the downloaded file.</p><details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.6.12<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
+    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div><p class="backup-date">Last export prepared: ${esc(last)}. Confirm that you saved the downloaded file.</p><details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The map may be blank. No map-area download or tile prefetch is offered.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.6.13<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. No booking, prices, budgets or paid APIs.</p></section>`;
   $("setting-theme").onchange = (e) =>
     commit((s) => (s.settings.theme = e.target.value));
   $("setting-mode").onchange = (e) =>
@@ -2427,20 +2441,73 @@ function serviceUrl(value) {
   }
 }
 
+// Search boxes: Japanese (IME) composition is never interrupted. While a
+// composition is active nothing re-renders; the search runs once it ends.
+let composingSearch = null,
+  pendingAfterComposition = null;
+function searchBox(input, delay, store, run) {
+  if (!input) return;
+  let timer = null;
+  const schedule = () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      if (composingSearch === input) return;
+      run();
+    }, delay);
+  };
+  input.addEventListener("compositionstart", () => {
+    composingSearch = input;
+    clearTimeout(timer);
+  });
+  input.addEventListener("compositionend", (e) => {
+    if (composingSearch === input) composingSearch = null;
+    store(e.target.value);
+    const pending = pendingAfterComposition;
+    pendingAfterComposition = null;
+    if (pending) pending();
+    else schedule();
+  });
+  input.addEventListener("input", (e) => {
+    store(e.target.value);
+    if (e.isComposing || composingSearch === input) {
+      clearTimeout(timer);
+      return;
+    }
+    schedule();
+  });
+}
+// Re-render the screen and put focus, caret and selection back in the search
+// box the user was typing in.
+function keepCaret(fn) {
+  return () => {
+    const field = document.activeElement;
+    if (!field?.matches?.("#local-search, #spots-search")) return fn();
+    const start = field.selectionStart,
+      end = field.selectionEnd,
+      dir = field.selectionDirection || "none";
+    fn();
+    const input = $(field.id);
+    if (!input) return;
+    input.focus({ preventScroll: true });
+    try {
+      input.setSelectionRange(start, end, dir);
+    } catch {}
+  };
+}
+
 function refreshSourceView() {
   if (screen === "settings") {
     $("source-status").innerHTML = renderSourceStatus();
     return;
   }
   if (!["discover", "spots"].includes(screen)) return;
-  const field = document.activeElement;
-  if (field?.matches("#local-search, #spots-search")) {
-    const start = field.selectionStart, end = field.selectionEnd;
-    render();
-    const input = $(field.id);
-    input?.focus({ preventScroll: true });
-    input?.setSelectionRange(start, end);
-  } else render();
+  // Saved Spots: a feed that finishes loading only changes the results.
+  if (screen === "spots" && refreshSpotsResults()) return;
+  if (composingSearch?.isConnected) {
+    pendingAfterComposition = keepCaret(render);
+    return;
+  }
+  keepCaret(render)();
 }
 
 async function refreshFeed(namespace, path) {

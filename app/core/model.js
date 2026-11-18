@@ -1,4 +1,5 @@
 import { categoryFor } from "./shopping-catalog.js";
+import { placeMatcher } from "./place-search.js";
 export const clone = (x) => structuredClone(x);
 export const id = () => crypto.randomUUID();
 export const now = () => new Date().toISOString();
@@ -577,9 +578,12 @@ export function filterPlaces(
   origins,
   scheduled = new Set(),
   flags = [],
+  search = {},
 ) {
   const lm = new Map(feed.lists.map((l) => [l.listId, l])),
-    saved = new Map(flags.map((x) => [x.placeKey, x]));
+    saved = new Map(flags.map((x) => [x.placeKey, x])),
+    match = placeMatcher(f.q, search),
+    ranks = new Map();
   let rows = feed.places
     .filter((p) => {
       if (!f.includeScheduled && scheduled.has(p.key)) return false;
@@ -592,17 +596,11 @@ export function filterPlaces(
         !(regions[f.region] || []).includes(p.address.prefecture)
       )
         return false;
-      const q = (f.q || "").normalize("NFKC").toLowerCase();
-      if (
-        q &&
-        ![...Object.values(p.names || {}), ...Object.values(p.address || {})]
-          .filter(Boolean)
-          .join(" ")
-          .normalize("NFKC")
-          .toLowerCase()
-          .includes(q)
-      )
-        return false;
+      if (match) {
+        const rank = match(p);
+        if (rank < 0) return false;
+        ranks.set(p, rank);
+      }
       if (feed.source.namespace === "shopping") {
         if (f.includeClosed === false && p.operatingStatus.value === "closed")
           return false;
@@ -641,14 +639,19 @@ export function filterPlaces(
         )
       );
     })
-    .map((p) => ({ p, km: nearby(p, origins) }));
+    .map((p) =>
+      match ? { p, km: nearby(p, origins), rank: ranks.get(p) } : { p, km: nearby(p, origins) },
+    );
+  const byRank = (a, b) => (a.rank ?? 0) - (b.rank ?? 0);
   const unknown = rows.filter((x) => !located(x.p));
+  if (match) unknown.sort(byRank);
   rows = rows
     .filter(
       (x) => located(x.p) && (!f.radius || (x.km !== null && x.km <= f.radius)),
     )
     .sort(
       (a, b) =>
+        byRank(a, b) ||
         (a.km ?? Infinity) - (b.km ?? Infinity) ||
         name(a.p).localeCompare(name(b.p), "ja"),
     );

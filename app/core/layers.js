@@ -41,6 +41,12 @@ export function badge(p) {
     ? other[p.shopping.brandId]
     : "SHOP";
 }
+const keyMaps = new WeakMap();
+function byKey(feed) {
+  let m = keyMaps.get(feed);
+  if (!m) keyMaps.set(feed, (m = new Map(feed.places.map((p) => [p.key, p]))));
+  return m;
+}
 export function combineLayers(
   feeds,
   visibility,
@@ -79,6 +85,12 @@ export function combineLayers(
       origins,
       view.scheduled,
       view.flags,
+      f.source.namespace === "shopping"
+        ? {
+            aliases: packageId === "osm" ? new Map() : aliases,
+            places: byKey(f),
+          }
+        : {},
     );
     sourceCounts[sourceKey] = {
       located: result.rows.length,
@@ -91,7 +103,9 @@ export function combineLayers(
     rows.push(...result.rows);
     unknown.push(...result.unknown);
   }
-  rows.sort((a, b) => (a.km ?? Infinity) - (b.km ?? Infinity));
+  const byRank = (a, b) => (a.rank ?? 0) - (b.rank ?? 0);
+  rows.sort((a, b) => byRank(a, b) || (a.km ?? Infinity) - (b.km ?? Infinity));
+  unknown.sort(byRank);
   return { rows, unknown, counts, sourceCounts };
 }
 
