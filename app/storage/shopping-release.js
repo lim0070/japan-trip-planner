@@ -20,12 +20,13 @@ const releases = [
   [21, "sha256:68f1253c15140bfeffd796bd28b607c849b5c9ef1be7401c64e85a2222bfa6c1", "sha256:2921c6298123e64ee458662afecf31eba70b2e61a290ab63503017cce4804e01", "shopping-verified/2026-11-13-r6/shopping.bundle.v2.json", 22418, "c43650dc4fafd2312137e2355193fd5adff5bcff0ecd6b011d7a62cbdd9f3708"],
   [22, "sha256:34cb16a0eee8b0b311897422e626e4e4aa30781457b562452e927df25f1071c0", "sha256:7173a2ca4b2bff820e36c2e8abc03646a53f2ab00c08d0b4352765ace35eee4f", "shopping-verified/2026-11-13-r7/shopping.bundle.v2.json", 22715, "4adb2f4ef302cd2348db433161bdb1642e5f2951dc93b6015d7d92ddc58dcd51"],
   [23, "sha256:924f5d22672f63699da8b930ab0c88d88c831348c65492eb7cf2d344f7868a49", "sha256:b3f4c057018e2e042d4e5094d9d5270e6dddc069f9bfe3a68ded4b3683fe5826", "shopping-verified/2026-11-13-r8/shopping.bundle.v2.json", 23016, "56cb060ead8f7f57bde08c7db6f580e78bb76940a66eb2354bb33d21afdc82fc"],
+  [24, "sha256:8db4971a0d604777c901a3a1e6ca1304bdfaa3e7a9ce7a1c063e779c7d7141d2", "sha256:376da3bdd8f0387acc925c8491306b3d93a58beeb993c054be4a7394f29269b7", "shopping-verified/2026-11-19-r1/shopping.bundle.v2.json", 23319, "2631651299a1196d63bb537d6cdc15e5a8e8f336f3c0ba894c776be3d0c84cc9"],
 ];
 
 export const currentShoppingRelease = Object.freeze({
-  generation: 23,
-  registryPath: "shopping-sources.successor.v10.json",
-  registryVersion: "sha256:47975d8b73a7278a1a467e17f3e7cf5992394ea710d336f039f754630bf0ffb0",
+  generation: 24,
+  registryPath: "shopping-sources.successor.v11.json",
+  registryVersion: "sha256:00c8da0099fa3cf2c1109b4f9c1a4a2de2078b3ceda808a2808ed3bd6c643349",
   artifact: releases.at(-1)[1],
   feedVersion: releases.at(-1)[2],
   osmVersion: "sha256:81443cb00fb61a010100ea309b0df0a9307a6d47a1888fdb6a6eb7ee244f18ff",

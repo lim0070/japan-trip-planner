@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "kind": "later-branch-roster-reconciliation-summary",
+  "sourceIdentities": 6696,
+  "legacyKeysPreserved": 6659,
+  "newLicensedCostcoKeys": 37,
+  "nullOnlyDirectNumericalFills": 164,
+  "newAliases": 13,
+  "totalAliasGroups": 85,
+  "aliasMemberRows": 171,
+  "presentationRows": 6610,
+  "referenceRows": 2521,
+  "structuredCalendarRows": 0,
+  "sourceIdentityCountsAreNotPhysicalCounts": true,
+  "verifiedActiveNationalPhysicalCount": null,
+  "costco": {
+    "currentOperatorRosterNativeIds": 37,
+    "licensedWarehouseSourceIdentities": 37,
+    "legacySourceIdentities": 38,
+    "supportedCrosswalkGroups": 11,
+    "unresolvedLegacyKeys": [
+      "shopping:overture:032d8cbc-d62f-467e-902d-6452075b7f70",
+      "shopping:overture:0535f892-e5a1-4595-a220-6cbf951d370e",
+      "shopping:overture:104477bc-a309-4711-a129-986a25ea0949",
+      "shopping:overture:1ad98d78-4360-4d71-abb5-b110deffced6",
+      "shopping:overture:23f34792-f96b-4633-9c18-90102da121e5",
+      "shopping:overture:25bf9dd0-3102-4f20-978d-50bf2a5ae8de",
+      "shopping:overture:2a7cc5c3-4083-48da-8572-77043fb6924e",
+      "shopping:overture:34d94623-f1cc-413e-9e55-ca5c5488c234",
+      "shopping:overture:40587943-02ea-42c8-ae3c-9f7d393af74b",
+      "shopping:overture:43ff3d5b-8f45-4f70-8028-1d570187ab62",
+      "shopping:overture:464ad64f-b7c2-47a3-af8a-d269ce89a515",
+      "shopping:overture:6f8b8a58-5887-4186-a613-44d0affceecc",
+      "shopping:overture:730f5cf7-6389-4c2c-83dc-fa9434459012",
+      "shopping:overture:898f4b14-c12b-4578-8e0f-bb261115a760",
+      "shopping:overture:8dc0c61f-b9b3-4c3c-9e70-f6020a27620c",
+      "shopping:overture:995b17bc-149b-471e-9844-1cf3edcf6e33",
+      "shopping:overture:a449d948-4651-4ce2-bda8-85c9576f13a8",
+      "shopping:overture:a7b08b26-df23-4062-b88f-ee71db773058",
+      "shopping:overture:ac9871b5-69f0-44b3-a2bc-cbdc068ce97e",
+      "shopping:overture:afe5f5fe-b04d-40d5-9220-14bf60c6baaa",
+      "shopping:overture:b5c5801e-c3b5-4afd-a5ea-d10819a8644c",
+      "shopping:overture:c43dc83c-97ab-4450-a2ea-97c6040d5738",
+      "shopping:overture:ca0337dc-599a-48ca-baed-35323a0ee061",
+      "shopping:overture:d1fcce38-ac86-4519-9210-381f5f17f6f8",
+      "shopping:overture:dcedd041-11af-4396-a9d2-89f2efc93ef1",
+      "shopping:overture:e537c6e4-22ad-46a9-8b98-0dadcfba714b",
+      "shopping:overture:f2f9ffbf-64fb-439a-b3a9-c3edaff1b78f"
+    ],
+    "unresolvedLegacyCount": 27,
+    "rawSourceIdentities": 75,
+    "presentationRows": 64,
+    "fuelFeaturesImported": 0,
+    "caveat": "Unresolved legacy records are preserved source history, not27new warehouses or closure findings. Current roster37is dated identity enumeration, not verified active opening."
+  },
+  "lifecycle": {
+    "shibuya": {
+      "announcedFinalBusinessDate": "2026-11-15",
+      "announcedFinalDayCloses": "19:00",
+      "currentOperatingStatus": "unknown"
+    },
+    "lopiaCotoe": {
+      "temporaryClosureReferenceAsOf": "2026-11-02",
+      "announcedReopeningDate": "2026-11-06",
+      "actualReopeningVerified": false,
+      "excludedFromNewFills": true
+    }
+  },
+  "outletUniverse": {
+    "associationDate": "2025-11-04",
+    "definitionBoundAssociationCount": 32,
+    "currentActiveCensusVerified": false,
+    "existingOperatorProfiles": 24,
+    "independentProfiles": 8,
+    "futureFukuoka2027Separate": true
+  },
+  "rawPrivateContactsPublished": false,
+  "existingNamesAddressesPointsStatusesFormatsChanged": false,
+  "publicActivation": false
+}
