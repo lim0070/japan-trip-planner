@@ -1,4 +1,4 @@
-import { canonical, parseJSON } from "../core/contracts.js";
+import { validateReviewedDelta } from "./shopping-reviewed-delta.js";
 
 export const generation24Registry = Object.freeze({
   bytes: 755,
@@ -7,6 +7,7 @@ export const generation24Registry = Object.freeze({
 
 export const aichiPdf = Object.freeze({
   key: "shopping:overture:ef62f707-2987-4be9-9974-dc0d8b39dc2e",
+  field: "address.prefecture",
   url: "https://www.pref.aichi.jp/uploaded/attachment/356368.pdf",
   label: "Aichi Prefecture website (PDF, 616,406 bytes)",
   bytes: 616406,
@@ -29,43 +30,16 @@ const reviewed = new Map([
 ]);
 
 export function validateGeneration24(base, next, overlay) {
-  const proof = parseJSON(next.notices[
-    `shopping:overture-${next.feed.datasetVersion}-shopping-reviewed-facts-mixed-g24-1.json`
-  ]);
-  // The changed input inventory is independently bound by the pinned manifest.
-  const { inputSha256: parentInputs, ...parentSource } = base.feed.source;
-  const { inputSha256: nextInputs, ...nextSource } = next.feed.source;
-  if (proof.schemaVersion !== 1 || proof.kind !== "shopping-reviewed-field-decisions" ||
-      proof.baseline?.manifestSha256 !== "56cb060ead8f7f57bde08c7db6f580e78bb76940a66eb2354bb33d21afdc82fc" ||
-      proof.baseline.logicalDatasetVersion !== base.feed.datasetVersion ||
-      proof.records?.length !== reviewed.size || overlay.replacements.length !== reviewed.size ||
-      canonical(base.aliases) !== canonical(next.aliases) ||
-      canonical(parentSource) !== canonical(nextSource))
-    throw Error("Shopping generation 24 differs from its reviewed delta");
-
-  const decisions = new Map(proof.records.map(record => [record.memberKey, record]));
-  for (const { index, place } of overlay.replacements) {
-    const prior = base.feed.places[index], decision = decisions.get(place.key);
-    const [field, after] = reviewed.get(place.key) || [];
-    const evidence = place.provenance.at(-1);
-    if (!field || decision?.sourceNativeId !== prior.sourceId ||
-        decision.field !== field || decision.before !== null || decision.after !== after ||
-        evidence?.field !== field || evidence.url !== decision.sourceUrl ||
-        evidence.observedAt !== decision.observedAt)
-      throw Error("Unexpected Shopping fact or evidence");
-
-    const expected = { ...prior, provenance: [...prior.provenance, evidence] };
-    if (field === "address.prefecture" && prior.address.prefecture === null)
-      expected.address = { ...prior.address, prefecture: after };
-    else if (field === "hoursText" && prior.hoursText === null)
-      expected.hoursText = after;
-    else throw Error("Unexpected prior Shopping fact");
-    if (canonical(place) !== canonical(expected))
-      throw Error("Unexpected unrelated Shopping field change");
-    if (place.key === aichiPdf.key &&
-        (decision.sourceUrl !== aichiPdf.url || decision.sourceLabel !== aichiPdf.label ||
-         decision.sourceMediaType !== "application/pdf" || decision.sourceBytes !== aichiPdf.bytes ||
-         !evidence.note?.startsWith(aichiPdf.label)))
-      throw Error("Aichi PDF label or size differs from the reviewed source");
-  }
+  validateReviewedDelta(base, next, overlay, {
+    generation: 24,
+    parentManifest: "56cb060ead8f7f57bde08c7db6f580e78bb76940a66eb2354bb33d21afdc82fc",
+    reviewed,
+    checkSource(place, decision, evidence) {
+      if (place.key === aichiPdf.key &&
+          (decision.sourceUrl !== aichiPdf.url || decision.sourceLabel !== aichiPdf.label ||
+           decision.sourceMediaType !== "application/pdf" || decision.sourceBytes !== aichiPdf.bytes ||
+           !evidence.note?.startsWith(aichiPdf.label)))
+        throw Error("Aichi PDF label or size differs from the reviewed source");
+    },
+  });
 }

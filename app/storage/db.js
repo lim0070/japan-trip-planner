@@ -14,8 +14,9 @@ import { approvedShopping, validateApprovedShoppingChanges } from "./shopping-ap
 import { decodeShoppingHistory, encodeShoppingHistory } from "./shopping-history.js";
 import { closureRegistry, normalizeClosureParent, validateClosureUpdate } from "./shopping-closure.js";
 import { reviewedClosureRegistry, validateReviewedClosures } from "./shopping-reviewed-closures.js";
-import { currentShoppingRelease, shoppingRelease } from "./shopping-release.js";
+import { currentShoppingRelease, generation24Release, shoppingRelease } from "./shopping-release.js";
 import { generation24Registry, validateGeneration24 } from "./shopping-generation24.js";
+import { generation25Registry, validateGeneration25 } from "./shopping-generation25.js";
 import { tenantHoursRegistry, validateTenantHoursUpdate } from "./shopping-hours.js";
 import { mixedRegistry, validateMixedUpdate } from "./shopping-mixed.js";
 import { sanoRegistry, validateSanoUpdate } from "./shopping-sano.js";
@@ -154,6 +155,7 @@ const APPROVED_KEY = "shopping-region-approved-history";
 const HISTORY_ARCHIVE_KEY = "shopping-history-archive-v1";
 const CLOSURE_KEY = "shopping-region-closure-history";
 const REVIEWED_CLOSURES_KEY = "shopping-region-reviewed-closures";
+const GENERATION_25_KEY = "shopping-region-reviewed-generation25";
 const GENERATION_24_KEY = "shopping-region-reviewed-generation24";
 const TENANT_HOURS_KEY = "shopping-region-tenant-hours";
 const MIXED_KEY = "shopping-region-mixed";
@@ -433,6 +435,7 @@ const legacyRegistryRows = [REGISTRY_KEY, "shopping-registry"];
 const regionRows = [
   ...legacyHistoryRows,
   GENERATION_24_KEY,
+  GENERATION_25_KEY,
   packageKey("overture"),
   packageKey("osm"),
   legacyKey("overture"),
@@ -814,12 +817,13 @@ const generation24 = {
   ...compactSuccessors,
   key: GENERATION_24_KEY,
   baseGeneration: 23,
+  release: generation24Release,
   baseEntry: rows => rows[TENANT_HOURS_KEY]?.find(entry =>
     entry.generation === 23 && entry.registryVersion === gen23RegistryVersion),
-  baseAvailable(rows, base) {
-    return matchesRelease(directPackage(rows, gen23Release), gen23Release) ||
+  baseAvailable(rows) {
+    return !!directPackage(rows, gen23Release) ||
       !!regionBase(rows) && rows[OVERLAY_KEY]?.registryVersion === REGION_REGISTRY_VERSION &&
-        artifact(this.baseEntry(rows)?.overlay.package) === artifact(base);
+        artifact(this.baseEntry(rows)?.overlay.package) === gen23Release.artifact;
   },
   async readBase(rows) {
     const direct = directPackage(rows, gen23Release);
@@ -829,15 +833,39 @@ const generation24 = {
     return readCompactShoppingSuccessor(await tenantHoursSuccessor.readBase(rows), entry.overlay);
   },
   async readRegistry(url) {
-    const { text } = await readBounded(url, 128 * 1024, generation24Registry);
-    const registry = await validateRegistry(parseJSON(text));
-    if (registry.generation !== currentShoppingRelease.generation ||
-        registry.datasetVersion !== currentShoppingRelease.registryVersion)
-      throw Error("Unexpected Shopping generation 24 registry");
-    return registry;
+    return readPinnedShoppingRegistry(url, generation24Registry, this.release);
   },
   validateUpdate: validateGeneration24,
 };
+
+const generation25 = {
+  ...compactSuccessors,
+  key: GENERATION_25_KEY,
+  baseGeneration: 24,
+  release: currentShoppingRelease,
+  baseAvailable(rows) {
+    if (directPackage(rows, generation24Release)) return true;
+    const parent = storedReleaseOverlay(rows[GENERATION_24_KEY], generation24Release);
+    return parent?.baseArtifact === gen23Release.artifact && generation24.baseAvailable(rows);
+  },
+  async readBase(rows) {
+    const parent = await readRetainedRelease(rows, generation24);
+    if (!parent) throw Error("Pinned Shopping generation 24 is unavailable");
+    return parent;
+  },
+  async readRegistry(url) {
+    return readPinnedShoppingRegistry(url, generation25Registry, this.release);
+  },
+  validateUpdate: validateGeneration25,
+};
+
+async function readPinnedShoppingRegistry(url, descriptor, release) {
+  const { text } = await readBounded(url, 128 * 1024, descriptor);
+  const registry = await validateRegistry(parseJSON(text));
+  if (registry.generation !== release.generation || registry.datasetVersion !== release.registryVersion)
+    throw Error("Unexpected Shopping registry for generation " + release.generation);
+  return registry;
+}
 
 async function readSuccessorHistory(base, history, format) {
   if (format.chained) {
@@ -851,7 +879,7 @@ async function readSuccessorHistory(base, history, format) {
 function appendShoppingSuccessor(base, overlay, registry, expectedHead, format) {
   return writeRegionRows(rows => {
     const available = format.baseAvailable
-      ? format.baseAvailable(rows, base)
+      ? format.baseAvailable(rows)
       : !!regionBase(rows) && rows[OVERLAY_KEY]?.registryVersion === REGION_REGISTRY_VERSION &&
         artifact(format.baseEntry(rows)?.overlay.package) === artifact(base);
     if (!available)
@@ -1027,7 +1055,7 @@ async function retainedShoppingVersion(version, rows) {
 }
 
 // Cold profiles use the exact reviewed materialized package. Upgrades retain
-// their generation 23 parent and commit only the verified compact overlay.
+// their exact parent and commit only a verified compact overlay.
 const shoppingDataRoot = () => new URL("../data/", location.href);
 
 function matchesRelease(pkg, release = currentShoppingRelease) {
@@ -1053,19 +1081,31 @@ async function readReleasedShopping(expected) {
   return candidate;
 }
 
-async function retainedCurrentShopping(primary = null) {
-  const row = primary || await shoppingCacheState("overture");
-  const direct = [row.current, row.previous].find(pkg => matchesRelease(pkg));
+function storedReleaseOverlay(history, release) {
+  const entry = history?.at(-1);
+  return entry?.registryVersion === release.registryVersion &&
+    artifact(entry.overlay?.package) === release.artifact ? entry.overlay : null;
+}
+
+async function readRetainedRelease(rows, format) {
+  const direct = directPackage(rows, format.release);
   if (direct) return verifyDirectPackage(direct);
-  const head = (await read("feeds", GENERATION_24_KEY))?.at(-1);
-  if (head?.registryVersion !== currentShoppingRelease.registryVersion) return null;
-  const rows = await feedRows(regionRows);
-  const candidate = await generation24.readOverlay(await generation24.readBase(rows), head.overlay);
-  return matchesRelease(candidate) ? candidate : null;
+  const overlay = storedReleaseOverlay(rows[format.key], format.release);
+  if (!overlay) return null;
+  const candidate = await format.readOverlay(await format.readBase(rows), overlay);
+  return matchesRelease(candidate, format.release) ? candidate : null;
+}
+
+async function retainedShoppingForRelease(format, primary = null) {
+  const row = primary || await shoppingCacheState("overture");
+  const direct = [row.current, row.previous].find(pkg => matchesRelease(pkg, format.release));
+  if (direct) return verifyDirectPackage(direct);
+  if (!storedReleaseOverlay(await read("feeds", format.key), format.release)) return null;
+  return readRetainedRelease(await feedRows(regionRows), format);
 }
 
 function hasLegacyShoppingRows() {
-  const keys = [...legacyHistoryRows, ...legacyRegistryRows];
+  const keys = [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY];
   return new Promise((resolve, reject) => {
     const tx = db.transaction("feeds"), store = tx.objectStore("feeds");
     let historical = false;
@@ -1078,12 +1118,13 @@ function hasLegacyShoppingRows() {
   });
 }
 
-function storeDirectShopping(candidate) {
+function storeDirectShopping(candidate, release) {
   return writeRegionRows(rows => {
     const key = packageKey("overture");
     const row = resolvedRow(rows[key], rows[legacyKey("overture")]);
-    if ((row.current && !matchesRelease(row.current)) || row.previous ||
-        [...legacyHistoryRows, ...legacyRegistryRows].some(key => rows[key] !== undefined))
+    if ((row.current && !matchesRelease(row.current, release)) || row.previous ||
+        [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY]
+          .some(key => rows[key] !== undefined))
       throw Error("Shopping history appeared during the cold download");
     const osm = resolvedRow(rows[packageKey("osm")], rows[legacyKey("osm")]).current;
     checkTotals([packageMetrics(candidate), ...(osm ? [packageMetrics(osm)] : []),
@@ -1094,30 +1135,34 @@ function storeDirectShopping(candidate) {
   }, GLOBAL.storage, legacyRegistryRows);
 }
 
-export async function shoppingCurrentSources(onPackage) {
+async function shoppingSourcesForRelease(onPackage, format, parentRelease, recoverParent) {
+  const { release } = format;
   const oldPrimary = await shoppingCacheState("overture");
-  const retained = await retainedCurrentShopping(oldPrimary).catch(() => null);
+  const retained = await retainedShoppingForRelease(format, oldPrimary).catch(() => null);
   let parent = null;
   if (!retained) {
-    const directParent = [oldPrimary.current, oldPrimary.previous].find(pkg => matchesRelease(pkg, gen23Release));
+    const directParent = [oldPrimary.current, oldPrimary.previous].find(pkg => matchesRelease(pkg, parentRelease));
     if (directParent) parent = await verifyDirectPackage(directParent).catch(() => null);
-    else if ([oldPrimary.current, oldPrimary.previous].some(pkg => pkg && !matchesRelease(pkg)) ||
-        await hasLegacyShoppingRows()) {
-      parent = await generation24.readBase(await feedRows(regionRows)).catch(() => null);
-      if (!parent) return shoppingSourcesWithSuccessor(onPackage,
-        "../data/" + currentShoppingRelease.registryPath, shoppingSourcesWithTenantHours, generation24);
+    if (!parent && ([oldPrimary.current, oldPrimary.previous].some(pkg => pkg && !matchesRelease(pkg, release)) ||
+        await hasLegacyShoppingRows())) {
+      parent = await format.readBase(await feedRows(regionRows)).catch(() => null);
+      if (!parent) {
+        await recoverParent(onPackage);
+        parent = await format.readBase(await feedRows(regionRows)).catch(() => null);
+        if (!parent) return;
+      }
     }
   }
 
   const osmRow = await shoppingCacheState("osm");
   const previousOsm = [osmRow.current, osmRow.previous].find(p =>
-    p?.feed?.datasetVersion === currentShoppingRelease.osmVersion);
+    p?.feed?.datasetVersion === release.osmVersion);
   if (retained) onPackage("overture", retained);
   else if (parent) onPackage("overture", { ...parent, error: "Checking for a Shopping update" });
   if (previousOsm) onPackage("osm", previousOsm);
   if (retained && previousOsm) return;
 
-  const registry = generation24.readRegistry(new URL(currentShoppingRelease.registryPath, shoppingDataRoot()));
+  const registry = format.readRegistry(new URL(release.registryPath, shoppingDataRoot()));
   const load = async (id, prior, action) => {
     if (prior) return;
     try {
@@ -1126,28 +1171,28 @@ export async function shoppingCurrentSources(onPackage) {
     } catch (error) {
       // A concurrent legacy activation may have completed while we waited.
       const cached = id === "overture"
-        ? (await retainedCurrentShopping().catch(() => null)) || parent
-        : await osmVersion(currentShoppingRelease.osmVersion);
+        ? (await retainedShoppingForRelease(format).catch(() => null)) || parent
+        : await osmVersion(release.osmVersion);
       onPackage(id, cached ? { ...cached, error: error.message } : null, error.message);
     }
   };
   await Promise.all([
     load("overture", retained, async expected => {
       const candidate = await readReleasedShopping(expected);
-      if (!matchesRelease(candidate) ||
+      if (!matchesRelease(candidate, release) ||
           canonical(packageMetrics(candidate)) !== canonical(expected.metrics))
         throw Error("Current Shopping package differs from its reviewed registry");
       if (parent) {
-        const overlay = generation24.makeOverlay(parent, candidate);
-        validateGeneration24(parent, candidate, overlay);
-        await generation24.readOverlay(parent, overlay);
-        await appendShoppingSuccessor(parent, overlay, await registry, undefined, generation24);
-      } else await storeDirectShopping(candidate);
+        const overlay = format.makeOverlay(parent, candidate);
+        format.validateUpdate(parent, candidate, overlay);
+        await format.readOverlay(parent, overlay);
+        await appendShoppingSuccessor(parent, overlay, await registry, undefined, format);
+      } else await storeDirectShopping(candidate, release);
       return candidate;
     }),
     load("osm", previousOsm, async expected => {
       const candidate = await loadOSM(new URL(expected.path, shoppingDataRoot()), { expected });
-      if (candidate.feed.datasetVersion !== currentShoppingRelease.osmVersion ||
+      if (candidate.feed.datasetVersion !== release.osmVersion ||
           canonical(packageMetrics(candidate)) !== canonical(expected.metrics))
         throw Error("OSM package differs from its reviewed registry");
       return activateShoppingPackage("osm", candidate, osmRow.revision);
@@ -1155,16 +1200,22 @@ export async function shoppingCurrentSources(onPackage) {
   ]);
 }
 
+export function shoppingSourcesWithGeneration24(onPackage) {
+  return shoppingSourcesForRelease(onPackage, generation24, gen23Release, shoppingSourcesWithTenantHours);
+}
+
+export function shoppingCurrentSources(onPackage) {
+  return shoppingSourcesForRelease(onPackage, generation25, generation24Release, shoppingSourcesWithGeneration24);
+}
+
 export async function shoppingRegionVersion(version) {
   const rows = await feedRows(regionRows);
   const release = shoppingRelease(version);
   const direct = release && directPackage(rows, release);
   if (direct) return direct;
-  if (release?.generation === currentShoppingRelease.generation) {
-    const head = rows[GENERATION_24_KEY]?.at(-1);
-    if (head?.registryVersion === currentShoppingRelease.registryVersion)
-      return generation24.readOverlay(await generation24.readBase(rows), head.overlay);
-  }
+  const format = [generation24, generation25].find(item => item.release.generation === release?.generation);
+  if (format && storedReleaseOverlay(rows[format.key], format.release))
+    return readRetainedRelease(rows, format);
   const retained = await retainedShoppingVersion(version, rows);
   if (retained) return retained;
 

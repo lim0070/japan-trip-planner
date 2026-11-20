@@ -1,0 +1,5 @@
+Generation 25 contains 15 exact, independently worded facts about verified native Shopping records.
+Each hours reference states the operating interval and any verified day scope. Effective dates, dated exceptions and structured hours are outside those references.
+Individual decisions name the source publisher. Use ordinary, attributed, unframed links and follow any link conditions in the corresponding source qualification.
+Existing licensing notices and attributions continue to apply.
+See shopping-reviewed-facts-mixed-g25-1.json for the exact changes and source references.
