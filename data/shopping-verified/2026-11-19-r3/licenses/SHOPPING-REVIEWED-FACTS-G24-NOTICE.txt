@@ -1,0 +1,5 @@
+Eight exact tenant-hour references and five prefecture labels update verified native Shopping records.
+Hours are independently phrased numeric tenant references. GU Across Plaza Yojiro gives separate weekdays and weekends/public holidays. The other seven have unverified day coverage. Effective dates and dated exceptions are unverified. These values do not set structured hours.
+Prefecture labels use official Gifu, Chiba, Aichi, Takatsuki and Toyonaka sources. Cite the official publisher named in the field decisions. Use ordinary, unframed links. The Aichi Prefecture source is a PDF of 616,406 bytes. Display this type and size beside any link and warn if it opens a new window.
+Review retains individual facts. Protected source materials and source captures are not part of this update. Existing attributions and licensing notices continue to apply.
+See shopping-reviewed-facts-mixed-g24-1.json for the exact changes and source references.

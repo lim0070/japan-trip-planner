@@ -1,0 +1,1 @@
+20 previously empty prefectures filled from individual geographic facts matched to the retained native records. See nonpostal-prefecture-field-decisions.json for the exact field, source citation and review timestamp for each update. Earlier notices document their original increments. Publisher material, postal records, hours, coordinates and operating status were not imported.

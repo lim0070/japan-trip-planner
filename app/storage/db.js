@@ -14,9 +14,10 @@ import { approvedShopping, validateApprovedShoppingChanges } from "./shopping-ap
 import { decodeShoppingHistory, encodeShoppingHistory } from "./shopping-history.js";
 import { closureRegistry, normalizeClosureParent, validateClosureUpdate } from "./shopping-closure.js";
 import { reviewedClosureRegistry, validateReviewedClosures } from "./shopping-reviewed-closures.js";
-import { currentShoppingRelease, generation24Release, shoppingRelease } from "./shopping-release.js";
+import { currentShoppingRelease, generation24Release, generation25Release, shoppingRelease } from "./shopping-release.js";
 import { generation24Registry, validateGeneration24 } from "./shopping-generation24.js";
 import { generation25Registry, validateGeneration25 } from "./shopping-generation25.js";
+import { generation26Registry, validateGeneration26 } from "./shopping-generation26.js";
 import { tenantHoursRegistry, validateTenantHoursUpdate } from "./shopping-hours.js";
 import { mixedRegistry, validateMixedUpdate } from "./shopping-mixed.js";
 import { sanoRegistry, validateSanoUpdate } from "./shopping-sano.js";
@@ -155,6 +156,7 @@ const APPROVED_KEY = "shopping-region-approved-history";
 const HISTORY_ARCHIVE_KEY = "shopping-history-archive-v1";
 const CLOSURE_KEY = "shopping-region-closure-history";
 const REVIEWED_CLOSURES_KEY = "shopping-region-reviewed-closures";
+const GENERATION_26_KEY = "shopping-region-reviewed-generation26";
 const GENERATION_25_KEY = "shopping-region-reviewed-generation25";
 const GENERATION_24_KEY = "shopping-region-reviewed-generation24";
 const TENANT_HOURS_KEY = "shopping-region-tenant-hours";
@@ -436,6 +438,7 @@ const regionRows = [
   ...legacyHistoryRows,
   GENERATION_24_KEY,
   GENERATION_25_KEY,
+  GENERATION_26_KEY,
   packageKey("overture"),
   packageKey("osm"),
   legacyKey("overture"),
@@ -818,6 +821,7 @@ const generation24 = {
   key: GENERATION_24_KEY,
   baseGeneration: 23,
   release: generation24Release,
+  parentArtifact: gen23Release.artifact,
   baseEntry: rows => rows[TENANT_HOURS_KEY]?.find(entry =>
     entry.generation === 23 && entry.registryVersion === gen23RegistryVersion),
   baseAvailable(rows) {
@@ -838,26 +842,36 @@ const generation24 = {
   validateUpdate: validateGeneration24,
 };
 
-const generation25 = {
-  ...compactSuccessors,
-  key: GENERATION_25_KEY,
-  baseGeneration: 24,
-  release: currentShoppingRelease,
-  baseAvailable(rows) {
-    if (directPackage(rows, generation24Release)) return true;
-    const parent = storedReleaseOverlay(rows[GENERATION_24_KEY], generation24Release);
-    return parent?.baseArtifact === gen23Release.artifact && generation24.baseAvailable(rows);
-  },
-  async readBase(rows) {
-    const parent = await readRetainedRelease(rows, generation24);
-    if (!parent) throw Error("Pinned Shopping generation 24 is unavailable");
-    return parent;
-  },
-  async readRegistry(url) {
-    return readPinnedShoppingRegistry(url, generation25Registry, this.release);
-  },
-  validateUpdate: validateGeneration25,
-};
+const generation25 = reviewedSuccessor(
+  GENERATION_25_KEY, generation25Release, generation24, generation25Registry, validateGeneration25,
+);
+const generation26 = reviewedSuccessor(
+  GENERATION_26_KEY, currentShoppingRelease, generation25, generation26Registry, validateGeneration26,
+);
+
+function reviewedSuccessor(key, release, parent, registry, validateUpdate) {
+  return {
+    ...compactSuccessors,
+    key,
+    baseGeneration: parent.release.generation,
+    release,
+    parentArtifact: parent.release.artifact,
+    baseAvailable(rows) {
+      if (directPackage(rows, parent.release)) return true;
+      const overlay = storedReleaseOverlay(rows[parent.key], parent.release);
+      return overlay?.baseArtifact === parent.parentArtifact && parent.baseAvailable(rows);
+    },
+    async readBase(rows) {
+      const base = await readRetainedRelease(rows, parent);
+      if (!base) throw Error("Pinned Shopping generation " + parent.release.generation + " is unavailable");
+      return base;
+    },
+    async readRegistry(url) {
+      return readPinnedShoppingRegistry(url, registry, release);
+    },
+    validateUpdate,
+  };
+}
 
 async function readPinnedShoppingRegistry(url, descriptor, release) {
   const { text } = await readBounded(url, 128 * 1024, descriptor);
@@ -1105,7 +1119,7 @@ async function retainedShoppingForRelease(format, primary = null) {
 }
 
 function hasLegacyShoppingRows() {
-  const keys = [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY];
+  const keys = [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY, GENERATION_26_KEY];
   return new Promise((resolve, reject) => {
     const tx = db.transaction("feeds"), store = tx.objectStore("feeds");
     let historical = false;
@@ -1123,7 +1137,7 @@ function storeDirectShopping(candidate, release) {
     const key = packageKey("overture");
     const row = resolvedRow(rows[key], rows[legacyKey("overture")]);
     if ((row.current && !matchesRelease(row.current, release)) || row.previous ||
-        [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY]
+        [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY, GENERATION_26_KEY]
           .some(key => rows[key] !== undefined))
       throw Error("Shopping history appeared during the cold download");
     const osm = resolvedRow(rows[packageKey("osm")], rows[legacyKey("osm")]).current;
@@ -1204,8 +1218,12 @@ export function shoppingSourcesWithGeneration24(onPackage) {
   return shoppingSourcesForRelease(onPackage, generation24, gen23Release, shoppingSourcesWithTenantHours);
 }
 
-export function shoppingCurrentSources(onPackage) {
+export function shoppingSourcesWithGeneration25(onPackage) {
   return shoppingSourcesForRelease(onPackage, generation25, generation24Release, shoppingSourcesWithGeneration24);
+}
+
+export function shoppingCurrentSources(onPackage) {
+  return shoppingSourcesForRelease(onPackage, generation26, generation25Release, shoppingSourcesWithGeneration25);
 }
 
 export async function shoppingRegionVersion(version) {
@@ -1213,7 +1231,7 @@ export async function shoppingRegionVersion(version) {
   const release = shoppingRelease(version);
   const direct = release && directPackage(rows, release);
   if (direct) return direct;
-  const format = [generation24, generation25].find(item => item.release.generation === release?.generation);
+  const format = [generation24, generation25, generation26].find(item => item.release.generation === release?.generation);
   if (format && storedReleaseOverlay(rows[format.key], format.release))
     return readRetainedRelease(rows, format);
   const retained = await retainedShoppingVersion(version, rows);
