@@ -101,7 +101,7 @@ export function suggestDay(snapshot, {
   const byId = new Map(stops.map((stop) => [stop.id, stop]));
   const visits = day.stopIds.map((id) => {
     const stop = byId.get(id);
-    return { ...stop, ...constraints[id], place: M.visitPlace(stop) };
+    return { ...stop, ...constraints[id], place: M.visitDestination(stop) };
   });
   // Each locked position forms a boundary. Visits cannot cross it.
   const groups = [];
@@ -180,6 +180,7 @@ export function applyDayPlan(state, dayId, finishBy, plan) {
   const day = state.days.find((day) => day.id === dayId);
   day.stopIds = plan.rows.map(({ stop }) => stop.id);
   day.planEndMinute = finishBy;
+  delete day.planDepartures;
   day.startMinute = plan.startMinute;
   const first = plan.rows[0], last = plan.rows.at(-1);
   saveAnchor(day, "planStartAnchor", plan.startAnchor, first?.route, first?.stop.id, state.settings.defaultMode, plan.allowEstimates);

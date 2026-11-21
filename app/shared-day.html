@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <title>Shared Japan itinerary</title>
+  <style>
+    html { color-scheme: light dark; } body { font: 1rem/1.5 system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    li { margin: 1rem 0; overflow-wrap: anywhere; } button { font: inherit; padding: .5rem .8rem; }
+    @media print { button { display: none; } body { margin: 0; } li { break-inside: avoid; } }
+  </style>
+  <script type="module" src="./shared-day.js"></script>
+</head>
+<body>
+  <main>
+    <h1>Shared Japan itinerary</h1>
+    <p id="day-status" role="status">Reading this day…</p>
+    <ol id="day-visits"></ol>
+    <button id="print-day" type="button" hidden>Print day</button>
+  </main>
+</body>
+</html>

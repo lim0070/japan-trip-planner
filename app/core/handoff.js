@@ -25,6 +25,9 @@ function validate(input) {
     const pairedNull = l.lat === null && l.lng === null;
     const pairedValid = Number.isFinite(l.lat) && Number.isFinite(l.lng) && Math.abs(l.lat) <= 90 && Math.abs(l.lng) <= 180;
     if (!pairedNull && !pairedValid) bad('coordinates must be paired nulls or finite, in-range numbers.');
+    if (p.confirmedEntrance && (!Number.isFinite(p.confirmedEntrance.lat) || !Number.isFinite(p.confirmedEntrance.lng) ||
+        Math.abs(p.confirmedEntrance.lat) > 90 || Math.abs(p.confirmedEntrance.lng) > 180))
+      bad('confirmed entrance coordinates must be finite and in range.');
     if (p.googlePlaceId !== null && (!text(p.googlePlaceId) || /[|,\u0000-\u001f\u007f]/u.test(p.googlePlaceId)))
       bad('googlePlaceId must be null or a nonempty identifier without list separators/control characters.');
   });
@@ -32,6 +35,7 @@ function validate(input) {
 }
 
 function destination(p) {
+  if (p.confirmedEntrance) return `${p.confirmedEntrance.lat},${p.confirmedEntrance.lng}`;
   if (text(p.address)) return `${p.name}, ${p.address}`;
   if (p.location.confidence === 'high' && p.location.lat !== null)
     return `${p.location.lat},${p.location.lng}`;
@@ -39,6 +43,7 @@ function destination(p) {
 }
 
 function placeWarnings(p) {
+  if (p.confirmedEntrance) return [];
   const out = [];
   if (!text(p.address)) out.push(`${p.selectionId}: no address supplied; verify the destination in Google Maps.`);
   if (p.location.lat !== null && p.location.confidence !== 'high')

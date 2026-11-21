@@ -1097,6 +1097,23 @@ body {
   position: fixed;
   inset: 0;
 }
+.entrance-picker {
+  position: absolute;
+  z-index: 1003;
+  bottom: calc(var(--map-bottom) + 28px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 20px);
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  background: var(--panel);
+  box-shadow: 0 3px 12px #18232133;
+}
+.entrance-picker button { margin-inline-start: 8px; }
+#map-stage[data-picking-entrance="true"] .leaflet-container { cursor: crosshair; }
 .discover-stage .leaflet-top { top: max(10px, env(safe-area-inset-top)); }
 .discover-stage .leaflet-bottom { bottom: var(--map-bottom); }
 .discover-stage .leaflet-control-attribution { max-width: min(530px, 100vw); }
@@ -1454,4 +1471,19 @@ body[data-theme="dark"] .discover-stage #map {
     padding-top: 4px;
     border-top: 1px solid var(--line);
   }
+}
+
+.address-card p[lang="ja"] {
+  font-size: 1.25rem;
+  overflow-wrap: anywhere;
+}
+.discover-stage #map.regional-map-active {
+  background: #ede9df;
+}
+body[data-theme="dark"] .discover-stage #map.regional-map-active {
+  background: #253531;
+}
+
+#map.regional-map-active ~ .tile-status {
+  display: none;
 }

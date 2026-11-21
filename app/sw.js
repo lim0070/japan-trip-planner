@@ -1,10 +1,21 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v40";
+  CACHE = PREFIX + "v41";
 const FILES = [
   "./",
   "index.html",
   "styles.css",
   "main.js",
+  "day-tools.js",
+  "offline-regions.js",
+  "shared-day.html",
+  "shared-day.js",
+  "core/shared-day.js",
+  "vendor/qr-encoder.js",
+  "vendor/QR-LICENSE.txt",
+  "phone-plan.js",
+  "local-planning.js",
+  "core/local-planning.js",
+  "core/remaining-day.js",
   "core/model.js",
   "core/place-search.js",
   "core/day-plan.js",
@@ -92,11 +103,13 @@ self.addEventListener("fetch", (e) => {
   e.respondWith(
     (async () => {
       const cache = await caches.open(CACHE);
-      if (navigation)
+      if (navigation) {
+        const reader = new URL("shared-day.html", base);
+        const shell = u.pathname === reader.pathname ? reader : new URL("index.html", base);
         return (
-          (await cache.match(new URL("index.html", base).href)) ||
-          fetch(e.request)
+          (await cache.match(shell.href)) || fetch(e.request)
         );
+      }
       return (await cache.match(e.request)) || fetch(e.request);
     })(),
   );

@@ -81,6 +81,12 @@ const intervals = (x) =>
         r.endMinute > r.startMinute &&
         (i === 0 || r.startMinute >= x[i - 1].endMinute),
     ));
+export const validHoursCheck = shape({
+  date,
+  intervals,
+  checkedAt: date,
+  sourceUrl: nullable(url),
+});
 export const validHours = shape({
   schemaVersion: version,
   timeZone: one("Asia/Tokyo"),
@@ -95,6 +101,13 @@ export const validHours = shape({
   exceptions: (x) => record(intervals)(x) && Object.keys(x).every(date),
   checkedAt: nd,
   sourceUrl: nullable(url),
+});
+export const validEntrance = shape({
+  lat: (x) => num(x, -90, 90),
+  lng: (x) => num(x, -180, 180),
+  note: (x) => str(x, 500),
+  sourceUrl: nullable(url),
+  checkedAt: date,
 });
 const names = shape({ ja: ns, en: ns, romaji: ns, branchJa: ns });
 const address = shape({
@@ -205,7 +218,22 @@ export const validThresholds = shape({
   longWalkKm: (x) => num(x, 0.01, 10000),
   longTrainKm: (x) => num(x, 0.01, 10000),
 });
-const trip = shape({
+const planningNote = (x) => str(x, 500);
+const yen = nullable((x) => integer(x, 0, 999999999));
+const localPlan = optionalFields(shape({
+  budgetYen: yen,
+  spentYen: yen,
+  refundYen: yen,
+  refundStatus: one("unknown", "pending", "received"),
+  budgetNote: planningNote,
+  seasonal: planningNote,
+  tax: planningNote,
+  pass: planningNote,
+}), {
+  receipts: array(shape({ label: (x) => str(x, 120), yen: (x) => integer(x, 0, 999999999) }), 200),
+  railCosts: shape({ passPriceYen: yen, coveredTicketsYen: yen, uncoveredFaresYen: yen }),
+});
+const trip = optionalFields(shape({
   schemaVersion: version,
   id: identifier,
   name: nonempty,
@@ -218,7 +246,7 @@ const trip = shape({
   thresholds: validThresholds,
   createdAt: stamp,
   updatedAt: stamp,
-});
+}), { localPlan });
 const clockMinute = (x) => integer(x, 0, 1439);
 const routeCheck = shape({
   provider: one("google", "jorudan"),
@@ -240,6 +268,7 @@ const planAnchor = (anchor) => {
   return check.minutes + check.access + check.egress <= 10080 &&
     (check.provider === "jorudan" ? anchor.mode === "train" : check.access === 0 && check.egress === 0);
 };
+const departureCheckpoint = shape({ departMinute: clockMinute, finishBy: clockMinute });
 const day = optionalFields(shape({
   schemaVersion: version,
   id: identifier,
@@ -247,7 +276,19 @@ const day = optionalFields(shape({
   date,
   startMinute: (x) => integer(x, 0, 1439),
   stopIds: array(identifier),
-}), { planEndMinute: clockMinute, planStartAnchor: planAnchor, planEndAnchor: planAnchor });
+}), {
+  label: (x) => str(x, 80),
+  travelNotes: shape({
+    weather: planningNote, transit: planningNote, lastTrainMinute: nullable(clockMinute),
+    sourceUrl: nullable(url), checkedAt: date, journal: (x) => str(x, 5000),
+  }),
+  planEndMinute: clockMinute,
+  planStartAnchor: planAnchor,
+  planEndAnchor: planAnchor,
+  planDepartures: (x) => record(departureCheckpoint)(x) &&
+    Object.keys(x).every(identifier) &&
+    Object.values(x).every(rule => rule.departMinute <= rule.finishBy),
+});
 const stopBase = shape({
   schemaVersion: version,
   id: identifier,
@@ -262,6 +303,12 @@ const stop = optionalFields(stopBase, {
   sourceDatasetVersion: nullable(nonempty),
   planLocked: bool,
   fixedStartMinute: clockMinute,
+  hoursCheck: validHoursCheck,
+  entrance: validEntrance,
+  visitDetails: shape({
+    exit: planningNote, luggage: planningNote, sauna: planningNote, reservation: planningNote,
+    sourceUrl: nullable(url), checkedAt: date,
+  }),
 });
 const segment = optionalFields(shape({
   schemaVersion: version,

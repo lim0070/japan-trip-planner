@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "sourceDataAsOf": "2026-11-01T21:21:36Z",
+  "attribution": "© OpenStreetMap contributors; extract by Geofabrik",
+  "license": "ODbL-1.0",
+  "licensePath": "LICENSE.txt",
+  "sourcePath": "SOURCE.md",
+  "regions": [
+    {
+      "id": "tokyo-central",
+      "name": "Central Tokyo",
+      "bbox": [
+        139.68,
+        35.62,
+        139.833,
+        35.736
+      ],
+      "path": "packs/tokyo-central.geojson",
+      "bytes": 3275057,
+      "sha256": "bd16c409732a57327bce8be2ee034a3191f1e62e2f4d03df998eabd62e550ce4",
+      "featureCount": 12892,
+      "counts": {
+        "road": 8833,
+        "rail": 3128,
+        "water": 310,
+        "station": 366,
+        "place": 255
+      }
+    },
+    {
+      "id": "sendai-matsushima",
+      "name": "Sendai to Matsushima Bay",
+      "bbox": [
+        140.84,
+        38.23,
+        141.105,
+        38.401
+      ],
+      "path": "packs/sendai-matsushima.geojson",
+      "bytes": 1468578,
+      "sha256": "f8c820cbab155fe59b532edede648c15800faeb3ab7ea7c68e50e8e022d84e0e",
+      "featureCount": 5768,
+      "counts": {
+        "road": 4427,
+        "rail": 662,
+        "water": 371,
+        "station": 57,
+        "place": 251
+      }
+    },
+    {
+      "id": "yamagata-city",
+      "name": "Central Yamagata City",
+      "bbox": [
+        140.292,
+        38.21,
+        140.375,
+        38.292
+      ],
+      "path": "packs/yamagata-city.geojson",
+      "bytes": 189705,
+      "sha256": "a2d52f093b3b897b733a5a0f7deb058e6694eb4fcf903d1e8eb74f4633143ae6",
+      "featureCount": 777,
+      "counts": {
+        "road": 543,
+        "rail": 90,
+        "water": 74,
+        "station": 4,
+        "place": 66
+      }
+    }
+  ]
+}

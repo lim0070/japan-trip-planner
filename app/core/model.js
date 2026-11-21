@@ -36,6 +36,13 @@ export const visitPlace = (s) => ({
   ...clone(s.placeSnapshot),
   ...clone(s.placeOverrides),
 });
+export function visitDestination(stop) {
+  const place = visitPlace(stop);
+  if (!stop.entrance) return place;
+  const { lat, lng } = stop.entrance;
+  return { ...place, entranceConfirmed: true,
+    location: { ...place.location, lat, lng, availability: "located" } };
+}
 export const located = (p) =>
   p.location.lat !== null && p.location.lng !== null;
 export const dates = (a, b) => {
@@ -95,6 +102,7 @@ export function changeDates(s, trip, start, end, shift = false) {
       };
       s.days.push(d);
     }
+    if (d.date !== date) delete d.planDepartures;
     d.date = date;
     keep.push(d.id);
   }
@@ -199,9 +207,18 @@ export function addStop(s, day, p, version) {
   reconcile(s);
   return stop;
 }
+function keepDepartureCheckpoints(day, previousOrder) {
+  if (!day.planDepartures) return;
+  for (const id of Object.keys(day.planDepartures)) {
+    const i = day.stopIds.indexOf(id);
+    if (i < 0 || !day.stopIds.slice(0, i + 1).every((stop, index) => stop === previousOrder[index]))
+      delete day.planDepartures[id];
+  }
+}
 export function moveStop(s, stopId, toDayId, index) {
   const stop = s.stops.find((x) => x.id === stopId),
     trip = s.trips.find((t) => t.id === stop.tripId);
+  const previous = new Map(s.days.filter(d => d.planDepartures).map(d => [d, d.stopIds]));
   for (const d of s.days) d.stopIds = d.stopIds.filter((x) => x !== stopId);
   trip.unassignedStopIds = trip.unassignedStopIds.filter((x) => x !== stopId);
   const to = s.days.find((d) => d.id === toDayId);
@@ -212,11 +229,16 @@ export function moveStop(s, stopId, toDayId, index) {
       stopId,
     );
   else trip.unassignedStopIds.push(stopId);
+  for (const [d, order] of previous) keepDepartureCheckpoints(d, order);
   reconcile(s);
 }
 export function removeStop(s, stopId) {
   s.stops = s.stops.filter((x) => x.id !== stopId);
-  for (const d of s.days) d.stopIds = d.stopIds.filter((x) => x !== stopId);
+  for (const d of s.days) {
+    const previous = d.stopIds;
+    d.stopIds = previous.filter((x) => x !== stopId);
+    keepDepartureCheckpoints(d, previous);
+  }
   for (const t of s.trips)
     t.unassignedStopIds = t.unassignedStopIds.filter((x) => x !== stopId);
   reconcile(s);
@@ -259,12 +281,18 @@ export const segmentKey = (x) =>
 export function reconcile(s) {
   const active = [];
   for (const d of s.days) {
+    if (d.planDepartures) {
+      const checkpointIds = new Set(d.stopIds.slice(0, -1));
+      for (const id of Object.keys(d.planDepartures))
+        if (!checkpointIds.has(id)) delete d.planDepartures[id];
+      if (!Object.keys(d.planDepartures).length) delete d.planDepartures;
+    }
     for (let i = 1; i < d.stopIds.length; i++) {
       const from = s.stops.find((x) => x.id === d.stopIds[i - 1]),
         to = s.stops.find((x) => x.id === d.stopIds[i]);
       if (!from || !to) continue;
-      const a = visitPlace(from),
-        b = visitPlace(to);
+      const a = visitDestination(from),
+        b = visitDestination(to);
       let seg = s.segments.find(
         (x) =>
           x.tripId === d.tripId &&
@@ -327,7 +355,7 @@ export function dayTravel(day, rows) {
   const last = rows.at(-1);
   const start = day.planStartAnchor, end = day.planEndAnchor;
   const inbound = end && (last || start)
-    ? anchorLeg(end, last ? visitPlace(last.stop) : start.place, end.place,
+    ? anchorLeg(end, last ? visitDestination(last.stop) : start.place, end.place,
         day, last ? last.departure : day.startMinute, last?.stop.id)
     : null;
   const outbound = rows[0]?.outbound || null;
@@ -341,9 +369,22 @@ export function dayTravel(day, rows) {
   };
 }
 
+export function dayDeadline(day) {
+  const last = day.stopIds.slice(0, -1).findLast(id =>
+    Object.hasOwn(day.planDepartures || {}, id));
+  return last ? day.planDepartures[last].finishBy : day.planEndMinute;
+}
+
 export function schedule(s, day) {
   let minute = day.startMinute;
+  let finishBy = day.planEndMinute;
   return day.stopIds.map((stopId, i) => {
+    const previousId = day.stopIds[i - 1];
+    if (i > 0 && day.planDepartures && Object.hasOwn(day.planDepartures, previousId)) {
+      const checkpoint = day.planDepartures[previousId];
+      minute = Math.max(minute ?? 0, checkpoint.departMinute);
+      finishBy = checkpoint.finishBy;
+    }
     const stop = s.stops.find((x) => x.id === stopId),
       segment = i
         ? s.segments.find(
@@ -353,27 +394,28 @@ export function schedule(s, day) {
     const check = segment?.routeCheck;
     const missed = check && !checkedRouteApplies(
       check, day.date, minute,
-      routeEndpoints(visitPlace(s.stops.find((x) => x.id === segment.fromStopId)), visitPlace(stop)),
+      routeEndpoints(visitDestination(s.stops.find((x) => x.id === segment.fromStopId)), visitDestination(stop)),
     );
     const outbound = i === 0 && day.planStartAnchor
-      ? anchorLeg(day.planStartAnchor, day.planStartAnchor.place, visitPlace(stop), day, minute, stop.id)
+      ? anchorLeg(day.planStartAnchor, day.planStartAnchor.place, visitDestination(stop), day, minute, stop.id)
       : null;
     const travel = segment
       ? (missed ? segment.estimatedMinutes : (segment.manualMinutes ?? segment.estimatedMinutes))
       : outbound ? outbound.minutes : 0;
     const routeWait = outbound ? outbound.leave - minute : check && !missed ? check.departMinute - minute : 0;
     if (minute !== null) minute += routeWait;
+    const routeDeparture = minute;
     minute = minute === null || travel === null ? null : minute + travel;
     const arrival = minute;
     const start = arrival === null ? null : (
-      day.planEndMinute === undefined ? Math.max(arrival, stop.fixedStartMinute ?? arrival)
-        : planningStart(stop, visitPlace(stop), day.date, arrival, day.planEndMinute)
+      finishBy === undefined ? Math.max(arrival, stop.fixedStartMinute ?? arrival)
+        : planningStart(stop, visitPlace(stop), day.date, arrival, finishBy)
     );
     // Keep displaying the computed itinerary if later edits introduce conflicts.
     const visitStart = start ?? arrival;
     minute = visitStart === null ? null : visitStart + stop.durationMinutes;
     return { stop, segment, travel, arrival, visitStart, departure: minute, outbound,
-      routeWait, missed, timingConflict: start === null && arrival !== null };
+      routeWait, routeDeparture, missed, timingConflict: start === null && arrival !== null };
   });
 }
 export function timeLabel(date, minutes) {
@@ -385,9 +427,30 @@ export function timeLabel(date, minutes) {
       : "") + stamp.toISOString().slice(11, 16)
   );
 }
+const weekdays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+
+export function hoursOnDate(hours, date) {
+  if (!hours) return null;
+  const weekday = weekdays[new Date(date + "T00:00:00Z").getUTCDay()];
+  return Object.hasOwn(hours.exceptions, date) ? hours.exceptions[date] : hours.weekly[weekday];
+}
+
+function visitScheduleHours(stop, hours, date) {
+  const check = stop?.hoursCheck;
+  if (!check || check.date !== date) return hours;
+  const base = hours?.checkedAt ? hours : {
+    weekly: Object.fromEntries(weekdays.map(day => [day, null])),
+    exceptions: {},
+  };
+  return {
+    ...base,
+    checkedAt: check.checkedAt,
+    exceptions: { ...base.exceptions, [date]: check.intervals },
+  };
+}
+
 function hoursSpans(hours, date, start, end) {
-  const base = Date.parse(date + "T00:00:00Z"),
-    week = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+  const base = Date.parse(date + "T00:00:00Z");
   let spans = [],
     unknown = [];
   for (
@@ -400,7 +463,7 @@ function hoursSpans(hours, date, start, end) {
       exception = Object.hasOwn(hours.exceptions, key),
       rule = exception
         ? hours.exceptions[key]
-        : hours.weekly[week[dt.getUTCDay()]];
+        : hours.weekly[weekdays[dt.getUTCDay()]];
     // A dated rule replaces the whole date, including any previous-day spill.
     if (exception) {
       const midnight = offset * 1440;
@@ -437,8 +500,9 @@ export function hoursResult(hours, date, start, end) {
 }
 const NEAR_CLOSING_MINUTES = 30;
 
-export function visitHoursNotice(place, date, { arrival, visitStart, departure }) {
-  const { hours, operatingStatus } = place;
+export function visitHoursNotice(place, date, { stop, arrival, visitStart, departure }) {
+  const hours = visitScheduleHours(stop, place.hours, date);
+  const { operatingStatus } = place;
   const check = "Check hours";
   if (!hours?.checkedAt || !Number.isInteger(arrival) ||
       ["closed", "relocated"].includes(operatingStatus.value)) return check;
@@ -497,7 +561,7 @@ export function planningStart(stop, place, date, arrival, finishBy) {
   const latest = finishBy - stop.durationMinutes;
   if (earliest < arrival || earliest > latest ||
       ["closed", "relocated"].includes(place.operatingStatus.value)) return null;
-  const hours = place.hours;
+  const hours = visitScheduleHours(stop, place.hours, date);
   if (!hours?.checkedAt) return earliest;
   const candidates = fixed !== undefined ? [fixed] : [
     earliest,
@@ -526,7 +590,8 @@ export function warnings(s, day, trip) {
       out.push("Long day — review the planned duration.");
     if (end > trip.thresholds.lateFinishMinute)
       out.push("Late finish in Japan time.");
-    if (day.planEndMinute !== undefined && end > day.planEndMinute)
+    const deadline = dayDeadline(day);
+    if (deadline !== undefined && end > deadline)
       out.push(day.planEndAnchor ? "Return is after your return-by time." : "The itinerary exceeds your finish-by time.");
     const next = s.days.find(
       (d) =>
@@ -548,8 +613,8 @@ export function warnings(s, day, trip) {
       out.push("Review the timing for " + name(p) + ".");
     if (row.missed) out.push("A checked route needs review after a timing or location change.");
     if (!row.segment) continue;
-    const a = visitPlace(s.stops.find((x) => x.id === row.segment.fromStopId)),
-      b = visitPlace(row.stop),
+    const a = visitDestination(s.stops.find((x) => x.id === row.segment.fromStopId)),
+      b = visitDestination(row.stop),
       km = located(a) && located(b) ? distance(a.location, b.location) : null;
     if (
       row.segment.mode === "walk" &&
@@ -582,7 +647,7 @@ export function filterPlaces(
 ) {
   const lm = new Map(feed.lists.map((l) => [l.listId, l])),
     saved = new Map(flags.map((x) => [x.placeKey, x])),
-    match = placeMatcher(f.q, search),
+    match = placeMatcher(f.q, { ...search, allowTypos: f.allowTypos === true, romajiByKey: f.romajiByKey }),
     ranks = new Map();
   let rows = feed.places
     .filter((p) => {
@@ -612,7 +677,7 @@ export function filterPlaces(
         );
       }
       if (feed.source.namespace === "tabelog")
-        return p.memberships.some((m) => {
+        return (f.includeClosed === true || p.operatingStatus.value !== "closed") && p.memberships.some((m) => {
           const l = lm.get(m.listId);
           return (
             (!f.categories.length || f.categories.includes(l.category)) &&
@@ -715,7 +780,7 @@ export function safeURL(s) {
   }
 }
 const destination = (p) =>
-  p.address.ja && (p.location.confidence !== "high" || !located(p))
+  !p.entranceConfirmed && p.address.ja && (p.location.confidence !== "high" || !located(p))
     ? name(p) + " " + p.address.ja
     : located(p)
       ? p.location.lat + "," + p.location.lng

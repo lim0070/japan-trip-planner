@@ -1,8 +1,7 @@
 // One place matcher for Discover and Saved Spots.
 // It only compares text the data already holds: every stored name, every
-// address part, a Shopping place's brand display name and the names of the
-// other records in its confirmed alias group. It never invents readings,
-// translations or romanizations.
+// address part, a Shopping place's brand, its confirmed alias names and any
+// reading the user saved. It never invents readings or translations.
 import { brands } from "./shopping-catalog.js";
 
 // Spaces, middle dots and similar separators are ignored.
@@ -31,6 +30,7 @@ export const RANK = {
   nameContains: 2,
   aliasOrBrand: 3,
   address: 4,
+  typo: 5,
 };
 
 const strings = (o) =>
@@ -67,7 +67,7 @@ function aliasNames(p, aliases, places) {
   }
   return hit.names;
 }
-function tier(t, f, alias) {
+function tier(t, f, alias, savedRomaji) {
   let best = -1;
   for (const n of f.names) {
     if (n === t) return RANK.nameExact;
@@ -75,10 +75,42 @@ function tier(t, f, alias) {
     else if (best < 0 && n.includes(t)) best = RANK.nameContains;
   }
   if (best >= 0) return best;
-  if (f.brand.some((n) => n.includes(t)) || alias.some((n) => n.includes(t)))
+  if (savedRomaji?.includes(t) || f.brand.some((n) => n.includes(t)) || alias.some((n) => n.includes(t)))
     return RANK.aliasOrBrand;
   if (f.address.some((n) => n.includes(t))) return RANK.address;
   return -1;
+}
+
+// Opt-in tolerance is limited to one edit or neighboring transposition in
+// a Latin name. Different kana, addresses and unseen readings stay distinct.
+function latinWord(value, minimum) {
+  if (value.length < minimum || value.length > 80 || !/^\p{Script=Latin}+$/u.test(value)) return null;
+  const letters = [...value];
+  return letters.length >= minimum ? letters : null;
+}
+
+function latinNames(names) {
+  const words = new Set();
+  for (const name of names) {
+    words.add(compact(name));
+    for (const term of terms(name)) words.add(term);
+  }
+  return [...words].map(word => latinWord(word, 3)).filter(Boolean);
+}
+
+function oneTypo(a, b) {
+  if (Math.abs(a.length - b.length) > 1) return false;
+  let i = 0;
+  while (i < a.length && a[i] === b[i]) i++;
+  if (a.length === b.length) {
+    if (i === a.length) return false;
+    return a.slice(i + 1).join("") === b.slice(i + 1).join("") ||
+      (a[i] === b[i + 1] && a[i + 1] === b[i] &&
+       a.slice(i + 2).join("") === b.slice(i + 2).join(""));
+  }
+  return a.length < b.length
+    ? a.slice(i).join("") === b.slice(i + 1).join("")
+    : a.slice(i + 1).join("") === b.slice(i).join("");
 }
 
 // Returns null for an empty query (no text filter), otherwise a function
@@ -87,22 +119,40 @@ function tier(t, f, alias) {
 // fields of that place.
 // context.aliases: Map placeKey -> confirmed alias group ({ memberKeys }).
 // context.places: Map placeKey -> place, used to read the members' names.
+// context.romajiByKey: Map placeKey -> a user-supplied stored romaji reading.
+// context.allowTypos: true to suggest lower-ranked, one-typo Latin matches.
 export function placeMatcher(query, context = {}) {
   const ts = terms(query);
   if (!ts.length) return null;
   const whole = ts.join("");
+  const approximate = context.allowTypos === true ? ts.map(term => latinWord(term, 4)) : [];
   return (p) => {
     if (!p) return -1;
     const f = fields(p),
-      alias = aliasNames(p, context.aliases, context.places);
+      alias = aliasNames(p, context.aliases, context.places),
+      userRomaji = context.romajiByKey?.get(p.key),
+      savedRomaji = userRomaji ? compact(userRomaji) : null;
     let worst = 0;
-    for (const t of ts) {
-      const r = tier(t, f, alias);
-      if (r < 0) return -1;
-      worst = Math.max(worst, r);
+    let missing = null;
+    for (const [i, t] of ts.entries()) {
+      const r = tier(t, f, alias, savedRomaji);
+      if (r < 0) {
+        if (missing || !approximate[i]) return -1;
+        missing = approximate[i];
+      } else worst = Math.max(worst, r);
+    }
+    if (missing) {
+      f.latinNames ??= latinNames(strings(p.names));
+      const couldBe = name => oneTypo(missing, name);
+      return f.latinNames.some(couldBe) ||
+        (userRomaji && latinNames([userRomaji]).some(couldBe)) ||
+        alias.some(name => {
+          const letters = latinWord(name, 3);
+          return letters && couldBe(letters);
+        }) ? RANK.typo : -1;
     }
     if (ts.length === 1) return worst;
-    const w = tier(whole, f, alias);
+    const w = tier(whole, f, alias, savedRomaji);
     return w >= 0 ? Math.min(w, worst) : worst;
   };
 }
