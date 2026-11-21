@@ -100,3 +100,67 @@ export const shopIcons = {
     "wide": true
   }
 };
+
+// Compact map-only faces. Full marks above remain available in the lists and details.
+export const roundShopIcons = {
+  "avail": {
+    "file": "round/avail.svg",
+    "kind": "planner-symbol"
+  },
+  "birthday": {
+    "file": "round/birthday.svg",
+    "kind": "planner-symbol"
+  },
+  "chambre": {
+    "file": "round/chambre.svg",
+    "kind": "planner-symbol"
+  },
+  "costco": {
+    "file": "round/costco.png",
+    "kind": "compact-interpretation"
+  },
+  "divalo": {
+    "file": "round/divalo.svg",
+    "kind": "planner-symbol"
+  },
+  "global-work": {
+    "file": "round/global-work.svg",
+    "kind": "planner-symbol"
+  },
+  "gu": {
+    "file": "round/gu.png",
+    "kind": "compact-adaptation"
+  },
+  "hands": {
+    "file": "round/hands.png",
+    "kind": "compact-adaptation"
+  },
+  "life-supermarket": {
+    "file": "round/life-supermarket.png",
+    "kind": "compact-adaptation"
+  },
+  "lopia": {
+    "file": "round/lopia.png",
+    "kind": "compact-adaptation"
+  },
+  "nitori": {
+    "file": "round/nitori.png",
+    "kind": "compact-adaptation"
+  },
+  "outlet-mall": {
+    "file": "round/outlet-mall.svg",
+    "kind": "planner-symbol"
+  },
+  "shimamura": {
+    "file": "round/shimamura.png",
+    "kind": "compact-interpretation"
+  },
+  "uniqlo": {
+    "file": "round/uniqlo.png",
+    "kind": "compact-adaptation"
+  },
+  "workman": {
+    "file": "round/workman.png",
+    "kind": "compact-interpretation"
+  }
+};

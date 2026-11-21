@@ -1593,9 +1593,13 @@ body[data-theme="dark"] .discover-stage #map.regional-map-active {
 .discover-marker .layer-pin { position: relative; }
 .discover-marker .map-symbol { width: 25px; height: 25px; }
 .wide-shop-symbol { width: 32px; }
-.discover-marker .layer-shopping:has(.wide-shop-symbol) { width: 44px; border-radius: 11px; }
-.discover-marker .wide-shop-symbol { width: 36px; }
-.discover-marker.inspected .wide-shop-symbol { width: 39px; }
+.discover-marker .shop-pin-symbol {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  pointer-events: none;
+}
+.discover-marker.inspected .shop-pin-symbol { width: 30px; height: 30px; }
 .pin-status {
   position: absolute; inset: -4px -3px auto auto; padding: 2px 4px; border-radius: 7px;
   background: #782f27; color: #fff; font: 700 11px/1 system-ui, sans-serif;

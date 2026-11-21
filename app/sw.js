@@ -1,5 +1,5 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v46";
+  CACHE = PREFIX + "v47";
 const FILES = [
   "./",
   "index.html",
@@ -37,6 +37,21 @@ const FILES = [
   "map-symbols.js",
   "icons/map/cuisine-icons.svg",
   "icons/map/credits.html",
+  "icons/map/round/avail.svg",
+  "icons/map/round/birthday.svg",
+  "icons/map/round/chambre.svg",
+  "icons/map/round/costco.png",
+  "icons/map/round/divalo.svg",
+  "icons/map/round/global-work.svg",
+  "icons/map/round/gu.png",
+  "icons/map/round/hands.png",
+  "icons/map/round/life-supermarket.png",
+  "icons/map/round/lopia.png",
+  "icons/map/round/nitori.png",
+  "icons/map/round/outlet-mall.svg",
+  "icons/map/round/shimamura.png",
+  "icons/map/round/uniqlo.png",
+  "icons/map/round/workman.png",
   "icons/map/assets/avail.svg",
   "icons/map/assets/birthday.svg",
   "icons/map/assets/chambre.svg",
