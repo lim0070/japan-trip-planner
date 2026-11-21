@@ -300,6 +300,7 @@ export function createLocalPlanning({
       <div id="local-share-link-box" hidden>
         <label>Read-only link<input id="local-share-link" type="url" readonly></label>
         <button type="button" id="local-copy-link">Copy link</button>
+        <a class="button" id="local-open-link" target="_blank" rel="noopener noreferrer">Open on this device</a>
         <button type="button" id="local-show-qr" hidden>Show QR code</button>
         <div id="local-share-qr"></div>
         <p><a href="./vendor/QR-LICENSE.txt" target="_blank" rel="noopener noreferrer">QR licence</a></p>
@@ -308,6 +309,7 @@ export function createLocalPlanning({
       const status = document.getElementById("local-share-status");
       const box = document.getElementById("local-share-link-box");
       const linkField = document.getElementById("local-share-link");
+      const openLink = document.getElementById("local-open-link");
       const qr = document.getElementById("local-share-qr");
       const qrButton = document.getElementById("local-show-qr");
       const preview = () => {
@@ -317,6 +319,7 @@ export function createLocalPlanning({
       const renderPreview = () => {
         box.hidden = true;
         linkField.value = "";
+        openLink.removeAttribute("href");
         qr.replaceChildren();
         qrButton.hidden = true;
         status.textContent = "";
@@ -328,11 +331,14 @@ export function createLocalPlanning({
       form.onchange = renderPreview;
       document.getElementById("local-prepare-link").onclick = () => {
         try {
-          const url = new URL("./shared-day.html", location.href);
-          url.hash = encodeSharedDay(preview());
-          linkField.value = url.href;
+          const fragment = encodeSharedDay(preview());
+          const shareURL = new URL("../shared-day.html", import.meta.url);
+          const deviceURL = new URL("./shared-day.html", import.meta.url);
+          shareURL.hash = deviceURL.hash = fragment;
+          linkField.value = shareURL.href;
+          openLink.href = deviceURL.href;
           box.hidden = false;
-          qrButton.hidden = url.href.length > 400;
+          qrButton.hidden = shareURL.href.length > 400;
           status.textContent = qrButton.hidden
             ? "Link ready. Use the link or file for a day this long."
             : "Link ready. Share it only with your intended readers.";
