@@ -1,3 +1,4 @@
+import nihombashi from "./nihombashi-event.js";
 import { readBounded } from "./core/shopping-bundle.js";
 
 export const calendarURL = "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html";
@@ -5,6 +6,10 @@ const jmaWeather = "https://www.jma.go.jp/jma/kokusai/multi.html";
 const gaugeViewer = "https://www.jma.go.jp/bosai/amedas/";
 const gaugeData = gaugeViewer + "data/";
 const jmaTerms = "https://www.jma.go.jp/jma/kishou/info/coment.html";
+const eventDerivative = new URL("../data/events/2027/edo-tokyo-festival-pin-2027.json", import.meta.url);
+const eventAttribution = 'Festival building location © <a href="' + nihombashi.geometrySource.attributionUrl +
+  '">OpenStreetMap contributors</a> · <a href="' + nihombashi.geometrySource.licenseUrl + '">ODbL</a>';
+const eventOn = (date) => nihombashi.startDate <= date && date <= nihombashi.endDate;
 const pdl = "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0";
 const sharedHolidays = {
   "01-01": "New Year’s Day", "02-11": "National Foundation Day", "02-23": "Emperor’s Birthday",
@@ -33,8 +38,8 @@ const seasons = [
     urls: ["https://www.data.jma.go.jp/osaka/kansoku/seibutsukisetsu.html"] },
 ];
 const events = [
-  { dates: ["2027-01-02", "2027-01-03"], title: "Tokyo · traditional performing arts opening program at Nihombashi Mitsukoshi",
-    url: "https://www.metro.tokyo.lg.jp/information/press/2026/10/2026102202" },
+  { dates: [nihombashi.startDate, nihombashi.endDate], title: "Tokyo · " + nihombashi.name + " · " + nihombashi.venue,
+    url: nihombashi.eventSourceUrl },
   { dates: ["2027-01-10", "2027-01-10"], title: "Yamagata · Hatsuichi New Year market on Route 112 · 10:00–17:00",
     url: "https://www.yamagata-cci.or.jp/user/eve/ev_hatu.html" },
   { dates: ["2027-09-20", "2027-12-31"], title: "Tokyo · Edo Tokyo Cultural Festival umbrella program · several venues",
@@ -124,7 +129,7 @@ export function rainObservation(data, latest, date, now = Date.now()) {
 }
 
 export function createCalendarTools({ esc, modal, getDay, getState, render }) {
-  let map, overlay, visible = false, renderedDate;
+  let map, overlay, visible = false, renderedDate, eventShown = false;
   const link = (url, label) => `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
   function milestone(item) {
     const [start, end] = item[item.type].map(prettyMonth);
@@ -167,8 +172,9 @@ export function createCalendarTools({ esc, modal, getDay, getState, render }) {
   }
 
   function layerSection() {
-    return `<button type="button" data-action="season-layer" aria-pressed="${visible}" ${getDay() ? "" : "disabled"}>Season on trip date</button>
-      ${visible ? '<p class="muted">City reference points for five JMA specimen trees. 1991–2020 averages. Local timing varies.</p>' : ""}`;
+    return `<button type="button" data-action="season-layer" aria-pressed="${visible}" ${getDay() ? "" : "disabled"}>Season &amp; events on trip date</button>
+      ${visible ? '<p class="muted">City reference points for five JMA specimen trees. 1991–2020 averages. Local timing varies.</p>' : ""}
+      ${visible && eventOn(getDay()?.date) ? '<button type="button" data-action="map-festival">Find Nihombashi festival pin</button>' : ""}`;
   }
 
   function syncMap() {
@@ -176,6 +182,10 @@ export function createCalendarTools({ esc, modal, getDay, getState, render }) {
     if (!map || renderedDate === date) return;
     renderedDate = date;
     if (overlay) { map.removeLayer(overlay); overlay = null; }
+    if (eventShown) {
+      map.attributionControl.removeAttribution(eventAttribution);
+      eventShown = false;
+    }
     if (!date) return;
     overlay = L.layerGroup().addTo(map);
     for (const item of seasonalMatches(date)) {
@@ -187,6 +197,34 @@ export function createCalendarTools({ esc, modal, getDay, getState, render }) {
       marker.getElement()?.setAttribute("aria-label", name);
       marker.on("click", () => modal(name, `<p>Historical specimen-tree milestones, 1991–2020. Site and year affect timing.</p>
         <ul>${seasonHTML(item)}</ul><p>${link(jmaTerms,"JMA terms")} · ${link(pdl,"Public Data License 1.0")}</p>`));
+    }
+    if (eventOn(date)) {
+      const marker = L.marker([nihombashi.lat, nihombashi.lon], {
+        icon: L.divIcon({ className: "station-marker festival-marker",
+          html: '<span aria-hidden="true">祭</span>', iconSize: [27, 27], iconAnchor: [13, 13] }),
+        zIndexOffset: 900, keyboard: true, title: nihombashi.name,
+      }).addTo(overlay);
+      const element = marker.getElement();
+      element?.setAttribute("aria-label", nihombashi.name);
+      const openEvent = () => modal(nihombashi.name, `
+        <p>${esc(nihombashi.startDate)} to ${esc(nihombashi.endDate)} · Japan time</p>
+        <p><strong>${esc(nihombashi.venue)}</strong><br>${esc(nihombashi.address)}</p>
+        <p>${esc(nihombashi.mapLabel)}. Check the venue guide for the indoor hall.</p>
+        <p>${link(nihombashi.eventSourceUrl, "Tokyo Metropolitan Government announcement")} ·
+          ${link(nihombashi.venueSourceUrl, "Venue access")}</p>
+        <p>${link(nihombashi.geometrySource.attributionUrl, "© OpenStreetMap contributors")} ·
+          ${link(nihombashi.geometrySource.sourceUrl, "Mapped Main Building")} ·
+          ${link(nihombashi.geometrySource.licenseUrl, "ODbL")} · ${link(eventDerivative, "Mapped point and sources (JSON)")}</p>`);
+      marker.on("click", openEvent);
+      element?.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          event.stopPropagation();
+          openEvent();
+        }
+      });
+      map.attributionControl.addAttribution(eventAttribution);
+      eventShown = true;
     }
   }
 
@@ -271,6 +309,7 @@ export function createCalendarTools({ esc, modal, getDay, getState, render }) {
   return { daySection, tripSection, layerSection, observationDialog, syncMap, attachMap(value) { map = value; syncMap(); }, actions: {
     "jma-forecast": forecastDialog,
     "jma-observation": () => observationDialog(),
+    "map-festival": () => { if (visible && eventOn(getDay()?.date)) map?.setView([nihombashi.lat, nihombashi.lon], 16); },
     "season-layer": () => { visible = !visible; syncMap(); render(); },
   } };
 }

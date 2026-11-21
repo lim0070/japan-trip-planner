@@ -1,0 +1,38 @@
+// Organizer-announced facts and an attributed OSM building-level location.
+export default {
+  "schemaVersion": 1,
+  "id": "edo-tokyo-performing-arts-opening-2027",
+  "checkedOn": "2026-11-21",
+  "name": "Edo Tokyo traditional performing arts festival opening program",
+  "startDate": "2027-01-02",
+  "endDate": "2027-01-03",
+  "timeZone": "Asia/Tokyo",
+  "venue": "Nihombashi Mitsukoshi Main Store, Main Building, 1F Central Hall",
+  "address": "1-4-1 Nihombashi Muromachi, Chuo, Tokyo",
+  "eventSource": "Tokyo Metropolitan Government, 22 October 2026, program 2",
+  "eventSourceUrl": "https://www.metro.tokyo.lg.jp/information/press/2026/10/2026102202",
+  "eventTermsUrl": "https://www.metro.tokyo.lg.jp/policy/chosakuken",
+  "eventReuse": "Individual announced facts in original planner wording.",
+  "venueSourceUrl": "https://www.mistore.jp/store/nihombashi/access.html",
+  "lat": 35.68563,
+  "lon": 139.77344,
+  "precision": "Approximate building location",
+  "mapLabel": "Main Building · approximate location",
+  "geometrySource": {
+    "id": "way/172599549",
+    "version": 8,
+    "name": "本館",
+    "sourceUrl": "https://www.openstreetmap.org/way/172599549",
+    "branchId": "relation/7872611",
+    "branchVersion": 7,
+    "branchName": "日本橋三越本店",
+    "branchUrl": "https://www.openstreetmap.org/relation/7872611",
+    "method": "Centroid of the mapped Main Building footprint. The published point lies inside that footprint, outside the annex and car park. The indoor hall position was not surveyed.",
+    "snapshot": "2026-11-01T21:21:36Z",
+    "pbfSha256": "34784d4e2cb82fce8e76cdcba38b76422295686b9639facbc05162441aa6f05d",
+    "attribution": "© OpenStreetMap contributors, extract by Geofabrik",
+    "attributionUrl": "https://www.openstreetmap.org/copyright",
+    "license": "ODbL-1.0",
+    "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/"
+  }
+};

@@ -1564,3 +1564,4 @@ body[data-theme="dark"] .discover-stage #map.regional-map-active {
 .prefecture-map-key i[data-visited="true"] {
   box-shadow: inset 0 -2px 0 var(--paper);
 }
+.festival-marker { background: #804524; }

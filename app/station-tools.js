@@ -1,12 +1,15 @@
+import stationDownloads from "./station-downloads.js";
 import delivery from "./station-delivery.js";
 import { manualPlace, safeURL } from "./core/model.js";
 import { readBounded } from "./core/shopping-bundle.js";
 
-const packURL = new URL("../data/stations/2026-11-01/station-pack-20261101.json", import.meta.url);
-const noticeURL = new URL("STATION-SOURCES.md", packURL);
+const packBase = new URL("../data/stations/2026-11-01/", import.meta.url);
+const packURL = new URL(stationDownloads.packs[0].file, packBase);
+const noticeURL = new URL("STATION-SOURCES.md", packBase);
+const downloadsURL = new URL("STATION-DOWNLOADS.md", packBase);
 const cacheName = "japan-trip-planner-station-pack-20261101";
-const packHash = "59f392cea0eb324e877cd92c6d31e303598635aecef9b424a8c83f8be91eda1d";
-const maxBytes = 350_000;
+const specs = new Map(stationDownloads.packs.map(spec => [spec.id, { ...spec, url: new URL(spec.file, packBase).href }]));
+const snapshot = stationDownloads.snapshot;
 const osm = "https://www.openstreetmap.org/";
 const license = "https://opendatacommons.org/licenses/odbl/1-0/";
 const kindNames = {
@@ -23,71 +26,73 @@ function label(feature) {
 }
 const featureKey = (feature) => feature.id.replace("/", ":");
 
-async function decode(bytes) {
-  const hash = [...new Uint8Array(await crypto.subtle.digest("SHA-256", bytes))]
-    .map(byte => byte.toString(16).padStart(2, "0")).join("");
-  if (hash !== packHash) throw new Error("Station pack checksum does not match.");
-  const pack = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
-  if (pack.schemaVersion !== 1 || !Array.isArray(pack.stations)) throw new Error("Unknown station pack format.");
+function parsePack(text, spec) {
+  const pack = JSON.parse(text);
+  if (pack.schemaVersion !== 1 || pack.source?.dataAsOf !== snapshot || !Array.isArray(pack.stations) ||
+      (spec.id !== "all" && (pack.stations.length !== 1 || pack.stations[0].id !== spec.id)))
+    throw new Error("Unknown station pack format.");
   return pack;
 }
 
 export function createStationTools({ esc, modal, toast, render, addPlace }) {
-  let pack = null;
+  const packs = new Map();
   let map;
   let overlay;
-  let operation = false;
+  let operation = null;
+  let loading = true;
   let active = false;
   let showEntrances = false;
   let stationId = "tokyo";
-  const station = () => pack?.stations.find(item => item.id === stationId);
+  const stations = () => packs.get("all")?.stations ||
+    [...specs.keys()].flatMap(id => packs.get(id)?.stations || []);
+  const station = () => {
+    const available = stations();
+    return available.find(item => item.id === stationId) || available[0];
+  };
   const attribution = 'Station data © <a href="' + osm + 'copyright">OpenStreetMap contributors</a> · <a href="' + license + '">ODbL</a>';
   const sources = '<a href="' + osm + 'copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a> · <a href="' +
     license + '" target="_blank" rel="noopener">ODbL</a> · <a href="' + noticeURL.href + '" target="_blank" rel="noopener">Source and download notice</a>';
 
   async function loadCached() {
-    try {
-      const cached = await caches.match(packURL.href, { cacheName });
+    const result = await Promise.allSettled([...specs.values()].map(async spec => {
+      const cached = await caches.match(spec.url, { cacheName });
       if (!cached) return;
-      pack = await decode(await cached.arrayBuffer());
-      render();
-    } catch {
-      toast("The saved station pack could not be opened. Download it again in Settings.");
-    }
+      const file = await readBounded(spec.url, spec.bytes, spec, () => cached);
+      packs.set(spec.id, parsePack(file.text, spec));
+    }));
+    loading = false;
+    if (result.some(item => item.status === "rejected"))
+      toast("A saved station download could not be opened. Download it again in Settings.");
+    if (packs.size) render();
+    else document.querySelectorAll('[data-action="station-download"]').forEach(button => { button.disabled = false; });
   }
 
-  async function download() {
-    if (operation || pack) return;
-    operation = true;
+  async function changeDownload(id = "all", remove = false) {
+    const spec = specs.get(id);
+    if (loading || operation || !spec || packs.has(id) !== remove) return;
+    operation = id;
     render();
     try {
-      const file = await readBounded(packURL, maxBytes);
-      if (file.sha256 !== packHash) throw new Error("Station pack checksum does not match.");
-      const next = JSON.parse(file.text);
       const cache = await caches.open(cacheName);
-      await cache.put(packURL.href, new Response(file.text, { headers: { "Content-Type": "application/json" } }));
-      pack = next;
-      toast("Station luggage and exits are ready offline.");
+      if (remove) {
+        await cache.delete(spec.url);
+        packs.delete(id);
+        active = active && packs.size > 0;
+        toast(spec.name + " download removed.");
+      } else {
+        const file = await readBounded(spec.url, spec.bytes, spec);
+        const pack = parsePack(file.text, spec);
+        await cache.put(spec.url, new Response(file.text, { headers: { "Content-Type": "application/json" } }));
+        packs.set(id, pack);
+        toast(id === "all" ? "Station luggage and exits are ready offline." : spec.name + " is ready offline.");
+      }
+      if (active) stationId = station()?.id || "tokyo";
+      syncMap();
     } catch (error) {
       toast("Station pack unavailable. " + error.message);
     } finally {
-      operation = false;
+      operation = null;
       render();
-    }
-  }
-
-  async function remove() {
-    if (operation) return;
-    operation = true;
-    try {
-      await caches.delete(cacheName);
-      pack = null;
-      active = false;
-      syncMap();
-      render();
-      toast("Station pack removed from this browser.");
-    } finally {
-      operation = false;
     }
   }
 
@@ -103,7 +108,7 @@ export function createStationTools({ esc, modal, toast, render, addPlace }) {
     const luggage = feature.kind !== "entrance";
     const noted = (value, fallback) => value ? esc(value) + " (mapped)" : fallback;
     modal(label(feature), `<p>Near ${esc(selected.name)} · ${feature.distanceM} m straight-line from the station reference point.</p>
-      <p>Snapshot ${esc(pack.source.dataAsOf.slice(0, 10))}. Confirm the entrance and access in person or with the operator.</p>
+      <p>Snapshot ${esc(snapshot.slice(0, 10))}. Confirm the entrance and access in person or with the operator.</p>
       ${luggage ? `<dl><dt>Hours</dt><dd>${noted(tags.opening_hours, "Unknown")}</dd>
       <dt>Fee</dt><dd>${noted(fee, "Unknown")}</dd>
       <dt>Size</dt><dd>${noted(size, "Unknown")}</dd><dt>Live availability</dt><dd>Unknown</dd></dl>` :
@@ -114,7 +119,7 @@ export function createStationTools({ esc, modal, toast, render, addPlace }) {
         const id = "station-" + featureKey(feature);
         const proof = {
           field: "location", sourceKind: "OpenStreetMap snapshot", url: source,
-          observedAt: pack.source.dataAsOf, note: "Station-nearby point. Entrance, operating status and walking route are unverified.",
+          observedAt: snapshot, note: "Station-nearby point. Entrance, operating status and walking route are unverified.",
         };
         return addPlace(manualPlace({
           key: "manual:" + id, sourceId: id,
@@ -174,10 +179,11 @@ export function createStationTools({ esc, modal, toast, render, addPlace }) {
     const open = document.getElementById("station-layer-controls")?.open ?? active;
     return `<details id="station-layer-controls" ${open ? "open" : ""}><summary>Luggage &amp; station exits</summary>
       ${selected ? `<button type="button" data-action="station-layer" aria-pressed="${active}">${active ? "Hide station layer" : "Show station layer"}</button>` :
-        `<button type="button" data-action="station-download" ${operation ? "disabled" : ""}>${operation ? "Downloading station pack…" : "Download station pack"}</button>`}
-      ${active && selected ? `<label>Station area<select id="station-picker">${pack.stations.map(item =>
-        `<option value="${esc(item.id)}"${stationId === item.id ? " selected" : ""}>${esc(item.name)}</option>`).join("")}</select></label>
-        <p class="muted">${esc(selected.name)} · Nearby map points as of ${esc(pack.source.dataAsOf.slice(0,10))}. Availability and the correct exit are unverified.</p>
+        `<button type="button" data-action="station-download" ${loading || operation ? "disabled" : ""}>${operation === "all" ? "Downloading station pack…" : "Download station pack"}</button>
+        <p><a href="#settings">Choose an individual station in Settings</a></p>`}
+      ${active && selected ? `<label>Station area<select id="station-picker">${stations().map(item =>
+        `<option value="${esc(item.id)}"${selected.id === item.id ? " selected" : ""}>${esc(item.name)}</option>`).join("")}</select></label>
+        <p class="muted">${esc(selected.name)} · Nearby map points as of ${esc(snapshot.slice(0,10))}. Availability and the correct exit are unverified.</p>
         <div class="actions"><button type="button" data-action="station-entrances" aria-pressed="${showEntrances}">Mapped exits and entrances</button>
         <button type="button" data-action="station-list">Show points as a list</button></div>${deliveryReference(selected)}` : ""}
       <small>${sources}</small></details>`;
@@ -185,10 +191,23 @@ export function createStationTools({ esc, modal, toast, render, addPlace }) {
 
   function settingsSection() {
     const open = document.getElementById("station-pack-settings")?.open;
+    const full = packs.has("all");
+    const buttons = stationDownloads.packs.slice(1).map(spec => {
+      const saved = packs.has(spec.id);
+      const size = (spec.bytes / 1024).toFixed(1) + " KiB";
+      const title = (saved ? "Remove " : "Download ") + spec.name + " station pack";
+      return `<li><strong>${esc(spec.name)}</strong> · ${size}${saved ? " · downloaded" : full ? " · included in the full pack" : ""}
+        <button type="button" data-action="station-${saved ? "remove" : "download"}" data-id="${spec.id}"
+          ${loading || operation ? "disabled" : ""}>${operation === spec.id ? "Working…" : esc(title)}</button></li>`;
+    }).join("");
     return `<details id="station-pack-settings" ${open ? "open" : ""}><summary>Offline station luggage &amp; exits</summary>
-      <p>${pack ? pack.stations.length + " station areas downloaded." : "Optional download of station-nearby OpenStreetMap luggage and entrance points."} Individual points can be checked on the map or in a list. Prices, hours and availability may be unknown.</p>
-      <button type="button" data-action="station-${pack ? "remove" : "download"}" ${operation ? "disabled" : ""}>${operation ? "Working…" : pack ? "Remove station pack" : "Download station pack"}</button>
-      <p>${sources} · <a href="${packURL.href}">Complete station derivative (JSON)</a></p></details>`;
+      <p>${packs.size ? stations().length + " station areas available offline." : "Download luggage and entrance points for the stations you need."}
+      Snapshot ${snapshot.slice(0, 10)}. Prices, hours and availability may be unknown.</p>
+      <ul class="station-point-list">${buttons}</ul>
+      <p>Full pack · 22 station areas · 200 KiB${full ? " · downloaded" : ""}</p>
+      <button type="button" data-action="station-${full ? "remove" : "download"}" ${loading || operation ? "disabled" : ""}>
+        ${operation === "all" ? "Working…" : full ? "Remove station pack" : "Download station pack"}</button>
+      <p>${sources} · <a href="${downloadsURL.href}">Individual derivatives</a> · <a href="${packURL.href}">Complete station derivative (JSON)</a></p></details>`;
   }
 
   function list() {
@@ -207,7 +226,7 @@ export function createStationTools({ esc, modal, toast, render, addPlace }) {
 
   function referenceChoices() {
     const seen = new Set();
-    return (pack?.stations || []).map(item => ({
+    return stations().map(item => ({
       name: item.name,
       options: item.features.filter(feature => {
         if (feature.kind !== "entrance" || seen.has(feature.id)) return false;
@@ -226,9 +245,9 @@ export function createStationTools({ esc, modal, toast, render, addPlace }) {
   function select(id) { stationId = id; syncMap(true); render(); }
 
   return { loadCached, select, attachMap(value) { map = value; syncMap(); }, layerSection, settingsSection, referenceChoices, referenceLink, actions: {
-    "station-download": download,
-    "station-remove": remove,
-    "station-layer": () => { active = !active && !!pack; syncMap(active); render(); },
+    "station-download": (id) => changeDownload(id),
+    "station-remove": (id) => changeDownload(id, true),
+    "station-layer": () => { active = !active && packs.size > 0; if (active) stationId = station().id; syncMap(active); render(); },
     "station-entrances": () => { showEntrances = !showEntrances; syncMap(); render(); },
     "station-list": list,
   } };
