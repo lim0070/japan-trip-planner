@@ -102,7 +102,11 @@ export function changeDates(s, trip, start, end, shift = false) {
       };
       s.days.push(d);
     }
-    if (d.date !== date) delete d.planDepartures;
+    if (d.date !== date) {
+      delete d.planDepartures;
+      delete d.planVisitStarts;
+      delete d.finishedStopIds;
+    }
     d.date = date;
     keep.push(d.id);
   }
@@ -190,18 +194,20 @@ export function flag(s, key, field, value) {
   f.updatedAt = now();
 }
 export function addStop(s, day, p, version) {
-  const l = ensurePlace(s, p, version),
-    stop = {
-      schemaVersion: 1,
-      id: id(),
-      tripId: day.tripId,
-      placeId: l.id,
-      placeSnapshot: effective(l),
-      sourceDatasetVersion: l.sourceRef?.datasetVersion || null,
-      placeOverrides: {},
-      notes: "",
-      durationMinutes: 60,
-    };
+  return addSavedStop(s, day, ensurePlace(s, p, version));
+}
+export function addSavedStop(s, day, local) {
+  const stop = {
+    schemaVersion: 1,
+    id: id(),
+    tripId: day.tripId,
+    placeId: local.id,
+    placeSnapshot: effective(local),
+    sourceDatasetVersion: local.sourceRef?.datasetVersion || null,
+    placeOverrides: {},
+    notes: "",
+    durationMinutes: 60,
+  };
   s.stops.push(stop);
   day.stopIds.push(stop.id);
   reconcile(s);
@@ -281,6 +287,16 @@ export const segmentKey = (x) =>
 export function reconcile(s) {
   const active = [];
   for (const d of s.days) {
+    const scheduled = new Set(d.stopIds);
+    if (d.finishedStopIds) {
+      d.finishedStopIds = d.finishedStopIds.filter(id => scheduled.has(id));
+      if (!d.finishedStopIds.length) delete d.finishedStopIds;
+    }
+    if (d.planVisitStarts) {
+      for (const id of Object.keys(d.planVisitStarts))
+        if (!scheduled.has(id)) delete d.planVisitStarts[id];
+      if (!Object.keys(d.planVisitStarts).length) delete d.planVisitStarts;
+    }
     if (d.planDepartures) {
       const checkpointIds = new Set(d.stopIds.slice(0, -1));
       for (const id of Object.keys(d.planDepartures))
@@ -407,9 +423,12 @@ export function schedule(s, day) {
     const routeDeparture = minute;
     minute = minute === null || travel === null ? null : minute + travel;
     const arrival = minute;
+    const retained = day.planVisitStarts?.[stopId];
+    const timingStop = retained !== undefined && stop.fixedStartMinute === undefined
+      ? { ...stop, fixedStartMinute: retained } : stop;
     const start = arrival === null ? null : (
-      finishBy === undefined ? Math.max(arrival, stop.fixedStartMinute ?? arrival)
-        : planningStart(stop, visitPlace(stop), day.date, arrival, finishBy)
+      finishBy === undefined ? Math.max(arrival, timingStop.fixedStartMinute ?? arrival)
+        : planningStart(timingStop, visitPlace(stop), day.date, arrival, finishBy)
     );
     // Keep displaying the computed itinerary if later edits introduce conflicts.
     const visitStart = start ?? arrival;
@@ -647,7 +666,7 @@ export function filterPlaces(
 ) {
   const lm = new Map(feed.lists.map((l) => [l.listId, l])),
     saved = new Map(flags.map((x) => [x.placeKey, x])),
-    match = placeMatcher(f.q, { ...search, allowTypos: f.allowTypos === true, romajiByKey: f.romajiByKey }),
+    match = placeMatcher(f.q, { ...search, allowTypos: f.allowTypos === true, romajiByKey: f.romajiByKey, searchAliasesByKey: f.searchAliasesByKey }),
     ranks = new Map();
   let rows = feed.places
     .filter((p) => {

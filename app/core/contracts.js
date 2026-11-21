@@ -195,7 +195,7 @@ const sourceRef = shape({
   sourceId: nonempty,
   datasetVersion: nonempty,
 });
-const local = shape({
+const local = optionalFields(shape({
   schemaVersion: version,
   id: identifier,
   sourceRef: nullable(sourceRef),
@@ -203,6 +203,14 @@ const local = shape({
   overrides,
   createdAt: stamp,
   updatedAt: stamp,
+}), {
+  setting: one("indoor", "outdoor"),
+  searchAliases: array((x) => nonempty(x) && x.length <= 80, 12),
+  dining: shape({
+    cashOnly: one("unknown","yes","no"), taxFree: one("unknown","yes","no"),
+    ticketMachine: one("unknown","yes","no"), checkedAt: date,
+    sourceUrl: nullable(url), note: (x) => str(x,500),
+  }),
 });
 const flag = shape({
   schemaVersion: version,
@@ -246,7 +254,11 @@ const trip = optionalFields(shape({
   thresholds: validThresholds,
   createdAt: stamp,
   updatedAt: stamp,
-}), { localPlan });
+}), {
+  localPlan,
+  checkedPass: shape({ label: (x) => nonempty(x) && x.length <= 80, yen, checkedAt: date, sourceUrl: nullable(url) }),
+  prefectureVisits: (x) => array(v => integer(v, 1, 47), 47)(x) && new Set(x).size === x.length,
+});
 const clockMinute = (x) => integer(x, 0, 1439);
 const routeCheck = shape({
   provider: one("google", "jorudan"),
@@ -278,6 +290,9 @@ const day = optionalFields(shape({
   stopIds: array(identifier),
 }), {
   label: (x) => str(x, 80),
+  finishedStopIds: (x) => array(identifier)(x) && new Set(x).size === x.length,
+  planVisitStarts: (x) => record(clockMinute)(x) && Object.keys(x).every(identifier),
+  backupTrain: shape({ text: (x) => nonempty(x) && x.length <= 500, travelDate: date, checkedAt: date, sourceUrl: nullable(url) }),
   travelNotes: shape({
     weather: planningNote, transit: planningNote, lastTrainMinute: nullable(clockMinute),
     sourceUrl: nullable(url), checkedAt: date, journal: (x) => str(x, 5000),
@@ -305,6 +320,11 @@ const stop = optionalFields(stopBase, {
   fixedStartMinute: clockMinute,
   hoursCheck: validHoursCheck,
   entrance: validEntrance,
+  saunaSets: array((x) => shape({
+    sauna: (v) => integer(v, 0, 1440), cold: (v) => integer(v, 0, 1440), rest: (v) => integer(v, 0, 1440),
+  })(x) && x.sauna + x.cold + x.rest > 0, 32),
+  togetherVotes: (x) => array(shape({id: identifier, choice: one("yes","maybe","no"), comment: (v) => str(v,280)}),40)(x)
+    && new Set(x.map(v => v.id)).size === x.length,
   visitDetails: shape({
     exit: planningNote, luggage: planningNote, sauna: planningNote, reservation: planningNote,
     sourceUrl: nullable(url), checkedAt: date,
@@ -321,7 +341,18 @@ const segment = optionalFields(shape({
   estimateModel: one("rough-v1"),
   coordinateFingerprint: (x) => str(x, 20000),
   overrideFingerprint: nullable((x) => str(x, 20000)),
-}), { routeCheck });
+}), {
+  routeCheck,
+  railFare: optionalFields(shape({ yen, coverage: one("unknown", "covered", "uncovered"), checkedAt: date,
+    travelDate: date, endpoints: (x) => str(x, 20000), sourceUrl: nullable(url), note: planningNote }), { passLabel: (x) => str(x, 80) }),
+  transitEvidence: shape({
+    status: one("unchecked", "operating", "suspended"),
+    lastDeparture: nullable((x) => integer(x,0,2879)),
+    exit: (x) => str(x,120), accessMetres: nullable((x) => integer(x,0,50000)),
+    alternative: planningNote, checkedAt: date, travelDate: date,
+    endpoints: (x) => str(x,20000), sourceUrl: nullable(url), stationFeature: nullable(identifier),
+  }),
+});
 const settings = shape({
   theme: one("system", "light", "dark"),
   defaultMode: one("walk", "train", "drive"),

@@ -1,0 +1,122 @@
+{
+  "pack": "station-pack-20261101.json",
+  "bytes": 204522,
+  "sha256": "59f392cea0eb324e877cd92c6d31e303598635aecef9b424a8c83f8be91eda1d",
+  "source": {
+    "name": "OpenStreetMap via Geofabrik",
+    "dataAsOf": "2026-11-01T21:21:36Z",
+    "url": "https://download.geofabrik.de/asia/japan-261101.osm.pbf",
+    "attribution": "© OpenStreetMap contributors, extract by Geofabrik",
+    "attributionUrl": "https://www.openstreetmap.org/copyright",
+    "license": "ODbL-1.0",
+    "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "bytes": 2566575684,
+    "md5": "a49fa3af3d11e1702d236cd86dde67fb",
+    "sha256": "34784d4e2cb82fce8e76cdcba38b76422295686b9639facbc05162441aa6f05d"
+  },
+  "stations": 22,
+  "stationAreasWithEntrances": 20,
+  "counts": {
+    "entrance": 825,
+    "locker": 103,
+    "storage": 3
+  },
+  "sourceNodeVersionsAndAllTagsVerified": 952,
+  "sourceWayVersionsRingsAndAllTagsVerified": 1,
+  "allBoundsAndRoundedDistancesVerified": true,
+  "luggageRowsWithMappedFields": {
+    "access": 3,
+    "capacity": 1,
+    "capacity:large": 1,
+    "capacity:medium": 1,
+    "capacity:small": 1,
+    "charge": 2,
+    "fee": 80,
+    "opening_hours": 9
+  },
+  "byStation": {
+    "tokyo": {
+      "entrance": 68,
+      "locker": 1,
+      "storage": 1
+    },
+    "shinjuku": {
+      "entrance": 123,
+      "locker": 3
+    },
+    "shibuya": {
+      "entrance": 35,
+      "locker": 1
+    },
+    "kyoto": {
+      "entrance": 14,
+      "locker": 2
+    },
+    "osaka": {
+      "entrance": 171,
+      "locker": 55
+    },
+    "ueno": {
+      "entrance": 27,
+      "locker": 2
+    },
+    "shinagawa": {
+      "entrance": 3
+    },
+    "ikebukuro": {
+      "entrance": 43,
+      "locker": 8
+    },
+    "akihabara": {
+      "entrance": 28,
+      "locker": 2,
+      "storage": 1
+    },
+    "asakusa": {
+      "entrance": 23,
+      "locker": 1
+    },
+    "yokohama": {
+      "entrance": 45,
+      "locker": 2
+    },
+    "nagoya": {
+      "entrance": 45,
+      "locker": 1
+    },
+    "shin-osaka": {
+      "entrance": 5,
+      "locker": 2
+    },
+    "namba": {
+      "entrance": 72,
+      "locker": 4
+    },
+    "sapporo": {
+      "entrance": 25,
+      "locker": 10
+    },
+    "sendai": {
+      "entrance": 21
+    },
+    "yamagata": {
+      "locker": 2
+    },
+    "kanazawa": {
+      "entrance": 8,
+      "locker": 6,
+      "storage": 1
+    },
+    "hiroshima": {},
+    "tennoji": {
+      "entrance": 33
+    },
+    "sannomiya": {
+      "entrance": 12
+    },
+    "hakata": {
+      "entrance": 24,
+      "locker": 1
+    }
+  }
+}

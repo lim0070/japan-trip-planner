@@ -1,5 +1,5 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v42";
+  CACHE = PREFIX + "v43";
 const FILES = [
   "./",
   "index.html",
@@ -13,6 +13,17 @@ const FILES = [
   "vendor/qr-encoder.js",
   "vendor/QR-LICENSE.txt",
   "phone-plan.js",
+  "now-mode.js",
+  "station-tools.js",
+  "station-delivery.js",
+  "transit-tools.js",
+  "calendar-tools.js",
+  "japan-depth.js",
+  "core/japan-depth.js",
+  "together.js",
+  "core/together.js",
+  "core/prefecture-map.js",
+  "core/yamagata-rail.js",
   "local-planning.js",
   "core/local-planning.js",
   "core/remaining-day.js",

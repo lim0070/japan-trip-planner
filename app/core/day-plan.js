@@ -103,6 +103,9 @@ export function suggestDay(snapshot, {
     const stop = byId.get(id);
     return { ...stop, ...constraints[id], place: M.visitDestination(stop) };
   });
+  const requiredPositions = new Map(visits
+    .filter(stop => constraints[stop.id]?.position !== undefined)
+    .map(stop => [constraints[stop.id].position, stop.id]));
   // Each locked position forms a boundary. Visits cannot cross it.
   const groups = [];
   let group = [];
@@ -121,10 +124,13 @@ export function suggestDay(snapshot, {
   for (const choices of groups) {
     for (let i = 0; i < choices.length; i++, position++) {
       const next = [];
+      const required = requiredPositions.get(position);
       for (const plan of beam) {
         const from = plan.rows.at(-1)?.stop ?? start;
         for (const stop of choices) {
-          if (plan.used.has(stop.id)) continue;
+          if ((required !== undefined && stop.id !== required) || plan.used.has(stop.id)) continue;
+          const constraint = constraints[stop.id];
+          if (constraint?.position !== undefined && constraint.position !== position) continue;
           const routes = from ? getRoutes({ from, to: stop, date: day.date,
             departMinute: plan.departure }) : [null];
           for (const route of routes) {
@@ -133,6 +139,8 @@ export function suggestDay(snapshot, {
             const start = M.planningStart(stop, stop.place, day.date, arrival, finishBy);
             if (start === null) continue;
             const departure = start + stop.durationMinutes;
+            if (constraint?.hoursNotice !== undefined && constraint.hoursNotice !==
+                M.visitHoursNotice(stop.place, day.date, { stop, arrival, visitStart: start, departure })) continue;
             const candidate = {
               ...plan,
               rows: [...plan.rows, { stop, leave, arrival, start, departure, route }],
@@ -181,6 +189,7 @@ export function applyDayPlan(state, dayId, finishBy, plan) {
   day.stopIds = plan.rows.map(({ stop }) => stop.id);
   day.planEndMinute = finishBy;
   delete day.planDepartures;
+  delete day.planVisitStarts;
   day.startMinute = plan.startMinute;
   const first = plan.rows[0], last = plan.rows.at(-1);
   saveAnchor(day, "planStartAnchor", plan.startAnchor, first?.route, first?.stop.id, state.settings.defaultMode, plan.allowEstimates);

@@ -1487,3 +1487,80 @@ body[data-theme="dark"] .discover-stage #map.regional-map-active {
 #map.regional-map-active ~ .tile-status {
   display: none;
 }
+
+.station-marker {
+  display: grid;
+  place-items: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #273957;
+  color: #fff;
+  font: 700 14px system-ui, sans-serif;
+  box-shadow: 0 1px 3px #172137a8;
+}
+.station-marker:focus-visible { outline: 3px solid #f4bf58; outline-offset: 2px; }
+.seasonal-marker { background: #fff3e3; }
+.station-point-list { padding-inline-start: 1.5rem; }
+.station-point-list li { margin-block: .35rem; }
+.calendar-day p, .transit-evidence p { margin-block: .45rem; }
+
+.prefecture-map {
+  container-type: inline-size;
+  margin: 0 0 1rem;
+}
+.prefecture-map figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .25rem .6rem;
+  margin-bottom: .35rem;
+}
+.prefecture-map-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-rows: clamp(17px, 5cqw, 30px);
+  gap: clamp(1px, .45cqw, 2px);
+}
+.prefecture-map-grid > span,
+.prefecture-map-key i {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--panel);
+  color: var(--ink);
+}
+.prefecture-map-grid > span {
+  display: grid;
+  place-items: center;
+  font-size: clamp(.58rem, 3cqw, .85rem);
+  line-height: 1;
+  white-space: nowrap;
+}
+.prefecture-map [data-visited="true"] {
+  background: var(--water);
+  border-color: var(--water);
+  color: var(--paper);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prefecture-map-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem 1rem;
+  margin: .4rem 0 0;
+  font-size: .82rem;
+}
+.prefecture-map-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+}
+.prefecture-map-key i {
+  display: inline-block;
+  width: .85rem;
+  height: .85rem;
+}
+.prefecture-map-key i[data-visited="true"] {
+  box-shadow: inset 0 -2px 0 var(--paper);
+}

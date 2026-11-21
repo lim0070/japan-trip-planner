@@ -36,7 +36,7 @@ export function backup(s, tripId = null, aliases = new Map()) {
     kind: tripId ? "trip" : "full",
     exportId: id(),
     exportedAt: now(),
-    appVersion: "2.8.1",
+    appVersion: "2.9.0",
     ...data,
   };
 }
@@ -149,6 +149,13 @@ export function mergeImport(s, data, preview, flagPolicy = "merge") {
                 .filter(([stopId]) => stopMap.has(stopId))
                 .map(([stopId, checkpoint]) => [stopMap.get(stopId), clone(checkpoint)]),
             ) } : {}),
+            ...(d.planVisitStarts ? { planVisitStarts: Object.fromEntries(
+              Object.entries(d.planVisitStarts)
+                .filter(([stopId]) => stopMap.has(stopId))
+                .map(([stopId, minute]) => [stopMap.get(stopId), minute]),
+            ) } : {}),
+            ...(d.finishedStopIds ? { finishedStopIds: d.finishedStopIds
+              .filter(stopId => stopMap.has(stopId)).map(stopId => stopMap.get(stopId)) } : {}),
           })),
       );
       s.stops.push(

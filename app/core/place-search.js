@@ -21,6 +21,10 @@ export function fold(text) {
     .replace(/[‐-―−]/g, "-");
 }
 const compact = (text) => fold(text).replace(SEP, "");
+const vowelLengths = new Map([
+  ["ā", "a"], ["ī", "i"], ["ū", "u"], ["ē", "e"], ["ō", "o"],
+  ["aa", "a"], ["ii", "i"], ["uu", "u"], ["ee", "e"], ["oo", "o"], ["ou", "o"],
+]);
 export const terms = (query) => fold(query).split(SEP).filter(Boolean);
 
 // Ranks: lower is better. -1 means no match.
@@ -30,6 +34,7 @@ export const RANK = {
   nameContains: 2,
   aliasOrBrand: 3,
   address: 4,
+  longVowel: 4.5,
   typo: 5,
 };
 
@@ -43,6 +48,7 @@ function fields(p) {
     const brandId = p.shopping?.brandId;
     f = {
       names: strings(p.names).map(compact).filter(Boolean),
+      romaji: compact(p.names?.romaji),
       brand:
         brandId && Object.hasOwn(brands, brandId)
           ? [compact(brands[brandId])].filter(Boolean)
@@ -79,6 +85,42 @@ function tier(t, f, alias, savedRomaji) {
     return RANK.aliasOrBrand;
   if (f.address.some((n) => n.includes(t))) return RANK.address;
   return -1;
+}
+
+// A long-vowel variant can suggest a documented reading or a saved alias.
+// Keep this fallback out of Japanese text, English names and address fields.
+function longVowelForm(value) {
+  if (!/^[a-zāīūēō]{3,80}$/.test(value)) return null;
+  const positions = [];
+  const base = [...value.matchAll(/[āīūēō]|aa|ii|uu|ee|oo|ou|[a-z]/g)]
+    .map(([token], index) => {
+      const vowel = vowelLengths.get(token);
+      if (vowel) positions.push(index);
+      return vowel || token;
+    }).join("");
+  return { base, positions };
+}
+function sameLongVowels(query, reading) {
+  if (!reading || reading.base !== query.base) return false;
+  // A conventional spelling may omit length, but two explicitly different
+  // marked positions cannot describe the same recorded pronunciation.
+  return reading.positions.every((position) => query.positions.includes(position)) ||
+    query.positions.every((position) => reading.positions.includes(position));
+}
+function longVowelMatch(query, form, readings) {
+  return form && readings.some((reading) =>
+    reading !== query && sameLongVowels(form, longVowelForm(reading)),
+  );
+}
+
+export function matchingSearchAlias(query, aliases = []) {
+  const ts = terms(query);
+  if (!ts.length) return null;
+  const text = ts.join("");
+  const form = longVowelForm(text);
+  const stored = aliases.map((name) => [name, compact(name)]);
+  return stored.find(([, value]) => ts.every((term) => value.includes(term)))?.[0] ||
+    stored.find(([, value]) => longVowelMatch(text, form, [value]))?.[0] || null;
 }
 
 // Opt-in tolerance is limited to one edit or neighboring transposition in
@@ -120,30 +162,38 @@ function oneTypo(a, b) {
 // context.aliases: Map placeKey -> confirmed alias group ({ memberKeys }).
 // context.places: Map placeKey -> place, used to read the members' names.
 // context.romajiByKey: Map placeKey -> a user-supplied stored romaji reading.
+// context.searchAliasesByKey: Map placeKey -> locally entered alternate names.
 // context.allowTypos: true to suggest lower-ranked, one-typo Latin matches.
 export function placeMatcher(query, context = {}) {
   const ts = terms(query);
   if (!ts.length) return null;
   const whole = ts.join("");
+  const longVowel = longVowelForm(whole);
   const approximate = context.allowTypos === true ? ts.map(term => latinWord(term, 4)) : [];
   return (p) => {
     if (!p) return -1;
     const f = fields(p),
-      alias = aliasNames(p, context.aliases, context.places),
+      localAliases = context.searchAliasesByKey?.get(p.key)?.map(compact) || [],
+      confirmedAliases = aliasNames(p, context.aliases, context.places),
+      alias = localAliases.length ? [...confirmedAliases, ...localAliases] : confirmedAliases,
       userRomaji = context.romajiByKey?.get(p.key),
       savedRomaji = userRomaji ? compact(userRomaji) : null;
     let worst = 0;
-    let missing = null;
+    let missing = 0;
+    let typo = null;
     for (const [i, t] of ts.entries()) {
       const r = tier(t, f, alias, savedRomaji);
       if (r < 0) {
-        if (missing || !approximate[i]) return -1;
-        missing = approximate[i];
+        missing++;
+        typo = approximate[i];
       } else worst = Math.max(worst, r);
     }
     if (missing) {
+      if (longVowelMatch(whole, longVowel, [f.romaji, savedRomaji || "", ...localAliases]))
+        return RANK.longVowel;
+      if (missing !== 1 || !typo) return -1;
       f.latinNames ??= latinNames(strings(p.names));
-      const couldBe = name => oneTypo(missing, name);
+      const couldBe = name => oneTypo(typo, name);
       return f.latinNames.some(couldBe) ||
         (userRomaji && latinNames([userRomaji]).some(couldBe)) ||
         alias.some(name => {

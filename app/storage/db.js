@@ -8,6 +8,7 @@ import {
 } from "../core/shopping-sources.js";
 import { bytes } from "../core/shopping-bundle.js";
 import { blank } from "../core/model.js";
+import { photoLimits } from "../core/together.js";
 import { loadBundle, readBounded } from "../core/shopping-bundle.js";
 import { emptyAliases, validateAliases } from "../core/shopping-aliases.js";
 import { approvedShopping, validateApprovedShoppingChanges } from "./shopping-approved.js";
@@ -39,6 +40,9 @@ import {
 } from "../core/contracts.js";
 let db,
   revision = 0;
+const photoJournalKey = "photo-journal";
+const samePhotoOwner = (photo, stop) => photo.tripId === stop.tripId && photo.stopId === stop.id;
+const ownerKey = (tripId, stopId) => JSON.stringify([tripId, stopId]);
 export function open() {
   return new Promise((resolve, reject) => {
     const r = indexedDB.open("japan-trip-planner", 1);
@@ -84,6 +88,16 @@ export function save(value) {
         tx.abort();
         return;
       }
+      const owners = new Set(value.stops.map(stop => ownerKey(stop.tripId, stop.id)));
+      if (r.result?.value.stops.some(stop => !owners.has(ownerKey(stop.tripId, stop.id)))) {
+        const photos = store.get(photoJournalKey);
+        photos.onsuccess = () => {
+          if (!photos.result) return;
+          const retained = photos.result.filter(photo => owners.has(ownerKey(photo.tripId, photo.stopId)));
+          if (retained.length) store.put(retained, photoJournalKey);
+          else store.delete(photoJournalKey);
+        };
+      }
       store.put({ revision: revision + 1, value }, "current");
     };
     tx.oncomplete = () => {
@@ -93,6 +107,44 @@ export function save(value) {
     tx.onerror = () => reject(tx.error || Error("Storage failed."));
     tx.onabort = () =>
       reject(Error(message || tx.error?.message || "Save was not committed."));
+  });
+}
+export async function readPhotoJournal(stop) {
+  return ((await read("state", photoJournalKey)) || []).filter(photo => samePhotoOwner(photo, stop));
+}
+export function updatePhotoJournal(stop, apply) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("state", "readwrite");
+    const store = tx.objectStore("state");
+    const current = store.get("current");
+    const photos = store.get(photoJournalKey);
+    let changed;
+    let failure;
+    photos.onsuccess = () => {
+      try {
+        if (!current.result?.value.stops.some(row => row.id === stop.id && row.tripId === stop.tripId))
+          throw Error("This visit is no longer saved. Reload Planner to see the current trip.");
+        const all = photos.result || [];
+        const existing = all.filter(row => samePhotoOwner(row, stop));
+        const updated = apply(existing).map(({ id, caption, digest, bytes }) =>
+          ({ id, caption, digest, bytes, tripId: stop.tripId, stopId: stop.id }));
+        if (updated.some(({ bytes }) => !(bytes instanceof Uint8Array) || !bytes.length || bytes.length > photoLimits.imageBytes))
+          throw Error("Each saved image must be a JPEG up to 1,400 KiB.");
+        const journal = all.filter(row => !samePhotoOwner(row, stop)).concat(updated);
+        if (journal.length > photoLimits.count || journal.reduce((size, row) => size + row.bytes.byteLength, 0) > photoLimits.totalBytes)
+          throw Error("The photo journal holds up to 48 photos or 12 MiB. Export and remove some photos first.");
+        changed = updated.length - existing.length;
+        if (journal.length) store.put(journal, photoJournalKey);
+        else store.delete(photoJournalKey);
+      } catch (error) {
+        failure = error;
+        tx.abort();
+      }
+    };
+    tx.oncomplete = () => resolve(changed);
+    tx.onabort = () => reject(failure || Error(tx.error?.name === "QuotaExceededError"
+      ? "Browser storage is full. Export and remove some photos first."
+      : "The photo journal could not save this change. " + (tx.error?.message || "Please try again.")));
   });
 }
 async function verifiedCachedFeed(row, namespace) {

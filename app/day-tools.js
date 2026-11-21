@@ -1,6 +1,8 @@
 import * as M from "./core/model.js";
 import { canonical, parseJSON, validateBackup, validateState } from "./core/contracts.js";
 import { mergeImport, previewImport } from "./core/merge.js";
+import { transitStatus } from "./transit-tools.js";
+import { saunaTotals } from "./core/japan-depth.js";
 import { completedPrefixLength } from "./core/remaining-day.js";
 
 const backupBytes = 20 * 1024 * 1024;
@@ -42,25 +44,26 @@ function recordedHours(check, date) {
 }
 
 export function addressCard(place, entrance) {
+  const name = M.name(place);
   const translations = [...new Set([place.names.en, place.names.romaji, place.address.en]
-    .filter(text => text && text !== place.names.ja && text !== place.address.ja))];
+    .filter(text => text && text !== name && text !== place.address.ja))];
   const coordinates = entrance ? entrance.lat + ", " + entrance.lng : null;
   const address = place.address.ja || null;
   return {
-    name: M.name(place),
+    name,
     japaneseName: place.names.ja,
     address,
     translations,
     entrance,
     coordinates,
     text: [
-      place.names.ja || M.name(place), address, ...translations,
+      name, address, ...translations,
       coordinates && "Confirmed entrance · " + coordinates, entrance?.note,
     ].filter(Boolean).join("\n"),
   };
 }
 
-export function printableDay(state, trip, day, includePrivateNotes = false) {
+export function printableDay(state, trip, day, includePrivateNotes = false, includeSaunatime = false) {
   const rows = M.schedule(state, day);
   const travel = M.dayTravel(day, rows);
   const leg = (row) => {
@@ -75,6 +78,8 @@ export function printableDay(state, trip, day, includePrivateNotes = false) {
     trip: trip.name,
     date: day.date,
     label: day.label,
+    weekday: new Intl.DateTimeFormat("en", { weekday: "long", timeZone: "UTC" }).format(new Date(day.date)),
+    backupTrain: day.backupTrain?.travelDate === day.date ? day.backupTrain : null,
     warnings: M.warnings(state, day, trip),
     tripNote: includePrivateNotes ? trip.notes : "",
     returnLeg: travel.inbound && {
@@ -85,6 +90,12 @@ export function printableDay(state, trip, day, includePrivateNotes = false) {
     visits: rows.map(row => {
       const stop = row.stop;
       const place = M.visitPlace(stop);
+      const transit = transitStatus(row, day, state);
+      const alerts = transit?.stale ? ["Train check needs review"] : [
+        transit?.evidence.status === "suspended" ? "Train suspension recorded" : "",
+        transit?.missesLast ? "Planned departure is after the recorded last train" : "",
+      ].filter(Boolean);
+      const sauna = includeSaunatime && stop.saunaSets?.length ? saunaTotals([stop]) : null;
       return {
         ...addressCard(place, stop.entrance),
         start: M.timeLabel(day.date, row.visitStart),
@@ -97,6 +108,7 @@ export function printableDay(state, trip, day, includePrivateNotes = false) {
         status: ["closed", "relocated"].includes(place.operatingStatus.value)
           ? "Recorded " + place.operatingStatus.value : "",
         checked: recordedHours(stop.hoursCheck, day.date),
+        alerts, sauna,
         note: includePrivateNotes ? stop.notes : "",
       };
     }),
@@ -183,10 +195,10 @@ export function createDayTools({
 }) {
   let storageStatus = "Use the button below to check whether this browser grants persistent storage.";
   const storage = navigator.storage;
-  const addressHTML = (card, showName = true) => `
+  const addressHTML = (card, showName = true, printing = false) => `
     <div class="address-card">
       ${showName ? `<p lang="${card.japaneseName ? "ja" : "en"}"><strong>${esc(card.name)}</strong></p>` : ""}
-      <p lang="ja">${esc(card.address || "Japanese address unavailable")}</p>
+      <p class="japanese-address" lang="${card.address ? "ja" : "en"}">${esc(card.address || (printing ? "Address not stored" : "Japanese address unavailable"))}</p>
       ${card.translations.length ? `<p class="muted">${card.translations.map(esc).join("<br>")}</p>` : ""}
       ${card.entrance ? `<p><strong>Confirmed entrance</strong><br>${esc(card.coordinates)}${card.entrance.note ? `<br>${esc(card.entrance.note)}` : ""}${card.entrance.checkedAt ? `<br>Checked ${esc(card.entrance.checkedAt)}` : ""}</p>` : ""}
     </div>`;
@@ -284,20 +296,27 @@ export function createDayTools({
     const text = value => esc(value ?? "");
     return `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
       <title>${text(data.trip)} · ${text(data.date)}</title><style>
+      @page { size:A4 portrait; margin:15mm 15mm 16mm; }
       * { box-sizing:border-box; } body{ color:#18241d; background:white; max-width:52rem; margin:2rem auto; padding:0 1.25rem; font:15px/1.5 system-ui,sans-serif; }
       h1,h2,h3,p{ margin:0 0 .45rem; overflow-wrap:anywhere; } ol,ul{ padding-left:1.25rem; }
-      li{ padding:.2rem 0; } .visit{ break-inside:avoid; border-bottom:1px solid #ccc; padding:1rem 0; } .memo{ white-space:pre-wrap; }
+      li{ padding:.2rem 0; } .visit{ border-bottom:1px solid #ccc; padding:.7rem 0; }
+      .visit-core,.travel-backup{ break-inside:avoid; } h2,h3{ break-after:avoid; } p{ orphans:3; widows:3; }
+      .japanese-address[lang=ja]{ font:1.3em/1.35 "Hiragino Mincho ProN","Noto Serif CJK JP",serif; } .memo{ white-space:pre-wrap; }
       button{ padding:.6rem .85rem; } button:focus-visible{ outline:3px solid #185d43; outline-offset:2px; } .subheading{margin-bottom:1rem;}
-      @media print { #print-now{display:none;} body{padding:0; margin:0; max-width:none; color:black;} }
+      @media print { #print-now{display:none;} body{padding:0; margin:0; max-width:none; color:black; font-size:10pt;} a{color:inherit;} }
       </style><body><button id="print-now">Print or save as PDF</button>
-      <h1>${text(data.trip)}</h1><p class="subheading">${text(data.date)} · Japan time${data.label ? " · " + text(data.label) : ""}</p>
+      <h1>${text(data.trip)}</h1><p class="subheading">${text(data.weekday)} · ${text(data.date)} · Japan time${data.label ? " · " + text(data.label) : ""}</p>
+      <section class="travel-backup"><h2>Backup train &amp; emergency</h2>
+      ${data.backupTrain ? `<p class="memo">${text(data.backupTrain.text)}</p><p>Traveler checked ${text(data.backupTrain.checkedAt)}${M.safeURL(data.backupTrain.sourceUrl) ? ` · <a href="${text(data.backupTrain.sourceUrl)}">Route source</a>` : ""}</p>` : "<p>No backup train recorded.</p>"}
+      <p>Police <strong>110</strong> · Fire or ambulance <strong>119</strong> · <a href="https://www.japan.travel/en/plan/hotline/">JNTO emergency information</a></p></section>
       ${data.tripNote ? `<p class="memo">${text(data.tripNote)}</p>` : ""}
       ${data.warnings.length ? `<h2>Day warnings</h2><ul>${data.warnings.map(value => `<li>${text(value)}</li>`).join("")}</ul>` : ""}
       ${data.visits.length ? `<h2>Itinerary</h2><ol>${data.visits.map(visit =>
-        `<li class="visit"><h3 lang="${visit.japaneseName ? "ja" : "en"}">${text(visit.name)}</h3>
+        `<li class="visit"><div class="visit-core"><h3 lang="${visit.japaneseName ? "ja" : "en"}">${text(visit.name)}</h3>
         <p>${text(visit.start)} – ${text(visit.end)} · ${text(visit.duration)} min${visit.booking ? " · Booking " + text(visit.booking) : ""}${visit.locked ? " · Position locked" : ""}</p>
-        ${addressHTML(visit, false)}
-        ${[visit.travel, visit.status, visit.warning, visit.checked].filter(Boolean).map(value => `<p>${text(value)}</p>`).join("")}
+        ${addressHTML(visit, false, true)}
+        ${[visit.travel, visit.status, visit.warning, visit.checked, ...visit.alerts].filter(Boolean).map(value => `<p>${text(value)}</p>`).join("")}</div>
+        ${visit.sauna ? `<p>Saunatime · ${visit.sauna.sets} sets · Sauna ${visit.sauna.sauna} min · Cold ${visit.sauna.cold} min · Rest ${visit.sauna.rest} min</p>` : ""}
         ${visit.note ? `<p class="memo">${text(visit.note)}</p>` : ""}</li>`).join("")}</ol>` : "<p>No visits planned.</p>"}
       ${data.returnLeg ? `<p>Return to ${text(data.returnLeg.name)} · ${text(data.returnLeg.arrival)}${data.returnLeg.warning ? " · " + text(data.returnLeg.warning) : ""}</p>` : ""}
       </body></html>`;
@@ -307,11 +326,13 @@ export function createDayTools({
     const current = day(), active = trip();
     if (!current || !active) return;
     modal("Print this day", `<p>${esc(current.date)} · ${esc(active.name)}</p>
-      <p>The print view includes the schedule, addresses, entrances, bookings and warnings.</p>
+      <p>The print view includes the schedule, addresses, entrances, bookings, warnings, backup train and emergency numbers.</p>
       <label class="check"><input type="checkbox" id="print-notes">Include private trip and visit notes</label>
+      <label class="check"><input type="checkbox" id="print-sauna">Include Saunatime logs</label>
       <button id="open-print-day">Open print view (new tab)</button>`, () => {
       document.getElementById("open-print-day").onclick = () => {
-        const data = printableDay(state(), active, current, document.getElementById("print-notes").checked);
+        const data = printableDay(state(), active, current, document.getElementById("print-notes").checked,
+          document.getElementById("print-sauna").checked);
         const view = window.open("", "_blank");
         if (!view) {
           toast("Allow a new tab to open the print view.");

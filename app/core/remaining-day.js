@@ -11,8 +11,13 @@ function getTrip(state, day) {
   return state.trips.find(trip => trip.id === day.tripId);
 }
 
-export const completedPrefixLength = day => day.stopIds.slice(0, -1)
-  .findLastIndex(id => Object.hasOwn(day.planDepartures ?? {}, id)) + 1;
+export function completedPrefixLength(day) {
+  let count = day.stopIds.slice(0, -1)
+    .findLastIndex(id => Object.hasOwn(day.planDepartures ?? {}, id)) + 1;
+  const finished = new Set(day.finishedStopIds);
+  while (finished.has(day.stopIds[count])) count++;
+  return count;
+}
 
 export function remainingDaySnapshot(state, day, skippedId = null) {
   return {
@@ -32,9 +37,15 @@ export function skippableRemainingStops(state, day, completed) {
     .filter(stop => stop.fixedStartMinute === undefined);
 }
 
-export function suggestRemainingDay(state, day, { completed, departMinute, finishBy, skipId = null, allowEstimates }) {
+export function suggestRemainingDay(state, day, {
+  completed, departMinute, finishBy, skipId = null, allowEstimates,
+  keepPositions = [], keepStarts = [], keepNotices = [],
+}) {
   if (!Number.isInteger(completed) || completed < completedPrefixLength(day) || completed >= day.stopIds.length)
     throw Error("Keep the completed visits and leave at least one to plan.");
+  const prefix = day.stopIds.slice(0, completed);
+  if (day.finishedStopIds?.some(id => !prefix.includes(id)))
+    throw Error("Keep all finished visits first. Reorder the existing itinerary before re-planning.");
   if (!validClock(departMinute) || !validClock(finishBy) || finishBy < departMinute)
     throw Error("Choose a departure and finish on this date, in Japan time.");
   const current = M.schedule(state, day);
@@ -45,10 +56,27 @@ export function suggestRemainingDay(state, day, { completed, departMinute, finis
     throw Error("Choose a remaining visit that can be set aside without moving a locked stop or booking.");
 
   const original = remainingDaySnapshot(state, day, skipId);
-  const prefix = day.stopIds.slice(0, completed);
   const remaining = day.stopIds.slice(completed).filter(id => id !== skipId);
   if (remaining.length > MAX_PLAN_STOPS)
     throw Error(`Re-planning supports up to ${MAX_PLAN_STOPS} remaining visits. Choose a smaller group.`);
+  const constraints = Object.fromEntries(remaining.map(id => [id, {}]));
+  const retainedStarts = {};
+  for (const id of [...keepPositions, ...keepStarts, ...keepNotices]) {
+    if (!remaining.includes(id)) throw Error("Only changes to remaining visits can be dismissed.");
+  }
+  for (const id of keepPositions) constraints[id].position = day.stopIds.indexOf(id) - completed;
+  for (const id of keepStarts) {
+    const row = current.find(({ stop }) => stop.id === id);
+    if (!validClock(row.visitStart) ||
+        (row.stop.fixedStartMinute !== undefined && row.stop.fixedStartMinute !== row.visitStart))
+      throw Error("This visit needs a usable original start time.");
+    constraints[id].fixedStartMinute = row.visitStart;
+    if (row.stop.fixedStartMinute === undefined) retainedStarts[id] = row.visitStart;
+  }
+  for (const id of keepNotices) {
+    const row = current.find(({ stop }) => stop.id === id);
+    constraints[id].hoursNotice = M.visitHoursNotice(M.visitPlace(row.stop), day.date, row);
+  }
   const snapshot = { ...original, day: { ...original.day, stopIds: remaining } };
   const places = new Map(snapshot.stops.map(stop => [stop.id, M.visitDestination(stop)]));
   const resumeId = prefix.at(-1);
@@ -74,12 +102,12 @@ export function suggestRemainingDay(state, day, { completed, departMinute, finis
     });
   };
   const plan = suggestDay(snapshot, {
-    finishBy, constraints: {}, getRoutes, startMinute: departMinute,
+    finishBy, constraints, getRoutes, startMinute: departMinute,
     startAnchor: fromAnchor, endAnchor: toAnchor, allowEstimates,
   });
   if (!plan)
     throw Error("No schedule fits the remaining hours, travel times, locks and bookings. Check the time limits or set aside an eligible stop.");
-  return { original, prefix, skipId, finishBy, plan, current: current.slice(completed) };
+  return { original, prefix, skipId, finishBy, plan, retainedStarts, current: current.slice(completed) };
 }
 
 function withAnchorRoute(anchor, route, stopId, allowEstimates) {
@@ -94,12 +122,18 @@ function withAnchorRoute(anchor, route, stopId, allowEstimates) {
 }
 
 export function applyRemainingDay(state, proposal) {
-  const { original, prefix, skipId, finishBy, plan } = proposal;
+  const { original, prefix, skipId, finishBy, plan, retainedStarts } = proposal;
   const day = state.days.find(item => item.id === original.day.id);
   if (!day || canonical(remainingDaySnapshot(state, day, skipId)) !== canonical(original))
     throw Error("The itinerary changed. Open a new re-planning preview.");
   if (skipId) getTrip(state, day).unassignedStopIds.push(skipId);
   day.stopIds = [...prefix, ...plan.rows.map(row => row.stop.id)];
+  const starts = Object.fromEntries(prefix
+    .filter(id => Object.hasOwn(day.planVisitStarts ?? {}, id))
+    .map(id => [id, day.planVisitStarts[id]]));
+  Object.assign(starts, retainedStarts);
+  if (Object.keys(starts).length) day.planVisitStarts = starts;
+  else delete day.planVisitStarts;
   const first = plan.rows[0], last = plan.rows.at(-1), resumeId = prefix.at(-1);
   if (resumeId) {
     day.planDepartures = Object.fromEntries(prefix
