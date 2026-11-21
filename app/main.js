@@ -1,3 +1,5 @@
+import { mapAddressAliases, mapStations, stationPack } from "./core/map-stations.js";
+import { googleMapSearch, photonPlaces } from "./core/map-lookup.js";
 import { createDirectionsPanel } from "./directions-panel.js";
 import { findDirectionStation, jorudanDirections, jorudanHome } from "./core/direction-search.js";
 import { foodSymbolId, shopIcons, roundShopIcons } from "./map-symbols.js";
@@ -90,13 +92,10 @@ let state = M.blank(),
   busy = false,
   pending = null,
   ready = false,
-  dropAction = null,
-  searchLast = 0;
+  dropAction = null;
 const planUndo = new Map();
 let discover = {
   source: "saunachelin",
-  q: "",
-  allowTypos: false,
   years: [],
   region: "",
   prefecture: "",
@@ -126,6 +125,7 @@ const compactMap = matchMedia("(max-width:760px)");
 const tabTitles = { trips: "Trips", day: "Itinerary", discover: "Maps & shopping", spots: "Saved spots", settings: "Settings" };
 let discoverBounds = [];
 let fitDiscoverSearch = false;
+let mapQuery = "", mapSearchTypos = false, mapSearchLocation = null;
 const sourceLoad = {
   "shopping:osm": "loading",
   saunachelin: "loading",
@@ -198,7 +198,6 @@ function filterFor(ns) {
       multi: false,
       first: false,
       includeClosed: false,
-      allowTypos: false,
       shopCategories: [],
       formats: [],
     }
@@ -1608,6 +1607,7 @@ function matchDiscovery() {
         ns,
         {
           ...filterFor(feeds[ns].source.namespace),
+          q: mapQuery, allowTypos: mapSearchTypos, addressAliases: mapAddressAliases,
           packageVisibility: shoppingPackages,
           layerChoice: visibleChoices[layerId(feeds[ns].source.namespace)],
           romajiByKey, searchAliasesByKey,
@@ -1688,14 +1688,34 @@ function renderDiscover() {
   sourceMatchCounts = combined.sourceCounts;
   discoverMatches = combined.rows;
   const result = combined;
+  const stationMatches = mapStations(mapQuery);
   const sourceLabel = { saunachelin: "Saunas", tabelog: "Food", shopping: "Shopping" }[discover.source];
   const railHTML = `
       <section class="discover-rail" id="discover-rail" aria-label="Map controls">
         ${discoverHeader()}
-        <label class="discover-search">Search ${sourceLabel}
-          <input id="local-search" type="search" value="${esc(discover.q)}" placeholder="Name, city or address">
-        </label>
-        <label class="check"><input type="checkbox" data-filter="allowTypos" ${discover.allowTypos ? "checked" : ""}>Show possible spelling matches</label>
+        <form class="map-search" id="map-search-form" role="search" aria-label="Search the map">
+          <label class="discover-search" for="local-search">Search places on the map</label>
+          <div class="map-search-field">
+            <input id="local-search" type="text" enterkeyhint="search" autocomplete="off" maxlength="160"
+              value="${esc(mapQuery)}" placeholder="Name, city, station or address">
+            ${mapQuery ? '<button id="map-search-clear" type="button" aria-label="Clear map search">×</button>' : ""}
+          </div>
+          <div class="map-search-actions">
+            <button id="map-search-online" type="button">Search online in Japan</button>
+            <label class="check"><input type="checkbox" id="map-search-typos" ${mapSearchTypos ? "checked" : ""}>Show possible spelling matches</label>
+          </div>
+          ${mapSearchLocation ? `<div class="map-search-location"><span id="map-search-pin-label" tabindex="-1">${esc(mapSearchLocation.label)}</span>
+            <button type="button" id="map-search-unpin">Clear location pin</button>
+            ${mapSearchLocation.source === "photon" ? '<small>Photon · © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a></small>' : ""}
+            ${mapSearchLocation.source === "osm" ? `<small>© OpenStreetMap contributors · <a href="${stationPack}" target="_blank" rel="noopener">ODbL station source</a></small>` : ""}
+            ${mapSearchLocation.source === "railway" ? '<small><a href="https://www.pref.yamagata.jp/020057/kurashi/kendo/kotsuseisaku/kokyokotsu_gtfs-jp.html" target="_blank" rel="noopener">Yamagata Prefecture · CC BY 4.0</a></small>' : ""}</div>` : ""}
+          ${stationMatches.length ? `<div class="map-search-stations" aria-label="Matching station locations">
+            ${stationMatches.map((station, i) => `<button type="button" data-map-search-station="${i}">${esc(station.label)}</button>`).join("")}
+            <small class="muted">Station reference points · ${stationMatches.some(x => x.source === "osm")
+              ? `© OpenStreetMap contributors (<a href="${stationPack}" target="_blank" rel="noopener">ODbL station source</a>)` : ""}
+              ${stationMatches.some(x => x.source === "railway") ? ' <a href="https://www.pref.yamagata.jp/020057/kurashi/kendo/kotsuseisaku/kokyokotsu_gtfs-jp.html" target="_blank" rel="noopener">Yamagata Prefecture · CC BY 4.0</a>' : ""}</small>
+          </div>` : ""}
+        </form>
         ${layersHTML(combined.counts, options)}
         ${stationTools.layerSection()}
         ${calendar.layerSection()}
@@ -1728,14 +1748,14 @@ function renderDiscover() {
           <div class="discover-results">${feeds["shopping:osm"] && shoppingPackages.osm && visibleLayers.shopping ? `<p class="attribution">Shopping data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL</a> · <button data-action="export-osm-source">Complete source & notices</button></p>` : ""}<p class="muted">Showing up to 100 rows per section. All matching located pins appear on the map.</p><h2>${result.rows.length} ${discover.radius ? "nearby located matches" : "located matches"}</h2>${
       result.rows
         .slice(0, 100)
-        .map(({ p, km, rank, cuisine }) => card(p, km, null, rank, discover.q, cuisine))
+        .map(({ p, km, rank, cuisine }) => card(p, km, null, rank, mapQuery, cuisine))
         .join("") ||
-      '<div class="empty"><h3>No matching places</h3><p>Try another origin, widen the radius or reset filters. The current source may not cover this destination.</p><button data-action="reset-filters">Reset filters</button></div>'
+      '<div class="empty"><h3>No matching places</h3><p>Try another spelling, enable more layers or use Search online in Japan.</p><button data-action="reset-filters">Reset filters</button></div>'
     }${
       result.unknown.length
         ? `<div class="section-divider"><h2>Location unknown (${result.unknown.length})</h2><p>These match the other filters. Their distance cannot be checked; they are not counted nearby.</p>${result.unknown
             .slice(0, 100)
-            .map(({ p, rank, cuisine }) => card(p, null, null, rank, discover.q, cuisine))
+            .map(({ p, rank, cuisine }) => card(p, null, null, rank, mapQuery, cuisine))
             .join("")}</div>`
         : ""
     }<p class="attribution">${Object.values(feeds)
@@ -1826,10 +1846,42 @@ function renderDiscover() {
   $("filters").ontoggle = (e) => {
     if (e.target.isConnected) discover.open = e.target.open;
   };
-  searchBox($("local-search"), 220, (value) => {
-    discover.q = value;
-    fitDiscoverSearch = !!value.trim();
-  }, keepCaret(render));
+  const searchField = $("local-search");
+  searchBox(searchField, 220, (value) => {
+    mapQuery = value;
+    fitDiscoverSearch = Boolean(value.trim());
+  }, () => {
+    keepCaret(render)();
+  });
+  $("map-search-form").onsubmit = (e) => {
+    e.preventDefault();
+    if (composingSearch === searchField) return;
+    fitDiscoverSearch = Boolean(mapQuery.trim());
+    render();
+    const results = $("map-results");
+    results.open = true;
+    results.querySelector("summary").focus();
+  };
+  $("map-search-typos").onchange = (e) => {
+    mapSearchTypos = e.target.checked;
+    fitDiscoverSearch = Boolean(mapQuery.trim());
+    render();
+    $("map-search-typos").focus({preventScroll:true});
+  };
+  $("map-search-online").onclick = () => mapLookupDialog(mapQuery);
+  $("map-search-clear")?.addEventListener("click", () => {
+    mapQuery = "";
+    fitDiscoverSearch = false;
+    render();
+    $("local-search").focus({preventScroll:true});
+  });
+  $("map-search-unpin")?.addEventListener("click", () => {
+    mapSearchLocation = null;
+    render();
+    $("local-search").focus({preventScroll:true});
+  });
+  for (const button of $("map-search-form").querySelectorAll("[data-map-search-station]"))
+    button.onclick = () => showMapLocation(stationMatches[Number(button.dataset.mapSearchStation)]);
   for (const [el, key] of [
     ["origin-mode", "originMode"],
     ["region", "region"],
@@ -2014,6 +2066,137 @@ function gps() {
     { timeout: 12000, maximumAge: 60000 },
   );
 }
+// Search and reference pins never write to the trip or change the chosen origin.
+function showMapLocation(place) {
+  mapSearchLocation = place;
+  fitDiscoverSearch = false;
+  if ($("dialog").open) close();
+  if (!map) return;
+  if (inspectedPlace) closePlaceInspector();
+  render();
+  fitDiscovery([[place.lat, place.lng]]);
+  $("map-search-pin-label")?.focus({preventScroll:true});
+}
+
+function syncMapLocationPin() {
+  const place = screen === "discover" && discoverPane === "places" ? mapSearchLocation : null;
+  if ((map.locationPinReference || null) === place) return;
+  map.locationPin?.remove();
+  map.locationPin = null;
+  map.locationPinReference = place;
+  if (!place) return;
+  map.locationPin = L.marker([place.lat, place.lng], {
+    title: place.label, alt: place.label, zIndexOffset: 1200, keyboard: false, interactive: false,
+    icon: L.divIcon({ className: "map-search-pin", html: '<span aria-hidden="true"></span>', iconSize: [28, 28] }),
+  }).addTo(map);
+}
+
+const lookupCache = new Map();
+let lookupStarted = 0;
+function mapLookupDialog(initial) {
+  modal("Find a location in Japan", `
+    <form id="photon-form">
+      <label>Public place name or address
+        <input name="query" required minlength="2" maxlength="160" value="${esc(initial)}" autocomplete="off">
+      </label>
+      <p class="muted">Search sends your query to Photon. Use a public place or address.</p>
+      <div class="actions"><button class="primary" type="submit">Find on this map</button></div>
+      <div id="map-lookup-status" role="status"></div>
+      <div id="map-lookup-results" class="search-results"></div>
+      <p class="attribution"><a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Approximate locations</p>
+    </form>
+    <details id="map-lookup-fallback">
+      <summary>Use Google Maps or paste coordinates</summary>
+      <p><a id="map-lookup-google" class="button" href="${googleMapSearch(initial)}" target="_blank" rel="noopener">Search in Google Maps ↗</a></p>
+      <form id="map-coordinates-form">
+        <label>Latitude, longitude
+          <input name="point" required placeholder="35.68124, 139.7671" maxlength="300" autocomplete="off">
+        </label>
+        <button type="submit">Show coordinates on this map</button>
+        <p id="map-coordinate-error" role="alert" class="form-error"></p>
+      </form>
+    </details>`, () => {
+      const form = $("photon-form"), status = $("map-lookup-status"), results = $("map-lookup-results");
+      const fallback = $("map-lookup-fallback"), submit = form.querySelector("button");
+      const input = form.elements.query;
+      const google = $("map-lookup-google");
+      function syncFallbackLink() {
+        google.href = googleMapSearch(input.value);
+        google.hidden = input.value.trim().length < 2;
+      }
+      syncFallbackLink();
+      input.oninput = () => {
+        syncFallbackLink();
+        results.replaceChildren();
+        status.textContent = "";
+      };
+      if (!navigator.onLine) fallback.open = true;
+      form.onsubmit = async e => {
+        e.preventDefault();
+        if (submit.disabled) return;
+        const query = input.value.trim();
+        results.replaceChildren();
+        const coordinates = M.parseCoordinates(query) || M.parseMapURL(query);
+        if (coordinates) {
+          showMapLocation({ ...coordinates, label: coordinates.lat + ", " + coordinates.lng });
+          return;
+        }
+        if (query.length < 2) {
+          status.textContent = "Enter at least two characters.";
+          return;
+        }
+        const key = query.normalize("NFKC").toLowerCase();
+        let rows = lookupCache.get(key);
+        if (!rows && Date.now() - lookupStarted < 1100) {
+          status.textContent = "Wait a moment before searching again.";
+          return;
+        }
+        submit.disabled = true;
+        status.textContent = "Looking up locations…";
+        try {
+          if (!rows) {
+            if (!navigator.onLine || !config.mapLookupUrl)
+              throw Error("Lookup unavailable");
+            lookupStarted = Date.now();
+            rows = await photonPlaces(config.mapLookupUrl, query);
+            if (lookupCache.size >= 16) lookupCache.delete(lookupCache.keys().next().value);
+            lookupCache.set(key, rows);
+          }
+          if (!$("dialog").open || !form.isConnected || input.value.trim() !== query) return;
+          status.textContent = rows.length ? "Choose a location to pin to the map." :
+            "No locations found. Try a Japanese name or address.";
+          if (!rows.length) fallback.open = true;
+          for (const row of rows) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.textContent = row.label;
+            button.onclick = () => showMapLocation(row);
+            results.append(button);
+          }
+        } catch {
+          if (!$("dialog").open || !form.isConnected || input.value.trim() !== query) return;
+          status.textContent = navigator.onLine ?
+            "Online lookup unavailable. Try Google Maps or paste coordinates below." :
+            "You’re offline. Paste coordinates to show a location on this map.";
+          fallback.open = true;
+        } finally {
+          submit.disabled = false;
+        }
+      };
+      $("map-coordinates-form").onsubmit = e => {
+        e.preventDefault();
+        const raw = val(new FormData(e.target), "point");
+        const position = M.parseCoordinates(raw) || M.parseMapURL(raw);
+        if (!position) {
+          $("map-coordinate-error").textContent = "Enter decimal latitude and longitude separated by a comma.";
+          return;
+        }
+        showMapLocation({ ...position, label: position.lat + ", " + position.lng });
+      };
+      input.focus();
+    });
+}
+
 function searchDialog(purpose) {
   modal(
     "Find a place",
@@ -2390,8 +2573,9 @@ function initMap(items) {
   }
   calendar.syncMap();
   addBasemap();
-  const matching = fitDiscoverSearch ? items.filter(({ p }) =>
-    p.key.startsWith(discover.source + ":")).map(({ p }) => [p.location.lat, p.location.lng]) : [];
+  const matching = fitDiscoverSearch && screen === "discover" && discoverPane === "places"
+    ? items.map(({ p }) => [p.location.lat, p.location.lng]) : [];
+  syncMapLocationPin();
   fitDiscoverSearch = false;
   const visits = (day()?.stopIds || []).map(id => state.stops.find(stop => stop.id === id));
   const places = items.map(({ p, id, cuisine }) =>
@@ -2551,7 +2735,7 @@ function renderSourceStatus() {
 }
 function renderSettings() {
   $("content").innerHTML =
-    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.5<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
+    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.6<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
   $("setting-theme").onchange = (e) =>
     commit((s) => (s.settings.theme = e.target.value));
   $("setting-mode").onchange = (e) =>
@@ -2917,7 +3101,6 @@ document.addEventListener("click", async (e) => {
           ...discover,
               formats: [],
           shopCategories: [],
-          q: "",
           years: [],
               region: "",
           prefecture: "",
@@ -2931,7 +3114,6 @@ document.addEventListener("click", async (e) => {
           visited: false,
           includeScheduled: false,
           includeClosed: false,
-          allowTypos: false,
         };
         render();
         break;
@@ -3076,6 +3258,7 @@ async function loadConfig() {
   return {
     tilesUrl: serviceUrl(value.tilesUrl),
     nominatimUrl: serviceUrl(value.nominatimUrl),
+    mapLookupUrl: serviceUrl(value.mapLookupUrl),
     personalSingleDevice: value.personalSingleDevice === true,
   };
 }
@@ -3100,7 +3283,7 @@ function searchBox(input, delay, store, run) {
   const schedule = () => {
     clearTimeout(timer);
     timer = setTimeout(() => {
-      if (composingSearch === input) return;
+      if (composingSearch === input || !input.isConnected) return;
       run();
     }, delay);
   };

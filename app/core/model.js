@@ -667,7 +667,7 @@ export function filterPlaces(
 ) {
   const lm = new Map(feed.lists.map((l) => [l.listId, l])),
     saved = new Map(flags.map((x) => [x.placeKey, x])),
-    match = placeMatcher(f.q, { ...search, allowTypos: f.allowTypos === true, romajiByKey: f.romajiByKey, searchAliasesByKey: f.searchAliasesByKey }),
+    match = placeMatcher(f.q, { ...search, allowTypos: f.allowTypos === true, romajiByKey: f.romajiByKey, searchAliasesByKey: f.searchAliasesByKey, addressAliases: f.addressAliases }),
     ranks = new Map(),
     cuisines = new Map();
   let rows = feed.places

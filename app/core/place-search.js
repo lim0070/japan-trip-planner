@@ -73,7 +73,7 @@ function aliasNames(p, aliases, places) {
   }
   return hit.names;
 }
-function tier(t, f, alias, savedRomaji) {
+function tier(t, f, alias, savedRomaji, addressAliases) {
   let best = -1;
   for (const n of f.names) {
     if (n === t) return RANK.nameExact;
@@ -83,7 +83,7 @@ function tier(t, f, alias, savedRomaji) {
   if (best >= 0) return best;
   if (savedRomaji?.includes(t) || f.brand.some((n) => n.includes(t)) || alias.some((n) => n.includes(t)))
     return RANK.aliasOrBrand;
-  if (f.address.some((n) => n.includes(t))) return RANK.address;
+  if (f.address.some((n) => n.includes(t)) || addressAliases.includes(t)) return RANK.address;
   return -1;
 }
 
@@ -163,6 +163,7 @@ function oneTypo(a, b) {
 // context.places: Map placeKey -> place, used to read the members' names.
 // context.romajiByKey: Map placeKey -> a user-supplied stored romaji reading.
 // context.searchAliasesByKey: Map placeKey -> locally entered alternate names.
+// context.addressAliases: optional known equivalents for recorded address fields.
 // context.allowTypos: true to suggest lower-ranked, one-typo Latin matches.
 export function placeMatcher(query, context = {}) {
   const ts = terms(query);
@@ -177,12 +178,13 @@ export function placeMatcher(query, context = {}) {
       confirmedAliases = aliasNames(p, context.aliases, context.places),
       alias = localAliases.length ? [...confirmedAliases, ...localAliases] : confirmedAliases,
       userRomaji = context.romajiByKey?.get(p.key),
-      savedRomaji = userRomaji ? compact(userRomaji) : null;
+      savedRomaji = userRomaji ? compact(userRomaji) : null,
+      addressAliases = context.addressAliases?.(p).map(compact) || [];
     let worst = 0;
     let missing = 0;
     let typo = null;
     for (const [i, t] of ts.entries()) {
-      const r = tier(t, f, alias, savedRomaji);
+      const r = tier(t, f, alias, savedRomaji, addressAliases);
       if (r < 0) {
         missing++;
         typo = approximate[i];
@@ -202,7 +204,7 @@ export function placeMatcher(query, context = {}) {
         }) ? RANK.typo : -1;
     }
     if (ts.length === 1) return worst;
-    const w = tier(whole, f, alias, savedRomaji);
+    const w = tier(whole, f, alias, savedRomaji, addressAliases);
     return w >= 0 ? Math.min(w, worst) : worst;
   };
 }

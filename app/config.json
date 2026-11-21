@@ -1,1 +1,1 @@
-{"tilesUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","nominatimUrl":"https://nominatim.openstreetmap.org/search","personalSingleDevice":true}
+{"tilesUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","mapLookupUrl":"https://photon.komoot.io/api/","nominatimUrl":"https://nominatim.openstreetmap.org/search","personalSingleDevice":true}
