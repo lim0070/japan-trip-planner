@@ -1645,3 +1645,51 @@ body[data-theme="dark"] .discover-stage #map.regional-map-active {
   border: 1px solid var(--panel);
   border-radius: 6px;
 }
+
+.discover-subtabs { display: flex; flex-wrap: wrap; gap: 5px; margin-block: 0 7px; }
+.discover-subtabs .button { flex: 1; justify-content: center; min-height: 38px; font-size: 13px; }
+.discover-subtabs [aria-current="page"] { border-color: var(--water); background: var(--soft); font-weight: 700; }
+.directions-panel { width: 100%; min-width: 0; }
+.directions-panel label { margin-block: 7px 4px; }
+.directions-panel input, .directions-panel select { max-width: 100%; min-width: 0; }
+.directions-panel small { display: block; margin: 3px 0 0; }
+.directions-endpoints { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 8px; }
+.directions-endpoint { grid-column: 1; min-width: 0; }
+.directions-endpoint small:empty { display: none; }
+#directions-swap { grid-column: 2; grid-row: 1 / 3; align-self: center; min-width: 42px; min-height: 42px; padding: 0; }
+.directions-segments { min-width: 0; margin: 0 0 8px; padding: 0; border: 0; }
+.directions-segments legend { font-weight: 650; margin-bottom: 4px; font-size: 13px; }
+.directions-segment-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; }
+.directions-panel .directions-segment-row label { margin: 0; position: relative; min-width: 0; }
+.directions-segment-row input { position: absolute; inline-size: 1px; min-block-size: 1px; block-size: 1px; clip-path: inset(50%); }
+.directions-segment-row span { display: grid; min-height: 37px; padding: 4px; place-items: center; text-align: center;
+  border: 1px solid var(--line); border-radius: 6px; font-size: 12px; color: var(--ink); background: var(--panel); }
+.directions-segment-row input:checked + span { border-color: var(--water); background: var(--soft); font-weight: 680; }
+.directions-segment-row input:focus-visible + span { outline: 2px solid var(--water); outline-offset: 2px; }
+#directions-when { margin-top: 12px; }
+.directions-datetime { margin-top: 4px; }
+.directions-provider-links { align-items: start; }
+#directions-result h2, #directions-result h3 { overflow-wrap: anywhere; font-size: 1.02rem; }
+#directions-result { padding-block: 3px; }
+.direction-alternatives { display: grid; gap: 7px; list-style: none; padding: 0; margin: 7px 0; }
+.direction-alternatives li { display: grid; gap: 2px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; background: var(--panel); }
+.direction-alternatives strong { font-size: 1.02rem; font-variant-numeric: tabular-nums; }
+@media (max-width: 760px) {
+  .discover-subtabs, .discover-rail .directions-panel { flex: 0 0 100%; }
+  .discover-subtabs .button { min-height: 42px; }
+  .directions-panel input:not([type="radio"]), .directions-panel select { min-height: 44px; }
+  .directions-segment-row span { min-height: 43px; }
+}
+
+
+#content[data-discover-pane="directions"] { width: clamp(268px, 29vw, 380px); }
+.directions-panel [hidden] { display: none !important; }
+#content .directions-datetime { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+.directions-expand { display: none; }
+.directions-station-choices { display: flex; flex-wrap: wrap; gap: 4px; }
+.directions-station-choices button { min-height: 38px; padding: 4px 7px; font-size: 12px; }
+@media (max-width: 760px) {
+  #content[data-discover-pane="directions"] { width: auto; max-height: min(53dvh, 440px); }
+  #content[data-discover-pane="directions"][data-directions-expanded="true"] { max-height: min(69dvh, 575px); }
+  .directions-expand { display: inline-flex; min-height: 38px; padding: 4px 10px; margin-bottom: 6px; font-size: 12px; }
+}

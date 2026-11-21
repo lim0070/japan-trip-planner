@@ -810,7 +810,7 @@ export function safeURL(s) {
     return null;
   }
 }
-const destination = (p) =>
+export const placeRouteEndpoint = (p) =>
   !p.entranceConfirmed && p.address.ja && (p.location.confidence !== "high" || !located(p))
     ? name(p) + " " + p.address.ja
     : located(p)
@@ -821,8 +821,8 @@ export function directions(a, b, mode) {
     "https://www.google.com/maps/dir/?" +
     new URLSearchParams({
       api: "1",
-      origin: destination(a),
-      destination: destination(b),
+      origin: placeRouteEndpoint(a),
+      destination: placeRouteEndpoint(b),
       travelmode: { walk: "walking", train: "transit", drive: "driving" }[mode],
     })
   );

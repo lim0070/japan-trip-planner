@@ -1,3 +1,5 @@
+import { createDirectionsPanel } from "./directions-panel.js";
+import { findDirectionStation, jorudanDirections, jorudanHome } from "./core/direction-search.js";
 import { foodSymbolId, shopIcons, roundShopIcons } from "./map-symbols.js";
 import { choiceLayers, choiceLabel, choiceOptions, choiceVisible, chooseAll, chooseOne, layerChoices } from "./core/layer-choices.js";
 import { createCalendarTools } from "./calendar-tools.js";
@@ -112,6 +114,8 @@ let discover = {
   originLabel: "",
   open: false,
 };
+let discoverPane = "places";
+let directionsExpanded = false;
 let controlsOpen = false;
 let resultsOpen = false;
 let inspectedPlace = null;
@@ -390,7 +394,7 @@ function pickContext() {
     activeDay = trip()?.dayIds[0] || null;
 }
 function navigate(next) {
-  collapsedPanels.delete(next);
+  collapsedPanels.delete(next === "directions" ? "discover" : next);
   if (location.hash !== "#" + next) location.hash = next;
   else render();
 }
@@ -463,18 +467,22 @@ function render() {
   const requested = location.hash.slice(1);
   if (requested !== "content") {
     const next = Object.hasOwn(tabTitles, requested) ? requested : "discover";
-    if (next !== screen) {
+    const pane = requested === "directions" ? "directions" : "places";
+    if (next !== screen || (next === "discover" && pane !== discoverPane)) {
       $("content").scrollTop = 0;
       dropAction = null;
       if (compactMap.matches) inspectorShown = false;
     }
     screen = next;
+    discoverPane = pane;
   }
   $("content").dataset.view = screen;
+  $("content").dataset.discoverPane = discoverPane;
+  $("content").dataset.directionsExpanded = String(directionsExpanded);
   document.body.dataset.view = screen;
   syncPanel();
   $("map-stage").querySelector(".discover-fit").textContent =
-    screen === "day" && day()?.stopIds.length ? "Fit day" : "Fit results";
+    screen === "day" && day()?.stopIds.length ? "Fit day" : discoverPane === "directions" ? "Fit map" : "Fit results";
   for (const a of document.querySelectorAll("[data-tab]"))
     a.setAttribute("aria-current", a.dataset.tab === screen ? "page" : "false");
   ({ trips: renderTrips, day: renderDay, discover: renderDiscover, spots: renderSpots, settings: renderSettings })[screen]();
@@ -612,7 +620,24 @@ const routeNames = {
   estimate: "Rough estimate",
   same: "Same place",
 };
-const jorudanURL = "https://www.jorudan.co.jp/norikae/";
+const directionsPanel = createDirectionsPanel(esc);
+function plannedTiming(date, minutes) {
+  if (!Number.isInteger(minutes) || minutes < 0) return null;
+  const timestamp = new Date(Date.parse(date + "T00:00:00Z") + minutes * 60000).toISOString();
+  return { when: "depart", date: timestamp.slice(0, 10), time: timestamp.slice(11, 16) };
+}
+function jorudanForPlaces(from, to, timing) {
+  const origin = from && findDirectionStation(M.name(from));
+  const finish = to && findDirectionStation(M.name(to));
+  return origin && finish && timing ? jorudanDirections(origin.name, finish.name, timing) : jorudanHome;
+}
+function plannerDirections({from = null, to = null, mode = "train", timing = null}) {
+  if (inspectorShown) closePlaceInspector();
+  const placePoint = place => place ? {label: M.name(place), query: M.placeRouteEndpoint(place)} : null;
+  directionsPanel.prefill({mode, from: placePoint(from), to: placePoint(to), timing});
+  navigate("directions");
+  requestAnimationFrame(() => $("directions-from")?.focus({ preventScroll: true }));
+}
 
 function autoPlanDialog() {
   const d = day();
@@ -814,7 +839,10 @@ function autoPlanDialog() {
         $("plan-duration-label").textContent = isTrain ? "Station-to-station minutes" : "Door-to-door minutes";
         const link = $("plan-provider-link");
         link.textContent = isTrain ? "Open Jorudan station search" : "Open Google Maps directions";
-        link.href = isTrain ? jorudanURL : M.directions(
+        const depart = form.elements.depart.value;
+        const timing = depart ? plannedTiming(d.date, timeMinute(depart) + Number(form.elements.access.value || 0)) : null;
+        link.href = isTrain ? jorudanForPlaces(places.get(form.elements.from.value),
+          places.get(form.elements.to.value), timing) : M.directions(
           places.get(form.elements.from.value), places.get(form.elements.to.value),
           form.elements.mode.value);
         const start = form.elements.depart.value || "your departure time";
@@ -1112,12 +1140,18 @@ function navigationDialog(toId) {
     rows = M.schedule(state, d),
     destination = rows.find((x) => x.stop.id === to.id),
     url = M.directions(M.visitDestination(from), M.visitDestination(to), seg.mode),
-    time = M.timeLabel(d.date, destination.routeDeparture);
+    time = M.timeLabel(d.date, destination.routeDeparture),
+    timing = plannedTiming(d.date, destination.routeDeparture),
+    start = M.visitDestination(from), finish = M.visitDestination(to);
   modal(
     "Check the journey",
-    `<p>Google Maps opens ${seg.mode === "train" ? "transit (which may include buses)" : esc(seg.mode)} directions. Confirm the actual route and date there.</p><p>Planned departure: <strong>${d.date} ${esc(time)} Japan time</strong></p><div class="actions"><a class="button primary" href="${esc(url)}" target="_blank" rel="noopener">Open Google Maps</a>${seg.mode === "train" ? `<a class="button" href="${jorudanURL}" target="_blank" rel="noopener">Jorudan station search</a>` : ""}<button id="copy-time">Copy Japan date/time</button></div>${seg.routeCheck && destination.missed ? '<p class="notice">The checked route needs review after a timing or location change.</p>' : ""}${seg.routeCheck && !destination.missed ? `<p>${routeNames[seg.routeCheck.provider]} · ${seg.routeCheck.minutes} min${seg.routeCheck.provider === "jorudan" ? ` station-to-station + ${seg.routeCheck.access} min to the station + ${seg.routeCheck.egress} min to the visit` : ""}</p>` : ""}<p class="muted">The link does not prefill a departure time. Estimates do not establish winter feasibility or train availability.</p>`,
+    `<p>Google Maps opens ${seg.mode === "train" ? "transit (which may include buses)" : esc(seg.mode)} directions. Confirm the actual route and date there.</p><p>Planned departure: <strong>${d.date} ${esc(time)} Japan time</strong></p><div class="actions"><a class="button primary" href="${esc(url)}" target="_blank" rel="noopener">Open Google Maps</a>${seg.mode === "train" ? `<a class="button" href="${esc(jorudanForPlaces(start, finish, timing))}" target="_blank" rel="noopener">Jorudan station search</a>` : ""}<button id="planner-directions">${seg.mode === "train" ? "Train search in Planner" : "Directions in Planner"}</button><button id="copy-time">Copy Japan date/time</button></div>${seg.routeCheck && destination.missed ? '<p class="notice">The checked route needs review after a timing or location change.</p>' : ""}${seg.routeCheck && !destination.missed ? `<p>${routeNames[seg.routeCheck.provider]} · ${seg.routeCheck.minutes} min${seg.routeCheck.provider === "jorudan" ? ` station-to-station + ${seg.routeCheck.access} min to the station + ${seg.routeCheck.egress} min to the visit` : ""}</p>` : ""}<p class="muted">Set dates and times in Google Maps. Estimates do not establish winter feasibility or train availability.</p>`,
     () => {
       $("copy-time").onclick = () => copy(`${d.date} ${time} Asia/Tokyo`);
+      $("planner-directions").onclick = () => {
+        close();
+        plannerDirections({from:start, to:finish, mode:seg.mode, timing});
+      };
     },
   );
 }
@@ -1591,7 +1625,32 @@ function matchDiscovery() {
   );
 }
 let discoverMatches = [];
+function discoverHeader() {
+  return `<div class="discover-heading"><h1>Maps &amp; shopping</h1></div>
+    <nav class="discover-subtabs" aria-label="Map tools">
+      <a class="button" id="discover-places-tab" href="#discover" ${discoverPane === "places" ? 'aria-current="page"' : ""}>Places</a>
+      <a class="button" id="discover-directions-tab" href="#directions" ${discoverPane === "directions" ? 'aria-current="page"' : ""}>Directions</a>
+    </nav>`;
+}
 function renderDiscover() {
+  if (discoverPane === "directions") {
+    const prior = $("discover-rail");
+    const focused = prior?.contains(document.activeElement) ? document.activeElement.id : null;
+    const scroll = prior?.querySelector("#directions-form") ? prior.scrollTop : 0;
+    const matches = matchDiscovery();
+    discoverMatches = matches.rows;
+    sourceMatchCounts = matches.sourceCounts;
+    choiceScrollObserver.disconnect();
+    $("content").innerHTML = `<section class="discover-rail" id="discover-rail" aria-label="Map tools">
+      ${discoverHeader()}<button type="button" class="directions-expand" id="directions-expand"
+        data-action="expand-directions" aria-expanded="${directionsExpanded}"
+        aria-controls="discover-directions">${directionsExpanded ? "Reduce Directions" : "Expand Directions"}</button>${directionsPanel.html()}</section>`;
+    const rail = $("discover-rail");
+    directionsPanel.wire(rail);
+    if (focused) $(focused)?.focus({preventScroll:true});
+    rail.scrollTop = scroll;
+    return;
+  }
   const feed = feeds[discover.source] || {
     source: {
       namespace: discover.source,
@@ -1632,7 +1691,7 @@ function renderDiscover() {
   const sourceLabel = { saunachelin: "Saunas", tabelog: "Food", shopping: "Shopping" }[discover.source];
   const railHTML = `
       <section class="discover-rail" id="discover-rail" aria-label="Map controls">
-        <div class="discover-heading"><h1>Maps &amp; shopping</h1></div>
+        ${discoverHeader()}
         <label class="discover-search">Search ${sourceLabel}
           <input id="local-search" type="search" value="${esc(discover.q)}" placeholder="Name, city or address">
         </label>
@@ -1693,7 +1752,7 @@ function renderDiscover() {
           <button data-action="export-selected">Google Maps · ${selectedExport.size} selected</button>
         </details>
       </section>`;
-  if ($("discover-rail")) {
+  if ($("discover-rail")?.querySelector(".discover-sources")) {
     const rail = $("discover-rail");
     const previousScroll = rail.scrollTop;
     const sourcesOpen = rail.querySelector(".discover-sources").open;
@@ -1827,7 +1886,7 @@ function card(p, km = null, local = null, rank = null, query = "", cuisine = nul
     })
     .join(
       "",
-    )}</div>${p.operatingStatus.note ? `<p class="notice">${esc(p.operatingStatus.note)}</p>` : ""}${foodNotice(p)}${p.operatingStatus.value === "closed" && !recordedFoodStatus(p) ? '<p class="notice">Recorded closed — check the source notice before planning a visit.</p>' : ""}<p>${isOSM(p) ? "Address reference (may be partial): " : ""}${esc(p.address.ja || p.address.city || "Japanese address not supplied")}</p>${p.shopping ? `<span class="badge">${isOSM(p) ? "OpenStreetMap · ODbL source" : p.key.startsWith("shopping:alltheplaces:") ? "AllThePlaces source" : "Overture source"}</span>` : ""}${sourceAccessHTML(p, local ? local.sourceRef?.datasetVersion : feed?.datasetVersion)}<span class="badge warn">${M.located(p) ? p.location.confidence + " confidence pin · check entrance" : "Location unknown"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${p.hoursText ? `<p>Hours reference: ${esc(p.hoursText)}</p>` : ""}<p class="muted">${p.hours ? "Structured hours available; checked against scheduled visits." : "Hours not checked."}</p>${p.reviewNotes.length ? `<details><summary>Location and source notes</summary><p>${esc(p.reviewNotes.join(" · "))}</p></details>` : ""}<label class="check"><input type="checkbox" data-export-key="${esc(p.key)}" ${selectedExport.has(p.key) ? "checked" : ""}>Select for Google Maps</label><p class="muted">${p.shopping ? esc(shoppingCategories[categoryFor(p.shopping.brandId)] + " · " + (Object.hasOwn(brands, p.shopping.brandId) ? brands[p.shopping.brandId] : p.shopping.brandId) + " · " + (Object.hasOwn(formats, p.shopping.formatId) ? formats[p.shopping.formatId] : p.shopping.formatId)) : p.key.startsWith("saunachelin:") ? "Sauna layer" : "Food layer"}</p>${shoppingAliases.has(p.key) ? '<p class="muted">Saved and visited flags apply to this confirmed branch group; your separate visits stay unchanged.</p>' : ""}<div class="actions"><button class="primary" data-action="add-place" data-id="${esc(p.key)}">Add to day</button><button data-action="save-place" data-id="${esc(p.key)}" aria-pressed="${!!f?.favourite}">${f?.favourite ? "★ Saved" : "☆ Save to Spots"}</button><button data-action="visited" data-id="${esc(p.key)}" aria-pressed="${!!f?.visited}">${f?.visited ? "✓ Visited" : "Visited"}</button>${M.located(p) ? `<button data-action="show-place" data-id="${esc(p.key)}">Show pin</button>` : ""}${saved ? `<button data-action="edit-place" data-id="${saved.id}">Edit saved place</button><button data-action="apply-saved" data-id="${saved.id}">Apply to visits</button><button data-action="edit-place-setting" data-id="${saved.id}">${saved.setting ? esc(saved.setting === "indoor" ? "Indoor" : "Outdoor") + " · Edit" : "Indoor or outdoor"}</button>` : ""}</div>${japanDepth.placeSection(p, { compact: !local })}<details><summary>Source and navigation links</summary><div class="actions">${p.links.map((l) => (M.safeURL(l.url) ? `<a class="button" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : "")).join("")}<a class="button" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(M.name(p) + " " + (p.address.ja || p.address.city || ""))}" target="_blank" rel="noopener">Google Maps search</a></div><p>Standalone links open the source map; they do not select this place automatically.</p></details></article>`;
+    )}</div>${p.operatingStatus.note ? `<p class="notice">${esc(p.operatingStatus.note)}</p>` : ""}${foodNotice(p)}${p.operatingStatus.value === "closed" && !recordedFoodStatus(p) ? '<p class="notice">Recorded closed — check the source notice before planning a visit.</p>' : ""}<p>${isOSM(p) ? "Address reference (may be partial): " : ""}${esc(p.address.ja || p.address.city || "Japanese address not supplied")}</p>${p.shopping ? `<span class="badge">${isOSM(p) ? "OpenStreetMap · ODbL source" : p.key.startsWith("shopping:alltheplaces:") ? "AllThePlaces source" : "Overture source"}</span>` : ""}${sourceAccessHTML(p, local ? local.sourceRef?.datasetVersion : feed?.datasetVersion)}<span class="badge warn">${M.located(p) ? p.location.confidence + " confidence pin · check entrance" : "Location unknown"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${p.hoursText ? `<p>Hours reference: ${esc(p.hoursText)}</p>` : ""}<p class="muted">${p.hours ? "Structured hours available; checked against scheduled visits." : "Hours not checked."}</p>${p.reviewNotes.length ? `<details><summary>Location and source notes</summary><p>${esc(p.reviewNotes.join(" · "))}</p></details>` : ""}<label class="check"><input type="checkbox" data-export-key="${esc(p.key)}" ${selectedExport.has(p.key) ? "checked" : ""}>Select for Google Maps</label><p class="muted">${p.shopping ? esc(shoppingCategories[categoryFor(p.shopping.brandId)] + " · " + (Object.hasOwn(brands, p.shopping.brandId) ? brands[p.shopping.brandId] : p.shopping.brandId) + " · " + (Object.hasOwn(formats, p.shopping.formatId) ? formats[p.shopping.formatId] : p.shopping.formatId)) : p.key.startsWith("saunachelin:") ? "Sauna layer" : "Food layer"}</p>${shoppingAliases.has(p.key) ? '<p class="muted">Saved and visited flags apply to this confirmed branch group; your separate visits stay unchanged.</p>' : ""}<div class="actions"><button class="primary" data-action="add-place" data-id="${esc(p.key)}">Add to day</button><button data-action="save-place" data-id="${esc(p.key)}" aria-pressed="${!!f?.favourite}">${f?.favourite ? "★ Saved" : "☆ Save to Spots"}</button><button data-action="visited" data-id="${esc(p.key)}" aria-pressed="${!!f?.visited}">${f?.visited ? "✓ Visited" : "Visited"}</button>${M.located(p) ? `<button data-action="show-place" data-id="${esc(p.key)}">Show pin</button>` : ""}<button data-action="directions-to-place" data-id="${esc(p.key)}">Directions</button>${saved ? `<button data-action="edit-place" data-id="${saved.id}">Edit saved place</button><button data-action="apply-saved" data-id="${saved.id}">Apply to visits</button><button data-action="edit-place-setting" data-id="${saved.id}">${saved.setting ? esc(saved.setting === "indoor" ? "Indoor" : "Outdoor") + " · Edit" : "Indoor or outdoor"}</button>` : ""}</div>${japanDepth.placeSection(p, { compact: !local })}<details><summary>Source and navigation links</summary><div class="actions">${p.links.map((l) => (M.safeURL(l.url) ? `<a class="button" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : "")).join("")}<a class="button" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(M.name(p) + " " + (p.address.ja || p.address.city || ""))}" target="_blank" rel="noopener">Google Maps search</a></div><p>Standalone links open the source map; they do not select this place automatically.</p></details></article>`;
 }
 function findPlace(key) {
   const local = state.places.find((x) => x.snapshot.key === key);
@@ -2218,6 +2277,7 @@ function renderPlaceInspector() {
     <div class="inspector-actions">
       <button type="button" class="primary" data-action="add-place" data-id="${esc(p.key)}">Add to day</button>
       <button type="button" data-action="save-place" data-id="${esc(p.key)}" aria-pressed="${saved}">${saved ? "★ Saved" : "☆ Save"}</button>
+      <button type="button" data-action="directions-to-place" data-id="${esc(p.key)}">Directions</button>
       <button type="button" class="inspector-more" data-action="inspector-details" data-id="${esc(p.key)}">Full details</button>
     </div>`;
   markInspected(markers.get(p.key), true);
@@ -2229,12 +2289,14 @@ function renderPlaceInspector() {
 function openInspectorDetails(id) {
   const p = findPlace(id);
   if (!p) return;
-  modal("Place details", card(p, null, null, null, "", markers.get(p.key)?.cuisine), () => {
+  modal("About this place", card(p, null, null, null, "", markers.get(p.key)?.cuisine), () => {
     const body = $("dialog-body");
     body.querySelector("[data-export-key]")?.closest("label")?.remove();
     body.querySelectorAll("[data-action]").forEach(button => {
       if (button.dataset.action === "export-osm-version")
         button.onclick = () => exportOSMSource(button.dataset.id).catch(err => toast(err.message));
+      else if (button.dataset.action === "directions-to-place")
+        button.onclick = () => { close(); plannerDirections({to:p}); };
       else if (button.dataset.action.startsWith("japan-"))
         button.onclick = () => japanDepth.handle(button.dataset.action, button.dataset.id).catch(err => toast(err.message));
       else button.remove();
@@ -2489,7 +2551,7 @@ function renderSourceStatus() {
 }
 function renderSettings() {
   $("content").innerHTML =
-    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.4<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
+    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.5<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
   $("setting-theme").onchange = (e) =>
     commit((s) => (s.settings.theme = e.target.value));
   $("setting-mode").onchange = (e) =>
@@ -2771,6 +2833,15 @@ document.addEventListener("click", async (e) => {
           delete seg.routeCheck;
         });
         break;
+      case "expand-directions":
+        directionsExpanded = !directionsExpanded;
+        render();
+        break;
+      case "directions-to-place": {
+        const place = findPlace(id);
+        if (place) plannerDirections({to:place});
+        break;
+      }
       case "directions":
         navigationDialog(id);
         break;
