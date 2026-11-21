@@ -26,7 +26,7 @@
   <body>
     <a class="skip" href="#content">Skip to planner</a>
     <header class="app-header">
-      <a class="identity" href="#trips"
+      <a class="identity" href="#discover"
         ><span lang="ja">旅のしおり</span><small>Japan trip planner</small></a
       ><span id="connection"></span
       ><button id="theme" aria-label="Change colour theme">◐</button>
@@ -35,9 +35,18 @@
     <div id="update" class="notice" hidden>
       New version ready. <button id="update-now">Save and reload</button>
     </div>
-    <main id="content" tabindex="-1">
-      <p class="loading">Opening your trip notebook…</p>
-    </main>
+    <div class="discover-stage" id="map-stage">
+      <div id="map" class="map" aria-label="Interactive map of Japan"></div>
+      <button class="discover-fit" type="button" data-action="fit-discover">Fit results</button>
+      <p class="tile-status" id="tile-status" role="status" hidden></p>
+      <aside class="place-inspector" id="place-inspector" aria-labelledby="inspector-title" hidden></aside>
+    </div>
+    <div class="panel-dock">
+      <button id="panel-toggle" type="button" aria-controls="content" aria-expanded="true" hidden></button>
+      <main id="content" tabindex="-1">
+        <p class="loading">Opening your trip notebook…</p>
+      </main>
+    </div>
     <nav class="bottom-nav" aria-label="Main">
       <a href="#trips" data-tab="trips">Trips</a
       ><a href="#day" data-tab="day">Itinerary</a
