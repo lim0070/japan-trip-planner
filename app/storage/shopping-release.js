@@ -23,34 +23,25 @@ const releases = [
   [24, "sha256:8db4971a0d604777c901a3a1e6ca1304bdfaa3e7a9ce7a1c063e779c7d7141d2", "sha256:376da3bdd8f0387acc925c8491306b3d93a58beeb993c054be4a7394f29269b7", "shopping-verified/2026-11-19-r1/shopping.bundle.v2.json", 23319, "2631651299a1196d63bb537d6cdc15e5a8e8f336f3c0ba894c776be3d0c84cc9"],
   [25, "sha256:6b4e62e10b2a433af9277e5b3b21642eb0710c06086be78be539ebe33c89f4f7", "sha256:428d7425120672da2a285307c9fd759fe17c6a450716c17d98804cde1ba78bce", "shopping-verified/2026-11-19-r2/shopping.bundle.v2.json", 23616, "a35aea74593fe57a1328e722d553d6a7945c391271cf4cf0f3a37b846e491412"],
   [26, "sha256:f6a0e048edfd57137c626310e809514b5b517dd9f9af5189216b9c13b3ed2e49", "sha256:d4713ccfe30868ec40ce80a683baddbed0d3281b3c07cfb8131d2a1c280c7161", "shopping-verified/2026-11-19-r3/shopping.bundle.v2.json", 23916, "a899c7dbfd2c936f43fdc5359ea5e1e82d1168e235fb6fc46aaa64ca686fa7f1"],
+  [27, "sha256:35bf2da05e4f2be0c1e705f5925abfd8ef530dcc967af09ec1d2094fd5aee151", "sha256:5d208861d81b399bf1b589567ea51f3aa01edc92c9107b5cf36d3c0174fd324f", "shopping-verified/2026-11-20-r1/shopping.bundle.v2.json", 24212, "ebcc94bdf5b323f703c2c0635d42cd872d3ff6a5d3b802410faad1adef2517a9"],
 ];
 
-export const generation24Release = Object.freeze({
-  generation: 24,
-  registryPath: "shopping-sources.successor.v11.json",
-  registryVersion: "sha256:00c8da0099fa3cf2c1109b4f9c1a4a2de2078b3ceda808a2808ed3bd6c643349",
-  artifact: releases.at(-3)[1],
-  feedVersion: releases.at(-3)[2],
-  osmVersion: "sha256:81443cb00fb61a010100ea309b0df0a9307a6d47a1888fdb6a6eb7ee244f18ff",
-});
+function reviewedRelease(generation, registryPath, registryVersion) {
+  const [, artifact, feedVersion] = releases.find(row => row[0] === generation);
+  return Object.freeze({
+    generation, registryPath, registryVersion, artifact, feedVersion,
+    osmVersion: "sha256:81443cb00fb61a010100ea309b0df0a9307a6d47a1888fdb6a6eb7ee244f18ff",
+  });
+}
 
-export const generation25Release = Object.freeze({
-  generation: 25,
-  registryPath: "shopping-sources.successor.v12.json",
-  registryVersion: "sha256:d28b708f8311eeb37c8f689406f2c611ab6975eed75f28c9fa7752f97edfd567",
-  artifact: releases.at(-2)[1],
-  feedVersion: releases.at(-2)[2],
-  osmVersion: "sha256:81443cb00fb61a010100ea309b0df0a9307a6d47a1888fdb6a6eb7ee244f18ff",
-});
-
-export const currentShoppingRelease = Object.freeze({
-  generation: 26,
-  registryPath: "shopping-sources.successor.v13.json",
-  registryVersion: "sha256:43fe4d7b79be23ee4a489fa35715ff79c29cdc98b78ecf65e17331e7bc8ffebd",
-  artifact: releases.at(-1)[1],
-  feedVersion: releases.at(-1)[2],
-  osmVersion: "sha256:81443cb00fb61a010100ea309b0df0a9307a6d47a1888fdb6a6eb7ee244f18ff",
-});
+export const generation24Release = reviewedRelease(24, "shopping-sources.successor.v11.json",
+  "sha256:00c8da0099fa3cf2c1109b4f9c1a4a2de2078b3ceda808a2808ed3bd6c643349");
+export const generation25Release = reviewedRelease(25, "shopping-sources.successor.v12.json",
+  "sha256:d28b708f8311eeb37c8f689406f2c611ab6975eed75f28c9fa7752f97edfd567");
+export const generation26Release = reviewedRelease(26, "shopping-sources.successor.v13.json",
+  "sha256:43fe4d7b79be23ee4a489fa35715ff79c29cdc98b78ecf65e17331e7bc8ffebd");
+export const currentShoppingRelease = reviewedRelease(27, "shopping-sources.successor.v14.json",
+  "sha256:ec0f5f340c7ee9438f0e9c4a27db0e93bb3ef8275d1099fd04e47337c1f6d1d4");
 
 export function shoppingRelease(version) {
   const artifact = releases.find(row => row[1] === version);

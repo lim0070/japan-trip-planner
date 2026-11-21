@@ -14,10 +14,11 @@ import { approvedShopping, validateApprovedShoppingChanges } from "./shopping-ap
 import { decodeShoppingHistory, encodeShoppingHistory } from "./shopping-history.js";
 import { closureRegistry, normalizeClosureParent, validateClosureUpdate } from "./shopping-closure.js";
 import { reviewedClosureRegistry, validateReviewedClosures } from "./shopping-reviewed-closures.js";
-import { currentShoppingRelease, generation24Release, generation25Release, shoppingRelease } from "./shopping-release.js";
+import { currentShoppingRelease, generation24Release, generation25Release, generation26Release, shoppingRelease } from "./shopping-release.js";
 import { generation24Registry, validateGeneration24 } from "./shopping-generation24.js";
 import { generation25Registry, validateGeneration25 } from "./shopping-generation25.js";
 import { generation26Registry, validateGeneration26 } from "./shopping-generation26.js";
+import { generation27Registry, validateGeneration27 } from "./shopping-generation27.js";
 import { tenantHoursRegistry, validateTenantHoursUpdate } from "./shopping-hours.js";
 import { mixedRegistry, validateMixedUpdate } from "./shopping-mixed.js";
 import { sanoRegistry, validateSanoUpdate } from "./shopping-sano.js";
@@ -156,6 +157,7 @@ const APPROVED_KEY = "shopping-region-approved-history";
 const HISTORY_ARCHIVE_KEY = "shopping-history-archive-v1";
 const CLOSURE_KEY = "shopping-region-closure-history";
 const REVIEWED_CLOSURES_KEY = "shopping-region-reviewed-closures";
+const GENERATION_27_KEY = "shopping-region-reviewed-generation27";
 const GENERATION_26_KEY = "shopping-region-reviewed-generation26";
 const GENERATION_25_KEY = "shopping-region-reviewed-generation25";
 const GENERATION_24_KEY = "shopping-region-reviewed-generation24";
@@ -439,6 +441,7 @@ const regionRows = [
   GENERATION_24_KEY,
   GENERATION_25_KEY,
   GENERATION_26_KEY,
+  GENERATION_27_KEY,
   packageKey("overture"),
   packageKey("osm"),
   legacyKey("overture"),
@@ -846,7 +849,11 @@ const generation25 = reviewedSuccessor(
   GENERATION_25_KEY, generation25Release, generation24, generation25Registry, validateGeneration25,
 );
 const generation26 = reviewedSuccessor(
-  GENERATION_26_KEY, currentShoppingRelease, generation25, generation26Registry, validateGeneration26,
+  GENERATION_26_KEY, generation26Release, generation25, generation26Registry, validateGeneration26,
+);
+
+const generation27 = reviewedSuccessor(
+  GENERATION_27_KEY, currentShoppingRelease, generation26, generation27Registry, validateGeneration27,
 );
 
 function reviewedSuccessor(key, release, parent, registry, validateUpdate) {
@@ -1119,7 +1126,7 @@ async function retainedShoppingForRelease(format, primary = null) {
 }
 
 function hasLegacyShoppingRows() {
-  const keys = [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY, GENERATION_26_KEY];
+  const keys = [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY, GENERATION_26_KEY, GENERATION_27_KEY];
   return new Promise((resolve, reject) => {
     const tx = db.transaction("feeds"), store = tx.objectStore("feeds");
     let historical = false;
@@ -1137,7 +1144,7 @@ function storeDirectShopping(candidate, release) {
     const key = packageKey("overture");
     const row = resolvedRow(rows[key], rows[legacyKey("overture")]);
     if ((row.current && !matchesRelease(row.current, release)) || row.previous ||
-        [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY, GENERATION_26_KEY]
+        [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY, GENERATION_26_KEY, GENERATION_27_KEY]
           .some(key => rows[key] !== undefined))
       throw Error("Shopping history appeared during the cold download");
     const osm = resolvedRow(rows[packageKey("osm")], rows[legacyKey("osm")]).current;
@@ -1222,8 +1229,12 @@ export function shoppingSourcesWithGeneration25(onPackage) {
   return shoppingSourcesForRelease(onPackage, generation25, generation24Release, shoppingSourcesWithGeneration24);
 }
 
-export function shoppingCurrentSources(onPackage) {
+export function shoppingSourcesWithGeneration26(onPackage) {
   return shoppingSourcesForRelease(onPackage, generation26, generation25Release, shoppingSourcesWithGeneration25);
+}
+
+export function shoppingCurrentSources(onPackage) {
+  return shoppingSourcesForRelease(onPackage, generation27, generation26Release, shoppingSourcesWithGeneration26);
 }
 
 export async function shoppingRegionVersion(version) {
@@ -1231,7 +1242,7 @@ export async function shoppingRegionVersion(version) {
   const release = shoppingRelease(version);
   const direct = release && directPackage(rows, release);
   if (direct) return direct;
-  const format = [generation24, generation25, generation26].find(item => item.release.generation === release?.generation);
+  const format = [generation24, generation25, generation26, generation27].find(item => item.release.generation === release?.generation);
   if (format && storedReleaseOverlay(rows[format.key], format.release))
     return readRetainedRelease(rows, format);
   const retained = await retainedShoppingVersion(version, rows);

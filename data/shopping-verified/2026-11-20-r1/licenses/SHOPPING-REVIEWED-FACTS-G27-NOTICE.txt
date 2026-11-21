@@ -1,0 +1,5 @@
+Generation 27 derives one prefecture label for the former GU Kumamoto Hikari-no-Mori roadside store.
+Source: Fast Retailing group opening announcement of 2015-03-02. The Japan Shopping Data project matched the historical store to the retained Kikuyo parcel and extracted the prefecture only.
+Use ordinary, attributed, unframed links to the source. The evidence describes the former roadside branch.
+Existing licensing notices and attributions continue to apply.
+See shopping-reviewed-facts-mixed-g27-1.json for the exact changes and source references.
