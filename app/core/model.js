@@ -1,3 +1,4 @@
+import { choiceVisible } from "./layer-choices.js";
 import { categoryFor } from "./shopping-catalog.js";
 import { placeMatcher } from "./place-search.js";
 export const clone = (x) => structuredClone(x);
@@ -667,7 +668,8 @@ export function filterPlaces(
   const lm = new Map(feed.lists.map((l) => [l.listId, l])),
     saved = new Map(flags.map((x) => [x.placeKey, x])),
     match = placeMatcher(f.q, { ...search, allowTypos: f.allowTypos === true, romajiByKey: f.romajiByKey, searchAliasesByKey: f.searchAliasesByKey }),
-    ranks = new Map();
+    ranks = new Map(),
+    cuisines = new Map();
   let rows = feed.places
     .filter((p) => {
       if (!f.includeScheduled && scheduled.has(p.key)) return false;
@@ -691,21 +693,28 @@ export function filterPlaces(
         return (
           (!f.shopCategories?.length ||
             f.shopCategories.includes(categoryFor(p.shopping.brandId))) &&
+          choiceVisible(f.layerChoice, p.shopping.brandId) &&
           (!f.brands?.length || f.brands.includes(p.shopping.brandId)) &&
           (!f.formats?.length || f.formats.includes(p.shopping.formatId))
         );
       }
-      if (feed.source.namespace === "tabelog")
-        return (f.includeClosed === true || p.operatingStatus.value !== "closed") && p.memberships.some((m) => {
+      if (feed.source.namespace === "tabelog") {
+        if (f.includeClosed !== true && p.operatingStatus.value === "closed") return false;
+        const membership = p.memberships.find((m) => {
           const l = lm.get(m.listId);
           return (
-            (!f.categories.length || f.categories.includes(l.category)) &&
+            l && choiceVisible(f.layerChoice, l.category) &&
+            (!f.categories?.length || f.categories.includes(l.category)) &&
             (!f.years.length || f.years.includes(String(l.year))) &&
             (!f.region || l.region === f.region) &&
             (!f.listId || l.listId === f.listId) &&
             (!f.first || m.firstTimePick)
           );
         });
+        if (!membership) return false;
+        cuisines.set(p, lm.get(membership.listId).category);
+        return true;
+      }
       return (
         (!f.hof || p.hallOfFame) &&
         (!f.multi ||
@@ -723,9 +732,12 @@ export function filterPlaces(
         )
       );
     })
-    .map((p) =>
-      match ? { p, km: nearby(p, origins), rank: ranks.get(p) } : { p, km: nearby(p, origins) },
-    );
+    .map(p => {
+      const row = { p, km: nearby(p, origins) };
+      if (match) row.rank = ranks.get(p);
+      if (cuisines.has(p)) row.cuisine = cuisines.get(p);
+      return row;
+    });
   const byRank = (a, b) => (a.rank ?? 0) - (b.rank ?? 0);
   const unknown = rows.filter((x) => !located(x.p));
   if (match) unknown.sort(byRank);

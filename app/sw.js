@@ -1,5 +1,5 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v44";
+  CACHE = PREFIX + "v45";
 const FILES = [
   "./",
   "index.html",
@@ -33,6 +33,25 @@ const FILES = [
   "core/place-search.js",
   "core/day-plan.js",
   "core/layers.js",
+  "core/layer-choices.js",
+  "map-symbols.js",
+  "icons/map/cuisine-icons.svg",
+  "icons/map/credits.html",
+  "icons/map/assets/avail.svg",
+  "icons/map/assets/birthday.svg",
+  "icons/map/assets/chambre.svg",
+  "icons/map/assets/costco.png",
+  "icons/map/assets/divalo.svg",
+  "icons/map/assets/global-work.svg",
+  "icons/map/assets/gu.png",
+  "icons/map/assets/hands.png",
+  "icons/map/assets/life-supermarket.png",
+  "icons/map/assets/lopia.png",
+  "icons/map/assets/nitori.png",
+  "icons/map/assets/outlet-mall.svg",
+  "icons/map/assets/shimamura.png",
+  "icons/map/assets/uniqlo.png",
+  "icons/map/assets/workman.png",
   "core/shopping-bundle.js",
   "core/shopping-sources.js",
   "core/source-exports.js",
@@ -117,11 +136,9 @@ self.addEventListener("fetch", (e) => {
     (async () => {
       const cache = await caches.open(CACHE);
       if (navigation) {
-        const reader = new URL("shared-day.html", base);
-        const shell = u.pathname === reader.pathname ? reader : new URL("index.html", base);
-        return (
-          (await cache.match(shell.href)) || fetch(e.request)
-        );
+        const documents = ["shared-day.html", "icons/map/credits.html"];
+        const document = documents.find(path => new URL(path, base).pathname === u.pathname) || "index.html";
+        return (await cache.match(new URL(document, base).href)) || fetch(e.request);
       }
       return (await cache.match(e.request)) || fetch(e.request);
     })(),

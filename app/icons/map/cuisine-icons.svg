@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="food-asia-ethnic" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h17c-.4 4.8-3 7.1-7.3 7.5l.6 2H8l.7-2.2C5.6 17.4 3.5 15.3 3 11Z"/><path d="m11.5 10.8 6.1-7.4c1.4-1.5 4 .2 2.8 2.1l-4.6 5.2"/><path d="M5 7.5c2 0 3 .8 3.5 2.6"/></g>
+  </symbol>
+  <symbol id="food-bread" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 16.7c-1.8-2.2-.2-6.3 3.8-9 4-2.9 9.6-4.4 12.1-2.4 2.7 2.3 1.4 6.2-2.3 9.4-3.7 3.2-10.5 5.7-13.6 2Z"/><path d="m7.7 8.3 2.2 3.2m2-6 2.1 3.3m2.1-4.2 1.6 2.3"/></g>
+  </symbol>
+  <symbol id="food-cafe" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9h13v3.2a6.5 6.5 0 0 1-13 0V9ZM17 9h1.8a2.8 2.8 0 0 1 0 5.6h-2.5M3 20h16"/><path d="M8.3 6.1c-1.6-1.4 1.6-1.9.2-3.7m4.7 3.7c-1.6-1.4 1.5-1.9.2-3.7"/></g>
+  </symbol>
+  <symbol id="food-chinese" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 16.4C3 13.3 4.1 10.2 6 9.3c.8-2.8 3.1-4 5-3.1 1.8-1.5 4.4-.6 5.1 1.2 3 .2 4.1 2.8 4.2 5 1 .9 1.5 2.6 1.2 3.8-2.8 3.1-14.9 4.1-18.9.2Z"/><path d="M6.1 9.4 8 13.6m3-7.2 1 6.4m4-5.2-.5 5.2"/></g>
+  </symbol>
+  <symbol id="food-creative-innovative" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c.2-4.4 3.4-7.8 8.2-7.8s7.8 3.4 8.1 7.8H3Zm-1 3h19M10 6.5h2.4"/><path d="m18.5 1.5 1.2 2.8 2.8 1.2-2.8 1.1-1.2 3-1.1-3-2.8-1.1 2.8-1.2Z" fill="currentColor" stroke="none"/></g>
+  </symbol>
+  <symbol id="food-curry" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.4 12h16.8c-.3 4.2-3.5 7.5-8.4 7.5-4.7 0-7.9-3.1-8.4-7.5Z"/><path d="M3.7 11.7c-.4-1.6 1.2-3.1 2.7-3 0-1.6 2.2-2.6 3.6-1.4 1.8-1.5 3.9.2 3.6 2.1"/><path d="m16.3 11.7 1.9-4.1"/><path d="M17.9 7.7c-1.4-.8-1.1-2.5-.1-4.1 1.1-1.7 2.3-2.2 3.4-1.5 1.4.8 1.1 2.4 0 4.1-1 1.4-2.2 2.2-3.3 1.5Z" fill="currentColor" stroke="none"/></g>
+  </symbol>
+  <symbol id="food-french" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.1 15.5c-.8-2.3.2-4.5 2.3-5.5.5-2.9 3-4.3 5.2-3.4 1.6-1.9 4.2-1.5 5.4.3 3.1-.3 4.8 1.6 4.5 4.7 1.6 1.8 1.5 4.6-.3 6.1l-3.7-2.9-3.7 1-4.1-.7L4.3 18Z"/><path d="m5.5 10.1 2.7 4.7m2.4-8.2 1 8m4.5-7.5-1.3 7.2m5.5-2.7-2.8 2.6"/></g>
+  </symbol>
+  <symbol id="food-hamburger" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.3c.6-4 3.9-6.6 9-6.6s8.4 2.6 9 6.6H3ZM3.2 16.7h17.6c-.1 2.6-2.2 4-4.4 4H7.6c-2.3 0-4.4-1.4-4.4-4Z"/><path d="m3 13.7 3.5-1.1 3.6 1.5 3.7-1.4 3.7 1.1 3.2-.9"/><circle cx="10" cy="6.8" r="0.7" fill="currentColor" stroke="none"/><circle cx="14.2" cy="7.1" r="0.7" fill="currentColor" stroke="none"/></g>
+  </symbol>
+  <symbol id="food-ice-gelato" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.4 11.2c-1.5-3.1.8-6.3 3.9-6.2.9-2.8 5.2-3.1 6.9-.4 3.2.1 5.3 3.5 3.8 6.6-1.2 2-3.4 2.1-4.9.8-1.6 1.8-4.1 1.7-5.6.1-1.1.9-3.4.9-4.1-.9Zm1.1 1.1 5.9 9.1 6-9"/><path d="m9.4 15.9 4.8 2.5"/></g>
+  </symbol>
+  <symbol id="food-italian" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8.7 3.1v4.1m3.4-4.1v4.1m3.4-4.1v4.1c0 2-1.4 3.5-3.4 3.5s-3.4-1.5-3.4-3.5m3.4 3.5v9.7"/><path d="M6.5 10c-2.2.6-2.3 2.7 0 3.2 2.6.7 9.7.3 11.1 1.8 2.2 2.4-2.2 4.4-2.2 6M7.6 16.5c-2.7.2-3.4 1.6-2.7 3.6"/></g>
+  </symbol>
+  <symbol id="food-izakaya" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.8 9.5V19c0 1 .5 1.6 1.7 1.6h8.2c1.1 0 1.7-.7 1.7-1.7v-10M16.5 10h2.1c1 0 1.5.7 1.5 1.6v2.3c0 1.2-.7 2-1.9 2h-1.7"/><path d="M4.6 9.3c-2.6-.9-2.3-4.8.8-5 1.3-2 4-2.2 5.5-.4 2.7-1.7 5.8-.1 5.8 2.3 0 2.9-3.4 3.7-5.1 2.2-1.2 1.5-3.4 1.6-4.7.2L4.6 9.3Z"/><path d="M8.5 12v5.3m4-5.3v5.3"/></g>
+  </symbol>
+  <symbol id="food-japanese" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 4.9c1.4-2 3.7-2 5.1 0l6.1 9.3c1.5 2.2.4 5.3-2.6 5.5H5.8c-2.9-.2-4.1-3.2-2.6-5.5l6.3-9.3Z"/><path d="M9 13h6v7H9Z" fill="currentColor" stroke="none"/><circle cx="8.5" cy="10.4" r="0.8" fill="currentColor" stroke="none"/><circle cx="14.2" cy="8.7" r="0.7" fill="currentColor" stroke="none"/></g>
+  </symbol>
+  <symbol id="food-okonomiyaki" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16.6 13.5c1.1 3.2-1.7 6.5-6.8 6.5-4.1 0-7.2-2.1-7.2-4.6 0-2.7 3.4-4.8 7.5-4.8 1.2 0 2.2.1 3.2.5"/><path d="m14 10.8 2.3-4.2 3.8 2-2.3 4.2-3.8-2Zm4.5-3.3 2.4-4.4"/><path d="m5.6 15.5 2.7-1.2 2.1 1.7 3-1.2"/></g>
+  </symbol>
+  <symbol id="food-pizza" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.1 7.2C7.1 4.4 14.1 3.1 21 6l-6.5 15L3.1 7.2Zm2.2 2.1C9.4 7 15 6.5 19.7 8.5"/><circle cx="10.4" cy="11.1" r="1.35" fill="currentColor" stroke="none"/><circle cx="15.5" cy="11.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="13.8" cy="15.6" r="1.1" fill="currentColor" stroke="none"/></g>
+  </symbol>
+  <symbol id="food-ramen" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12.6h19a9.6 9.6 0 0 1-9.5 7.7 9.5 9.5 0 0 1-9.5-7.7Zm6.2 8.1h6.6"/><path d="m11.3 8.2 9.4-5.3m-8 7.5 9-4.4M4.5 12c-.6-2 .1-4.4 2.2-4.8 2.2-.6 4.3 1.5 4.1 4.5"/><circle cx="7.4" cy="10.5" r="1.15" fill="currentColor" stroke="none"/></g>
+  </symbol>
+  <symbol id="food-shokudo" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 14h19v5.4h-19ZM4.1 10.3h6.7c-.1 2-1.4 3.6-3.3 3.6s-3.1-1.6-3.4-3.6Zm8.3-2h7.8c-.3 3-1.5 5.4-4 5.4-2.1 0-3.4-2.3-3.8-5.4Z"/><path d="M13.7 8.1c-.1-2.6 2.1-3.2 3.3-2.3 1.8-.7 2.7.4 2.5 2"/></g>
+  </symbol>
+  <symbol id="food-soba" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.9 14.4h18.2l-1.9 4.7H4.7l-1.8-4.7Zm2.2-.3c-.5-3.3 2.5-6.2 6.2-6.8 3-.4 6.4 1.1 7.6 4.4"/><path d="M7.4 13.8c.1-3.9 4.7-5.4 7.4-3.6m-4.5 3.6c.6-2.4 4.7-2.6 5.6-.5m-8.2 1.5-.4 2.3m4.1-2.3-.2 2.3m4.1-2.3-.2 2.3"/><path d="m11 6 1-2 5.7 2.4-.8 1.8Z" fill="currentColor" stroke="none"/></g>
+  </symbol>
+  <symbol id="food-spanish" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.7 11.1c1.4-1.7 4-2.7 7.3-2.7 3.8 0 6.4 1.1 7.4 2.7l-1 4.2c-1.6 2-3.9 3-6.4 3s-5-1-6.5-3l-.8-4.2Zm.6 1.1c3.7 2 10.1 2 13.5 0M4.7 12.2H2m17.2 0H22"/><path d="m8.3 10.6 1.6-.4m4.3.4 1.2.4m-3.5-4.3 1.2-2.3"/></g>
+  </symbol>
+  <symbol id="food-steak" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.3c.7-2.3 2.9-6.6 5.6-7.6 3.6-1.3 5.7 2.4 8.1 3.3 4.6 1.7 5.2 6.2 2.2 8.9-3.2 2.8-8 3.4-11.9 2.1-3.6-1.2-5-3.6-4-6.7Z"/><path d="M8.1 14.1c-1.3-1.5.3-4 1.9-4.1 1.8-.2 1.5 1.5 3.2 2.1 1.9.6 2.6 1.5 2.2 3.1"/></g>
+  </symbol>
+  <symbol id="food-sukiyaki-shabushabu" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.3 10.3h15.4v5.2a4.6 4.6 0 0 1-4.6 4.6H8.9a4.6 4.6 0 0 1-4.6-4.6v-5.2ZM2 12.5h2.2m15.6 0H22"/><path d="M7.9 7.6C5.6 5 9.1 5 7.4 2.7m5.2 4.9c-2.3-2.6 1.2-2.6-.6-4.9m5.2 4.9c-2.3-2.6 1.1-2.6-.6-4.9"/></g>
+  </symbol>
+  <symbol id="food-sweets" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 11.7 16 7.1l4.6 4.6v7.8H3.8v-7.8Zm0 0H20m-16.1 4.1h16.3"/><path d="M13.2 6.3c.1-1.7 1-3 2.3-3.5"/><circle cx="12.3" cy="7.4" r="2" fill="currentColor" stroke="none"/></g>
+  </symbol>
+  <symbol id="food-tachinomi" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.6 3.4h5.5m-4.2.4v4c0 2.2-2.6 3.9-2.6 6.3V19c0 .8.6 1.4 1.4 1.4h5.1c.9 0 1.5-.6 1.5-1.4v-4.9c0-2.4-2.5-4.1-2.5-6.3v-4m-5.3 11.8h7.6"/><path d="M15.1 12h6.4l-.9 4.5a2.4 2.4 0 0 1-4.7 0l-.8-4.5Zm3.3 6.9v1.7m-2 0h4"/></g>
+  </symbol>
+  <symbol id="food-tonkatsu" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 15.3c-1.1-2.3 0-4.8 2-6.7 2.8-2.3 8-4.6 12.1-3.4 2.7.8 4.3 3.8 3 6.3-2.3 4.5-8.6 7.6-13 7.4-2.1-.1-3.4-1.1-4.1-3.6Z"/><path d="m6.8 8.2 2.8 10m1.1-12.1 3 10.7m1.2-11.7L18 14.3"/></g>
+  </symbol>
+  <symbol id="food-toriryori" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.4 15.5c-2 0-4.9-1.3-5.8-3.9C3.1 7.7 6 3.6 10 3.5c4.3-.1 6.7 3.2 5.6 7.2-.3 1 .1 2.1.8 2.8l-2.5 2.8c-1.1-.9-2.2-.9-3.5-.8Z"/><path d="m15.7 14.4 2.4 2.4c1.1-.7 2.3-.5 3 .4.9 1.2.2 2.5-1.1 2.9-.2 1.3-1.5 1.9-2.6 1.1-1-.7-1.1-1.7-.6-2.6l-2.2-2.3"/><path d="M7 8.5a3.6 3.6 0 0 1 2.7-2.6"/></g>
+  </symbol>
+  <symbol id="food-unagi" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.3h18v13.4H3z"/><path d="M5.8 9c2.8-2.1 4.2 1.2 6.6-.5 2.1-1.5 3-.8 5.4-.5l-.2 5.8c-2.1-.1-3.1-.9-5.4.6-2.7 1.9-4-.8-6.4.7V9Z"/><path d="m8.6 10 .1 2.3m5.7-2.6v1.8M4 20.8h16"/></g>
+  </symbol>
+  <symbol id="food-wagashi" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.1 7.2c-.6-4.8 5.9-6.2 6.8-1 .1.6.1 1.2-.1 1.9 4.4-1.8 7 3.9 2.8 6.2-.4.2-.8.4-1.3.5 3.1 3.6-1 8.2-4.4 5.2-.5-.4-.9-.9-1.2-1.5-2.2 4.3-7.6 2.4-6.7-1.9.1-.5.4-1 .7-1.5-4.8-.6-4.8-6.7-.5-7.4 1.2-.2 2 .2 2.8.7"/><circle cx="12" cy="12.7" r="1.7" fill="currentColor" stroke="none"/></g>
+  </symbol>
+  <symbol id="food-yakiniku" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.4c0 3.7-4.1 6.6-9 6.6s-9-2.9-9-6.6c0-3.6 4-6.4 9-6.4s9 2.8 9 6.4Zm-15.9 4 1.1 3.6m12.2-3.3-1 3.3"/><path d="m5 12.4 7.9-5.5m-4.5 8.5 9.2-6.7m-10.8.2 8.8 6.9m-4.6-9.1 8 6"/></g>
+  </symbol>
+  <symbol id="food-yakitori" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 2.6-2.6m12.9-13L21 3"/><path d="m4.4 15.5 3.2-3.1 3.9 4-3.1 3.1-4-4Zm5-5 2.3-2.4 4.1 4.1-2.4 2.3-4-4Zm4.4-4.4 2.9-3 4.2 4.2-3 3-4.1-4.2Z"/></g>
+  </symbol>
+  <symbol id="food-yoshoku" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 15.2c1.1-4.9 5.7-8.6 10.9-8.5 4.3.2 6.6 3 7.5 6.8-3.2 4.8-12.8 6.5-18.4 1.7Z"/><path d="m7.1 12.8 2.4-2 .8 2.3 2.1-2.8 1.2 2.1 2.3-2.6M4.8 16.4c3.4.8 7.7.6 10-.6"/></g>
+  </symbol>
+  <symbol id="food-udon" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.9 11.8h16.2l-1.2 5.7c-.4 2-2.4 3.1-4.2 3.1H9.2c-2 0-3.8-1.1-4.2-3.1l-1.1-5.7Z"/><path d="M8 11.5V7a3.4 3.4 0 0 1 6.8 0v1.6a1.9 1.9 0 0 0 3.8 0V5.4" stroke-width="2.8"/><path d="M7 15h9.8"/></g>
+  </symbol>
+  <symbol id="food-other" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.7 3.3v5.6a2.7 2.7 0 0 0 5.4 0V3.3m-2.7 0v17.5M17.2 12.3v8.5"/><path d="M20.4 7.6c0 2.6-1.2 4.6-3.2 4.6S14 10.2 14 7.6s1.2-4.5 3.2-4.5 3.2 1.9 3.2 4.5Z"/></g>
+  </symbol>
+</svg>

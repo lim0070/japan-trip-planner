@@ -1,3 +1,5 @@
+import { foodSymbolId, shopIcons } from "./map-symbols.js";
+import { choiceLayers, choiceLabel, choiceOptions, choiceVisible, chooseAll, chooseOne, layerChoices } from "./core/layer-choices.js";
 import { createCalendarTools } from "./calendar-tools.js";
 import { createStationTools } from "./station-tools.js";
 import { createTransitTools } from "./transit-tools.js";
@@ -94,7 +96,6 @@ let discover = {
   q: "",
   allowTypos: false,
   years: [],
-  categories: [],
   region: "",
   prefecture: "",
   listId: "",
@@ -147,6 +148,22 @@ function backup(s, tripId = null) {
   return data;
 }
 
+const layerChoiceKey = "japan-trip-layer-choices";
+let visibleChoices = layerChoices();
+try {
+  visibleChoices = layerChoices(JSON.parse(localStorage.getItem(layerChoiceKey)));
+} catch {}
+function saveLayerChoices() {
+  try {
+    localStorage.setItem(layerChoiceKey, JSON.stringify(visibleChoices));
+  } catch {}
+}
+function updateLayerChoice(layer, selection) {
+  visibleChoices[layer] = selection;
+  saveLayerChoices();
+  render();
+}
+
 const sourceFilters = {},
   selectedExport = new Map(),
   selectedOrigins = new Map();
@@ -167,7 +184,6 @@ function filterFor(ns) {
       ...discover,
       source: ns,
       years: [],
-      categories: [],
       region: "",
       prefecture: "",
       listId: "",
@@ -176,7 +192,6 @@ function filterFor(ns) {
       first: false,
       includeClosed: false,
       allowTypos: false,
-      brands: [],
       shopCategories: [],
       formats: [],
     }
@@ -461,7 +476,7 @@ function render() {
     a.setAttribute("aria-current", a.dataset.tab === screen ? "page" : "false");
   ({ trips: renderTrips, day: renderDay, discover: renderDiscover, spots: renderSpots, settings: renderSettings })[screen]();
   const matches = screen === "discover" ? discoverMatches : matchDiscovery().rows;
-  initMap(matches.map(({ p }) => ({ p, id: p.key })));
+  initMap(matches.map(({ p, cuisine }) => ({ p, id: p.key, cuisine })));
   renderPlaceInspector();
 }
 function renderTrips() {
@@ -1557,6 +1572,7 @@ function matchDiscovery() {
         {
           ...filterFor(feeds[ns].source.namespace),
           packageVisibility: shoppingPackages,
+          layerChoice: visibleChoices[layerId(feeds[ns].source.namespace)],
           romajiByKey, searchAliasesByKey,
           includeClosed: filterFor(feeds[ns].source.namespace).includeClosed ?? false,
           radius: discover.radius,
@@ -1598,7 +1614,7 @@ function renderDiscover() {
     ]
       .sort()
       .reverse(),
-    categories = [...new Set(feed.lists.map((l) => l.category))],
+    options = Object.fromEntries(choiceLayers.map(layer => [layer, choiceOptions(feeds, layer)])),
     prefs = [
       ...new Set(feed.places.map((p) => p.address.prefecture).filter(Boolean)),
     ].sort(),
@@ -1618,11 +1634,11 @@ function renderDiscover() {
           <input id="local-search" type="search" value="${esc(discover.q)}" placeholder="Name, city or address">
         </label>
         <label class="check"><input type="checkbox" data-filter="allowTypos" ${discover.allowTypos ? "checked" : ""}>Show possible spelling matches</label>
-        ${layersHTML(combined.counts)}
+        ${layersHTML(combined.counts, options)}
         ${stationTools.layerSection()}
         ${calendar.layerSection()}
         ${discover.source === "tabelog" && visibleLayers.food ? `<label class="check"><input type="checkbox" data-filter="includeClosed" ${discover.includeClosed ? "checked" : ""}>Show closed Food places</label>` : ""}
-        <details id="discover-controls" ${controlsOpen ? "open" : ""}><summary>Filters <span class="filter-source">· ${sourceLabel}</span></summary><div class="toolbar"><div class="source-tabs" role="group" aria-label="Choose filters to edit"><button data-action="source" data-id="saunachelin" aria-pressed="${discover.source === "saunachelin"}">Saunas</button><button data-action="source" data-id="tabelog" aria-pressed="${discover.source === "tabelog"}">Food awards</button><button data-action="source" data-id="shopping" aria-pressed="${discover.source === "shopping"}">Shopping</button></div></div><details id="filters" ${discover.open ? "open" : ""}><summary>Filters for ${esc(discover.source === "shopping" ? "Shopping" : discover.source === "tabelog" ? "Food" : "Saunas")}</summary>${discover.source === "shopping" ? shoppingFiltersHTML() : ""}<div class="grid2"><label>Distance from<select id="origin-mode"><option value="day" ${discover.originMode === "day" ? "selected" : ""}>Selected day’s stops</option><option value="trip" ${discover.originMode === "trip" ? "selected" : ""}>Whole trip’s stops</option><option value="custom" ${discover.originMode === "custom" ? "selected" : ""}>Chosen origin</option></select></label><label>Radius<select id="radius">${[1, 3, 5, 10, 20, 50, 100, 0].map((n) => `<option value="${n}" ${discover.radius === n ? "selected" : ""}>${n ? n + " km" : "All distances"}</option>`).join("")}</select></label></div><div class="actions"><button data-action="gps">Near me</button><button data-action="origin">Choose origin</button></div><p class="muted">${discover.originMode === "custom" ? esc(discover.originLabel || "No origin selected") : origins().length + " located scheduled stops"}. Approximate straight-line distance, not access or travel time.</p>${discover.source === "shopping" ? "" : "<p>Award years</p>" + chips("years", years, discover.years)}${categories.length ? "<p>Food categories</p>" + chips("categories", categories, discover.categories) : ""}<div class="grid2"><label>Region<select id="region"><option value="">All</option>${regions.map((x) => `<option ${discover.region === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select></label><label>Prefecture<select id="prefecture"><option value="">All</option>${prefs.map((x) => `<option ${discover.prefecture === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select></label></div>${discover.source === "tabelog" ? `<label>Award list<select id="list-filter"><option value="">All imported lists</option>${feed.lists.map((l) => `<option value="${esc(l.listId)}" ${discover.listId === l.listId ? "selected" : ""}>${esc(l.titleJa)}</option>`).join("")}</select></label>` : ""}<div class="grid2">${(discover.source ===
+        <details id="discover-controls" ${controlsOpen ? "open" : ""}><summary>Filters <span class="filter-source">· ${sourceLabel}</span></summary><div class="toolbar"><div class="source-tabs" role="group" aria-label="Choose filters to edit"><button data-action="source" data-id="saunachelin" aria-pressed="${discover.source === "saunachelin"}">Saunas</button><button data-action="source" data-id="tabelog" aria-pressed="${discover.source === "tabelog"}">Food awards</button><button data-action="source" data-id="shopping" aria-pressed="${discover.source === "shopping"}">Shopping</button></div></div><details id="filters" ${discover.open ? "open" : ""}><summary>Filters for ${esc(discover.source === "shopping" ? "Shopping" : discover.source === "tabelog" ? "Food" : "Saunas")}</summary>${discover.source === "shopping" ? shoppingFiltersHTML() : ""}<div class="grid2"><label>Distance from<select id="origin-mode"><option value="day" ${discover.originMode === "day" ? "selected" : ""}>Selected day’s stops</option><option value="trip" ${discover.originMode === "trip" ? "selected" : ""}>Whole trip’s stops</option><option value="custom" ${discover.originMode === "custom" ? "selected" : ""}>Chosen origin</option></select></label><label>Radius<select id="radius">${[1, 3, 5, 10, 20, 50, 100, 0].map((n) => `<option value="${n}" ${discover.radius === n ? "selected" : ""}>${n ? n + " km" : "All distances"}</option>`).join("")}</select></label></div><div class="actions"><button data-action="gps">Near me</button><button data-action="origin">Choose origin</button></div><p class="muted">${discover.originMode === "custom" ? esc(discover.originLabel || "No origin selected") : origins().length + " located scheduled stops"}. Approximate straight-line distance, not access or travel time.</p>${discover.source === "shopping" ? "" : "<p>Award years</p>" + chips("years", years, discover.years)}${discover.source === "tabelog" ? advancedCuisinesHTML(options.food) : ""}<div class="grid2"><label>Region<select id="region"><option value="">All</option>${regions.map((x) => `<option ${discover.region === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select></label><label>Prefecture<select id="prefecture"><option value="">All</option>${prefs.map((x) => `<option ${discover.prefecture === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select></label></div>${discover.source === "tabelog" ? `<label>Award list<select id="list-filter"><option value="">All imported lists</option>${feed.lists.map((l) => `<option value="${esc(l.listId)}" ${discover.listId === l.listId ? "selected" : ""}>${esc(l.titleJa)}</option>`).join("")}</select></label>` : ""}<div class="grid2">${(discover.source ===
     "saunachelin"
       ? [
           ["hof", "Hall of Fame"],
@@ -1650,14 +1666,14 @@ function renderDiscover() {
           <div class="discover-results">${feeds["shopping:osm"] && shoppingPackages.osm && visibleLayers.shopping ? `<p class="attribution">Shopping data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL</a> · <button data-action="export-osm-source">Complete source & notices</button></p>` : ""}<p class="muted">Showing up to 100 rows per section. All matching located pins appear on the map.</p><h2>${result.rows.length} ${discover.radius ? "nearby located matches" : "located matches"}</h2>${
       result.rows
         .slice(0, 100)
-        .map(({ p, km, rank }) => card(p, km, null, rank, discover.q))
+        .map(({ p, km, rank, cuisine }) => card(p, km, null, rank, discover.q, cuisine))
         .join("") ||
       '<div class="empty"><h3>No matching places</h3><p>Try another origin, widen the radius or reset filters. The current source may not cover this destination.</p><button data-action="reset-filters">Reset filters</button></div>'
     }${
       result.unknown.length
         ? `<div class="section-divider"><h2>Location unknown (${result.unknown.length})</h2><p>These match the other filters. Their distance cannot be checked; they are not counted nearby.</p>${result.unknown
             .slice(0, 100)
-            .map(({ p, rank }) => card(p, null, null, rank, discover.q))
+            .map(({ p, rank, cuisine }) => card(p, null, null, rank, discover.q, cuisine))
             .join("")}</div>`
         : ""
     }<p class="attribution">${Object.values(feeds)
@@ -1678,9 +1694,22 @@ function renderDiscover() {
     const rail = $("discover-rail");
     const previousScroll = rail.scrollTop;
     const sourcesOpen = rail.querySelector(".discover-sources").open;
+    const focused = rail.contains(document.activeElement) ? document.activeElement.dataset.layerFocus : null;
+    const choiceViews = choiceLayers.map(layer => {
+      const panel = rail.querySelector("#layer-choices-" + layer);
+      return { layer, open: panel.open, scroll: panel.querySelector(".layer-choice-list")?.scrollTop || 0 };
+    });
     rail.outerHTML = railHTML;
-    $("discover-rail").querySelector(".discover-sources").open = sourcesOpen;
-    $("discover-rail").scrollTop = previousScroll;
+    const next = $("discover-rail");
+    next.querySelector(".discover-sources").open = sourcesOpen;
+    for (const { layer, open, scroll } of choiceViews) {
+      const panel = next.querySelector("#layer-choices-" + layer);
+      panel.open = open;
+      const list = panel.querySelector(".layer-choice-list");
+      if (list) list.scrollTop = scroll;
+    }
+    if (focused) next.querySelector(`[data-layer-focus="${CSS.escape(focused)}"]`)?.focus({ preventScroll: true });
+    next.scrollTop = previousScroll;
   } else $("content").innerHTML = railHTML;
   wireContext();
   $("discover-controls").querySelector("summary").onclick = (e) => {
@@ -1712,7 +1741,16 @@ function renderDiscover() {
       discover.includeClosed = e.target.checked;
       render();
     };
-  document.querySelectorAll("[data-shop-filter]").forEach(
+  document.querySelectorAll("[data-layer-choice]").forEach(el => {
+    el.onchange = () => {
+      const layer = el.dataset.layerChoice;
+      updateLayerChoice(layer, chooseOne(visibleChoices[layer], el.value, el.checked));
+    };
+  });
+  document.querySelectorAll("[data-layer-choice-bulk]").forEach(el => {
+    el.onclick = () => updateLayerChoice(el.dataset.layerChoiceBulk, chooseAll(el.dataset.visible === "true"));
+  });
+  document.querySelectorAll("[data-shop-filter]:not([data-layer-choice])").forEach(
     (el) =>
       (el.onchange = () => {
         const k = el.dataset.shopFilter;
@@ -1768,7 +1806,7 @@ function renderDiscover() {
 function chips(key, values, selected) {
   return `<div class="filter-chips"><button data-chip="${key}" data-value="" aria-pressed="${!selected.length}">All</button>${values.map((v) => `<button data-chip="${key}" data-value="${esc(v)}" aria-pressed="${selected.includes(v)}">${esc(v)}</button>`).join("")}</div>`;
 }
-function card(p, km = null, local = null, rank = null, query = "") {
+function card(p, km = null, local = null, rank = null, query = "", cuisine = null) {
   const saved = local || state.places.find(item => item.snapshot.key === p.key);
   const alternate = matchingSearchAlias(query, saved?.searchAliases || []);
   const matchText = rank === RANK.typo ? "Possible spelling match" :
@@ -1778,7 +1816,7 @@ function card(p, km = null, local = null, rank = null, query = "") {
       f.places.some((x) => x.key === p.key),
     ),
     lm = new Map((feed?.lists || []).map((l) => [l.listId, l]));
-  return `<article class="place-card ${selected === p.key ? "selected" : ""}" data-place="${esc(p.key)}"><div class="place-meta"><h3 lang="ja"><span class="brand-symbol">${esc(badge(p))}</span> ${esc(M.name(p))}</h3>${km !== null ? `<span class="muted">${km.toFixed(1)} km</span>` : ""}</div>${matchText ? `<small class="muted">${matchText}</small>` : ""}${alternate ? `<small class="muted">Alternate name · ${esc(alternate)}</small>` : ""}${p.names.en && p.names.en !== p.names.ja ? `<p class="muted">${esc(p.names.en)}</p>` : ""}<div>${p.awards.map((a) => `<span class="badge">${a.year ?? "Year unknown"} ${a.type === "ranked" ? "No. " + a.rank : esc(a.title || a.type)}</span>`).join("")}${p.memberships
+  return `<article class="place-card ${selected === p.key ? "selected" : ""}" data-place="${esc(p.key)}"><div class="place-meta"><h3 lang="ja"><span class="brand-symbol">${placeSymbol(p, cuisine)}</span> ${esc(M.name(p))}</h3>${km !== null ? `<span class="muted">${km.toFixed(1)} km</span>` : ""}</div>${matchText ? `<small class="muted">${matchText}</small>` : ""}${alternate ? `<small class="muted">Alternate name · ${esc(alternate)}</small>` : ""}${p.names.en && p.names.en !== p.names.ja ? `<p class="muted">${esc(p.names.en)}</p>` : ""}<div>${p.awards.map((a) => `<span class="badge">${a.year ?? "Year unknown"} ${a.type === "ranked" ? "No. " + a.rank : esc(a.title || a.type)}</span>`).join("")}${p.memberships
     .map((m) => {
       const l = lm.get(m.listId);
       return `<span class="badge">${esc(l ? l.category + " " + l.region + " " + l.year : m.listId)}${m.firstTimePick ? " · 初選出" : ""}</span>`;
@@ -2035,7 +2073,37 @@ function searchDialog(purpose) {
       }),
   );
 }
-function placeMarker(p) {
+const mapArtwork = new URL("./icons/map/", import.meta.url);
+let cuisineSource, cuisineByList;
+function primaryCuisine(place) {
+  if (!place.key.startsWith("tabelog:") || !feeds.tabelog) return null;
+  if (cuisineSource !== feeds.tabelog) {
+    cuisineSource = feeds.tabelog;
+    cuisineByList = new Map(cuisineSource.lists.map(list => [list.listId, list.category]));
+  }
+  for (const { listId } of place.memberships) {
+    if (cuisineByList.has(listId)) return cuisineByList.get(listId);
+  }
+  return null;
+}
+function choiceSymbol(layer, key, fallback = "") {
+  if (layer === "food") {
+    const id = foodSymbolId(key);
+    return `<svg class="map-symbol cuisine-symbol" aria-hidden="true" focusable="false" viewBox="0 0 24 24" data-food-symbol="${esc(id)}">
+      <use href="${esc(new URL("cuisine-icons.svg#" + id, mapArtwork).href)}"></use></svg>`;
+  }
+  const brandIcon = Object.hasOwn(shopIcons, key) && shopIcons[key];
+  return brandIcon
+    ? `<img class="map-symbol shop-symbol${brandIcon.wide ? " wide-shop-symbol" : ""}" data-brand-icon="${esc(key)}"
+        data-brand-kind="${esc(brandIcon.kind)}" src="${esc(new URL(brandIcon.file, mapArtwork).href)}" alt="" draggable="false">`
+    : `<span class="map-symbol shop-initial" aria-hidden="true">${esc(fallback || choiceLabel("shopping", key).slice(0, 2).toUpperCase())}</span>`;
+}
+function placeSymbol(place, cuisine) {
+  if (place.shopping) return choiceSymbol("shopping", place.shopping.brandId, badge(place));
+  if (place.key.startsWith("tabelog:")) return choiceSymbol("food", cuisine ?? primaryCuisine(place));
+  return `<span aria-hidden="true">${esc(badge(place))}</span>`;
+}
+function placeMarker(p, cuisine = null) {
   const layer = layerId(p.key.split(":")[0]) || "saved";
   const foodStatus = recordedFoodStatus(p);
   const marker = L.marker([p.location.lat, p.location.lng], {
@@ -2043,13 +2111,16 @@ function placeMarker(p) {
     bubblingMouseEvents: true,
     icon: L.divIcon({
       className: "discover-marker",
-      html: `<div class="layer-pin layer-${layer}">${layer === "saved" ? "★" : esc(badge(p))}${foodStatus ? "!" : ""}</div>`,
+      html: `<div class="layer-pin layer-${layer}">${layer === "saved" ? "★" : placeSymbol(p, cuisine)}${foodStatus ? '<span class="pin-status" aria-hidden="true">!</span>' : ""}</div>`,
       iconSize: [44, 44],
     }),
   });
   marker.on("add", () => {
     const icon = marker.getElement();
     icon.setAttribute("aria-label", M.name(p) + (foodStatus ? " · recorded " + foodStatus : ""));
+    const category = cuisine ?? primaryCuisine(p);
+    if (category) icon.setAttribute("aria-description", choiceLabel("food", category));
+    if (p.shopping) icon.setAttribute("aria-description", choiceLabel("shopping", p.shopping.brandId));
     markInspected(marker, inspectedPlace === p.key);
     icon.onkeydown = e => {
       if (dropAction || !["Enter", " "].includes(e.key)) return;
@@ -2116,7 +2187,7 @@ function renderPlaceInspector() {
   const focused = inspector.contains(document.activeElement) ? document.activeElement : null;
   inspector.innerHTML = `
     <div class="inspector-top">
-      <span class="inspector-kind"><span class="layer-${layer} inspector-dot" aria-hidden="true"></span>${kind}</span>
+      <span class="inspector-kind">${placeSymbol(p, markers.get(p.key)?.cuisine)}${kind}</span>
       <button type="button" data-action="close-inspector" aria-label="Close place details">×</button>
     </div>
     <div class="inspector-body">
@@ -2145,7 +2216,7 @@ function renderPlaceInspector() {
 function openInspectorDetails(id) {
   const p = findPlace(id);
   if (!p) return;
-  modal("Place details", card(p), () => {
+  modal("Place details", card(p, null, null, null, "", markers.get(p.key)?.cuisine), () => {
     const body = $("dialog-body");
     body.querySelector("[data-export-key]")?.closest("label")?.remove();
     body.querySelectorAll("[data-action]").forEach(button => {
@@ -2248,7 +2319,8 @@ function initMap(items) {
     p.key.startsWith(discover.source + ":")).map(({ p }) => [p.location.lat, p.location.lng]) : [];
   fitDiscoverSearch = false;
   const visits = (day()?.stopIds || []).map(id => state.stops.find(stop => stop.id === id));
-  const places = items.map(({ p, id }) => [id, p.location.lat, p.location.lng, M.name(p), badge(p), recordedFoodStatus(p)]);
+  const places = items.map(({ p, id, cuisine }) =>
+    [id, p.location.lat, p.location.lng, M.name(p), badge(p), recordedFoodStatus(p), cuisine]);
   const scheduled = visits.map(stop => {
     const p = M.visitDestination(stop);
     return [stop.id, p.location.lat, p.location.lng, M.name(p), isOSM(p), !!stop.entrance];
@@ -2334,16 +2406,21 @@ function initMap(items) {
       maxClusterRadius: 45,
       showCoverageOnHover: false,
     });
-    for (const { p, id } of items) {
+    for (const { p, id, cuisine } of items) {
       if (!M.located(p)) continue;
       const point = [p.location.lat, p.location.lng];
       discoverBounds.push(point);
-      const marker = placeMarker(p);
+      const marker = placeMarker(p, cuisine);
+      marker.cuisine = cuisine;
       markers.set(id, marker);
       cluster.addLayer(marker);
     }
     cluster.addTo(map);
     map.cluster = cluster;
+    if (screen === "discover" && inspectedPlace && !markers.has(inspectedPlace) && !pinnedSavedPlace) {
+      inspectedPlace = null;
+      inspectorShown = false;
+    }
   }
   if (matching.length) fitDiscovery(matching);
 }
@@ -2399,7 +2476,7 @@ function renderSourceStatus() {
 }
 function renderSettings() {
   $("content").innerHTML =
-    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.1<br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
+    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Nominatim searches occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.2<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
   $("setting-theme").onchange = (e) =>
     commit((s) => (s.settings.theme = e.target.value));
   $("setting-mode").onchange = (e) =>
@@ -2746,16 +2823,19 @@ document.addEventListener("click", async (e) => {
           navigate("discover");
         } else render();
         break;
-      case "reset-filters":
+      case "reset-filters": {
+        const layer = layerId(discover.source);
+        if (choiceLayers.includes(layer)) {
+          visibleChoices[layer] = chooseAll(true);
+          saveLayerChoices();
+        }
         discover = {
           ...discover,
-          brands: [],
-          formats: [],
+              formats: [],
           shopCategories: [],
           q: "",
           years: [],
-          categories: [],
-          region: "",
+              region: "",
           prefecture: "",
           listId: "",
           radius: 0,
@@ -2771,6 +2851,7 @@ document.addEventListener("click", async (e) => {
         };
         render();
         break;
+      }
       case "origin":
         originDialog();
         break;
@@ -3110,7 +3191,7 @@ function originalApps() {
   return `<div class="original-apps" aria-label="Original standalone apps"><a href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Open original sauna app</a><a href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Open original food app</a></div>`;
 }
 
-function layersHTML(counts) {
+function layersHTML(counts, options) {
   const layers = [
     ["sauna", "saunachelin", "Saunas"],
     ["food", "tabelog", "Food"],
@@ -3125,18 +3206,42 @@ function layersHTML(counts) {
               ? { places: shoppingPlaces() }
               : feeds.shopping
             : feeds[ns];
+      const hasChoices = Object.hasOwn(options, id);
+      const none = hasChoices && options[id].length && options[id].every(({ key }) => !choiceVisible(visibleChoices[id], key));
       const detail = !feed
         ? status === "loading"
           ? "Loading…"
           : "Unavailable — reload online"
         : !visibleLayers[id]
           ? `Off · ${feed.places.length.toLocaleString("en-US")} loaded`
-          : `${counts[id]?.located || 0} map matches${counts[id]?.unknown ? ` · ${counts[id].unknown} without pins` : ""}${id === "shopping" ? " · source records may overlap" : ""}${status === "cached" ? " · cached data" : ""}`;
-      return `<label class="layer-option"><span class="check"><input type="checkbox" data-layer="${id}" aria-describedby="layer-help layer-status-${id}" ${visibleLayers[id] ? "checked" : ""}>${label}</span><small id="layer-status-${id}" role="status">${esc(detail)}</small></label>`;
+          : `${counts[id]?.located || 0} map matches${none ? (id === "food" ? " · No cuisines selected" : " · No brands selected") : ""}${counts[id]?.unknown ? ` · ${counts[id].unknown} without pins` : ""}${id === "shopping" ? " · source records may overlap" : ""}${status === "cached" ? " · cached data" : ""}`;
+      return `<label class="layer-option"><span class="check"><input type="checkbox" data-layer="${id}" data-layer-focus="master-${id}" aria-describedby="layer-help layer-status-${id}" ${visibleLayers[id] ? "checked" : ""}>${label}</span><small id="layer-status-${id}" role="status">${esc(detail)}</small></label>`;
     })
     .join(
       "",
-    )}</div></section>`;
+    )}</div><div class="layer-choice-panels">${choiceLayers.map(layer => layerChecklistHTML(layer, options[layer])).join("")}</div></section>`;
+}
+function bulkChoiceHTML(layer, scope, visible) {
+  const label = visible ? "Select all" : "Clear all";
+  return `<button type="button" data-layer-choice-bulk="${layer}" data-visible="${visible}" data-layer-focus="${scope}-${layer}-${visible}">${label}</button>`;
+}
+function choiceInputHTML(layer, scope, key, label, extra = "") {
+  return `<label class="check"><input type="checkbox" data-layer-choice="${layer}" value="${esc(key)}"
+    data-layer-focus="${scope}-${layer}-${esc(key)}" ${extra} ${choiceVisible(visibleChoices[layer], key) ? "checked" : ""}>${choiceSymbol(layer, key)}<span>${esc(label)}</span></label>`;
+}
+function layerChecklistHTML(layer, options) {
+  const title = layer === "food" ? "Food cuisines" : "Shopping brands";
+  const chosen = options.filter(({key}) => choiceVisible(visibleChoices[layer], key)).length;
+  return `<details class="layer-choice-panel" id="layer-choices-${layer}"><summary data-layer-focus="summary-${layer}">
+    ${title}${options.length ? ` <span>${chosen} of ${options.length} selected</span>` : ""}</summary>
+    ${options.length ? `<div class="actions">${bulkChoiceHTML(layer, "main", true)}${bulkChoiceHTML(layer, "main", false)}</div>
+    <div class="layer-choice-list" role="group" aria-label="${title} checklist" tabindex="0" data-layer-focus="list-${layer}">
+      ${options.map(({key, label}) => choiceInputHTML(layer, "main", key, label)).join("")}</div>` :
+      '<p class="muted">Choices appear when the source loads.</p>'}</details>`;
+}
+function advancedCuisinesHTML(options) {
+  return options.length ? `<h3>Food categories</h3><div class="actions">${bulkChoiceHTML("food", "advanced", true)}${bulkChoiceHTML("food", "advanced", false)}</div>
+    <div class="grid2">${options.map(({key, label}) => choiceInputHTML("food", "advanced", key, label)).join("")}</div>` : "";
 }
 function shoppingPlaces() {
   return Object.entries(feeds)
@@ -3169,7 +3274,7 @@ function shoppingFiltersHTML() {
   );
   const formatPlaces = categoryPlaces.filter(
     (p) =>
-      !discover.brands?.length || discover.brands.includes(p.shopping.brandId),
+      choiceVisible(visibleChoices.shopping, p.shopping.brandId),
   );
   return `${shoppingSourcesHTML()}<h3>Shopping categories</h3><div class="grid2">${Object.entries(
     shoppingCategories,
@@ -3185,18 +3290,12 @@ function shoppingFiltersHTML() {
     )
     .join(
       "",
-    )}</div><h3>Brands and formats</h3>${shoppingCoverageHTML(ps)}<p>None selected means all. Formats use both symbols and labels.</p><div class="grid2">${[
-    ...new Set([
-      ...categoryPlaces.map((p) => p.shopping.brandId),
-      ...(discover.brands || []),
-    ]),
-  ]
-    .sort()
-    .map(
-      (v) =>
-        `<label class="check"><input type="checkbox" data-shop-filter="brands" value="${esc(v)}" ${(discover.brands || []).includes(v) ? "checked" : ""}>${esc(Object.hasOwn(brands, v) ? brands[v] : v)} (${ps.filter((p) => p.shopping.brandId === v).length})</label>`,
-    )
-    .join("")}</div><div class="grid2">${[
+    )}</div><h3>Brands and formats</h3>${shoppingCoverageHTML(ps)}<p>Brands share the map-layer selection. With no formats selected, all formats are included.</p>
+    <div class="actions">${bulkChoiceHTML("shopping", "advanced", true)}${bulkChoiceHTML("shopping", "advanced", false)}</div><div class="grid2">${[
+      ...new Set(categoryPlaces.map(p => p.shopping.brandId)),
+    ].sort().map(key => choiceInputHTML("shopping", "advanced", key,
+      (Object.hasOwn(brands, key) ? brands[key] : key) + " (" + ps.filter(p => p.shopping.brandId === key).length + ")",
+      'data-shop-filter="brands"')).join("")}</div><div class="grid2">${[
     ...new Set([
       ...formatPlaces.map((p) => p.shopping.formatId),
       ...(discover.formats || []),

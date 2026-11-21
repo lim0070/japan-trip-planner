@@ -36,7 +36,7 @@ export function backup(s, tripId = null, aliases = new Map()) {
     kind: tripId ? "trip" : "full",
     exportId: id(),
     exportedAt: now(),
-    appVersion: "2.9.1",
+    appVersion: "2.9.2",
     ...data,
   };
 }
