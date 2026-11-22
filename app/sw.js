@@ -1,10 +1,11 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v49";
+  CACHE = PREFIX + "v50";
 const FILES = [
   "./",
   "index.html",
   "styles.css",
   "main.js",
+  "personal-google-map.js",
   "directions-panel.js",
   "core/direction-search.js",
   "core/flower-nagai-data.js",

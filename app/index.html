@@ -37,6 +37,13 @@
     </div>
     <div class="discover-stage" id="map-stage">
       <div id="map" class="map" aria-label="Interactive map of Japan"></div>
+      <div id="google-map" class="google-map-surface" tabindex="-1" aria-label="Google Maps of Japan" aria-hidden="true" inert></div>
+      <div id="google-map-data-credits" class="google-map-data-credits" hidden></div>
+      <div id="google-map-zoom" role="group" aria-label="Map zoom" hidden>
+        <button type="button" id="google-zoom-in" aria-label="Zoom in">+</button>
+        <button type="button" id="google-zoom-out" aria-label="Zoom out">−</button>
+      </div>
+      <p id="google-map-status" role="status" class="google-map-status" hidden></p>
       <button class="discover-fit" type="button" data-action="fit-discover">Fit results</button>
       <div id="entrance-picker" class="entrance-picker" hidden>
         <span role="status">Choose the entrance on the map</span>

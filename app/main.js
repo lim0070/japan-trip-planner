@@ -1,3 +1,4 @@
+import { createPersonalGoogleMap, hasGoogleMapsKey, saveGoogleMapsKey } from "./personal-google-map.js";
 import { mapAddressAliases, mapStations, stationPack } from "./core/map-stations.js";
 import { googleMapSearch, photonPlaces } from "./core/map-lookup.js";
 import { createDirectionsPanel } from "./directions-panel.js";
@@ -126,6 +127,7 @@ const tabTitles = { trips: "Trips", day: "Itinerary", discover: "Maps & shopping
 let discoverBounds = [];
 let fitDiscoverSearch = false;
 let mapQuery = "", mapSearchTypos = false, mapSearchLocation = null;
+let googleMap = null, beforeGooglePin = null;
 const sourceLoad = {
   "shopping:osm": "loading",
   saunachelin: "loading",
@@ -1701,11 +1703,13 @@ function renderDiscover() {
             ${mapQuery ? '<button id="map-search-clear" type="button" aria-label="Clear map search">×</button>' : ""}
           </div>
           <div class="map-search-actions">
-            <button id="map-search-online" type="button">Search online in Japan</button>
+            <button id="map-search-online" type="button" ${googleMap?.active() ? 'class="primary"' : ""}>${googleMap?.active() ? "Find with Google Maps" : "Search online in Japan"}</button>
+            <a id="map-search-google" class="button" href="${esc(googleMapSearch(mapQuery))}" target="_blank" rel="noopener">Open in Google Maps ↗</a>
             <label class="check"><input type="checkbox" id="map-search-typos" ${mapSearchTypos ? "checked" : ""}>Show possible spelling matches</label>
           </div>
           ${mapSearchLocation ? `<div class="map-search-location"><span id="map-search-pin-label" tabindex="-1">${esc(mapSearchLocation.label)}</span>
             <button type="button" id="map-search-unpin">Clear location pin</button>
+            ${mapSearchLocation.source === "google" ? '<small class="google-attribution" translate="no">Google Maps</small>' : ""}
             ${mapSearchLocation.source === "photon" ? '<small>Photon · © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a></small>' : ""}
             ${mapSearchLocation.source === "osm" ? `<small>© OpenStreetMap contributors · <a href="${stationPack}" target="_blank" rel="noopener">ODbL station source</a></small>` : ""}
             ${mapSearchLocation.source === "railway" ? '<small><a href="https://www.pref.yamagata.jp/020057/kurashi/kendo/kotsuseisaku/kokyokotsu_gtfs-jp.html" target="_blank" rel="noopener">Yamagata Prefecture · CC BY 4.0</a></small>' : ""}</div>` : ""}
@@ -1849,7 +1853,8 @@ function renderDiscover() {
   const searchField = $("local-search");
   searchBox(searchField, 220, (value) => {
     mapQuery = value;
-    fitDiscoverSearch = Boolean(value.trim());
+    fitDiscoverSearch = Boolean(value.trim()) && !googleMap?.active();
+    $("map-search-google").href = googleMapSearch(value);
   }, () => {
     keepCaret(render)();
   });
@@ -1868,7 +1873,7 @@ function renderDiscover() {
     render();
     $("map-search-typos").focus({preventScroll:true});
   };
-  $("map-search-online").onclick = () => mapLookupDialog(mapQuery);
+  $("map-search-online").onclick = () => mapLookupDialog(mapQuery, googleMap?.active() ? "google" : "photon");
   $("map-search-clear")?.addEventListener("click", () => {
     mapQuery = "";
     fitDiscoverSearch = false;
@@ -2068,6 +2073,10 @@ function gps() {
 }
 // Search and reference pins never write to the trip or change the chosen origin.
 function showMapLocation(place) {
+  if (place.source === "google") {
+    if (!googleMap?.active()) return;
+    beforeGooglePin ??= { center: map.getCenter(), zoom: map.getZoom() };
+  } else beforeGooglePin = null;
   mapSearchLocation = place;
   fitDiscoverSearch = false;
   if ($("dialog").open) close();
@@ -2093,17 +2102,18 @@ function syncMapLocationPin() {
 
 const lookupCache = new Map();
 let lookupStarted = 0;
-function mapLookupDialog(initial) {
-  modal("Find a location in Japan", `
-    <form id="photon-form">
+function mapLookupDialog(initial, provider = "photon") {
+  const useGoogle = provider === "google";
+  modal(useGoogle ? "Find a location with Google Maps" : "Find a location in Japan", `
+    <form id="location-lookup-form">
       <label>Public place name or address
         <input name="query" required minlength="2" maxlength="160" value="${esc(initial)}" autocomplete="off">
       </label>
-      <p class="muted">Search sends your query to Photon. Use a public place or address.</p>
+      <p class="muted">${useGoogle ? "Google Maps searches for cities and addresses in Japan. For businesses and landmarks, use the Google Maps website below." : "Search sends your query to Photon. Use a public place or address."}</p>
       <div class="actions"><button class="primary" type="submit">Find on this map</button></div>
       <div id="map-lookup-status" role="status"></div>
       <div id="map-lookup-results" class="search-results"></div>
-      <p class="attribution"><a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Approximate locations</p>
+      ${useGoogle ? '<p class="google-attribution" translate="no">Google Maps</p>' : '<p class="attribution"><a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Approximate locations</p>'}
     </form>
     <details id="map-lookup-fallback">
       <summary>Use Google Maps or paste coordinates</summary>
@@ -2116,7 +2126,7 @@ function mapLookupDialog(initial) {
         <p id="map-coordinate-error" role="alert" class="form-error"></p>
       </form>
     </details>`, () => {
-      const form = $("photon-form"), status = $("map-lookup-status"), results = $("map-lookup-results");
+      const form = $("location-lookup-form"), status = $("map-lookup-status"), results = $("map-lookup-results");
       const fallback = $("map-lookup-fallback"), submit = form.querySelector("button");
       const input = form.elements.query;
       const google = $("map-lookup-google");
@@ -2146,15 +2156,16 @@ function mapLookupDialog(initial) {
           return;
         }
         const key = query.normalize("NFKC").toLowerCase();
-        let rows = lookupCache.get(key);
-        if (!rows && Date.now() - lookupStarted < 1100) {
+        let rows = useGoogle ? null : lookupCache.get(key);
+        if (!useGoogle && !rows && Date.now() - lookupStarted < 1100) {
           status.textContent = "Wait a moment before searching again.";
           return;
         }
         submit.disabled = true;
         status.textContent = "Looking up locations…";
         try {
-          if (!rows) {
+          if (useGoogle) rows = await googleMap.search(query);
+          else if (!rows) {
             if (!navigator.onLine || !config.mapLookupUrl)
               throw Error("Lookup unavailable");
             lookupStarted = Date.now();
@@ -2176,7 +2187,8 @@ function mapLookupDialog(initial) {
         } catch {
           if (!$("dialog").open || !form.isConnected || input.value.trim() !== query) return;
           status.textContent = navigator.onLine ?
-            "Online lookup unavailable. Try Google Maps or paste coordinates below." :
+            (useGoogle ? "Google Maps lookup unavailable. Check that Geocoding API is enabled or use the link below." :
+              "Online lookup unavailable. Try Google Maps or paste coordinates below.") :
             "You’re offline. Paste coordinates to show a location on this map.";
           fallback.open = true;
         } finally {
@@ -2384,7 +2396,7 @@ function placeMarker(p, cuisine = null) {
       inspectPlace(p.key, true);
     };
   });
-  marker.on("click", () => { if (!dropAction) inspectPlace(p.key); });
+  marker.on("click", e => { if (!dropAction) inspectPlace(p.key, e.originalEvent?.type === "keydown"); });
   return marker;
 }
 
@@ -2395,6 +2407,7 @@ function markInspected(marker, checked) {
     icon.setAttribute("aria-pressed", String(checked));
   }
   marker?.setZIndexOffset(checked ? 800 : 0);
+  googleMap?.requestDraw();
 }
 
 function inspectPlace(id, keyboard = false) {
@@ -2418,7 +2431,8 @@ function closePlaceInspector() {
   inspectedPlace = null;
   inspectorShown = false;
   renderPlaceInspector();
-  (marker?.getElement() || $("map")).focus({ preventScroll: true });
+  if (googleMap?.active()) googleMap.focusMarker(marker);
+  else (marker?.getElement() || $("map")).focus({ preventScroll: true });
 }
 
 function renderPlaceInspector() {
@@ -2506,7 +2520,17 @@ function fitDiscovery(bounds = screen === "day" && map?.dayBounds.length ? map.d
 }
 
 function addBasemap() {
-  if (!map || map.basemap || !config.tilesUrl) return;
+  if (!map) return;
+  if (googleMap?.active()) {
+    map.basemap?.remove();
+    $("tile-status").hidden = true;
+    return;
+  }
+  if (map.basemap) {
+    if (!map.hasLayer(map.basemap)) map.basemap.addTo(map);
+    return;
+  }
+  if (!config.tilesUrl) return;
   const tileLayer = L.tileLayer(config.tilesUrl, {
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 19,
@@ -2516,11 +2540,11 @@ function addBasemap() {
   const container = map.getContainer();
   tileLayer.on("loading", () => {
     const status = $("tile-status");
-    if (status && container === $("map")) status.hidden = true;
+    if (status && !googleMap?.active() && container === $("map")) status.hidden = true;
   });
   tileLayer.on("load", () => {
     const status = $("tile-status");
-    if (!status || container !== $("map")) return;
+    if (!status || googleMap?.active() || container !== $("map")) return;
     const tiles = [...container.querySelectorAll(".leaflet-tile")];
     const missing = tiles.filter(tile => tile.complete && !tile.naturalWidth);
     status.hidden = !missing.length;
@@ -2570,6 +2594,31 @@ function initMap(items) {
         }),
       });
     });
+    googleMap = createPersonalGoogleMap({ stage: $("map-stage"), leaf: map, leaflet: L,
+      change: mode => {
+        if (mode !== "active") {
+          if (mapSearchLocation?.source === "google") mapSearchLocation = null;
+          syncMapLocationPin();
+          if (beforeGooglePin && mode !== "regional")
+            map.setView(beforeGooglePin.center, beforeGooglePin.zoom, {animate:false});
+          beforeGooglePin = null;
+          if ($("location-lookup-form") && $("dialog-title").textContent.includes("Google Maps")) close();
+        }
+        const status = $("google-map-status");
+        const message = googleMapStatus(mode);
+        status.textContent = message;
+        status.hidden = !message;
+        $("google-map-zoom").hidden = mode !== "active";
+        addBasemap();
+        queueMicrotask(() => {
+          if (composingSearch?.isConnected) pendingAfterComposition = keepCaret(render);
+          else keepCaret(render)();
+        });
+      },
+    });
+    $("google-zoom-in").onclick = () => map.zoomIn();
+    $("google-zoom-out").onclick = () => map.zoomOut();
+    googleMap.refresh();
   }
   calendar.syncMap();
   addBasemap();
@@ -2682,6 +2731,7 @@ function initMap(items) {
     }
   }
   if (matching.length) fitDiscovery(matching);
+  googleMap?.requestDraw();
 }
 function selectVisit(id) {
   selected = id;
@@ -2694,7 +2744,8 @@ function showPin(id) {
   const visit = map?.dayMarkers.get(id);
   if (visit) {
     fitDiscovery([visit.getLatLng()]);
-    visit.getElement()?.focus({ preventScroll: true });
+    if (googleMap?.active()) googleMap.focusMarker(visit);
+    else visit.getElement()?.focus({ preventScroll: true });
     selected = id;
     render();
     return;
@@ -2733,9 +2784,54 @@ function renderSourceStatus() {
         "",
       )}`;
 }
+function googleMapStatus(mode) {
+  return {
+    loading: "Loading Google Maps…",
+    active: "Google Maps",
+    offline: "Offline · Planner map",
+    regional: "Downloaded regional map",
+    unavailable: "Google Maps unavailable · Planner map",
+  }[mode] || "";
+}
+
+function googleSettings(open) {
+  const configured = hasGoogleMapsKey();
+  return `<details id="google-map-settings" ${open ? "open" : ""}><summary>Google Maps</summary>
+    <p>${configured ? (googleMapStatus(googleMap?.mode()) || "Enabled on this browser") : "Optional. Add a restricted browser key to use Google Maps online."}</p>
+    <form id="google-key-form">
+      <label>Google Maps browser API key<input type="password" name="browserKey" required maxlength="180" autocomplete="off" spellcheck="false"></label>
+      <div class="actions"><button class="primary" type="submit">${configured ? "Replace key and reload" : "Enable Google Maps and reload"}</button>
+        ${configured ? '<button type="button" id="remove-google-key">Remove key and reload</button>' : ""}</div>
+      <p class="form-error" role="alert" id="google-key-error"></p>
+    </form>
+    <p>The key is stored on this browser. Google receives it, map requests and submitted addresses. Trip backups exclude the key and temporary Google results.</p>
+    <p>Use a billing-enabled project with Maps JavaScript API and Geocoding API. Restrict the key to both APIs and to the website origin <code>https://lim0070.github.io/*</code>. Google may charge for map loads or lookups beyond your available usage allowance.</p>
+    <p><a href="https://developers.google.com/maps/api-security-best-practices" target="_blank" rel="noopener">Key restrictions</a> ·
+      <a href="https://developers.google.com/maps/billing-and-pricing/pricing" target="_blank" rel="noopener">Pricing</a></p>
+    <p>Using Google Maps is subject to the
+      <a href="https://maps.google.com/help/terms_maps/" target="_blank" rel="noopener">Google Maps terms</a> and
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google privacy policy</a>.</p>
+  </details>`;
+}
+
 function renderSettings() {
+  const googleSettingsOpen = $("google-map-settings")?.open;
   $("content").innerHTML =
-    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.6<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
+    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}${googleSettings(googleSettingsOpen)}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.7<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
+  $("google-key-form").onsubmit = event => {
+    event.preventDefault();
+    try {
+      saveGoogleMapsKey(event.target.elements.browserKey.value);
+      event.target.reset();
+      location.reload();
+    } catch (error) { $("google-key-error").textContent = error.message; }
+  };
+  $("remove-google-key")?.addEventListener("click", () => {
+    try {
+      saveGoogleMapsKey(null);
+      location.reload();
+    } catch (error) { $("google-key-error").textContent = error.message; }
+  });
   $("setting-theme").onchange = (e) =>
     commit((s) => (s.settings.theme = e.target.value));
   $("setting-mode").onchange = (e) =>
@@ -3199,6 +3295,7 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", theme);
 compactMap.addEventListener("change", () => { if (ready) syncPanel(); });
 function connection() {
   $("connection").textContent = navigator.onLine ? "" : "Offline";
+  googleMap?.refresh();
 }
 connection();
 window.addEventListener("beforeunload", (e) => {

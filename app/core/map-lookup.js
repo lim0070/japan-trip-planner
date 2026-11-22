@@ -2,7 +2,7 @@ const japanBounds = [122.9, 24, 154, 45.6]; // lon/lat, including Japan's inhabi
 
 export function googleMapSearch(query) {
   const url = new URL("https://www.google.com/maps/search/");
-  url.search = new URLSearchParams({ api: "1", query: query.trim() + ", Japan" });
+  url.search = new URLSearchParams({ api: "1", query: query.trim() ? query.trim() + ", Japan" : "Japan" });
   return url.href;
 }
 
