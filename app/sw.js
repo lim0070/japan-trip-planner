@@ -1,5 +1,5 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v52";
+  CACHE = PREFIX + "v53";
 const FILES = [
   "./",
   "index.html",
@@ -41,6 +41,9 @@ const FILES = [
   "core/timetable.js",
   "core/timetable-plan.js",
   "core/planner-timetable.js",
+  "core/hakodate-tram.js",
+  "core/hakodate-tram-public.js",
+  "hakodate-tram-tools.js",
   "core/winter-transit-data.js",
   "core/layers.js",
   "core/layer-choices.js",

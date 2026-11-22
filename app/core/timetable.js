@@ -32,48 +32,59 @@ function stationIndex(stops) {
   return index;
 }
 
-function endpoint(place, stops, index) {
+function endpoint(place, stops, index, platforms) {
   if (!place || travelVisit(place)) return [];
-  const matches = new Set();
-  for (const name of Object.values(place.names ?? {})) {
-    const key = normalize(name).split(/\s+·\s+/u)[0];
-    for (const match of index.get(key) ?? []) matches.add(match);
+  const selected = platforms.get(place.key?.replace(/^manual:/u, ""));
+  const matches = new Set(selected);
+  if (!selected) {
+    for (const name of Object.values(place.names ?? {})) {
+      const key = normalize(name).split(/\s+·\s+/u)[0];
+      for (const match of index.get(key) ?? []) matches.add(match);
+    }
   }
-  // Ambiguous exact labels are not a reason to guess a city or an operator.
-  const named = matches.size === 1 ? [...matches][0] : null;
-  if (named && (!located(place) || !Number.isFinite(named.lat) || !Number.isFinite(named.lng)))
-    return [{ stop: named, walk: 0, exact: true }];
+  // Named platforms for a single signed stop share an endpoint, unlike an ambiguous city or station name.
+  const labels = [...matches];
+  const group = labels[0]?.platformGroup;
+  const oneStop = labels.length === 1 || (group && labels.every(stop => stop.platformGroup === group));
+  if (oneStop && (!located(place) ||
+      (group && labels.some(stop => distance(place.location, stop) <= 0.08)) ||
+      !Number.isFinite(labels[0].lat) || !Number.isFinite(labels[0].lng)))
+    return labels.map(stop => ({ stop, walk: 0, exact: true }));
   if (!located(place)) return [];
   const exact = matches.size ? [...matches] : stops;
-  return exact.flatMap(stop => {
+  const candidates = exact.flatMap(stop => {
     const km = Number.isFinite(stop.lat) && Number.isFinite(stop.lng)
       ? distance(place.location, stop) : Infinity;
     return km <= walkLimitKm ? [{ stop, walk: km <= 0.025 ? 0 : walkingMinutes(km), exact: matches.has(stop) }] : [];
-  }).sort((a, b) => a.walk - b.walk).slice(0, 4);
+  }).sort((a, b) => a.walk - b.walk);
+  const nearby = new Set();
+  return candidates.filter(({ stop }) => {
+    const key = stop.platformGroup ?? stop.id;
+    if (nearby.size === 4 && !nearby.has(key)) return false;
+    nearby.add(key);
+    return true;
+  });
 }
 
 function buildDepartures(trips, date) {
   const departures = new Map();
+  const dropoffs = new Set(), busDropoffs = new Set(), busOrigins = new Set();
   for (const trip of trips) {
     if (!coversService(trip.calendar, date)) continue;
-    for (const [i, origin] of trip.calls.entries()) {
-      if (!origin.pickup) continue;
-      if (!departures.has(origin.stop)) departures.set(origin.stop, []);
-      const outgoing = departures.get(origin.stop);
-      for (const destination of trip.calls.slice(i + 1)) {
-        if (!destination.dropoff || origin.stop === destination.stop ||
-            !Number.isInteger(origin.depart) || !Number.isInteger(destination.arrive) ||
-            origin.depart < 0 || destination.arrive <= origin.depart) continue;
-        outgoing.push({
-          from: origin.stop, to: destination.stop, depart: origin.depart, arrive: destination.arrive,
-          service: trip.name, coverage: trip.calendar, source: trip.source, mode: trip.mode, line: trip.line,
-          arrivalBound: destination.arrivalBound,
-        });
+    const last = trip.calls.length - 1;
+    for (const [index, call] of trip.calls.entries()) {
+      if (index > 0 && call.dropoff && Number.isInteger(call.arrive)) {
+        dropoffs.add(call.stop);
+        if (trip.mode === "bus") busDropoffs.add(call.stop);
       }
+      if (index === last || !call.pickup || !Number.isInteger(call.depart) || call.depart < 0) continue;
+      if (!departures.has(call.stop)) departures.set(call.stop, []);
+      departures.get(call.stop).push({ trip, index, depart: call.depart });
+      if (trip.mode === "bus") busOrigins.add(call.stop);
     }
   }
   for (const edges of departures.values()) edges.sort((a, b) => a.depart - b.depart);
-  return departures;
+  return { departures, dropoffs, busDropoffs, busOrigins };
 }
 
 function firstAfter(edges, minute) {
@@ -94,6 +105,12 @@ function record(map, station, arrival) {
 export function createTimetableRouter({ stops, trips, transfers = [], standards = [], accessLinks = [] }) {
   const byId = new Map(stops.map(stop => [stop.id, stop]));
   const names = stationIndex(stops);
+  const platforms = new Map();
+  for (const stop of stops) {
+    if (!stop.platformGroup) continue;
+    if (!platforms.has(stop.platformGroup)) platforms.set(stop.platformGroup, []);
+    platforms.get(stop.platformGroup).push(stop);
+  }
   const dates = new Map();
   const transfersFrom = new Map();
   for (const transfer of transfers) {
@@ -104,7 +121,7 @@ export function createTimetableRouter({ stops, trips, transfers = [], standards 
   const resolve = place => {
     if (!place) return [];
     if (!candidates.has(place)) {
-      const base = endpoint(place, stops, names);
+      const base = endpoint(place, stops, names, platforms);
       const links = base.filter(entry => entry.exact).flatMap(entry =>
         (transfersFrom.get(entry.stop.id) ?? []).filter(link => link.access).map(link =>
           ({ stop: byId.get(link.to), walk: entry.walk + link.minutes, exact: true })));
@@ -125,77 +142,92 @@ export function createTimetableRouter({ stops, trips, transfers = [], standards 
       (lineMatch(rule.line2, prior.line) && lineMatch(rule.line1, edge.line))));
   };
 
-  return function route(from, to, date, ready, finishBy = 1439, { atStopSince = null, incoming = null, busOnly = false } = {}) {
+  return function route(from, to, date, ready, finishBy = 1439, {
+    atStopSince = null, incoming = null, busOnly = false, boardAfter = ready,
+  } = {}) {
     const origins = resolve(from).filter(entry => !busOnly || (entry.exact && entry.stop.bus));
     const destinations = resolve(to).filter(entry => !busOnly || (entry.exact && entry.stop.bus));
     const hint = [origins[0]?.stop.name, destinations[0]?.stop.name];
     if (busOnly && (!origins.length || !destinations.length))
       return { reason: "mode", hint };
     if (!origins.length || !destinations.length) return { reason: "access", hint };
-    if (origins.length === 1 && destinations.length === 1 &&
-        origins[0].stop.id === destinations[0].stop.id &&
-        origins[0].walk === 0 && destinations[0].walk === 0)
+    const originGroup = origins[0].stop.platformGroup || origins[0].stop.id;
+    const samePlace = ({ stop, walk }) => !walk && (stop.platformGroup || stop.id) === originGroup;
+    if (origins.every(samePlace) && destinations.every(samePlace))
       return { same: true, hint };
     if (!Number.isInteger(ready) || ready > finishBy) return { reason: "time", hint };
     if (!dates.has(date)) {
       if (dates.size >= 14) dates.delete(dates.keys().next().value);
       dates.set(date, buildDepartures(trips, date));
     }
-    const edges = dates.get(date);
+    const { departures, dropoffs, busDropoffs, busOrigins } = dates.get(date);
     const egress = new Map();
     for (const destination of destinations) {
       const old = egress.get(destination.stop.id);
       if (!old || old.walk > destination.walk) egress.set(destination.stop.id, destination);
     }
-    const destinationsOnDate = new Set();
-    for (const outgoing of edges.values()) for (const edge of outgoing) {
-      if (egress.has(edge.to) && (!busOnly || edge.mode === "bus")) destinationsOnDate.add(edge.to);
-      if (destinationsOnDate.size === egress.size) break;
-    }
-    if (!origins.some(({ stop }) => edges.has(stop.id)) || !destinationsOnDate.size)
+    if (!origins.some(({ stop }) => (busOnly ? busOrigins : departures).has(stop.id)) ||
+        !destinations.some(({ stop }) => (busOnly ? busDropoffs : dropoffs).has(stop.id)))
       return { reason: "coverage", hint };
     let readyAt = new Map();
     for (const { stop, walk, exact, source } of origins) {
       const connection = exact && walk === 0 && incoming?.to === stop.name ? incoming : null;
-      const margin = connection ? stop.transfer ?? 8 : stop.boarding ?? 5;
+      const changedPlatform = connection?.platform && connection.platform !== stop.id;
+      const crossing = changedPlatform && (transfersFrom.get(connection.platform) ?? [])
+        .find(link => link.to === stop.id && coversService(link.calendar, date));
+      if (changedPlatform && !crossing) continue;
+      const margin = connection ? Math.max(stop.transfer ?? 8, (crossing?.minimum ?? 0) - (crossing?.minutes ?? 0)) : stop.boarding ?? 5;
       const atStation = connection?.at ?? (exact && walk === 0 ? atStopSince : null);
-      record(readyAt, stop.id, { station: stop.id, access: walk, accessSource: source,
-        margin, atStation, line: connection?.line, time: ready + walk, legs: [] });
+      const access = walk + (crossing?.minutes ?? 0);
+      const stationSince = atStation === null ? null : atStation + (crossing?.minutes ?? 0);
+      const time = crossing && stationSince !== null ? Math.max(ready, stationSince) : ready + access;
+      record(readyAt, stop.id, { station: stop.id, access: time - ready, accessSource: source,
+        margin, atStation: stop.platformGroup && connection && !connection.platform ? null : stationSince,
+        line: connection?.line, time, legs: [] });
     }
     let best = null;
     for (let ride = 0; ride < maxRides && readyAt.size; ride++) {
       const arrivals = new Map();
       for (const prior of readyAt.values()) {
-        const outgoing = edges.get(prior.station) ?? [];
-        for (let i = firstAfter(outgoing, prior.time); i < outgoing.length; i++) {
-          const edge = outgoing[i];
-          const standard = prior.transferWalk ? null : transferRule(prior.station, prior, edge);
+        const outgoing = departures.get(prior.station) ?? [];
+        const earliest = ride ? prior.time : Math.max(prior.time, boardAfter);
+        for (let i = firstAfter(outgoing, earliest); i < outgoing.length; i++) {
+          const { trip, index, depart } = outgoing[i];
+          if (depart > Math.min(best?.arrival ?? finishBy, finishBy)) break;
+          if (busOnly && trip.mode !== "bus") continue;
+          const standard = prior.transferWalk ? null : transferRule(prior.station, prior, trip);
           const fullMargin = standard?.minutes ?? prior.margin;
           const credited = prior.atStation == null ? 0
             : Math.min(fullMargin, Math.max(0, prior.time - prior.atStation));
           const margin = fullMargin - credited;
-          if (edge.depart < prior.time + margin) continue;
-          const limit = Math.min(best?.arrival ?? finishBy, finishBy);
-          if (edge.depart > limit) break;
-          if (edge.arrive > limit || !byId.has(edge.to) || (busOnly && edge.mode !== "bus")) continue;
-          const option = {
-            station: edge.to, line: edge.line, access: prior.access, accessSource: prior.accessSource, time: edge.arrive,
-            legs: [...prior.legs, {
-              from: byId.get(edge.from).name, to: byId.get(edge.to).name,
-              depart: edge.depart, arrive: edge.arrive, wait: edge.depart - prior.time,
-              margin, priorWait: credited, transferWalk: prior.transferWalk ?? 0, line: edge.line,
-              ...(standard ? { marginSource: standard.source } : {}),
-              ...(edge.arrivalBound ? { arrivalBound: true } : {}),
-              service: edge.service, source: edge.source,
-              validFrom: edge.coverage.start, validThrough: edge.coverage.end,
-            }],
-          };
-          record(arrivals, edge.to + "|" + edge.line, option);
-          if (!egress.has(edge.to)) continue;
-          const exit = egress.get(edge.to), arrival = edge.arrive + exit.walk;
-          if (arrival <= finishBy && (!best || arrival < best.arrival))
-            best = { date, ready, arrival, access: option.access, accessSource: option.accessSource,
-              egress: exit.walk, egressSource: exit.source, legs: option.legs };
+          if (depart < prior.time + margin) continue;
+          for (let j = index + 1; j < trip.calls.length; j++) {
+            const { stop, dropoff, arrive, arrivalBound } = trip.calls[j];
+            if (!dropoff || stop === prior.station || !Number.isInteger(arrive) || arrive <= depart ||
+                arrive > Math.min(best?.arrival ?? finishBy, finishBy) || !byId.has(stop)) continue;
+            const recordKey = stop + "|" + trip.line;
+            const exit = egress.get(stop);
+            const arrival = exit ? arrive + exit.walk : Infinity;
+            const bestHere = arrival <= finishBy && (!best || arrival < best.arrival);
+            if (!bestHere && (arrivals.get(recordKey)?.time ?? Infinity) <= arrive) continue;
+            const option = {
+              station: stop, line: trip.line, access: prior.access, accessSource: prior.accessSource, time: arrive,
+              legs: [...prior.legs, {
+                from: byId.get(prior.station).name, to: byId.get(stop).name,
+                depart, arrive, wait: depart - prior.time, margin, priorWait: credited,
+                transferWalk: prior.transferWalk ?? 0, line: trip.line,
+                ...(standard ? { marginSource: standard.source } : {}),
+                ...(arrivalBound ? { arrivalBound: true } : {}),
+                service: trip.name, source: trip.source,
+                validFrom: trip.calendar.start, validThrough: trip.calendar.end,
+              }],
+            };
+            record(arrivals, recordKey, option);
+            if (bestHere)
+              best = { date, ready, arrival, access: option.access, accessSource: option.accessSource,
+                egress: exit.walk, egressSource: exit.source, legs: option.legs,
+                ...(byId.get(stop).platformGroup ? { platform: stop } : {}) };
+          }
         }
       }
       readyAt = new Map();
@@ -205,7 +237,7 @@ export function createTimetableRouter({ stops, trips, transfers = [], standards 
         for (const edge of transfersFrom.get(station) ?? []) {
           if (!byId.has(edge.to) || !coversService(edge.calendar, date)) continue;
           record(readyAt, edge.to + "|" + prior.line, { ...prior, station: edge.to, time: prior.time + edge.minutes,
-            margin: byId.get(edge.to).transfer ?? 8, transferWalk: edge.minutes });
+            margin: Math.max(byId.get(edge.to).transfer ?? 8, (edge.minimum ?? 0) - edge.minutes), transferWalk: edge.minutes });
         }
       }
     }

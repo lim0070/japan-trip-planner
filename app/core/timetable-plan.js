@@ -1,6 +1,7 @@
 import * as M from "./model.js";
 import { START_ANCHOR, END_ANCHOR } from "./day-plan.js";
 import { timetableCheck, travelVisit } from "./timetable.js";
+import { tramLine } from "./hakodate-tram.js";
 
 function enteredRoute(segment, anchor, matchId, from, to, date, ready) {
   const endpoints = M.routeEndpoints(from.place, to.place);
@@ -66,6 +67,17 @@ export function timetableDay(snapshot, settings, router, defaultMode) {
       }
     }
     const match = evidence?.journey;
+    const laterTrams = [];
+    if (match?.legs[0].line === tramLine && evidence?.tramSchedule) {
+      let boardAfter = match.legs[0].depart + 1;
+      for (let i = 0; i < 2; i++) {
+        const { journey } = router(from.place, to.place, day.date, ready, accessLimit,
+          { atStopSince, incoming, boardAfter });
+        if (!journey || journey.legs[0].line !== tramLine) break;
+        laterTrams.push(journey);
+        boardAfter = journey.legs[0].depart + 1;
+      }
+    }
     const rough = from && ready !== null && settings.allowEstimates
       ? M.estimate(from.place, to.place, mode) : null;
     const same = anchor && M.sameRoutingPlace(from.place, to.place);
@@ -87,10 +99,11 @@ export function timetableDay(snapshot, settings, router, defaultMode) {
     const inboundCheck = checked ?? entered?.check;
     const lastRide = inboundCheck?.legs?.at(-1);
     incoming = !conflict && lastRide && !inboundCheck.egress
-      ? { to: lastRide.to, line: lastRide.line, at: lastRide.arrive } : null;
+      ? { to: lastRide.to, line: lastRide.line, at: lastRide.arrive,
+          platform: checked ? match?.platform : undefined } : null;
     rows.push({
       from, to, stop, mode, ready, arrival, start, departure, booking, limit,
-      checked: conflict ? null : checked, entered, evidence, alternatives, onboard, useTransit, usesRough,
+      checked: conflict ? null : checked, entered, evidence, alternatives, laterTrams, onboard, useTransit, usesRough,
       conflict, knownInTimeline: !usesRough && arrival !== null,
     });
     from = to;

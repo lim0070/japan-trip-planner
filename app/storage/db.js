@@ -68,6 +68,18 @@ function read(store, key) {
     r.onerror = () => reject(r.error);
   });
 }
+const tramTimetableKey = "hakodate-tram-timetable";
+export const readTramTimetable = () => read("state", tramTimetableKey);
+export function writeTramTimetable(pack) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("state", "readwrite");
+    const store = tx.objectStore("state");
+    if (pack === null) store.delete(tramTimetableKey);
+    else store.put(pack, tramTimetableKey);
+    tx.oncomplete = () => resolve();
+    tx.onabort = () => reject(tx.error ?? Error("The timetable change could not be saved."));
+  });
+}
 export async function load() {
   const row = await read("state", "current");
   if (!row) return blank();

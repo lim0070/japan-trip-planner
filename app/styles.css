@@ -922,7 +922,7 @@ dialog:has(.plan-dialog) { width: min(900px, calc(100vw - 24px)); }
 .plan-comparison ol { margin: 0; padding-inline-start: 22px; }
 .plan-comparison li { padding: 8px 0; border-top: 1px solid var(--line); }
 @media (max-width: 760px) {
-  .day-planning { display: none; }
+  .day-planning:not(.has-tram) { display: none; }
   .plan-comparison { grid-template-columns: 1fr; }
 }
 .visit-hours {

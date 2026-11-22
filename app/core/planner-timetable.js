@@ -1,5 +1,7 @@
 import flower from "./flower-nagai-data.js";
 import winter from "./winter-transit-data.js";
+import publicTramPack from "./hakodate-tram-public.js";
+import { compileTramPack, tramLine } from "./hakodate-tram.js";
 import { directionStations } from "./direction-search.js";
 import { routeEndpoints } from "./model.js";
 import { createTimetableRouter, timetableCheck } from "./timetable.js";
@@ -28,15 +30,46 @@ const flowerTrips = flower.trips.map(trip => ({
     pickup: call.pickup, dropoff: call.dropoff,
   })),
 }));
-export const winterRouter = createTimetableRouter({
-  ...winter, stops: [...winter.stops, ...flowerStops],
-  trips: [...winter.trips.map(trip => ({
+const winterTrips = winter.trips.map(trip => ({
     ...trip, source: winter.sources[trip.source], calendar: winter.calendars[trip.calendar],
-  })), ...flowerTrips],
-});
+}));
+export const publicTram = publicTramPack ? compileTramPack(publicTramPack) : null;
 
-export function optimizedTransit(from, to, date, ready, mode) {
-  const { journey } = winterRouter(from, to, date, ready, 1439, { busOnly: mode === "drive" });
+function routerWith(tram) {
+  const byGroup = new Map(tram?.choices.map(stop => [stop.group, stop.platforms]));
+  const accessLinks = tram ? winter.accessLinks.flatMap(link =>
+    link.to.startsWith("hakodate-tram-")
+      ? (byGroup.get(link.to) ?? []).map(stop => ({ ...link, to: stop.id }))
+      : [link]) : winter.accessLinks;
+  const route = createTimetableRouter({
+    ...winter, accessLinks,
+    stops: [...winter.stops.filter(stop => !tram || !stop.id.startsWith("hakodate-tram-")),
+      ...flowerStops, ...(tram?.stops ?? [])],
+    trips: [...winterTrips.filter(trip => !tram || trip.line !== tramLine), ...flowerTrips, ...(tram?.trips ?? [])],
+    transfers: [...winter.transfers, ...(tram?.transfers ?? [])],
+  });
+  return (...query) => {
+    const result = route(...query);
+    if (tram && (result.hint.some(name => name?.endsWith(" tram stop")) ||
+        result.journey?.legs.some(leg => leg.line === tramLine)))
+      result.tramSchedule = { ...tram.coverage, source: tram.source,
+        locationSource: tram.locationSource === tram.source ? null : tram.locationSource, imported: tram.imported };
+    return result;
+  };
+}
+export const winterRouter = routerWith(publicTram);
+
+export function plannerRouter(imported) {
+  if (!imported) return winterRouter;
+  const local = routerWith(imported);
+  return (...query) => {
+    const date = query[2];
+    return date >= imported.coverage.start && date <= imported.coverage.end ? local(...query) : winterRouter(...query);
+  };
+}
+
+export function optimizedTransit(from, to, date, ready, mode, router = winterRouter) {
+  const { journey } = router(from, to, date, ready, 1439, { busOnly: mode === "drive" });
   if (!journey) return null;
   return {
     kind: "timetable", mode: "train", minutes: journey.arrival - ready,
