@@ -260,15 +260,53 @@ const trip = optionalFields(shape({
   prefectureVisits: (x) => array(v => integer(v, 1, 47), 47)(x) && new Set(x).size === x.length,
 });
 const clockMinute = (x) => integer(x, 0, 1439);
-const routeCheck = shape({
-  provider: one("google", "jorudan"),
+const timetableSource = optionalFields(shape({
+  publisher: (x) => nonempty(x) && x.length <= 160,
+  url,
+}), {
+  note: (x) => str(x, 1000),
+  license: (x) => str(x, 80),
+  licenseUrl: url,
+});
+const timetableLeg = optionalFields(shape({
+  from: (x) => nonempty(x) && x.length <= 160,
+  to: (x) => nonempty(x) && x.length <= 160,
+  service: (x) => nonempty(x) && x.length <= 160,
+  line: (x) => nonempty(x) && x.length <= 160,
+  depart: clockMinute,
+  arrive: clockMinute,
+  wait: clockMinute,
+  margin: clockMinute,
+  priorWait: clockMinute,
+  transferWalk: clockMinute,
+  source: timetableSource,
+  validFrom: date,
+  validThrough: date,
+}), { marginSource: url, arrivalBound: bool });
+const routeCheckShape = optionalFields(shape({
+  provider: one("google", "jorudan", "timetable"),
   date,
   departMinute: clockMinute,
   minutes,
   access: minutes,
   egress: minutes,
   endpoints: (x) => str(x, 20000),
-});
+}), { legs: array(timetableLeg, 3), accessSource: url, egressSource: url });
+const routeCheck = check => {
+  if (!routeCheckShape(check)) return false;
+  if (check.provider !== "timetable") return check.legs === undefined && check.accessSource === undefined && check.egressSource === undefined;
+  if (!check.legs?.length || check.departMinute + check.access + check.minutes + check.egress > 1439)
+    return false;
+  let time = check.departMinute + check.access;
+  for (const [i, leg] of check.legs.entries()) {
+    if (leg.depart < time || leg.arrive <= leg.depart || leg.margin > leg.wait ||
+        (i === 0 ? leg.transferWalk !== 0 : leg.priorWait !== 0) ||
+        leg.depart - time - leg.transferWalk !== leg.wait ||
+        check.date < leg.validFrom || check.date > leg.validThrough) return false;
+    time = leg.arrive;
+  }
+  return time === check.departMinute + check.access + check.minutes;
+};
 const planAnchorShape = optionalFields(shape({
   place: validPlace,
   mode: one("walk", "train", "drive"),
@@ -278,7 +316,7 @@ const planAnchor = (anchor) => {
   const check = anchor.routeCheck;
   if (!check) return anchor.stopId === undefined;
   return check.minutes + check.access + check.egress <= 10080 &&
-    (check.provider === "jorudan" ? anchor.mode === "train" : check.access === 0 && check.egress === 0);
+    (check.provider !== "google" ? anchor.mode === "train" : check.access === 0 && check.egress === 0);
 };
 const departureCheckpoint = shape({ departMinute: clockMinute, finishBy: clockMinute });
 const day = optionalFields(shape({
@@ -473,7 +511,7 @@ export function validateState(s) {
       const { provider, minutes, access, egress } = seg.routeCheck;
       if (
         seg.manualMinutes !== minutes + access + egress ||
-        (provider === "jorudan" && seg.mode !== "train") ||
+        (provider !== "google" && seg.mode !== "train") ||
         (provider === "google" && (access !== 0 || egress !== 0))
       )
         fail("Invalid checked route.");

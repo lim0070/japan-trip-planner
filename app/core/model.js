@@ -427,7 +427,7 @@ export function schedule(s, day) {
     const retained = day.planVisitStarts?.[stopId];
     const timingStop = retained !== undefined && stop.fixedStartMinute === undefined
       ? { ...stop, fixedStartMinute: retained } : stop;
-    const start = arrival === null ? null : (
+    const start = arrival === null ? (timingStop.fixedStartMinute ?? null) : (
       finishBy === undefined ? Math.max(arrival, timingStop.fixedStartMinute ?? arrival)
         : planningStart(timingStop, visitPlace(stop), day.date, arrival, finishBy)
     );

@@ -1789,3 +1789,10 @@ body[data-theme="dark"] .discover-stage #map.regional-map-active {
   padding: 0;
   font-size: 19px;
 }
+
+.timetable-review > li { border-top: 1px solid var(--line); padding-block: 9px; }
+.timetable-review p { margin: 4px 0; }
+.timetable-evidence { margin-block: 5px; }
+.timetable-evidence small, .timetable-review small { display: block; }
+.timetable-evidence ol { padding-inline-start: 22px; }
+.timetable-evidence li { margin-bottom: 7px; }

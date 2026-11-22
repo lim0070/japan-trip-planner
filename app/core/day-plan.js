@@ -27,7 +27,7 @@ export function restoreDay(state, saved) {
 const checkedMinutes = ({ minutes, access, egress }) => minutes + access + egress;
 
 // Synchronous, local provider. Checks belong to one directed leg, mode and date.
-export function createRouteProvider(snapshot, checks, defaultMode, allowEstimates) {
+export function createRouteProvider(snapshot, checks, defaultMode, allowEstimates, timetable = null) {
   const saved = new Map(snapshot.segments.map((segment) =>
     [segment.fromStopId + "|" + segment.toStopId, segment],
   ));
@@ -51,24 +51,21 @@ export function createRouteProvider(snapshot, checks, defaultMode, allowEstimate
       }
       const checked = matching
         .filter((check) => check.date === date && check.endpoints === M.routeEndpoints(a, b))
-        .map(({ provider, date, departMinute, minutes, access, egress, endpoints, mode }) => ({
-          kind: provider,
-          mode,
-          minutes: checkedMinutes({ minutes, access, egress }),
-          check: { provider, date, departMinute, minutes, access, egress, endpoints },
+        .map(({ from, to, mode, ...check }) => ({
+          kind: check.provider, mode, minutes: checkedMinutes(check), check,
         }));
       const manual = segment && !segment.routeCheck && segment.manualMinutes !== null &&
         segment.overrideFingerprint === segment.coordinateFingerprint;
       const estimate = allowEstimates ? M.estimate(a, b, mode) : null;
       const fallback = manual ? { kind: "manual", mode, minutes: segment.manualMinutes }
         : estimate === null ? null : { kind: "estimate", mode, minutes: estimate };
-      routes.set(key, { checked, fallback });
+      routes.set(key, { checked, fallback, mode, manual });
     }
-    const { checked, fallback } = routes.get(key);
-    return [
-      ...checked.filter((route) => route.check.departMinute >= departMinute),
-      ...(fallback ? [fallback] : []),
-    ];
+    const { checked, fallback, mode, manual } = routes.get(key);
+    const available = checked.filter(route => route.check.departMinute >= departMinute);
+    const publicRoute = !manual && !available.length && mode !== "walk"
+      ? timetable?.(from.place, to.place, date, departMinute, mode) : null;
+    return [...available, ...(publicRoute ? [publicRoute] : []), ...(fallback ? [fallback] : [])];
   };
 }
 

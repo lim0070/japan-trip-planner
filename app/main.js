@@ -1,3 +1,6 @@
+import { airportTimetableCheck, optimizedTransit, winterRouter } from "./core/planner-timetable.js";
+import { timetableCheck } from "./core/timetable.js";
+import { applyTimetableDay, timetableDay } from "./core/timetable-plan.js";
 import { createPersonalGoogleMap, hasGoogleMapsKey, saveGoogleMapsKey } from "./personal-google-map.js";
 import { mapAddressAliases, mapStations, stationPack } from "./core/map-stations.js";
 import { googleMapSearch, photonPlaces } from "./core/map-lookup.js";
@@ -605,7 +608,7 @@ function dayPlanningHTML(rows, d) {
       ` · ${deadline - finish} min before ${target}`;
   const summary = !rows.length && !inbound ? "No visits or travel legs" :
     `${rows.length} visits · ${travel === null ? "Some travel times unknown" : travel + " min travel"}${estimates ? " (includes estimates)" : ""} · ${finish === null ? "Arrival unknown" : (inbound ? "Arrive " : "Finish ") + M.timeLabel(d.date, finish)}${slack}`;
-  const leg = (anchor, timing, label) => anchor ? `<p><strong>${label} ${esc(M.name(anchor.place))}</strong>${timing ? ` · ${timing.minutes === null ? "Travel time unknown" : timing.minutes + " min · " + routeNames[timing.kind]}` : ""}</p>` : "";
+  const leg = (anchor, timing, label) => anchor ? `<p><strong>${label} ${esc(M.name(anchor.place))}</strong>${timing ? ` · ${timing.minutes === null ? "Travel time unknown" : timing.minutes + " min · " + routeNames[timing.kind]}` : ""}</p>${timing?.kind === "timetable" ? publicRouteHTML(anchor.routeCheck) : ""}` : "";
   const anchors = leg(d.planStartAnchor, outbound, "From") +
     leg(d.planEndAnchor, inbound, "To");
   return `<section class="day-planning" aria-label="Day planning">
@@ -615,6 +618,7 @@ function dayPlanningHTML(rows, d) {
 }
 
 const routeNames = {
+  timetable: "Published timetable",
   google: "Google Maps check",
   jorudan: "Jorudan + access",
   manual: "Manual minutes",
@@ -640,6 +644,27 @@ function plannerDirections({from = null, to = null, mode = "train", timing = nul
   requestAnimationFrame(() => $("directions-from")?.focus({ preventScroll: true }));
 }
 
+function publicRouteHTML(check) {
+  if (!check?.legs?.length) return "";
+  const time = n => M.timeLabel(check.date, n);
+  const walk = (minutes, label, source) => minutes
+    ? `<small>${minutes} min ${label} · ${source && M.safeURL(source)
+      ? `<a href="${esc(source)}" target="_blank" rel="noopener">Published walking reference</a>` : "walking estimate"}</small>` : "";
+  return `<details class="timetable-evidence"><summary>Published timetable · ${check.legs.length} ride${check.legs.length === 1 ? "" : "s"}</summary>
+    ${walk(check.access, "to boarding", check.accessSource)}
+    <ol>${check.legs.map((leg, i) => `<li><strong>${esc(leg.service)}</strong> · ${esc(leg.from)} ${time(leg.depart)} → ${esc(leg.to)} ${leg.arrivalBound ? "by " : ""}${time(leg.arrive)}
+      <small>${leg.transferWalk ? leg.transferWalk + " min transfer walk (estimate) · " : ""}${leg.wait} min wait
+      ${leg.margin || leg.priorWait ? ` · ${leg.margin + leg.priorWait} min ${leg.marginSource ? `<a href="${esc(leg.marginSource)}" target="_blank" rel="noopener">operator transfer minimum</a>` : (i ? "transfer allowance" : "boarding or transfer allowance")}` : ""}
+      ${leg.priorWait ? ` (${leg.priorWait} min already at the station)` : ""}</small>
+      <small><a href="${esc(leg.source.url)}" target="_blank" rel="noopener">${esc(leg.source.publisher)} timetable</a> · ${check.date} JST
+      ${leg.source.licenseUrl ? ` · <a href="${esc(leg.source.licenseUrl)}" target="_blank" rel="noopener">${esc(leg.source.license)}</a>` : ""}
+      ${leg.arrivalBound ? " · Published alight-by bound" : ""}</small>
+      ${leg.source.note ? `<small>${esc(leg.source.note)}</small>` : ""}</li>`).join("")}</ol>
+    ${walk(check.egress, "from arrival stop", check.egressSource)}
+    <small>Scheduled service. Check winter disruption, boarding and reservations with the operator.</small>
+  </details>`;
+}
+
 function autoPlanDialog() {
   const d = day();
   if (!d) return;
@@ -657,16 +682,20 @@ function autoPlanDialog() {
   const current = M.schedule(state, d);
   const existing = M.dayTravel(d, current);
   const { dayMinutes, lateFinishMinute } = trip().thresholds;
+  const importedTiming = Boolean(Object.keys(d.planDepartures ?? {}).length || Object.keys(d.planVisitStarts ?? {}).length);
   const settings = {
     startMinute: d.startMinute,
     startAnchor: d.planStartAnchor ?? null,
     endAnchor: d.planEndAnchor ?? null,
-    finishBy: d.planEndMinute ?? Math.max(d.startMinute, Math.min(lateFinishMinute, d.startMinute + dayMinutes)),
+    finishBy: d.planEndMinute ?? M.dayDeadline(d) ?? (importedTiming ? 1439 :
+      Math.max(d.startMinute, Math.min(lateFinishMinute, d.startMinute + dayMinutes))),
+    useTimetables: true, replaceManual: true,
     allowEstimates: d.planStartAnchor?.allowEstimates ?? d.planEndAnchor?.allowEstimates ?? true,
     constraints: Object.fromEntries(stops.map((stop) => [stop.id, {
       planLocked: !!stop.planLocked, fixedStartMinute: stop.fixedStartMinute,
     }])),
   };
+  settings.initialFinishBy = settings.finishBy;
   const checks = [];
   if (d.planStartAnchor?.routeCheck && places.has(d.planStartAnchor.stopId))
     checks.push({ from: START_ANCHOR, to: d.planStartAnchor.stopId,
@@ -683,6 +712,8 @@ function autoPlanDialog() {
     settings.startMinute = timeMinute(val(f, "start"));
     settings.finishBy = timeMinute(val(f, "finish"));
     settings.allowEstimates = f.has("estimates");
+    settings.useTimetables = f.has("use-timetables");
+    settings.replaceManual = f.has("replace-manual");
     for (const stop of stops) {
       const raw = val(f, "fixed-" + stop.id);
       settings.constraints[stop.id] = {
@@ -703,18 +734,25 @@ function autoPlanDialog() {
       <div class="plan-options"><label>Depart at<input type="time" name="start" required value="${hhmm(settings.startMinute)}"></label>
       <label>${settings.endAnchor ? "Return by" : "Finish by"}<input type="time" name="finish" required value="${hhmm(settings.finishBy)}"></label>
       <label class="check"><input type="checkbox" name="estimates" ${settings.allowEstimates ? "checked" : ""}>Allow rough estimates</label></div>
-      <p class="muted">Lock a visit’s position to keep the stops on either side in their own groups. Enter a booking time to hold its start.</p>
+      ${importedTiming ? "" : `<label class="check"><input type="checkbox" name="use-timetables" ${settings.useTimetables ? "checked" : ""}>Use published timetables in schedule suggestions</label>`}
+      <label class="check"><input type="checkbox" name="replace-manual" ${settings.replaceManual ? "checked" : ""}>Use published times for transit legs with entered minutes</label>
+      <p class="muted">${importedTiming ? "Timetable review keeps your visit order and saved timing checkpoints." :
+        "Timetable review keeps your visit order. To optimize the order, lock visits you want to keep in place and enter any booking times."}</p>
       <div class="plan-constraints">${stops.map(({ id, durationMinutes }, i) => {
         const constraint = settings.constraints[id];
         return `<div class="plan-constraint"><span>${i + 1}. ${names(id)} <small>${durationMinutes} min</small></span>
           <label class="check"><input name="lock-${id}" aria-label="Lock position ${i + 1}" type="checkbox" ${constraint.planLocked ? "checked" : ""}>Lock</label>
           <label><span>Booking</span><input name="fixed-${id}" aria-label="Booking time ${i + 1}" type="time" value="${constraint.fixedStartMinute === undefined ? "" : hhmm(constraint.fixedStartMinute)}"></label></div>`;
       }).join("")}</div>
-      ${places.size > 1 ? `<details ${checks.length ? "open" : ""}><summary>Route checks${checks.length ? " (" + checks.length + ")" : ""}</summary>
-        <p class="muted">Look up a directed leg in Google Maps or Jorudan and enter the time you found. Add different departure times to compare them.</p>
+      ${places.size > 1 && !importedTiming ? `<details ${checks.length ? "open" : ""}><summary>Route checks${checks.length ? " (" + checks.length + ")" : ""}</summary>
+        <p class="muted">Use these checks in Preview schedule. Look up a directed leg in Google Maps or Jorudan and enter the time you found. Add different departure times to compare them.</p>
         ${checks.length ? `<ul class="plan-check-list">${checks.map((c, i) => `<li><span>${names(c.from)} → ${names(c.to)} · ${hhmm(c.departMinute)} · ${c.minutes + c.access + c.egress} min · ${routeNames[c.provider]}</span><button type="button" data-remove-check="${i}" aria-label="Remove route check ${i + 1}">Remove</button></li>`).join("")}</ul>` : ""}
         <button type="button" id="plan-add-check" ${checks.length >= MAX_ROUTE_CHECKS ? "disabled" : ""}>Add route check</button></details>` : ""}
-      ${footer("Preview schedule")}</form>`, () => {
+      <p id="form-error" class="form-error" role="alert"></p>
+      <div class="dialog-footer"><button type="button" data-cancel>Cancel</button>
+        ${importedTiming ? "" : '<button type="submit">Preview schedule</button>'}
+        <button class="primary" id="plan-timetable" type="${importedTiming ? "submit" : "button"}">Preview timetables</button>
+      </div></form>`, () => {
       const form = $("dialog-body").querySelector("form");
       const editChecks = (fn) => {
         try {
@@ -733,12 +771,24 @@ function autoPlanDialog() {
           controls();
         });
       });
-      setupForm((f) => {
+      const validateInputs = (f) => {
         if (!stillCurrent(state)) throw Error("The itinerary changed. Reopen Auto-plan day.");
         readSettings(f);
         if (settings.finishBy < settings.startMinute)
           throw Error(settings.endAnchor ? "Return-by time must be at or after departure." : "Finish-by time must be at or after departure.");
-        const getRoutes = createRouteProvider(snapshot, checks, defaultMode, settings.allowEstimates);
+      };
+      const timetablePreview = (f) => {
+        validateInputs(f);
+        previewTimetables(timetableDay(snapshot, settings, winterRouter, defaultMode));
+      };
+      if (!importedTiming) $("plan-timetable").onclick = () => {
+        try { timetablePreview(new FormData(form)); } catch (err) { formError(err); }
+      };
+      setupForm((f) => {
+        if (importedTiming) return timetablePreview(f);
+        validateInputs(f);
+        const getRoutes = createRouteProvider(snapshot, checks, defaultMode, settings.allowEstimates,
+          settings.useTimetables ? optimizedTransit : null);
         const suggestion = suggestDay(snapshot, { ...settings, getRoutes });
         if (!suggestion) throw Error(settings.endAnchor
           ? "Auto-plan found no schedule that meets the return-by time. Check travel times, hours, bookings and locks."
@@ -873,6 +923,72 @@ function autoPlanDialog() {
       });
     });
   }
+  function previewTimetables(plan) {
+    const time = n => n === null || n === undefined ? "Time unknown" : M.timeLabel(d.date, n);
+    const matched = plan.rows.filter(row => row.evidence?.journey).length;
+    const needsCheck = plan.rows.filter(row => !row.evidence?.journey && !row.evidence?.same &&
+      (row.useTransit || airportTimetableCheck(row.from?.place, row.to.place))).length;
+    const reason = {
+      access: "Choose an exact station or boarding stop, or add coordinates for the walk.",
+      time: "Set a departure time or resolve the preceding travel.",
+      coverage: "The selected operator timetables lack coverage for this leg and date.",
+      "no-service": "No catchable journey in the selected timetables before the recorded deadline.",
+    };
+    const routeReview = row => {
+      if (!row.from) return "";
+      const airport = airportTimetableCheck(row.from.place, row.to.place);
+      const source = row.evidence?.journey;
+      const train = row.useTransit || airport;
+      const existing = row.entered ? routeNames[row.entered.kind] : row.usesRough ? "Rough estimate" :
+        row.evidence?.same ? "Same station area" : "Travel time unknown";
+      const hints = row.evidence?.hint ?? [];
+      const departure = plannedTiming(d.date, row.ready);
+      const jorudan = hints.every(Boolean) && hints.length === 2 && departure
+        ? jorudanDirections(hints[0], hints[1], departure)
+        : jorudanForPlaces(row.from.place, row.to.place, departure);
+      const differs = source && row.entered?.kind === "manual" && row.entered.arrival !== source.arrival;
+      return `<p>${row.checked ? "Use published timing" : existing} · ${time(row.ready)} → ${time(row.arrival)}</p>
+        ${row.conflict ? '<p class="danger">This arrival conflicts with a booking, opening hours or the time limit.</p>' : ""}
+        ${row.onboard ? '<p class="muted">A recorded travel visit is kept. No additional ride was added.</p>' : ""}
+        ${source ? `<p>Timetable option · Arrive ${time(source.arrival)}${row.entered && !row.checked ? " · existing timing kept" : ""}</p>
+          ${publicRouteHTML(timetableCheck(source, M.routeEndpoints(row.from.place,row.to.place)))}
+          ${differs ? `<p>Entered minutes give arrival ${time(row.entered.arrival)}. <a href="${esc(jorudan)}" target="_blank" rel="noopener">Check in Jorudan</a></p>` : ""}` : ""}
+        ${!source && train && !row.evidence?.same ? `<p class="notice">${airport ? "Confirm the Narita boarding terminal, Haneda arrival terminal and service on your date." :
+          reason[row.evidence?.reason] || "Confirm the actual service."}
+          <a href="${esc(jorudan)}" target="_blank" rel="noopener">Check in Jorudan</a>
+          ${airport ? ` · <a href="${esc(airport)}" target="_blank" rel="noopener">Airport bus timetable</a>` : ""}</p>` : ""}
+        ${row.alternatives.map(({journey,reason,latest}) => `<div class="notice">
+          <p>${reason === "earlier" ? `Alternative requires starting access by ${time(latest)} and confirming the inbound connection.` :
+            `Next option reaches the destination by ${time(journey.arrival)}, after the saved time limit.`}</p>
+          ${publicRouteHTML(timetableCheck(journey, M.routeEndpoints(row.from.place,row.to.place)))}</div>`).join("")}`;
+    };
+    modal("Compare timetable timings", `<div class="plan-dialog">
+      <p>${d.date} · Japan time · ${matched} timetable option${matched === 1 ? "" : "s"} · ${needsCheck} transit check${needsCheck === 1 ? "" : "s"}</p>
+      <p>Visit order and saved timing checkpoints are preserved. Walking estimates and allowances may need extra time in winter.</p>
+      <p class="attribution">Station-area reference points © OpenStreetMap contributors · <a href="../data/stations/2026-11-01/station-pack-20261101.json" target="_blank" rel="noopener">ODbL station source</a></p>
+      <ol class="timetable-review">${plan.rows.map(row => `<li>
+        <strong>${row.from ? esc(M.name(row.from.place)) + " → " : ""}${esc(M.name(row.to.place))}</strong>
+        ${routeReview(row)}${row.booking !== undefined ? `<small>Recorded start ${time(row.booking)}</small>` : ""}
+      </li>`).join("")}</ol>
+      <div class="dialog-footer"><button type="button" id="plan-back">Back</button>
+        <button type="button" id="plan-export">Export original trip</button>
+        ${plan.updates.length ? `<button class="primary" id="plan-apply-timetables">Apply ${plan.updates.length} timetable timing${plan.updates.length === 1 ? "" : "s"}</button>` : ""}</div>
+    </div>`, () => {
+      $("plan-back").onclick = controls;
+      $("plan-export").onclick = () => download(originalBackup, "japan-trip-before-timetable-review.json");
+      $("plan-apply-timetables")?.addEventListener("click", async () => {
+        if (await commit(s => {
+          if (!stillCurrent(s)) throw Error("The itinerary changed. Reopen Auto-plan day.");
+          applyTimetableDay(s, s.days.find(item => item.id === d.id), plan);
+        }, {redraw:false})) {
+          planUndo.set(d.id, {snapshot, applied:canonical(daySnapshot(state, day()))});
+          close();
+          render();
+          toast("Published timings applied.");
+        }
+      });
+    });
+  }
   function preview(plan) {
     const time = (n) => M.timeLabel(d.date, n);
     const timing = (start, finish) => start === null ? "Time unknown" : `${time(start)}–${time(finish)}`;
@@ -887,10 +1003,10 @@ function autoPlanDialog() {
         <section><h3>Suggested</h3><p>${plan.travel} min travel · ${plan.departure - settings.startMinute} min elapsed · ${finishLabel(plan.departure, plan.endLeg)} · ${settings.finishBy - plan.departure} min free</p>
         ${settings.startAnchor ? `<p>Depart ${names(START_ANCHOR)} at ${time(settings.startMinute)}</p>` : ""}
         <ol>${plan.rows.map((r, i) => `<li><strong>${names(r.stop.id)}</strong><br>${timing(r.start, r.departure)}
-          ${r.route ? `<br><small>${routeText(r.route, r.leave)}${r.leave > (plan.rows[i - 1]?.departure ?? settings.startMinute) ? ` · Wait ${r.leave - (plan.rows[i - 1]?.departure ?? settings.startMinute)} min` : ""}</small>` : ""}
+          ${r.route ? `<br><small>${routeText(r.route, r.leave)}${r.leave > (plan.rows[i - 1]?.departure ?? settings.startMinute) ? ` · Wait ${r.leave - (plan.rows[i - 1]?.departure ?? settings.startMinute)} min` : ""}</small>${publicRouteHTML(r.route.check)}` : ""}
           ${r.start > r.arrival ? `<br><small>Arrive ${time(r.arrival)} · Wait ${r.start - r.arrival} min before visit</small>` : ""}
           ${visitHoursHTML(places.get(r.stop.id), d.date, { ...r, visitStart: r.start })}</li>`).join("")}</ol>
-        ${plan.endLeg ? `<p><strong>Arrive at ${names(END_ANCHOR)} at ${time(plan.endLeg.arrival)}</strong><br><small>${routeText(plan.endLeg.route, plan.endLeg.leave)}</small></p>` : ""}
+        ${plan.endLeg ? `<p><strong>Arrive at ${names(END_ANCHOR)} at ${time(plan.endLeg.arrival)}</strong><br><small>${routeText(plan.endLeg.route, plan.endLeg.leave)}</small></p>${publicRouteHTML(plan.endLeg.route.check)}` : ""}
         ${!plan.rows.length && !plan.endLeg ? "<p>No visits or travel legs to time.</p>" : ""}</section>
       </div>
       <p class="muted">${plan.estimates ? `${plan.estimates} leg(s) use rough estimates. ` : ""}The search favors checked legs, then shorter travel. Confirm hours and time-sensitive routes before travel.</p>
@@ -958,7 +1074,7 @@ function renderDay() {
             })
             .join("")}</div>`
         : ""
-    }<details><summary>Planning assumptions and warnings</summary><p>Times are rough estimates, not timetables or road routes. Walk: 4 km/h × 1.25 detour. Drive: 35 km/h × 1.35 + 10 minutes. Train: 45 km/h × 1.3 + 20 minutes. Estimates round up to whole minutes. Verify intercity travel and access.</p><button data-action="thresholds">Edit this trip’s warning thresholds</button><p>Unknown travel makes downstream times unknown. An award does not prove a venue is operating.</p></details><p class="map-note">Map lines show the order of stops. Gaps remain where a stop has no location.</p></section>`;
+    }<details><summary>Planning assumptions and warnings</summary><p>Unverified travel uses rough estimates. Walk: 4 km/h × 1.25 detour. Drive: 35 km/h × 1.35 + 10 minutes. Train: 45 km/h × 1.3 + 20 minutes. Estimates round up to whole minutes. Verify intercity travel and access.</p><button data-action="thresholds">Edit this trip’s warning thresholds</button><p>Unknown travel leaves the arrival time open. A later recorded start can resume the timeline. Check venue operation before travel.</p></details><p class="map-note">Map lines show the order of stops. Gaps remain where a stop has no location.</p></section>`;
   wireContext();
   $("day-start").onchange = async (e) => {
     try {
@@ -978,7 +1094,14 @@ function travelHTML(row, d) {
   const stale =
     !seg.routeCheck && seg.manualMinutes !== null &&
     seg.overrideFingerprint !== seg.coordinateFingerprint;
-  return `<div class="travel"><div class="actions"><select aria-label="Travel mode" data-mode="${seg.toStopId}">${["walk", "train", "drive"].map((m) => `<option ${m === seg.mode ? "selected" : ""}>${m}</option>`).join("")}</select><strong>${row.travel === null ? "Travel time unknown" : row.travel + " min"}</strong><span>${source}</span>${row.routeWait ? `<span>Wait ${row.routeWait} min before departure</span>` : ""}</div>${row.missed ? '<p class="danger">Checked departure or place changed. Review the route.</p>' : ""}${stale ? '<p class="danger">Location changed — review this manual time.</p>' : ""}<div class="actions"><button data-action="travel" data-id="${seg.toStopId}">Set minutes</button>${seg.manualMinutes !== null ? `<button data-action="reset-travel" data-id="${seg.toStopId}">Reset to estimate</button>` : ""}<button data-action="directions" data-id="${seg.toStopId}">Directions</button></div>${transitTools.legSection(row, d)}${japanDepth.legSection(seg, d)}</div>`;
+  const from = M.visitDestination(state.stops.find(stop => stop.id === seg.fromStopId));
+  const to = M.visitDestination(row.stop);
+  const airportCheck = !seg.routeCheck && airportTimetableCheck(from, to);
+  const timetableNeedsCheck = (seg.mode === "train" || airportCheck) && (!seg.routeCheck || row.missed);
+  const checkLink = timetableNeedsCheck
+    ? `<a href="${esc(jorudanForPlaces(from, to, plannedTiming(d.date, row.routeDeparture)))}" target="_blank" rel="noopener">Check in Jorudan</a>`
+    : "";
+  return `<div class="travel"><div class="actions"><select aria-label="Travel mode" data-mode="${seg.toStopId}">${["walk", "train", "drive"].map((m) => `<option ${m === seg.mode ? "selected" : ""}>${m}</option>`).join("")}</select><strong>${row.travel === null ? "Travel time unknown" : row.travel + " min"}</strong><span>${source}</span>${row.routeWait ? `<span>Wait ${row.routeWait} min before departure</span>` : ""}</div>${row.missed ? '<p class="danger">Checked departure or place changed. Review the route.</p>' : ""}${stale ? '<p class="danger">Location changed — review this manual time.</p>' : ""}<div class="actions"><button data-action="travel" data-id="${seg.toStopId}">Set minutes</button>${seg.manualMinutes !== null ? `<button data-action="reset-travel" data-id="${seg.toStopId}">Reset to estimate</button>` : ""}<button data-action="directions" data-id="${seg.toStopId}">Directions</button>${checkLink}${airportCheck ? ` · <a href="${esc(airportCheck)}" target="_blank" rel="noopener">Confirm airport terminal and timetable</a>` : ""}</div>${row.missed ? "" : publicRouteHTML(seg.routeCheck)}${transitTools.legSection(row, d)}${japanDepth.legSection(seg, d)}</div>`;
 }
 function sourceAccessHTML(p, version) {
   if (!isOSM(p)) {
@@ -2817,7 +2940,7 @@ function googleSettings(open) {
 function renderSettings() {
   const googleSettingsOpen = $("google-map-settings")?.open;
   $("content").innerHTML =
-    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}${googleSettings(googleSettingsOpen)}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.7<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
+    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}${googleSettings(googleSettingsOpen)}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.8<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
   $("google-key-form").onsubmit = event => {
     event.preventDefault();
     try {
