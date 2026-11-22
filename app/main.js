@@ -97,6 +97,7 @@ let state = M.blank(),
   pending = null,
   ready = false,
   dropAction = null;
+let saveComplete;
 const planUndo = new Map();
 let discover = {
   source: "saunachelin",
@@ -253,8 +254,11 @@ async function commit(fn, { redraw = true } = {}) {
     return false;
   }
   busy = true;
-  const next = M.clone(state);
+  let finishSave;
+  let saved = false;
+  saveComplete = new Promise(resolve => { finishSave = resolve; });
   try {
+    const next = M.clone(state);
     await fn(next);
     next.dataLicenses = { ...(next.dataLicenses || {}), ...sourceLicenseTexts };
     next.sourceVersions = preserveSourceVersions(next.sourceVersions, feeds);
@@ -267,12 +271,14 @@ async function commit(fn, { redraw = true } = {}) {
     $("error").hidden = true;
     theme();
     if (redraw) render();
+    saved = true;
     return true;
   } catch (e) {
     error("Changes were not saved. " + e.message);
     return false;
   } finally {
     busy = false;
+    finishSave(saved);
   }
 }
 function originFor(p, stop = null) {
@@ -396,6 +402,7 @@ function pickContext() {
   }
   if (!day() || day().tripId !== activeTrip)
     activeDay = trip()?.dayIds[0] || null;
+  pref("japan-trip-context", JSON.stringify({ tripId: activeTrip, dayId: activeDay }));
 }
 function navigate(next) {
   collapsedPanels.delete(next === "directions" ? "discover" : next);
@@ -2940,7 +2947,7 @@ function googleSettings(open) {
 function renderSettings() {
   const googleSettingsOpen = $("google-map-settings")?.open;
   $("content").innerHTML =
-    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}${googleSettings(googleSettingsOpen)}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.8<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
+    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${japanDepth.settingsSection()}${googleSettings(googleSettingsOpen)}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.9.9<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
   $("google-key-form").onsubmit = event => {
     event.preventDefault();
     try {
@@ -3429,23 +3436,77 @@ window.addEventListener("beforeunload", (e) => {
 });
 async function serviceWorker() {
   if (!("serviceWorker" in navigator)) return;
+  const workers = navigator.serviceWorker;
+  let startingController = workers.controller;
   try {
-    const reg = await navigator.serviceWorker.register("sw.js");
-    let requestedUpdate = false;
+    const reg = await workers.register("sw.js");
+    const banner = $("update"), button = $("update-now"), status = $("update-status");
+    let applying = false;
+    let reloading = false;
+    let controllerChanged;
+    const activated = () =>
+      startingController && workers.controller && startingController !== workers.controller;
     const show = () => {
-      if (reg.waiting && navigator.serviceWorker.controller) {
-        $("update").hidden = false;
-        $("update-now").onclick = () => {
-          if (busy || pending) {
-            toast("Finish saving or export recovery before updating.");
+      banner.hidden = !applying && !(activated() || (reg.waiting && workers.controller));
+    };
+    const saved = async () => {
+      while (busy) {
+        status.textContent = "Finishing your save…";
+        if (!await saveComplete) break;
+      }
+      if (pending || busy || !$("error").hidden) {
+        status.textContent = "Resolve the save error above before reloading.";
+        return false;
+      }
+      if ($("dialog").open || dropAction) {
+        status.textContent = "Finish or close the current editor before reloading.";
+        return false;
+      }
+      return true;
+    };
+    button.onclick = async () => {
+      if (applying) return;
+      applying = button.disabled = true;
+      try {
+        if (!await saved()) return;
+        if (!activated()) {
+          status.textContent = "Preparing the update…";
+          const waiting = reg.waiting;
+          let timeout;
+          const activation = new Promise(resolve => {
+            controllerChanged = () => resolve(true);
+            timeout = setTimeout(() => resolve(false), 8000);
+          });
+          let didActivate;
+          try {
+            // A different tab may activate this worker before our message arrives.
+            if (waiting?.state === "installed") waiting.postMessage({ type: "ACTIVATE" });
+            didActivate = activated() || await activation;
+          } finally {
+            clearTimeout(timeout);
+            controllerChanged = null;
+          }
+          if (!didActivate) {
+            status.textContent = "The update is taking longer than expected. Try again.";
             return;
           }
-          requestedUpdate = true;
-          reg.waiting.postMessage({ type: "ACTIVATE" });
-        };
+        }
+        if (!await saved()) return;
+        status.textContent = "Reloading…";
+        location.reload();
+        reloading = true;
+      } catch {
+        status.textContent = "Could not activate the update. Try again.";
+      } finally {
+        if (!reloading) applying = button.disabled = false;
+        show();
       }
     };
-    show();
+    workers.addEventListener("controllerchange", () => {
+      if (!startingController) startingController = workers.controller;
+      if (activated()) controllerChanged?.();
+      show();
+    });
     const watchInstall = () => {
       const worker = reg.installing;
       const check = () => {
@@ -3458,13 +3519,6 @@ async function serviceWorker() {
     };
     watchInstall();
     reg.addEventListener("updatefound", watchInstall);
-    let reloading = false;
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
-      if (requestedUpdate && !reloading) {
-        reloading = true;
-        location.reload();
-      }
-    });
   } catch (e) {
     toast("Offline shell setup failed. Local trips still save; retry online.");
   }
@@ -3608,6 +3662,11 @@ function refreshSources() {
 try {
   await DB.open();
   state = await DB.load();
+  try {
+    const context = JSON.parse(pref("japan-trip-context"));
+    activeTrip = context?.tripId ?? null;
+    activeDay = context?.dayId ?? null;
+  } catch {}
   theme();
   ready = true;
   render();

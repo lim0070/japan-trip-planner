@@ -960,14 +960,26 @@ body {
 .identity span { font-size: 20px; }
 .identity small { font-size: 11px; }
 #theme { min-height: 38px; padding: 5px 10px; }
-#error, #update {
+#app-notices {
   position: fixed;
   z-index: 1015;
-  top: 16px;
+  top: max(16px, env(safe-area-inset-top));
   left: 50%;
   transform: translateX(-50%);
   width: min(500px, calc(100% - 28px));
+  pointer-events: none;
+}
+#app-notices > :not([hidden]) {
+  margin: 0 0 8px;
+  pointer-events: auto;
   box-shadow: 0 3px 16px #18232133;
+}
+#error { background: var(--panel); }
+#update:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
 }
 #panel-toggle {
   position: fixed;

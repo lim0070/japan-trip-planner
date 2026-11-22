@@ -31,9 +31,12 @@
       ><span id="connection"></span
       ><button id="theme" aria-label="Change colour theme">◐</button>
     </header>
-    <div id="error" class="error" role="alert" hidden></div>
-    <div id="update" class="notice" hidden>
-      New version ready. <button id="update-now">Save and reload</button>
+    <div id="app-notices">
+      <div id="error" class="error" role="alert" hidden></div>
+      <div id="update" class="notice" hidden>
+        <span id="update-status" role="status">New version ready.</span>
+        <button type="button" id="update-now">Save and reload</button>
+      </div>
     </div>
     <div class="discover-stage" id="map-stage">
       <div id="map" class="map" aria-label="Interactive map of Japan"></div>
