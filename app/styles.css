@@ -1813,6 +1813,54 @@ body[data-theme="dark"] .discover-stage #map.regional-map-active {
 .trip-update-row { border-top: 1px solid var(--line); padding: 12px 0; }
 .trip-update-row h3, .trip-update-row h4 { margin: 0 0 4px; }
 .trip-update-values { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+
+.notes-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 14px;
+}
+.notes-heading h1 { margin: 0; }
+.notes-panel > p { margin: 8px 0 12px; }
+.notes-panel input, .notes-panel textarea { width: 100%; }
+.notes-list {
+  display: grid;
+  gap: 7px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.notes-list button {
+  display: grid;
+  width: 100%;
+  gap: 3px;
+  padding: 9px 11px;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+.note-snippet {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.note-back { margin-bottom: 9px; }
+.note-editor {
+  display: grid;
+  gap: 5px;
+}
+.note-editor label { margin: 0; }
+.note-editor textarea { resize: vertical; min-height: 116px; }
+.note-editor .actions { margin-top: 6px; }
+.notes-status, .note-editor .form-error { margin: 0; }
+.notes-panel .form-error:empty { display: none; }
+.notes-status:empty { display: none; }
+.note-links { margin-top: 12px; overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .bottom-nav a { text-align: center; }
+  #content[data-view="notes"] { max-height: min(56dvh, 480px); }
+  .note-editor textarea { height: 140px; }
+}
 .trip-update-values > div { border: 1px solid var(--line); border-radius: 8px; padding: 10px; overflow-wrap: anywhere; }
 .trip-update-values pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 .trip-update-text { white-space: pre-wrap; }

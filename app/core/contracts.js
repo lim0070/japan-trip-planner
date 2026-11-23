@@ -1,4 +1,5 @@
 import { dates, segmentKey } from "./model.js";
+import { noteLimits } from "./notes.js";
 const fail = (m) => {
   throw Error(m);
 };
@@ -429,6 +430,21 @@ function unique(rows, key = "id") {
 }
 const licenseTexts = (x) =>
   record((v) => str(v, 40000))(x) && Object.keys(x).length <= 1000;
+const note = shape({
+  id: identifier,
+  title: x => str(x, noteLimits.title),
+  body: x => str(x, noteLimits.body),
+  createdAt: stamp,
+  updatedAt: stamp,
+});
+export function validateNotes(notes) {
+  if (!array(note, noteLimits.count)(notes) || notes.some(item => !item.title.trim() && !item.body.trim()))
+    fail("Notes must have a title or text and fit the notebook limits.");
+  unique(notes);
+  if (new TextEncoder().encode(JSON.stringify(notes)).byteLength > noteLimits.bytes)
+    fail("Saved notes exceed the 4 MiB notebook limit.");
+  return notes;
+}
 export function validateState(s) {
   guardTree(s);
   if (
@@ -610,12 +626,16 @@ export function validateBackup(b) {
       appVersion: nonempty,
     })(
       Object.fromEntries(
-        Object.entries(b).filter(([k]) => k !== "dataLicenses"),
+        Object.entries(b).filter(([k]) => k !== "dataLicenses" && k !== "notes"),
       ),
     ) ||
     (Object.hasOwn(b, "dataLicenses") && !licenseTexts(b.dataLicenses))
   )
     fail("Unsupported backup version, fields or limits.");
+  if (Object.hasOwn(b, "notes")) {
+    if (b.kind !== "full") fail("Only full notebook backups may contain personal notes.");
+    validateNotes(b.notes);
+  }
   validateState({
     ...Object.fromEntries(Object.keys(stateFields).map((k) => [k, b[k]])),
     imports: {},

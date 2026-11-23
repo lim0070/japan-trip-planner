@@ -2,6 +2,7 @@ import { airportTimetableCheck, optimizedTransit } from "./core/planner-timetabl
 import { createTramTools } from "./hakodate-tram-tools.js";
 import { applyTripUpdate, dayAfterTripUpdate, legacyCopyLink, previewTripUpdate, projectCopyUpdate, tripUpdateBase } from "./core/trip-update.js";
 import { showTripUpdate } from "./trip-update-ui.js";
+import { createNotesPanel } from "./notes-panel.js";
 import { tramLine, tramTransfersUrl } from "./core/hakodate-tram.js";
 import { timetableCheck } from "./core/timetable.js";
 import { applyTimetableDay, timetableDay } from "./core/timetable-plan.js";
@@ -131,7 +132,7 @@ let inspectorShown = false;
 let pinnedSavedPlace = null;
 const collapsedPanels = new Set();
 const compactMap = matchMedia("(max-width:760px)");
-const tabTitles = { trips: "Trips", day: "Itinerary", discover: "Maps & shopping", spots: "Saved spots", settings: "Settings" };
+const tabTitles = { trips: "Trips", day: "Itinerary", discover: "Maps & shopping", spots: "Saved spots", notes: "Notes", settings: "Settings" };
 let discoverBounds = [];
 let fitDiscoverSearch = false;
 let mapQuery = "", mapSearchTypos = false, mapSearchLocation = null;
@@ -153,14 +154,15 @@ const sourcePackageNotices = {},
   sourcePackageRoots = {};
 let sourceLicenseTexts = {},
   shoppingAliases = new Map();
-function backup(s, tripId = null) {
+function backup(s, tripId = null, notes = []) {
   const data = {
-    ...makeBackup(s, tripId, shoppingAliases),
+    ...makeBackup(s, tripId, shoppingAliases, notes),
     dataLicenses: { ...(s.dataLicenses || {}), ...sourceLicenseTexts },
   };
   parseJSON(JSON.stringify(data)); // Keep exports within the unchanged reimport guard.
   return data;
 }
+const fullBackup = async s => backup(s, null, await DB.readNotes());
 
 const layerChoiceKey = "japan-trip-layer-choices";
 const choiceScrollObserver = new ResizeObserver(entries => {
@@ -235,7 +237,10 @@ function error(message) {
   if (pending) {
     const b = document.createElement("button");
     b.textContent = "Export unsaved recovery";
-    b.onclick = () => download(backup(pending), "japan-unsaved-recovery.json");
+    b.onclick = async () => {
+      try { download(await fullBackup(pending), "japan-unsaved-recovery.json"); }
+      catch (err) { toast(err.message); }
+    };
     $("error").append(b);
   }
   const reload = document.createElement("button");
@@ -252,7 +257,7 @@ function theme() {
       : state.settings.theme;
   document.documentElement.dataset.theme = document.body.dataset.theme;
 }
-async function commit(fn, { redraw = true, tripUpdateBases = [] } = {}) {
+async function commit(fn, { redraw = true, tripUpdateBases = [], notesToMerge = [] } = {}) {
   if (busy) {
     toast("Please wait for the current save.");
     return false;
@@ -269,7 +274,7 @@ async function commit(fn, { redraw = true, tripUpdateBases = [] } = {}) {
     M.reconcile(next);
     validateState(next);
     pending = next;
-    await DB.save(next, tripUpdateBases);
+    await DB.save(next, tripUpdateBases, notesToMerge);
     state = next;
     pending = null;
     $("error").hidden = true;
@@ -310,7 +315,7 @@ function saveZip(files, name) {
 }
 async function exportBackupZip(tripId = null) {
   try {
-    const data = backup(state, tripId);
+    const data = tripId ? backup(state, tripId) : await fullBackup(state);
     const files = await completeBackupFiles(data, DB.osmVersion);
     saveZip(files, "japan-backup-with-sources.zip");
     dayTools.recordExport(data, "japan-backup-with-sources.zip");
@@ -447,6 +452,7 @@ const together = createTogether({
   getState: () => state, getDay: day, openDay, openAutoPlan: autoPlanDialog,
   commit, modal, close, setupForm, footer, esc, val, toast,
 });
+const notesPanel = createNotesPanel({ esc });
 const japanDepth = createJapanDepth({
   getState: () => state, getTrip: trip, getDay: day, commit, modal, close, setupForm,
   footer, esc, val, toast, findPlace, sourceVersion,
@@ -501,7 +507,8 @@ function render() {
     screen === "day" && day()?.stopIds.length ? "Fit day" : discoverPane === "directions" ? "Fit map" : "Fit results";
   for (const a of document.querySelectorAll("[data-tab]"))
     a.setAttribute("aria-current", a.dataset.tab === screen ? "page" : "false");
-  ({ trips: renderTrips, day: renderDay, discover: renderDiscover, spots: renderSpots, settings: renderSettings })[screen]();
+  ({ trips: renderTrips, day: renderDay, discover: renderDiscover, spots: renderSpots,
+    notes: () => notesPanel.render($("content")), settings: renderSettings })[screen]();
   const matches = screen === "discover" ? discoverMatches : matchDiscovery().rows;
   initMap(matches.map(({ p, cuisine }) => ({ p, id: p.key, cuisine })));
   renderPlaceInspector();
@@ -2992,7 +2999,7 @@ function googleSettings(open) {
 function renderSettings() {
   const googleSettingsOpen = $("google-map-settings")?.open;
   $("content").innerHTML =
-    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${tramTools.settingsHTML()}${japanDepth.settingsSection()}${googleSettings(googleSettingsOpen)}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.10.2<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
+    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips, saved places and notes before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${tramTools.settingsHTML()}${japanDepth.settingsSection()}${googleSettings(googleSettingsOpen)}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.10.3<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
   tramTools.wireSettings();
   $("google-key-form").onsubmit = event => {
     event.preventDefault();
@@ -3121,7 +3128,7 @@ function importDialog(cachedData = null, offerUpdate = screen === "settings") {
               tripUpdateBases.push([copyId, { related: {
                 ...projected.link, baseline:tripUpdateBase(projected.data, copyId),
               } }]);
-            }), { tripUpdateBases })) {
+            }), { tripUpdateBases, notesToMerge: data.notes ?? [] })) {
               close();
               toast("Import saved. Existing edits preserved.");
             }
@@ -3467,7 +3474,7 @@ document.addEventListener("click", async (e) => {
         download(backup(state, activeTrip), "japan-trip.json");
         break;
       case "export-all":
-        download(backup(state), "japan-trips-backup.json");
+        download(await fullBackup(state), "japan-trips-backup.json");
         break;
       case "import":
         importDialog();
@@ -3594,7 +3601,7 @@ function connection() {
 }
 connection();
 window.addEventListener("beforeunload", (e) => {
-  if (busy || pending) {
+  if (busy || pending || notesPanel.unloadRisk()) {
     e.preventDefault();
     e.returnValue = "";
   }
@@ -3621,6 +3628,10 @@ async function serviceWorker() {
       }
       if (pending || busy || !$("error").hidden) {
         status.textContent = "Resolve the save error above before reloading.";
+        return false;
+      }
+      if (notesPanel.unloadRisk()) {
+        status.textContent = "Finish saving your note before reloading.";
         return false;
       }
       if ($("dialog").open || dropAction) {

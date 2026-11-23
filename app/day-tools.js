@@ -1,5 +1,5 @@
 import * as M from "./core/model.js";
-import { canonical, parseJSON, validateBackup, validateState } from "./core/contracts.js";
+import { canonical, parseJSON, validateBackup, validateNotes, validateState } from "./core/contracts.js";
 import { mergeImport, previewImport } from "./core/merge.js";
 import { transitStatus } from "./transit-tools.js";
 import { saunaTotals } from "./core/japan-depth.js";
@@ -170,12 +170,20 @@ export async function verifyBackupRestore(data, readBack = reopenScratch) {
   validateBackup(data);
   const restored = M.blank();
   mergeImport(restored, data, await previewImport(restored, data));
-  const reread = await readBack(restored);
+  const { notes = [], ...reread } = await readBack(
+    data.notes ? { ...restored, notes: M.clone(data.notes) } : restored,
+  );
   validateState(reread);
+  validateNotes(notes);
   if (canonical(restoreContents(reread)) !== canonical(restoreContents(data)))
     throw Error("The restored trip records differed from the file.");
-  return { trips: reread.trips.length, visits: reread.stops.length };
+  if (canonical(notes) !== canonical(data.notes ?? []))
+    throw Error("The restored personal notes differed from the file.");
+  return { trips: reread.trips.length, visits: reread.stops.length,
+    ...(notes.length ? { notes: notes.length } : {}) };
 }
+
+const noteCount = result => result.notes ? ` and ${result.notes} personal ${result.notes === 1 ? "note" : "notes"}` : "";
 
 function storedStatus(key) {
   try { return JSON.parse(localStorage.getItem(key)); }
@@ -351,7 +359,8 @@ export function createDayTools({
     const exported = storedStatus(exportKey);
     const restored = storedStatus(restoreKey);
     const prepared = exported ? stamp(exported.at) + " · " + exported.filename : "No backup prepared in this browser.";
-    const proof = restored ? stamp(restored.at) + " · " + restored.trips + " trips, " + restored.visits + " visits" : "No restore check in this browser.";
+    const proof = restored ? stamp(restored.at) + " · " + restored.trips + " trips, " + restored.visits + " visits" + noteCount(restored)
+      : "No restore check in this browser.";
     return `<details class="backup-recovery"><summary>Backup and recovery</summary>
       <p><strong>Last backup prepared</strong><br><span id="last-planner-backup">${esc(prepared)}</span></p><p class="muted">Confirm the file finished downloading and keep a copy outside this browser.</p>
       <p><strong>Last successful restore check</strong><br>${esc(proof)}</p>
@@ -374,7 +383,7 @@ export function createDayTools({
       finally { submit.disabled = false; }
       saveStatus(restoreKey, { at: M.now(), ...result });
       render();
-      modal("Restore check passed", `<p>Imported and reopened ${result.trips} trips and ${result.visits} visits from temporary storage.</p>
+      modal("Restore check passed", `<p>Imported and reopened ${result.trips} trips, ${result.visits} visits${noteCount(result)} from temporary storage.</p>
         <p>Repeat the check on the device you plan to use.</p><button id="done-restore-check">Done</button>`,
         () => { document.getElementById("done-restore-check").onclick = close; });
     }));

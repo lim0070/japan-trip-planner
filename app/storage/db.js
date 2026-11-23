@@ -8,6 +8,7 @@ import {
 } from "../core/shopping-sources.js";
 import { bytes } from "../core/shopping-bundle.js";
 import { blank } from "../core/model.js";
+import { mergeNotes, sameSavedNote } from "../core/notes.js";
 import { photoLimits } from "../core/together.js";
 import { loadBundle, readBounded } from "../core/shopping-bundle.js";
 import { emptyAliases, validateAliases } from "../core/shopping-aliases.js";
@@ -36,6 +37,7 @@ import {
   readCompactShoppingSuccessor,
 } from "./shopping-overlay.js";
 import {
+  validateNotes,
   validateState,
   verifyFeed,
   parseJSON,
@@ -91,8 +93,38 @@ export async function load() {
 }
 const updateBaseKey = tripId => "trip-update-base:" + tripId;
 export const readTripUpdateBase = tripId => read("state", updateBaseKey(tripId));
-export function save(value, tripUpdateBases = []) {
+const notesKey = "personal-notes";
+export const readNotes = async () => validateNotes(await read("state", notesKey) ?? []);
+
+export function changeNote(base, next) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("state", "readwrite");
+    const store = tx.objectStore("state"), request = store.get(notesKey);
+    let result, failure;
+    request.onsuccess = () => {
+      try {
+        const notes = validateNotes(request.result ?? []);
+        const index = notes.findIndex(note => note.id === (base ?? next).id);
+        const saved = notes[index];
+        const conflict = base ? !sameSavedNote(base, saved) : !!saved;
+        result = { notes, conflict };
+        if (conflict) return;
+        if (base) notes.splice(index, 1);
+        if (next) notes.push(next);
+        store.put(validateNotes(notes), notesKey);
+      } catch (error) {
+        failure = error;
+        tx.abort();
+      }
+    };
+    tx.oncomplete = () => resolve(result);
+    tx.onabort = () => reject(failure || tx.error || Error("The note change could not be saved."));
+  });
+}
+
+export function save(value, tripUpdateBases = [], notesToMerge = []) {
   validateState(value);
+  validateNotes(notesToMerge);
   return new Promise((resolve, reject) => {
     const tx = db.transaction("state", "readwrite"),
       store = tx.objectStore("state");
@@ -110,6 +142,18 @@ export function save(value, tripUpdateBases = []) {
         if (!tripIds.has(trip.id)) store.delete(updateBaseKey(trip.id));
       for (const [tripId, baseline] of tripUpdateBases)
         if (tripIds.has(tripId)) store.put(baseline, updateBaseKey(tripId));
+      if (notesToMerge.length) {
+        const notes = store.get(notesKey);
+        notes.onsuccess = () => {
+          try {
+            const merged = mergeNotes(validateNotes(notes.result ?? []), notesToMerge);
+            store.put(validateNotes(merged), notesKey);
+          } catch (error) {
+            message = error.message;
+            tx.abort();
+          }
+        };
+      }
       const owners = new Set(value.stops.map(stop => ownerKey(stop.tripId, stop.id)));
       if (r.result?.value.stops.some(stop => !owners.has(ownerKey(stop.tripId, stop.id)))) {
         const photos = store.get(photoJournalKey);
