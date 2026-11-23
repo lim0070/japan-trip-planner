@@ -18,6 +18,7 @@ These markers identify stores on the Japan Trip Planner map. Store names and bra
 | Birthday | Baby bodysuit | Japan Trip Planner · [Store website](https://www.s-birthday.com/) | Original identifying pictogram. |
 | Chambre | Homewares lamp | Japan Trip Planner · [Store website](https://www.shimamura.gr.jp/chambre/) | Original identifying pictogram. |
 | Divalo | Shoe | Japan Trip Planner · [Store website](https://www.shimamura.gr.jp/divalo/) | Original identifying pictogram. |
+| PASEOS | Clothing tag | Japan Trip Planner · [Retailer directory](https://www.paseos.co.jp/shop/) | Original identifying pictogram. |
 | Outlet malls | Shopfront | Japan Trip Planner | Category shared by multiple operators. |
 
 The Hands raster adaptation preserves the credit to A1027 and is offered under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) where applicable.

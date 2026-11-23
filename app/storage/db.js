@@ -15,11 +15,12 @@ import { approvedShopping, validateApprovedShoppingChanges } from "./shopping-ap
 import { decodeShoppingHistory, encodeShoppingHistory } from "./shopping-history.js";
 import { closureRegistry, normalizeClosureParent, validateClosureUpdate } from "./shopping-closure.js";
 import { reviewedClosureRegistry, validateReviewedClosures } from "./shopping-reviewed-closures.js";
-import { currentShoppingRelease, generation24Release, generation25Release, generation26Release, shoppingRelease } from "./shopping-release.js";
+import { currentShoppingRelease, generation24Release, generation25Release, generation26Release, generation27Release, shoppingRelease } from "./shopping-release.js";
 import { generation24Registry, validateGeneration24 } from "./shopping-generation24.js";
 import { generation25Registry, validateGeneration25 } from "./shopping-generation25.js";
 import { generation26Registry, validateGeneration26 } from "./shopping-generation26.js";
 import { generation27Registry, validateGeneration27 } from "./shopping-generation27.js";
+import { generation28Registry, validateGeneration28 } from "./shopping-generation28.js";
 import { tenantHoursRegistry, validateTenantHoursUpdate } from "./shopping-hours.js";
 import { mixedRegistry, validateMixedUpdate } from "./shopping-mixed.js";
 import { sanoRegistry, validateSanoUpdate } from "./shopping-sano.js";
@@ -28,6 +29,8 @@ import {
   makeShoppingOverlay,
   makeShoppingSuccessor,
   makeCompactShoppingSuccessor,
+  makeShoppingAppend,
+  readShoppingAppend,
   readShoppingOverlay,
   readShoppingSuccessor,
   readCompactShoppingSuccessor,
@@ -228,6 +231,7 @@ const APPROVED_KEY = "shopping-region-approved-history";
 const HISTORY_ARCHIVE_KEY = "shopping-history-archive-v1";
 const CLOSURE_KEY = "shopping-region-closure-history";
 const REVIEWED_CLOSURES_KEY = "shopping-region-reviewed-closures";
+const GENERATION_28_KEY = "shopping-region-reviewed-generation28";
 const GENERATION_27_KEY = "shopping-region-reviewed-generation27";
 const GENERATION_26_KEY = "shopping-region-reviewed-generation26";
 const GENERATION_25_KEY = "shopping-region-reviewed-generation25";
@@ -350,8 +354,10 @@ export function activateShoppingPackage(id, fresh, expectedRevision, registry = 
           }
           if (id === "overture") validateAliases(fresh.aliases, fresh.feed,
             current?.aliases || emptyAliases());
+          const primary = id === "overture" ? fresh : other.current;
+          const aggregateLimit = matchesRelease(primary) ? currentShoppingRelease.expandedLimit : undefined;
           checkTotals([packageMetrics(fresh), ...(other.current ? [packageMetrics(other.current)] : []),
-            {ancillary:128*1024}]);
+            {ancillary:128*1024}], aggregateLimit);
           const same = artifact(current || owned?.current) === artifact(fresh), next = {
             current: storedPackage(fresh, id, rows[oldKey]),
             previous: storedPackage(same ? row.previous : current, id, rows[oldKey]) ||
@@ -507,12 +513,10 @@ const legacyHistoryRows = [
   TENANT_HOURS_KEY,
 ];
 const legacyRegistryRows = [REGISTRY_KEY, "shopping-registry"];
+const reviewedHistoryRows = [GENERATION_24_KEY, GENERATION_25_KEY, GENERATION_26_KEY, GENERATION_27_KEY, GENERATION_28_KEY];
 const regionRows = [
   ...legacyHistoryRows,
-  GENERATION_24_KEY,
-  GENERATION_25_KEY,
-  GENERATION_26_KEY,
-  GENERATION_27_KEY,
+  ...reviewedHistoryRows,
   packageKey("overture"),
   packageKey("osm"),
   legacyKey("overture"),
@@ -924,8 +928,14 @@ const generation26 = reviewedSuccessor(
 );
 
 const generation27 = reviewedSuccessor(
-  GENERATION_27_KEY, currentShoppingRelease, generation26, generation27Registry, validateGeneration27,
+  GENERATION_27_KEY, generation27Release, generation26, generation27Registry, validateGeneration27,
 );
+const generation28 = {
+  ...reviewedSuccessor(GENERATION_28_KEY, currentShoppingRelease, generation27, generation28Registry, validateGeneration28),
+  makeOverlay: makeShoppingAppend,
+  readOverlay: readShoppingAppend,
+  storageLimit: currentShoppingRelease.storageLimit,
+};
 
 function reviewedSuccessor(key, release, parent, registry, validateUpdate) {
   return {
@@ -953,7 +963,7 @@ function reviewedSuccessor(key, release, parent, registry, validateUpdate) {
 
 async function readPinnedShoppingRegistry(url, descriptor, release) {
   const { text } = await readBounded(url, 128 * 1024, descriptor);
-  const registry = await validateRegistry(parseJSON(text));
+  const registry = await validateRegistry(parseJSON(text), release.expandedLimit);
   if (registry.generation !== release.generation || registry.datasetVersion !== release.registryVersion)
     throw Error("Unexpected Shopping registry for generation " + release.generation);
   return registry;
@@ -1197,7 +1207,7 @@ async function retainedShoppingForRelease(format, primary = null) {
 }
 
 function hasLegacyShoppingRows() {
-  const keys = [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY, GENERATION_26_KEY, GENERATION_27_KEY];
+  const keys = [...legacyHistoryRows, ...legacyRegistryRows, ...reviewedHistoryRows];
   return new Promise((resolve, reject) => {
     const tx = db.transaction("feeds"), store = tx.objectStore("feeds");
     let historical = false;
@@ -1215,12 +1225,12 @@ function storeDirectShopping(candidate, release) {
     const key = packageKey("overture");
     const row = resolvedRow(rows[key], rows[legacyKey("overture")]);
     if ((row.current && !matchesRelease(row.current, release)) || row.previous ||
-        [...legacyHistoryRows, ...legacyRegistryRows, GENERATION_24_KEY, GENERATION_25_KEY, GENERATION_26_KEY, GENERATION_27_KEY]
+        [...legacyHistoryRows, ...legacyRegistryRows, ...reviewedHistoryRows]
           .some(key => rows[key] !== undefined))
       throw Error("Shopping history appeared during the cold download");
     const osm = resolvedRow(rows[packageKey("osm")], rows[legacyKey("osm")]).current;
     checkTotals([packageMetrics(candidate), ...(osm ? [packageMetrics(osm)] : []),
-      { ancillary: 128 * 1024 }]);
+      { ancillary: 128 * 1024 }], release.expandedLimit);
     // Existing loaders count this row. An older open tab cannot exceed the
     // retained budget by writing history alongside the direct snapshot.
     return [key, { current: candidate, previous: null, revision: row.revision + 1 }];
@@ -1304,8 +1314,12 @@ export function shoppingSourcesWithGeneration26(onPackage) {
   return shoppingSourcesForRelease(onPackage, generation26, generation25Release, shoppingSourcesWithGeneration25);
 }
 
-export function shoppingCurrentSources(onPackage) {
+export function shoppingSourcesWithGeneration27(onPackage) {
   return shoppingSourcesForRelease(onPackage, generation27, generation26Release, shoppingSourcesWithGeneration26);
+}
+
+export function shoppingCurrentSources(onPackage) {
+  return shoppingSourcesForRelease(onPackage, generation28, generation27Release, shoppingSourcesWithGeneration27);
 }
 
 export async function shoppingRegionVersion(version) {
@@ -1313,7 +1327,8 @@ export async function shoppingRegionVersion(version) {
   const release = shoppingRelease(version);
   const direct = release && directPackage(rows, release);
   if (direct) return direct;
-  const format = [generation24, generation25, generation26, generation27].find(item => item.release.generation === release?.generation);
+  const format = [generation24, generation25, generation26, generation27, generation28]
+    .find(item => item.release.generation === release?.generation);
   if (format && storedReleaseOverlay(rows[format.key], format.release))
     return readRetainedRelease(rows, format);
   const retained = await retainedShoppingVersion(version, rows);

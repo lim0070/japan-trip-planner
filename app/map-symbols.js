@@ -85,6 +85,10 @@ export const shopIcons = {
     "file": "assets/outlet-mall.svg",
     "kind": "planner-symbol"
   },
+  "paseos": {
+    "file": "round/paseos.svg",
+    "kind": "planner-symbol"
+  },
   "shimamura": {
     "file": "assets/shimamura.png",
     "kind": "brand-mark",
@@ -121,6 +125,10 @@ export const roundShopIcons = {
   },
   "divalo": {
     "file": "round/divalo.svg",
+    "kind": "planner-symbol"
+  },
+  "paseos": {
+    "file": "round/paseos.svg",
     "kind": "planner-symbol"
   },
   "global-work": {

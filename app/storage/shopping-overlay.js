@@ -1,4 +1,5 @@
 import { canonical, verifyFeed } from "../core/contracts.js";
+import { byteOrder } from "../core/shopping-bundle.js";
 import { validateAliases } from "../core/shopping-aliases.js";
 
 // Store only complete replacements and the new package metadata. The base
@@ -87,4 +88,29 @@ export function makeCompactShoppingSuccessor(base, next) {
 export function readCompactShoppingSuccessor(base, overlay) {
   const aliases = overlay.package.aliases ?? base.aliases;
   return readShoppingSuccessor(base, { ...overlay, package: { ...overlay.package, aliases } });
+}
+
+export function makeShoppingAppend(base, next) {
+  const length = base.feed.places.length;
+  const overlay = makeCompactShoppingSuccessor(base, {
+    ...next, feed: {...next.feed, places:next.feed.places.slice(0, length)},
+  });
+  const additions = next.feed.places.slice(length);
+  if (!additions.length || overlay.replacements.length || overlay.package.aliases !== null)
+    throw Error("Shopping addition must preserve all previous places and aliases");
+  return { ...overlay, additions };
+}
+
+export function readShoppingAppend(base, overlay) {
+  if (!Array.isArray(overlay.additions) || !overlay.additions.length ||
+      overlay.replacements.length || overlay.package.aliases !== null)
+    throw Error("Invalid Shopping addition");
+  let previous = base.feed.places.at(-1)?.key ?? "";
+  for (const place of overlay.additions) {
+    if (typeof place?.key !== "string" || byteOrder(previous, place.key) >= 0)
+      throw Error("Shopping additions require unique sorted suffix keys");
+    previous = place.key;
+  }
+  const extended = { ...base, feed:{ ...base.feed, places:[...base.feed.places, ...overlay.additions] } };
+  return readCompactShoppingSuccessor(extended, overlay);
 }

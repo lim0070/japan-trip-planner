@@ -1,0 +1,7 @@
+Generation 26 contains 23 exact, independently worded facts about verified native Shopping records.
+Each hours reference states the operating interval and any verified day scope. Effective dates, dated exceptions and structured hours are outside those references.
+Individual decisions name the source publisher. Use ordinary, attributed, unframed links and follow any link conditions in the corresponding source qualification.
+Rinku Premium Outlets prefecture is derived by the Japan Shopping Data project from the Ministry of the Environment field-test plan dated 2003-11-14, PDF page 8, table 3-1. Credit the Ministry of the Environment for the source and identify the derived prefecture as edited by Japan Shopping Data.
+The Akishima Lopia tenant reference is dated March 2026. Use the source label, document page and format in the decision record when citing the publicly linked PDF.
+Existing licensing notices and attributions continue to apply.
+See shopping-reviewed-facts-mixed-g26-1.json for the exact changes and source references.

@@ -1,0 +1,5 @@
+PASEOS branch facts from Tawaraya Co., Ltd., the operator’s store locator and digital flyer directory, and cited address authorities.
+Branch identifiers, names, addresses, numeric trading times and lifecycle facts are normalized independently. Publisher HTML, images, promotional copy and embedded map data are excluded.
+Published points by Overture Maps Foundation (Meta, CDLA-Permissive-2.0; Copyright 2024 Foursquare Labs, Inc., Apache 2.0).
+Geometry is filtered for exact branch/site identity and represented as WGS84 latitude/longitude. Overture dataset and provider record references are retained. Site points have medium confidence and unknown entrance accuracy.
+See paseos-sources-v1.json, paseos-branch-crosswalk-*.json, paseos-point-proof-*.json and source-to-notice.json for the source ledger.

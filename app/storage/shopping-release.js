@@ -24,6 +24,7 @@ const releases = [
   [25, "sha256:6b4e62e10b2a433af9277e5b3b21642eb0710c06086be78be539ebe33c89f4f7", "sha256:428d7425120672da2a285307c9fd759fe17c6a450716c17d98804cde1ba78bce", "shopping-verified/2026-11-19-r2/shopping.bundle.v2.json", 23616, "a35aea74593fe57a1328e722d553d6a7945c391271cf4cf0f3a37b846e491412"],
   [26, "sha256:f6a0e048edfd57137c626310e809514b5b517dd9f9af5189216b9c13b3ed2e49", "sha256:d4713ccfe30868ec40ce80a683baddbed0d3281b3c07cfb8131d2a1c280c7161", "shopping-verified/2026-11-19-r3/shopping.bundle.v2.json", 23916, "a899c7dbfd2c936f43fdc5359ea5e1e82d1168e235fb6fc46aaa64ca686fa7f1"],
   [27, "sha256:35bf2da05e4f2be0c1e705f5925abfd8ef530dcc967af09ec1d2094fd5aee151", "sha256:5d208861d81b399bf1b589567ea51f3aa01edc92c9107b5cf36d3c0174fd324f", "shopping-verified/2026-11-20-r1/shopping.bundle.v2.json", 24212, "ebcc94bdf5b323f703c2c0635d42cd872d3ff6a5d3b802410faad1adef2517a9"],
+  [28, "sha256:c59fc5e04fa2bf1f809e3ef0272788497de0b4394d600b869a5512943471c0a8", "sha256:2d98dde19a10b56aae957b4fadd053adade6becba5c091f111d6c13c50a19d3c", "shopping-verified/2026-11-22-r1/shopping.bundle.v2.json", 26223, "a58c0b07aad24289dec2572bb4e022cf64c5a4deb9673898ebaa3f5a1fcc146b"],
 ];
 
 function reviewedRelease(generation, registryPath, registryVersion) {
@@ -40,8 +41,15 @@ export const generation25Release = reviewedRelease(25, "shopping-sources.success
   "sha256:d28b708f8311eeb37c8f689406f2c611ab6975eed75f28c9fa7752f97edfd567");
 export const generation26Release = reviewedRelease(26, "shopping-sources.successor.v13.json",
   "sha256:43fe4d7b79be23ee4a489fa35715ff79c29cdc98b78ecf65e17331e7bc8ffebd");
-export const currentShoppingRelease = reviewedRelease(27, "shopping-sources.successor.v14.json",
+export const generation27Release = reviewedRelease(27, "shopping-sources.successor.v14.json",
   "sha256:ec0f5f340c7ee9438f0e9c4a27db0e93bb3ef8275d1099fd04e47337c1f6d1d4");
+
+// These aggregate limits apply only to the pinned PASEOS successor.
+export const currentShoppingRelease = Object.freeze({
+  ...reviewedRelease(28, "shopping-sources.successor.v15.json", "sha256:86e518c98f5bfcea04cee7b241b44387bd4e294f34431eb28f094bf264388f19"),
+  expandedLimit: 33818449,
+  storageLimit: 101125400,
+});
 
 export function shoppingRelease(version) {
   const artifact = releases.find(row => row[1] === version);

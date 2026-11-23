@@ -32,6 +32,7 @@ export function badge(p) {
     birthday: "B",
     chambre: "CH",
     divalo: "D",
+    paseos: "PA",
   };
   if (p.shopping.brandId === "workman")
     return Object.hasOwn(workman, p.shopping.formatId)

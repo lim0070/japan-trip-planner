@@ -1,5 +1,5 @@
 const PREFIX = "japan-trip-planner-shell-",
-  CACHE = PREFIX + "v54";
+  CACHE = PREFIX + "v55";
 const FILES = [
   "./",
   "index.html",
@@ -62,6 +62,7 @@ const FILES = [
   "icons/map/round/lopia.png",
   "icons/map/round/nitori.png",
   "icons/map/round/outlet-mall.svg",
+  "icons/map/round/paseos.svg",
   "icons/map/round/shimamura.png",
   "icons/map/round/uniqlo.png",
   "icons/map/round/workman.png",
@@ -106,6 +107,7 @@ const FILES = [
   "storage/shopping-generation25.js",
   "storage/shopping-generation26.js",
   "storage/shopping-generation27.js",
+  "storage/shopping-generation28.js",
   "storage/shopping-reviewed-delta.js",
   "manifest.webmanifest",
   "icons/icon.svg",

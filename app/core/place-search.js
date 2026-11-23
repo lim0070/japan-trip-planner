@@ -2,7 +2,7 @@
 // It only compares text the data already holds: every stored name, every
 // address part, a Shopping place's brand, its confirmed alias names and any
 // reading the user saved. It never invents readings or translations.
-import { brands } from "./shopping-catalog.js";
+import { brands, brandSearchAliases } from "./shopping-catalog.js";
 
 // Spaces, middle dots and similar separators are ignored.
 const SEP = /[\s·•‧∙⋅・･、，,/]+/gu;
@@ -51,7 +51,8 @@ function fields(p) {
       romaji: compact(p.names?.romaji),
       brand:
         brandId && Object.hasOwn(brands, brandId)
-          ? [compact(brands[brandId])].filter(Boolean)
+          ? [brands[brandId], ...(Object.hasOwn(brandSearchAliases, brandId) ? brandSearchAliases[brandId] : [])]
+              .map(compact).filter(Boolean)
           : [],
       address: strings(p.address).map(compact).filter(Boolean),
     };

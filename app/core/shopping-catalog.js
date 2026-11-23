@@ -9,11 +9,15 @@ export const brands = {
   birthday: "Birthday",
   chambre: "Chambre",
   divalo: "Divalo",
+  paseos: "PASEOS",
   costco: "Costco",
   lopia: "Lopia",
   "life-supermarket": "Life Supermarket",
   nitori: "Nitori",
   hands: "Hands / Tokyu Hands",
+};
+export const brandSearchAliases = {
+  paseos: ["パシオス"],
 };
 export const formats = {
   standard: "Standard",
