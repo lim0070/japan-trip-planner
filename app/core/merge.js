@@ -36,7 +36,7 @@ export function backup(s, tripId = null, aliases = new Map()) {
     kind: tripId ? "trip" : "full",
     exportId: id(),
     exportedAt: now(),
-    appVersion: "2.10.0",
+    appVersion: "2.10.1",
     ...data,
   };
 }
@@ -64,7 +64,7 @@ export async function previewImport(s, data) {
       : `${data.trips.length} trips, ${data.stops.length} visits, ${data.places.length} places. ${conflicts} existing trip IDs. Different trips are copied with new IDs; existing edits are preserved. Personal notes are included.`,
   };
 }
-export function mergeImport(s, data, preview, flagPolicy = "merge") {
+export function mergeImport(s, data, preview, flagPolicy = "merge", onCopy = null) {
   if (preview.already || s.imports[preview.hash]) return s;
   if (preview.legacy) {
     for (const f of data.flags) {
@@ -178,6 +178,9 @@ export function mergeImport(s, data, preview, flagPolicy = "merge") {
             toStopId: stopMap.get(x.toStopId),
           })),
       );
+      if (remap && onCopy) onCopy(tid, {
+        sourceTripId: t.id, dayIds: dayMap, stopIds: stopMap, placeIds: placeMap,
+      });
     }
     for (const f of data.flags) {
       const old = s.flags.find((x) => x.placeKey === f.placeKey);

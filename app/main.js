@@ -1,5 +1,7 @@
 import { airportTimetableCheck, optimizedTransit } from "./core/planner-timetable.js";
 import { createTramTools } from "./hakodate-tram-tools.js";
+import { applyTripUpdate, dayAfterTripUpdate, legacyCopyLink, previewTripUpdate, projectCopyUpdate, tripUpdateBase } from "./core/trip-update.js";
+import { showTripUpdate } from "./trip-update-ui.js";
 import { tramLine, tramTransfersUrl } from "./core/hakodate-tram.js";
 import { timetableCheck } from "./core/timetable.js";
 import { applyTimetableDay, timetableDay } from "./core/timetable-plan.js";
@@ -250,7 +252,7 @@ function theme() {
       : state.settings.theme;
   document.documentElement.dataset.theme = document.body.dataset.theme;
 }
-async function commit(fn, { redraw = true } = {}) {
+async function commit(fn, { redraw = true, tripUpdateBases = [] } = {}) {
   if (busy) {
     toast("Please wait for the current save.");
     return false;
@@ -267,7 +269,7 @@ async function commit(fn, { redraw = true } = {}) {
     M.reconcile(next);
     validateState(next);
     pending = next;
-    await DB.save(next);
+    await DB.save(next, tripUpdateBases);
     state = next;
     pending = null;
     $("error").hidden = true;
@@ -2985,7 +2987,7 @@ function googleSettings(open) {
 function renderSettings() {
   const googleSettingsOpen = $("google-map-settings")?.open;
   $("content").innerHTML =
-    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${tramTools.settingsHTML()}${japanDepth.settingsSection()}${googleSettings(googleSettingsOpen)}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.10.0<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
+    `<section class="narrow"><h1>Your notebook, backed up</h1><p>Local storage is not a backup. Export your trips and saved places before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${tramTools.settingsHTML()}${japanDepth.settingsSection()}${googleSettings(googleSettingsOpen)}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner 2.10.1<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
   tramTools.wireSettings();
   $("google-key-form").onsubmit = event => {
     event.preventDefault();
@@ -3043,38 +3045,157 @@ function thresholds() {
       }),
   );
 }
-function importDialog() {
+const lastUpdatedTripKey = "japan-last-trip-update-context";
+function importDialog(cachedData = null, offerUpdate = screen === "settings") {
   modal(
     "Import a backup or saved flags",
-    `<p>Choose a versioned JSON file. You will see a preview before anything changes. Existing trips are never silently overwritten.</p><label>JSON file<input id="import-file" type="file" accept=".json,application/json"></label><p id="form-error" role="alert" class="form-error"></p><div id="import-preview"></div>`,
+    `<p>Choose a versioned JSON file and review it before saving.</p><label>JSON file<input id="import-file" type="file" accept=".json,application/json"></label><p id="form-error" role="alert" class="form-error"></p><div id="import-preview"></div>`,
     () => {
-      $("import-file").onchange = async (e) => {
+      const input = $("import-file"), output = $("import-preview"), status = $("form-error");
+      let generation = 0;
+      const draw = async load => {
+        const request = ++generation;
+        const current = () => input.isConnected && $("dialog").open && request === generation;
+        output.replaceChildren();
+        status.textContent = "";
         try {
-          const file = e.target.files[0];
-          if (!file) return;
-          if (file.size > 20 * 1024 * 1024) throw Error("File exceeds 20 MiB.");
-          const data = parseJSON(await file.text()),
-            preview = await previewImport(state, data);
-          $("import-preview").innerHTML =
-            `<div class="notice">${esc(preview.message)}</div>${preview.already ? "<p>This exact file was already imported. Repeating it will not change your edits.</p>" : ""}${preview.legacy ? '<label>For differing flags<select id="flag-policy"><option value="merge">Keep any true flag (recommended)</option value="local">Keep current values</option value="incoming">Use incoming values</option></select></label>' : ""}<button id="confirm-import" class="primary">${preview.already ? "Close" : "Confirm import"}</button>`;
-          $("confirm-import").onclick = async () => {
-            if (preview.already) {
-              close();
-              return;
+          const data = await load();
+          if (!data) return;
+          const preview = await previewImport(state, data);
+          if (!current()) return;
+          const sources = new Set((data.trips ?? []).map(trip => trip.id));
+          const matches = new Map();
+          if (offerUpdate && !preview.legacy) {
+            const recorded = await Promise.all(state.trips.map(async saved => [saved, await DB.readTripUpdateBase(saved.id)]));
+            if (!current()) return;
+            for (const [saved, record] of recorded) {
+              if (sources.has(saved.id)) matches.set(saved.id, {saved, record});
+              else if (sources.has(record?.related?.sourceTripId)) matches.set(saved.id, {saved, record, related:true});
             }
+          }
+          const viewed = trip();
+          const matchingOpen = matches.has(activeTrip);
+          const possibleLink = offerUpdate && !preview.legacy && viewed && !matchingOpen &&
+            data.trips.some(fileTrip => fileTrip.createdAt === viewed.createdAt);
+          output.innerHTML = `<div class="notice">${esc(preview.message)}</div>
+            ${preview.already ? `<p>This exact file was already imported.${matches.size ? " You can still review an update to a matching trip." : ""}</p>` : ""}
+            ${preview.legacy ? '<label>For differing flags<select id="flag-policy"><option value="merge">Keep any true flag (recommended)</option><option value="local">Keep current values</option><option value="incoming">Use incoming values</option></select></label>' : ""}
+            ${matches.size ? `<label><span id="import-target-label">Saved trip to update</span><select id="import-update-target" aria-labelledby="import-target-label">
+              ${possibleLink ? '<option value="" selected>Choose a saved trip</option>' : ""}
+              ${[...matches.values()].map(({saved, related}) =>
+              `<option value="${esc(saved.id)}" ${saved.id === activeTrip ? "selected" : ""}>${esc(saved.name)} · ${esc(saved.startDate)} through ${esc(saved.endDate)}${related ? " · linked copy" : ""}</option>`).join("")}</select></label>
+              ${!matchingOpen && viewed ? `<p class="notice">You last viewed ${esc(viewed.name)}. Review the destination above before updating.</p>` : ""}
+              <p>An in-place update changes the selected saved trip. A regular import makes copies of differing matches.</p>` : ""}
+            ${possibleLink ? `<p>To update ${esc(viewed.name)} from this file, verify its earlier import first.</p>` : ""}
+            <div class="actions">${possibleLink ? '<button id="link-trip-update" class="primary">Verify the selected copy</button>' : ""}
+            ${matches.size ? '<button id="review-trip-update" class="primary">Review trip update</button>' : ""}
+            <button id="confirm-import" ${matches.size || possibleLink ? "" : 'class="primary"'}>${preview.already ? "Close" :
+              preview.conflicts && offerUpdate ? "Import as copy" : "Confirm import"}</button></div>`;
+          const back = () => importDialog(data, offerUpdate);
+          if ($("link-trip-update")) $("link-trip-update").onclick = () => verifyCopyForUpdate(data, viewed, back);
+          if ($("review-trip-update")) $("review-trip-update").onclick = () => {
+            const tripId = $("import-update-target").value;
+            try {
+              if (pending) throw Error("Resolve the pending save error before updating a trip.");
+              const target = matches.get(tripId);
+              if (!target) throw Error("Choose the saved trip you want to review.");
+              if (target.related) reviewLinkedCopy(data, tripId, target.record, back);
+              else reviewTripUpdate(data, tripId, target.record?.trip ? target.record : null, back, target.record);
+            } catch (err) {
+              if (current()) status.textContent = err.message;
+            }
+          };
+          $("confirm-import").onclick = async () => {
+            if (preview.already) return close();
             const policy = $("flag-policy")?.value || "merge";
-            if (await commit((s) => mergeImport(s, data, preview, policy))) {
+            const tripUpdateBases = preview.legacy ? [] : data.trips
+              .filter(trip => !state.trips.some(saved => saved.id === trip.id))
+              .map(trip => [trip.id, tripUpdateBase(data, trip.id)]);
+            if (await commit(s => mergeImport(s, data, preview, policy, (copyId, link) => {
+              const projected = projectCopyUpdate(data, copyId, link);
+              tripUpdateBases.push([copyId, { related: {
+                ...projected.link, baseline:tripUpdateBase(projected.data, copyId),
+              } }]);
+            }), { tripUpdateBases })) {
               close();
               toast("Import saved. Existing edits preserved.");
             }
           };
         } catch (err) {
-          formError(err);
-          $("import-preview").replaceChildren();
+          if (current()) status.textContent = err.message;
         }
       };
+      input.onchange = () => draw(async () => {
+        const file = input.files[0];
+        if (!file) return null;
+        if (file.size > 20 * 1024 * 1024) throw Error("File exceeds 20 MiB.");
+        return parseJSON(await file.text());
+      });
+      if (cachedData) void draw(() => cachedData);
     },
   );
+}
+
+function verifyCopyForUpdate(data, viewed, back) {
+  modal("Verify the selected copy", `<form class="plan-dialog">
+    <p><strong>Destination</strong> ${esc(viewed.name)} · ${esc(viewed.startDate)} through ${esc(viewed.endDate)}</p>
+    <p>Choose the earlier JSON file you previously imported to create this copy. Planner checks its import history, trip identity and visit matches before showing the update.</p>
+    <label>Earlier import file<input name="earlier" type="file" accept=".json,application/json" required></label>
+    <div class="actions"><button id="trip-link-back" type="button">Back to import</button></div>
+    ${footer("Verify and review update")}</form>`, () => {
+    const editor = $("dialog-body").querySelector("form");
+    $("trip-link-back").onclick = back;
+    setupForm(async values => {
+      const file = values.get("earlier");
+      if (!file?.size || file.size > 20 * 1024 * 1024) throw Error("Choose a backup JSON file under 20 MiB.");
+      const earlier = parseJSON(await file.text());
+      const previous = await previewImport(state, earlier);
+      if (!editor.isConnected || !$("dialog").open) return;
+      if (previous.legacy || !previous.already)
+        throw Error("This exact earlier file does not appear in this browser’s import history.");
+      const sourceIds = new Set(earlier.trips.filter(trip => trip.createdAt === viewed.createdAt).map(trip => trip.id));
+      const common = data.trips.filter(trip => sourceIds.has(trip.id));
+      if (common.length !== 1) throw Error("The earlier file does not identify one matching source trip for this copy.");
+      const link = legacyCopyLink(state, earlier, viewed.id, common[0].id);
+      const projected = projectCopyUpdate(earlier, viewed.id, link);
+      const old = await DB.readTripUpdateBase(viewed.id);
+      if (editor.isConnected && $("dialog").open) reviewLinkedCopy(data, viewed.id, {
+        ...old, related: { ...projected.link, baseline:tripUpdateBase(projected.data, viewed.id) },
+      }, back);
+    });
+  });
+}
+
+function reviewLinkedCopy(data, copyId, record, back) {
+  const projected = projectCopyUpdate(data, copyId, record.related);
+  reviewTripUpdate(projected.data, copyId, record.related.baseline, back, record, projected.link);
+}
+
+function reviewTripUpdate(data, tripId, baseline, back, record, link = null) {
+  const reviewed = state;
+  const review = previewTripUpdate(reviewed, data, tripId, baseline, new Set(link?.protectedLocal));
+  review.linkedCopy = !!link;
+  const previousDay = activeTrip === tripId ? day() : null;
+  showTripUpdate(review, {
+    modal, esc, back,
+    exportBefore: () => download(backup(reviewed, tripId), "japan-trip-before-update.json"),
+    async apply(choices) {
+      if (state !== reviewed) throw Error("This trip changed after you opened the preview. Go back and review it again.");
+      if (pending) throw Error("Resolve the pending save error before updating a trip.");
+      const latest = review.older ? baseline : tripUpdateBase(data, tripId);
+      const stored = link ? { ...record, related:{ ...link, baseline:latest } } : { ...record, ...latest };
+      const tripUpdateBases = [[tripId, stored]];
+      if (!await commit(s => applyTripUpdate(s, data, review, choices), { redraw:false, tripUpdateBases })) return false;
+      const selectedDay = dayAfterTripUpdate(state, tripId, previousDay);
+      close();
+      if (selectedDay) {
+        try { localStorage.setItem(lastUpdatedTripKey, JSON.stringify({ tripId, dayId:selectedDay.id })); } catch {}
+        openDay(selectedDay.id);
+      }
+      toast("Updated this trip" + (previousDay && selectedDay?.date !== previousDay.date ? " · opened the nearest saved date." : "."));
+      return true;
+    },
+  });
 }
 function refreshPreview() {
   const changes = state.places
@@ -3703,7 +3824,7 @@ try {
   state = await DB.load();
   await tramTools.load();
   try {
-    const context = JSON.parse(pref("japan-trip-context"));
+    const context = JSON.parse(pref("japan-trip-context") || localStorage.getItem(lastUpdatedTripKey));
     activeTrip = context?.tripId ?? null;
     activeDay = context?.dayId ?? null;
   } catch {}

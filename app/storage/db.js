@@ -86,7 +86,9 @@ export async function load() {
   revision = row.revision;
   return validateState(row.value);
 }
-export function save(value) {
+const updateBaseKey = tripId => "trip-update-base:" + tripId;
+export const readTripUpdateBase = tripId => read("state", updateBaseKey(tripId));
+export function save(value, tripUpdateBases = []) {
   validateState(value);
   return new Promise((resolve, reject) => {
     const tx = db.transaction("state", "readwrite"),
@@ -100,6 +102,11 @@ export function save(value) {
         tx.abort();
         return;
       }
+      const tripIds = new Set(value.trips.map(trip => trip.id));
+      for (const trip of r.result?.value.trips ?? [])
+        if (!tripIds.has(trip.id)) store.delete(updateBaseKey(trip.id));
+      for (const [tripId, baseline] of tripUpdateBases)
+        if (tripIds.has(tripId)) store.put(baseline, updateBaseKey(tripId));
       const owners = new Set(value.stops.map(stop => ownerKey(stop.tripId, stop.id)));
       if (r.result?.value.stops.some(stop => !owners.has(ownerKey(stop.tripId, stop.id)))) {
         const photos = store.get(photoJournalKey);

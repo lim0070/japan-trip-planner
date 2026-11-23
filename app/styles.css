@@ -1808,3 +1808,12 @@ body[data-theme="dark"] .discover-stage #map.regional-map-active {
 .timetable-evidence small, .timetable-review small { display: block; }
 .timetable-evidence ol { padding-inline-start: 22px; }
 .timetable-evidence li { margin-bottom: 7px; }
+
+.trip-update-list { list-style: none; margin: 12px 0; padding: 0; }
+.trip-update-row { border-top: 1px solid var(--line); padding: 12px 0; }
+.trip-update-row h3, .trip-update-row h4 { margin: 0 0 4px; }
+.trip-update-values { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.trip-update-values > div { border: 1px solid var(--line); border-radius: 8px; padding: 10px; overflow-wrap: anywhere; }
+.trip-update-values pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.trip-update-text { white-space: pre-wrap; }
+@media (max-width: 520px) { .trip-update-values { grid-template-columns: minmax(0, 1fr); } }
