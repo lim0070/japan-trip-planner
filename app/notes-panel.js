@@ -4,7 +4,7 @@ import { changeNote, readNotes } from "./storage/db.js";
 const sessionKey = "japan-notes-editor";
 const newKey = ":new";
 
-export function createNotesPanel({ esc }) {
+export function createNotesPanel({ esc, findBranches }) {
   let root, notes = null, editor = null, active = null;
   let query = "", issue = "", saving = false, draftsStored = true, readGeneration = 0;
   let conflicts = false, refreshList = null;
@@ -104,6 +104,7 @@ export function createNotesPanel({ esc }) {
         <p class="form-error" role="alert" tabindex="-1">${esc(issue)}</p>
         <div class="actions">
           <button class="primary" type="submit" ${saving || conflicts ? "disabled" : ""}>Save note</button>
+          <button type="button" data-note-find>Find branches near itinerary</button>
           ${editor.base && !conflicts ? '<button type="button" class="danger" data-note-delete>Delete note</button>' : ""}
         </div>
         ${conflicts ? `<div class="actions note-conflict">
@@ -140,6 +141,9 @@ export function createNotesPanel({ esc }) {
       root.querySelector("#note-search")?.focus();
     };
     const remove = root.querySelector("[data-note-delete]");
+    root.querySelector("[data-note-find]").onclick = () => findBranches({
+      title: title.value, body: body.value, selected: body.value.slice(body.selectionStart, body.selectionEnd),
+    });
     if (remove) remove.onclick = () => {
       if (confirm("Delete this note and its draft from this browser?")) void save("delete");
     };

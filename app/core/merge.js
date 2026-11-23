@@ -6,6 +6,7 @@ import {
   validateNotes,
   validateState,
 } from "./contracts.js";
+export const appVersion = "2.11.0";
 export function backup(s, tripId = null, aliases = new Map(), notes = []) {
   const data = clone(s);
   delete data.imports;
@@ -37,7 +38,7 @@ export function backup(s, tripId = null, aliases = new Map(), notes = []) {
     kind: tripId ? "trip" : "full",
     exportId: id(),
     exportedAt: now(),
-    appVersion: "2.10.3",
+    appVersion,
     ...data,
     ...(!tripId && notes.length ? { notes: clone(validateNotes(notes)) } : {}),
   };

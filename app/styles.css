@@ -1865,3 +1865,48 @@ body[data-theme="dark"] .discover-stage #map.regional-map-active {
 .trip-update-values pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 .trip-update-text { white-space: pre-wrap; }
 @media (max-width: 520px) { .trip-update-values { grid-template-columns: minmax(0, 1fr); } }
+
+.fit-stop-form > p { margin: 8px 0; }
+.fit-stop-form fieldset {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  min-width: 0;
+}
+.fit-stop-form legend { padding-inline: 5px; font-weight: 650; }
+.fit-stop-form .grid2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); }
+.fit-pick { display: grid; gap: 6px; margin-block: 10px; }
+.fit-pick button { text-align: start; }
+.fit-pick small { display: block; color: var(--muted); }
+.fit-stop-report { border-top: 1px solid var(--line); margin-top: 14px; }
+.fit-times, .fit-comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 10px; }
+.fit-times > div, .fit-comparison > section { background: var(--soft); border-radius: 8px; padding: 9px; }
+.fit-times dt { color: var(--muted); }
+.fit-times dd { margin: 0; font-variant-numeric: tabular-nums; font-weight: 650; }
+.fit-comparison h4 { margin: 0 0 8px; }
+.fit-comparison ol { margin: 0; padding-left: 21px; }
+.fit-comparison li { padding: 4px 2px; overflow-wrap: anywhere; }
+.fit-comparison li > span, .fit-comparison small { display: block; }
+.fit-comparison small { color: var(--muted); }
+.fit-new-stop { border-left: 2px solid var(--water); padding-left: 6px !important; }
+@media (max-width: 480px) {
+  .fit-comparison { grid-template-columns: 1fr; }
+}
+
+.trip-check-day { padding: 8px 0; border-top: 1px solid var(--line); }
+.trip-check-day h3 { margin: 0 0 6px; }
+.trip-check-day ul, .branch-results { list-style: none; padding: 0; margin: 0; }
+.trip-check-day li, .branch-results li { padding: 8px 0; border-bottom: 1px solid var(--line); }
+.trip-check-day small, .branch-results small { display: block; color: var(--muted); }
+.branch-results .actions { margin-top: 5px; }
+
+.app-version-panel {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 10px 12px;
+  margin: 0 0 16px;
+}
+.app-version-panel p { margin: 0 0 6px; }
+.app-version-panel p:last-child { margin: 6px 0 0; }
+.app-version-panel p:empty { display: none; }

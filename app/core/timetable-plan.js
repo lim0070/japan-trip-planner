@@ -42,14 +42,20 @@ export function timetableDay(snapshot, settings, router, defaultMode) {
     const booking = settings.constraints[id]?.fixedStartMinute ?? day.planVisitStarts?.[id];
     const segment = segmentsByPair.get(from?.id + "|" + id);
     const anchor = isEnd ? settings.endAnchor : from?.id === START_ANCHOR ? settings.startAnchor : null;
-    const mode = segment?.mode ?? anchor?.mode ?? defaultMode;
+    const override = from && settings.travelOverrides?.get(from.id + "|" + id);
+    const mode = override?.mode ?? segment?.mode ?? anchor?.mode ?? defaultMode;
     const accessLimit = Math.min(limit - (stop?.durationMinutes ?? 0), booking ?? Infinity);
     const ready = earliest;
-    const entered = from && ready !== null && enteredRoute(segment, anchor, isEnd ? from.id === START_ANCHOR ? undefined : from.id : id, from, to, day.date, ready);
+    const protectedRide = override?.protectedRide;
+    const entered = protectedRide ? (protectedRide.caught && {
+      kind: protectedRide.check.provider, check: protectedRide.check, arrival: protectedRide.arrival,
+    }) : from && ready !== null && (Number.isInteger(override?.minutes)
+      ? { kind: "manual", arrival: ready + override.minutes }
+      : enteredRoute(segment, anchor, isEnd ? from.id === START_ANCHOR ? undefined : from.id : id, from, to, day.date, ready));
     const onboard = from && (travelVisit(from.place) || travelVisit(to.place));
     // A recorded ride is already part of the day. Never add another
     // station-to-station journey on either side of it automatically.
-    const evidence = from && !onboard && mode !== "walk"
+    const evidence = from && !onboard && mode !== "walk" && !protectedRide && !Number.isInteger(override?.minutes)
       ? router(from.place, to.place, day.date, ready, accessLimit, { atStopSince, incoming, busOnly: mode === "drive" })
       : null;
     const useTransit = Boolean(evidence && evidence.reason !== "mode");
@@ -78,14 +84,14 @@ export function timetableDay(snapshot, settings, router, defaultMode) {
         boardAfter = journey.legs[0].depart + 1;
       }
     }
-    const rough = from && ready !== null && settings.allowEstimates
+    const rough = from && ready !== null && !protectedRide && (settings.allowEstimates || (settings.walkEstimates && mode === "walk"))
       ? M.estimate(from.place, to.place, mode) : null;
     const same = anchor && M.sameRoutingPlace(from.place, to.place);
     const mayReplace = !entered || (settings.replaceManual && entered.kind === "manual");
     const checked = match && mayReplace ? timetableCheck(match, M.routeEndpoints(from.place, to.place)) : null;
 
     const arrival = !from ? ready : ready === null ? null : checked ? match.arrival :
-      entered ? entered.arrival : same ? ready : rough === null ? null : ready + rough;
+      entered ? entered.arrival : same && !protectedRide ? ready : rough === null ? null : ready + rough;
     const usesRough = Boolean(from && !checked && !entered && !same && rough !== null);
     const effective = stop && { ...stop, fixedStartMinute: booking };
     const fitted = arrival === null ? booking ?? null : isEnd ? arrival :
@@ -103,7 +109,7 @@ export function timetableDay(snapshot, settings, router, defaultMode) {
           platform: checked ? match?.platform : undefined } : null;
     rows.push({
       from, to, stop, mode, ready, arrival, start, departure, booking, limit,
-      checked: conflict ? null : checked, entered, evidence, alternatives, laterTrams, onboard, useTransit, usesRough,
+      checked: conflict ? null : checked, entered, evidence, alternatives, laterTrams, onboard, useTransit, usesRough, protectedRide,
       conflict, knownInTimeline: !usesRough && arrival !== null,
     });
     from = to;

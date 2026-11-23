@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Open Notes · Japan Trip Planner</title>
+  <style>
+    body { margin: 12vh auto; padding: 0 20px; max-width: 38rem; font: 1rem/1.6 system-ui, sans-serif; }
+    h1 { line-height: 1.15; }
+    a { display: inline-block; padding: 9px 14px; background: #246b72; color: white; border-radius: 6px; font-weight: 650; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Open Notes</h1>
+    <p>Notes are available in Japan Trip Planner 2.10.3 and later.</p>
+    <p>If the link opens the map in an older installation, finish your edits and choose <strong>Save and reload</strong> when the update appears. Planner will reopen at Notes. You can keep other Planner tabs open while you finish their edits.</p>
+    <a id="open-notes" href="./app/#notes">Open Notes in Planner</a>
+    <p id="notes-handoff" role="status"></p>
+  </main>
+  <script>
+    const link = document.getElementById("open-notes");
+    link.addEventListener("click", async event => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0 ||
+          !navigator.onLine || !("serviceWorker" in navigator)) return;
+      event.preventDefault();
+      document.getElementById("notes-handoff").textContent = "Checking for a Planner update…";
+      let timer;
+      try {
+        const update = navigator.serviceWorker.getRegistration(link.href).then(registration => registration?.update());
+        await Promise.race([update, new Promise(resolve => { timer = setTimeout(resolve, 6000); })]);
+      } catch {} finally { clearTimeout(timer); location.assign(link.href); }
+    });
+  </script>
+</body>
+</html>
