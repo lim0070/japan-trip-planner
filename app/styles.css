@@ -1910,3 +1910,29 @@ body[data-theme="dark"] .discover-stage #map.regional-map-active {
 .app-version-panel p { margin: 0 0 6px; }
 .app-version-panel p:last-child { margin: 6px 0 0; }
 .app-version-panel p:empty { display: none; }
+
+.spending-panel > .toolbar { margin-bottom: 8px; }
+.spending-panel > .actions { margin-block: 8px; }
+.spending-panel [aria-pressed="true"] { background: var(--soft); color:var(--water); border-color:var(--water); }
+.spending-records, .spending-breakdown, .spending-balances { list-style:none; margin:10px 0; padding:0; }
+.spending-records button, .spending-breakdown button { width:100%; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:3px 10px; text-align:start; }
+.spending-records li, .spending-breakdown li, .spending-balances li { margin:0 0 8px; }
+.spending-records small, .spending-balances small { display:block; color:var(--muted); grid-column:1/-1; overflow-wrap:anywhere; }
+.spending-breakdown progress { width:100%; height:9px; accent-color:var(--water); }
+.spending-balances li { padding:8px; border:1px solid var(--line); border-radius:8px; }
+.spending-balances button { margin-top:6px; }
+#spending-expense fieldset { min-width:0; border:1px solid var(--line); border-radius:8px; margin:10px 0; padding:10px; }
+#spending-expense .grid2 { grid-template-columns:repeat(auto-fit,minmax(min(100%,145px),1fr)); }
+.spending-shares > div { display:grid; grid-template-columns:minmax(68px,1fr) minmax(65px,100px) minmax(60px,auto); align-items:center; gap:5px; }
+.spending-shares [data-exact][hidden] { display:none; }
+.spending-shares output { grid-column:3; text-align:end; font-variant-numeric:tabular-nums; }
+#spending-pictures > div { margin:10px 0; overflow:auto; }
+#spending-pictures button:first-child { display:block; margin-bottom:4px; }
+#spending-pictures img { display:block; max-width:180px; max-height:170px; }
+#spending-pictures .receipt-zoom img { max-width:none; max-height:none; width:min(1050px,125vw); }
+.spending-today { border-left:3px solid var(--water); padding-left:10px; }
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
+@media(max-width:440px) {
+  .bottom-nav { gap:0; padding-inline:4px; }
+  .bottom-nav a { min-width:44px; font-size:10px; }
+}

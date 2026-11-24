@@ -1,5 +1,6 @@
 import { dates, segmentKey } from "./model.js";
 import { noteLimits } from "./notes.js";
+import { validateSpendingBackups } from "./spending-contract.js";
 const fail = (m) => {
   throw Error(m);
 };
@@ -626,7 +627,7 @@ export function validateBackup(b) {
       appVersion: nonempty,
     })(
       Object.fromEntries(
-        Object.entries(b).filter(([k]) => k !== "dataLicenses" && k !== "notes"),
+        Object.entries(b).filter(([k]) => k !== "dataLicenses" && k !== "notes" && k !== "spending"),
       ),
     ) ||
     (Object.hasOwn(b, "dataLicenses") && !licenseTexts(b.dataLicenses))
@@ -635,6 +636,10 @@ export function validateBackup(b) {
   if (Object.hasOwn(b, "notes")) {
     if (b.kind !== "full") fail("Only full notebook backups may contain personal notes.");
     validateNotes(b.notes);
+  }
+  if (Object.hasOwn(b,"spending")) {
+    if (b.kind !== "full") fail("Only private full backups include spending.");
+    validateSpendingBackups(b.spending,b.trips);
   }
   validateState({
     ...Object.fromEntries(Object.keys(stateFields).map((k) => [k, b[k]])),

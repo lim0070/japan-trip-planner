@@ -28,17 +28,18 @@ function chosenFile(form, size, description) {
   return file;
 }
 
-async function journalImage(file) {
+export async function journalImage(file, limits = photoLimits) {
+  if (!file?.size || file.size > limits.inputBytes) throw Error("Choose a smaller JPEG or PNG image.");
   const bytes = new Uint8Array(await file.arrayBuffer());
   const dimensions = photoDimensions(bytes);
-  if (!dimensions?.width || !dimensions.height || dimensions.width * dimensions.height > photoLimits.maxPixels)
+  if (!dimensions?.width || !dimensions.height || dimensions.width * dimensions.height > limits.maxPixels)
     throw Error("Choose a JPEG or PNG photo with up to 24 megapixels.");
   const url = URL.createObjectURL(new Blob([bytes], { type: dimensions.type }));
   try {
     const original = new Image();
     original.src = url;
     await original.decode();
-    const scale = Math.min(1, photoLimits.maxSide / Math.max(original.naturalWidth, original.naturalHeight));
+    const scale = Math.min(1, limits.maxSide / Math.max(original.naturalWidth, original.naturalHeight));
     const canvas = document.createElement("canvas");
     canvas.width = Math.max(1, Math.round(original.naturalWidth * scale));
     canvas.height = Math.max(1, Math.round(original.naturalHeight * scale));
@@ -48,7 +49,7 @@ async function journalImage(file) {
     context.drawImage(original, 0, 0, canvas.width, canvas.height);
     for (const quality of [0.84, 0.70, 0.54]) {
       const image = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", quality));
-      if (image?.type === "image/jpeg" && image.size <= photoLimits.imageBytes) {
+      if (image?.type === "image/jpeg" && image.size <= limits.imageBytes) {
         return privateJpeg(new Uint8Array(await image.arrayBuffer()));
       }
     }

@@ -1,4 +1,5 @@
 import * as M from "./core/model.js";
+import { validateSpendingBackups } from "./core/spending-contract.js";
 import { canonical, parseJSON, validateBackup, validateNotes, validateState } from "./core/contracts.js";
 import { mergeImport, previewImport } from "./core/merge.js";
 import { transitStatus } from "./transit-tools.js";
@@ -170,17 +171,21 @@ export async function verifyBackupRestore(data, readBack = reopenScratch) {
   validateBackup(data);
   const restored = M.blank();
   mergeImport(restored, data, await previewImport(restored, data));
-  const { notes = [], ...reread } = await readBack(
-    data.notes ? { ...restored, notes: M.clone(data.notes) } : restored,
-  );
+  const { notes = [], spending = [], ...reread } = await readBack({
+    ...restored, ...(data.notes ? {notes:M.clone(data.notes)} : {}),
+    ...(data.spending ? {spending:M.clone(data.spending)} : {}),
+  });
   validateState(reread);
   validateNotes(notes);
   if (canonical(restoreContents(reread)) !== canonical(restoreContents(data)))
     throw Error("The restored trip records differed from the file.");
   if (canonical(notes) !== canonical(data.notes ?? []))
     throw Error("The restored personal notes differed from the file.");
+  if (canonical(validateSpendingBackups(spending,reread.trips)) !== canonical(data.spending ?? []))
+    throw Error("The restored spending differed from the file.");
   return { trips: reread.trips.length, visits: reread.stops.length,
-    ...(notes.length ? { notes: notes.length } : {}) };
+    ...(notes.length ? { notes: notes.length } : {}),
+    ...(spending.length ? { spending: spending.length } : {}) };
 }
 
 const noteCount = result => result.notes ? ` and ${result.notes} personal ${result.notes === 1 ? "note" : "notes"}` : "";
@@ -199,7 +204,7 @@ function stamp(at) {
 }
 
 export function createDayTools({
-  state, day, trip, selectDay, addStop, commit, modal, close, setupForm, footer, esc, copy, toast, render,
+  state, day, trip, selectDay, addStop, commit, modal, close, setupForm, footer, esc, copy, toast, render, spendingToday,
 }) {
   let storageStatus = "Use the button below to check whether this browser grants persistent storage.";
   const storage = navigator.storage;
@@ -285,7 +290,12 @@ export function createDayTools({
       ${current.stop.entrance?.note ? `<p>Entrance · ${esc(current.stop.entrance.note)}</p>` : ""}
       <div class="actions"><button id="today-address">Address card</button><button id="today-visit">Show visit</button></div>`
       : `<p>${target.stopIds.length ? "The scheduled visits have ended." : "There are no visits scheduled for today."}</p>`;
-    modal("Today in Japan", header + progress + booking + (checks ? `<h3>Checks to review</h3><ul>${checks}</ul>` : ""), () => {
+    modal("Today in Japan", header + '<div id="today-spending"></div>' + progress + booking + (checks ? `<h3>Checks to review</h3><ul>${checks}</ul>` : ""), () => {
+      const spot = document.getElementById("today-spending");
+      const owner = existing.trips.find(item=>item.id===target.tripId);
+      if (owner && spendingToday) void spendingToday(owner,now.date).then(result=>{
+        if (spot.isConnected) spot.innerHTML=result;
+      }).catch(()=>{if(spot.isConnected) spot.textContent="Daily allowance could not be loaded.";});
       if (!current) return;
       document.getElementById("today-address").onclick = () => showAddress(current.stop.id);
       document.getElementById("today-visit").onclick = () => {
@@ -384,6 +394,7 @@ export function createDayTools({
       saveStatus(restoreKey, { at: M.now(), ...result });
       render();
       modal("Restore check passed", `<p>Imported and reopened ${result.trips} trips, ${result.visits} visits${noteCount(result)} from temporary storage.</p>
+        ${result.spending ? `<p>Verified spending for ${result.spending} ${result.spending===1?"trip":"trips"}.</p>` : ""}
         <p>Repeat the check on the device you plan to use.</p><button id="done-restore-check">Done</button>`,
         () => { document.getElementById("done-restore-check").onclick = close; });
     }));

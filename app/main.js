@@ -3,6 +3,8 @@ import { createTramTools } from "./hakodate-tram-tools.js";
 import { applyTripUpdate, dayAfterTripUpdate, legacyCopyLink, previewTripUpdate, projectCopyUpdate, tripUpdateBase } from "./core/trip-update.js";
 import { showTripUpdate } from "./trip-update-ui.js";
 import { createNotesPanel } from "./notes-panel.js";
+import { remapSpending } from "./core/spending-contract.js";
+import { createSpendingPanel } from "./spending-panel.js";
 import { createFitStopPanel } from "./fit-stop-panel.js";
 import { createBranchFinder } from "./itinerary-branches.js";
 import { openTripChecks } from "./trip-checks-panel.js";
@@ -138,7 +140,7 @@ let inspectorShown = false;
 let pinnedSavedPlace = null;
 const collapsedPanels = new Set();
 const compactMap = matchMedia("(max-width:760px)");
-const tabTitles = { trips: "Trips", day: "Itinerary", discover: "Maps & shopping", spots: "Saved spots", notes: "Notes", settings: "Settings" };
+const tabTitles = { trips: "Trips", day: "Itinerary", discover: "Maps & shopping", spots: "Saved spots", notes: "Notes", spending: "Spending", settings: "Settings" };
 let discoverBounds = [];
 let fitDiscoverSearch = false;
 let mapQuery = "", mapSearchTypos = false, mapSearchLocation = null;
@@ -160,15 +162,18 @@ const sourcePackageNotices = {},
   sourcePackageRoots = {};
 let sourceLicenseTexts = {},
   shoppingAliases = new Map();
-function backup(s, tripId = null, notes = []) {
+function backup(s, tripId = null, notes = [], spending = []) {
   const data = {
-    ...makeBackup(s, tripId, shoppingAliases, notes),
+    ...makeBackup(s, tripId, shoppingAliases, notes, spending),
     dataLicenses: { ...(s.dataLicenses || {}), ...sourceLicenseTexts },
   };
   parseJSON(JSON.stringify(data)); // Keep exports within the unchanged reimport guard.
   return data;
 }
-const fullBackup = async s => backup(s, null, await DB.readNotes());
+async function fullBackup(s) {
+  const [notes, spending] = await Promise.all([DB.readNotes(),DB.spendingBackups(s.trips.map(trip=>trip.id))]);
+  return backup(s,null,notes,spending);
+}
 
 const layerChoiceKey = "japan-trip-layer-choices";
 const choiceScrollObserver = new ResizeObserver(entries => {
@@ -263,7 +268,7 @@ function theme() {
       : state.settings.theme;
   document.documentElement.dataset.theme = document.body.dataset.theme;
 }
-async function commit(fn, { redraw = true, tripUpdateBases = [], notesToMerge = [] } = {}) {
+async function commit(fn, { redraw = true, tripUpdateBases = [], notesToMerge = [], spendingToMerge = [] } = {}) {
   if (busy) {
     toast("Please wait for the current save.");
     return false;
@@ -280,7 +285,7 @@ async function commit(fn, { redraw = true, tripUpdateBases = [], notesToMerge = 
     M.reconcile(next);
     validateState(next);
     pending = next;
-    await DB.save(next, tripUpdateBases, notesToMerge);
+    await DB.save(next, tripUpdateBases, notesToMerge, spendingToMerge);
     state = next;
     pending = null;
     $("error").hidden = true;
@@ -437,6 +442,10 @@ function openDay(id, stopId = null) {
 const dayTools = createDayTools({
   state: () => state, day, trip, selectDay: openDay, addStop: addDialog,
   commit, modal, close, setupForm, footer, esc, copy, toast, render,
+  spendingToday: (trip,date)=>spendingPanel.today(trip,date),
+});
+const spendingPanel=createSpendingPanel({ getState:()=>state,getTrip:trip,getDay:day,modal,close,esc,toast,
+  selectTrip(id) {activeTrip=id;pickContext();render();},
 });
 const phonePlan = createPhonePlan({
   getState: () => state, getDay: day, commit, modal, footer, setupForm, close, esc, render, toast,
@@ -549,7 +558,7 @@ function render() {
   for (const a of document.querySelectorAll("[data-tab]"))
     a.setAttribute("aria-current", a.dataset.tab === screen ? "page" : "false");
   ({ trips: renderTrips, day: renderDay, discover: renderDiscover, spots: renderSpots,
-    notes: () => notesPanel.render($("content")), settings: renderSettings })[screen]();
+    notes: () => notesPanel.render($("content")), spending:()=>spendingPanel.render($("content")), settings: renderSettings })[screen]();
   const matches = screen === "discover" ? discoverMatches : matchDiscovery().rows;
   initMap(matches.map(({ p, cuisine }) => ({ p, id: p.key, cuisine })));
   renderPlaceInspector();
@@ -1244,7 +1253,7 @@ function visitHTML(row, d, i) {
     p = M.visitPlace(st),
     current = allPlaces().find((x) => x.key === p.key),
     missing = !p.key.startsWith("manual:") && !current;
-  return `<article class="visit ${selected === st.id ? "selected" : ""}" data-stop="${st.id}"><div class="visit-head"><span class="visit-number">${i + 1}</span><div class="visit-title"><h3><button class="name-button" data-action="edit-stop" data-id="${st.id}" lang="ja">${esc(M.name(p))}</button></h3><div class="time">${row.arrival === null ? "Time unknown" : M.timeLabel(d.date, row.visitStart) + " – " + M.timeLabel(d.date, row.departure)}</div><small>${st.durationMinutes} min visit${st.planLocked ? " · Position locked for auto-plan" : ""}${st.fixedStartMinute !== undefined ? " · Booking " + hhmm(st.fixedStartMinute) : ""}${row.arrival !== null && row.visitStart > row.arrival ? " · Arrive " + M.timeLabel(d.date, row.arrival) : ""}</small>${visitHoursHTML(p, d.date, row, st.hoursCheck?.date === d.date ? "" : "Hours unverified")}${hoursCheckSummary(st.hoursCheck, d.date)}</div><button class="drag-handle" aria-label="Drag visit ${i + 1} to reorder" data-drag="${st.id}">⠿</button></div><p>${isOSM(p) ? "Address reference (may be partial): " : ""}${esc(p.address.ja || "Japanese address not supplied")}</p><div><span class="badge ${M.located(p) && p.location.confidence === "high" ? "" : "warn"}">${M.located(p) ? p.location.confidence + " confidence pin" : "Location unknown · list only"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${missing ? '<span class="badge warn">Not in current source</span>' : ""}</div>${p.operatingStatus.note ? `<p class="notice">${esc(p.operatingStatus.note)}</p>` : ""}${st.notes ? `<p>${esc(st.notes)}</p>` : ""}${foodNotice(p, current)}${entranceSummary(st)}${localPlanning.visitSection(st)}${japanDepth.visitSection(st,p)}${sourceAccessHTML(p, visitVersion(state, st))}<div class="actions">${together.visitTools(st)}<button data-action="check-visit-hours" data-id="${st.id}">Check hours</button><button data-action="edit-entrance" data-id="${st.id}">${st.entrance ? "Review entrance" : "Confirm entrance"}</button><button data-action="japanese-address" data-id="${st.id}">Japanese address</button><button data-action="up" data-id="${st.id}" ${i === 0 ? "disabled" : ""}>Move up</button><button data-action="down" data-id="${st.id}" ${i === d.stopIds.length - 1 ? "disabled" : ""}>Move down</button><button data-action="move" data-id="${st.id}">Move to day</button><button data-action="save-visit" data-id="${st.id}">Save to Spots</button><button data-action="show-stop" data-id="${st.id}">Show pin</button><button data-action="remove-stop" data-id="${st.id}">Remove</button></div></article>`;
+  return `<article class="visit ${selected === st.id ? "selected" : ""}" data-stop="${st.id}"><div class="visit-head"><span class="visit-number">${i + 1}</span><div class="visit-title"><h3><button class="name-button" data-action="edit-stop" data-id="${st.id}" lang="ja">${esc(M.name(p))}</button></h3><div class="time">${row.arrival === null ? "Time unknown" : M.timeLabel(d.date, row.visitStart) + " – " + M.timeLabel(d.date, row.departure)}</div><small>${st.durationMinutes} min visit${st.planLocked ? " · Position locked for auto-plan" : ""}${st.fixedStartMinute !== undefined ? " · Booking " + hhmm(st.fixedStartMinute) : ""}${row.arrival !== null && row.visitStart > row.arrival ? " · Arrive " + M.timeLabel(d.date, row.arrival) : ""}</small>${visitHoursHTML(p, d.date, row, st.hoursCheck?.date === d.date ? "" : "Hours unverified")}${hoursCheckSummary(st.hoursCheck, d.date)}</div><button class="drag-handle" aria-label="Drag visit ${i + 1} to reorder" data-drag="${st.id}">⠿</button></div><p>${isOSM(p) ? "Address reference (may be partial): " : ""}${esc(p.address.ja || "Japanese address not supplied")}</p><div><span class="badge ${M.located(p) && p.location.confidence === "high" ? "" : "warn"}">${M.located(p) ? p.location.confidence + " confidence pin" : "Location unknown · list only"}</span><span class="badge">${esc(p.operatingStatus.value === "unknown" ? "Operating status unverified" : p.operatingStatus.value)}</span>${missing ? '<span class="badge warn">Not in current source</span>' : ""}</div>${p.operatingStatus.note ? `<p class="notice">${esc(p.operatingStatus.note)}</p>` : ""}${st.notes ? `<p>${esc(st.notes)}</p>` : ""}${foodNotice(p, current)}${entranceSummary(st)}${localPlanning.visitSection(st)}${japanDepth.visitSection(st,p)}${sourceAccessHTML(p, visitVersion(state, st))}<div class="actions"><button data-action="spending-expense" data-id="${esc(st.id)}">Add expense</button>${together.visitTools(st)}<button data-action="check-visit-hours" data-id="${st.id}">Check hours</button><button data-action="edit-entrance" data-id="${st.id}">${st.entrance ? "Review entrance" : "Confirm entrance"}</button><button data-action="japanese-address" data-id="${st.id}">Japanese address</button><button data-action="up" data-id="${st.id}" ${i === 0 ? "disabled" : ""}>Move up</button><button data-action="down" data-id="${st.id}" ${i === d.stopIds.length - 1 ? "disabled" : ""}>Move down</button><button data-action="move" data-id="${st.id}">Move to day</button><button data-action="save-visit" data-id="${st.id}">Save to Spots</button><button data-action="show-stop" data-id="${st.id}">Show pin</button><button data-action="remove-stop" data-id="${st.id}">Remove</button></div></article>`;
 }
 function wireContext() {
   $("trip-select")?.addEventListener("change", (e) => {
@@ -3059,7 +3068,7 @@ function renderSettings() {
       <p><strong>Planner ${esc(appVersion)}</strong></p><div class="actions">
       <button type="button" data-action="check-app-update" id="check-app-update">Check for update</button>
       <button type="button" data-action="update-open-notes" id="update-open-notes">Update and open Notes</button></div>
-      <p class="muted" id="settings-update-status" role="status"></p></section><h2>Your notebook, backed up</h2><p>Local storage is not a backup. Export your trips, saved places and notes before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${tramTools.settingsHTML()}${japanDepth.settingsSection()}${googleSettings(googleSettingsOpen)}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner ${esc(appVersion)}<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
+      <p class="muted" id="settings-update-status" role="status"></p></section><h2>Your notebook, backed up</h2><p>Local storage is not a backup. Export your trips, saved places, notes and spending before travelling, changing devices or clearing browser storage.</p><div class="actions"><button class="primary" data-action="export-all">Export full backup</button><button data-action="export-backup-zip">Backup + offline source ZIP</button><button data-action="import">Import / restore</button></div>${dayTools.recoveryHTML()}${offlineRegions.settingsHTML()}${stationTools.settingsSection()}${tramTools.settingsHTML()}${japanDepth.settingsSection()}${googleSettings(googleSettingsOpen)}<details open><summary>Preferences</summary><label>Colour theme<select id="setting-theme">${["system", "light", "dark"].map((v) => `<option ${state.settings.theme === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><label>Default travel mode for new segments<select id="setting-mode">${["walk", "train", "drive"].map((v) => `<option ${state.settings.defaultMode === v ? "selected" : ""}>${v}</option>`).join("")}</select></label><p>Change day-length, late-finish and long-walk warnings from a trip’s Planning assumptions panel.</p></details><details><summary>Sources and updates</summary><div id="source-status">${renderSourceStatus()}</div><p>Snapshots are generated from the existing source pipelines. This planner never scrapes. Export time is not venue verification time. A changed feed never silently replaces your saved or scheduled place snapshots.</p><button data-action="refresh-preview">Review saved source changes</button></details><details><summary>Offline use and installation</summary><p>Open online, then in iPhone Safari choose Share → Add to Home Screen. The app and saved trips can work offline before optional sources finish downloading. Discover data is available offline after its first successful load on this device. Use Regional offline maps to download one of the available orientation maps. Earlier Shopping releases are available offline on devices that already retained them. A fresh device loads the current release. The standard street-map background needs a connection. Downloaded regional maps are available separately.</p><p>Browser storage can be evicted. Keep a JSON backup outside this browser. Physical iPhone installation and real GPS still need device verification.</p></details><details><summary>Search services and privacy</summary><p>Map search checks the enabled layers and downloaded data locally. If you submit an online lookup, Photon receives the query. The map search pin is temporary. <a href="https://github.com/komoot/photon#demo-server" target="_blank" rel="noopener">Photon service terms</a></p><p>Nominatim searches for manual stop and origin entry occur only when you submit. Cached results and manual entry remain available. Use the public search endpoint on only one actively searching device. Browser throttling cannot enforce the application-wide one-request-per-second limit across phones.</p><p>Do not submit confidential addresses. GPS is used locally. External direction links open a third-party map. No accounts or automatic device sync.</p><a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim policy</a><p><a href="https://operations.osmfoundation.org/policies/tiles/" target="_blank" rel="noopener">OpenStreetMap tile policy</a></p></details><details><summary>Saved flags from the standalone maps</summary><p>Open each standalone map on the browser where you saved places, choose Export saved / visited, then import that JSON here. Default merge keeps any true flag. Differing values are previewed; unknown IDs remain for later matching. There is no automatic cross-origin sync.</p><div class="actions"><a class="button" href="https://saunachelin-field-guide.wittycob1.chatgpt.site/app/" target="_blank" rel="noopener">Sauna map</a><a class="button" href="https://japan-food-award-map-lm.wittycob1.chatgpt.site/" target="_blank" rel="noopener">Food map</a></div></details><p class="attribution">旅のしおり · Japan Trip Planner ${esc(appVersion)}<br><a href="./icons/map/credits.html" target="_blank" rel="noopener">Map icon credits</a><br>Leaflet and MarkerCluster are bundled locally. © OpenStreetMap contributors. Award facts retain their original source links. Budget and fare estimates use the amounts you enter.</p></section>`;
   tramTools.wireSettings();
   appUpdates?.sync();
   $("google-key-form").onsubmit = event => {
@@ -3181,15 +3190,20 @@ function importDialog(cachedData = null, offerUpdate = screen === "settings") {
           $("confirm-import").onclick = async () => {
             if (preview.already) return close();
             const policy = $("flag-policy")?.value || "merge";
+            const copies = new Map(), spendingToMerge = [];
             const tripUpdateBases = preview.legacy ? [] : data.trips
               .filter(trip => !state.trips.some(saved => saved.id === trip.id))
               .map(trip => [trip.id, tripUpdateBase(data, trip.id)]);
-            if (await commit(s => mergeImport(s, data, preview, policy, (copyId, link) => {
-              const projected = projectCopyUpdate(data, copyId, link);
-              tripUpdateBases.push([copyId, { related: {
-                ...projected.link, baseline:tripUpdateBase(projected.data, copyId),
-              } }]);
-            }), { tripUpdateBases, notesToMerge: data.notes ?? [] })) {
+            if (await commit(s => {
+              mergeImport(s, data, preview, policy, (copyId, link) => {
+                copies.set(link.sourceTripId,{...link,id:copyId});
+                const projected = projectCopyUpdate(data, copyId, link);
+                tripUpdateBases.push([copyId, { related: {
+                  ...projected.link, baseline:tripUpdateBase(projected.data, copyId),
+                } }]);
+              });
+              spendingToMerge.push(...remapSpending(data.spending ?? [],copies));
+            }, { tripUpdateBases, notesToMerge: data.notes ?? [], spendingToMerge })) {
               close();
               toast("Import saved. Existing edits preserved.");
             }
@@ -3390,6 +3404,9 @@ document.addEventListener("click", async (e) => {
         break;
       case "trip-checks":
         showTripChecks(id ? state.trips.find(item => item.id === id) : trip());
+        break;
+      case "spending-expense":
+        await spendingPanel.addExpense(id);
         break;
       case "check-app-update":
         if (appUpdates) await appUpdates.check();

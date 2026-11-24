@@ -9,6 +9,8 @@ import {
 import { bytes } from "../core/shopping-bundle.js";
 import { blank } from "../core/model.js";
 import { mergeNotes, sameSavedNote } from "../core/notes.js";
+import { newLedger } from "../core/spending.js";
+import { mergeSpending, validateLedger } from "../core/spending-contract.js";
 import { photoLimits } from "../core/together.js";
 import { loadBundle, readBounded } from "../core/shopping-bundle.js";
 import { emptyAliases, validateAliases } from "../core/shopping-aliases.js";
@@ -95,6 +97,59 @@ const updateBaseKey = tripId => "trip-update-base:" + tripId;
 export const readTripUpdateBase = tripId => read("state", updateBaseKey(tripId));
 const notesKey = "personal-notes";
 export const readNotes = async () => validateNotes(await read("state", notesKey) ?? []);
+const spendingKey = tripId => "spending:" + tripId;
+const receiptKey = tripId => "spending-receipts:" + tripId;
+export const receiptLimit = Object.freeze({ imageBytes:1600*1024, totalBytes:12*1024*1024, count:64 });
+export function readSpending(tripId) {
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction("state"), store=tx.objectStore("state");
+    const row=store.get(spendingKey(tripId)), photos=store.get(receiptKey(tripId));
+    tx.oncomplete=()=>{
+      try{resolve({revision:row.result?.revision??0,ledger:validateLedger(row.result?.ledger??newLedger()),images:photos.result??[]});}
+      catch(err){reject(err);}
+    };
+    tx.onabort=()=>reject(tx.error||Error("Spending could not be read."));
+  });
+}
+export async function spendingBackups(tripIds) {
+  const rows = await Promise.all(tripIds.map(async tripId=>({tripId,ledger:(await read("state",spendingKey(tripId)))?.ledger})));
+  return rows.filter(row=>row.ledger);
+}
+
+export function saveSpending(tripId, expected, ledger, incomingImages) {
+  validateLedger(ledger);
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction("state","readwrite"), store=tx.objectStore("state");
+    const current=store.get("current"), saved=store.get(spendingKey(tripId)), photos=store.get(receiptKey(tripId));
+    let pending=3, result, failure;
+    current.onsuccess=saved.onsuccess=photos.onsuccess=()=>{
+      if (--pending) return;
+      try {
+        if (!current.result?.value.trips.some(trip=>trip.id===tripId)) throw Error("This trip was removed in another tab.");
+        if ((saved.result?.revision ?? 0)!==expected) throw Error("Spending changed in another tab. Reopen the ledger before saving.");
+        const owners=new Set(ledger.entries.filter(row=>["expense","draft"].includes(row.type)).map(row=>row.id));
+        const images=(incomingImages ?? photos.result ?? []).filter(row=>owners.has(row.entryId));
+        const counts=new Map(), imageIds=new Set();
+        let total=0;
+        for (const row of images) {
+          const next=(counts.get(row.entryId) ?? 0)+1;
+          if (typeof row.id!=="string" || imageIds.has(row.id) || !(row.bytes instanceof Uint8Array) ||
+              !row.bytes.length || row.bytes.length>receiptLimit.imageBytes || next>2)
+            throw Error("Invalid receipt image or more than two images for a transaction.");
+          counts.set(row.entryId,next); imageIds.add(row.id); total+=row.bytes.length;
+        }
+        if (images.length>receiptLimit.count || total>receiptLimit.totalBytes)
+          throw Error("Receipts exceed this trip’s 12 MiB image limit.");
+        result={revision:expected+1,ledger,images};
+        store.put({revision:result.revision,ledger},spendingKey(tripId));
+        if (images.length) store.put(images,receiptKey(tripId));
+        else store.delete(receiptKey(tripId));
+      } catch (error) { failure=error; tx.abort(); }
+    };
+    tx.oncomplete=()=>resolve(result);
+    tx.onabort=()=>reject(failure || tx.error || Error("The spending save could not be completed."));
+  });
+}
 
 export function changeNote(base, next) {
   return new Promise((resolve, reject) => {
@@ -122,7 +177,7 @@ export function changeNote(base, next) {
   });
 }
 
-export function save(value, tripUpdateBases = [], notesToMerge = []) {
+export function save(value, tripUpdateBases = [], notesToMerge = [], spendingToMerge = []) {
   validateState(value);
   validateNotes(notesToMerge);
   return new Promise((resolve, reject) => {
@@ -138,8 +193,22 @@ export function save(value, tripUpdateBases = [], notesToMerge = []) {
         return;
       }
       const tripIds = new Set(value.trips.map(trip => trip.id));
-      for (const trip of r.result?.value.trips ?? [])
-        if (!tripIds.has(trip.id)) store.delete(updateBaseKey(trip.id));
+      for (const trip of r.result?.value.trips ?? []) {
+        if (tripIds.has(trip.id)) continue;
+        store.delete(updateBaseKey(trip.id));
+        store.delete(spendingKey(trip.id));
+        store.delete(receiptKey(trip.id));
+      }
+      for (const {tripId,ledger} of spendingToMerge) {
+        if (!tripIds.has(tripId)) continue;
+        const existing=store.get(spendingKey(tripId));
+        existing.onsuccess=()=>{
+          try {
+            store.put({revision:(existing.result?.revision ?? 0)+1,
+              ledger:mergeSpending(existing.result?.ledger,ledger)},spendingKey(tripId));
+          } catch (error) { message=error.message; tx.abort(); }
+        };
+      }
       for (const [tripId, baseline] of tripUpdateBases)
         if (tripIds.has(tripId)) store.put(baseline, updateBaseKey(tripId));
       if (notesToMerge.length) {

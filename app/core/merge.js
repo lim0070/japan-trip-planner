@@ -1,4 +1,5 @@
 import { clone, id, now, blank } from "./model.js";
+import { validateSpendingBackups } from "./spending-contract.js";
 import {
   validateBackup,
   validateLegacy,
@@ -6,8 +7,8 @@ import {
   validateNotes,
   validateState,
 } from "./contracts.js";
-export const appVersion = "2.11.0";
-export function backup(s, tripId = null, aliases = new Map(), notes = []) {
+export const appVersion = "2.12.0";
+export function backup(s, tripId = null, aliases = new Map(), notes = [], spending = []) {
   const data = clone(s);
   delete data.imports;
   if (tripId) {
@@ -41,6 +42,7 @@ export function backup(s, tripId = null, aliases = new Map(), notes = []) {
     appVersion,
     ...data,
     ...(!tripId && notes.length ? { notes: clone(validateNotes(notes)) } : {}),
+    ...(!tripId && spending.length ? { spending: clone(validateSpendingBackups(spending,s.trips)) } : {}),
   };
 }
 export async function previewImport(s, data) {
@@ -66,7 +68,7 @@ export async function previewImport(s, data) {
       ? `${data.flags.length} flags; ${conflicts} differing records. Default merges true flags without clearing existing flags.`
       : `${data.trips.length} trips, ${data.stops.length} visits, ${data.places.length} places. ${conflicts} existing trip IDs. Different trips are copied with new IDs and existing edits are preserved.${
         data.notes?.length ? ` Full import also merges ${data.notes.length} personal ${data.notes.length === 1 ? "note" : "notes"}. Different versions of a note are kept as copies.` : ""
-      }`,
+      }${data.spending?.length ? ` Includes spending for ${data.spending.length} ${data.spending.length===1?"trip":"trips"}.` : ""}`,
   };
 }
 export function mergeImport(s, data, preview, flagPolicy = "merge", onCopy = null) {

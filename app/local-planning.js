@@ -170,7 +170,7 @@ export function createLocalPlanning({
       <div class="grid2">${amountField("refundYen", "Refund (JPY)", p.refundYen)}
       <label>Refund status<select name="refundStatus">${Object.entries(refundLabels)
         .map(([key, label]) => `<option value="${key}" ${(p.refundStatus || "unknown") === key ? "selected" : ""}>${label}</option>`).join("")}</select></label></div>
-      <p class="muted">Only received refunds count toward net spending.</p>
+      <p class="muted">These balances use your original budget entries. Spending includes those entries and your new purchases. Record new purchases and linked refunds there.</p>
       ${noteField("tax", "Eligibility, retailer and departure checks", p.tax)}${links(["tax", "taxFAQ"])}</details>
       <details><summary>Rail pass comparison</summary>
       ${amountField("passPriceYen", "Pass quote (JPY)", rail.passPriceYen)}
