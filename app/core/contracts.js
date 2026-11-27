@@ -1,4 +1,5 @@
 import { dates, segmentKey } from "./model.js";
+import { readReelBackup } from "./reel-lists.js";
 import { noteLimits } from "./notes.js";
 import { validateSpendingBackups } from "./spending-contract.js";
 const fail = (m) => {
@@ -627,12 +628,16 @@ export function validateBackup(b) {
       appVersion: nonempty,
     })(
       Object.fromEntries(
-        Object.entries(b).filter(([k]) => k !== "dataLicenses" && k !== "notes" && k !== "spending"),
+        Object.entries(b).filter(([k]) => k !== "dataLicenses" && k !== "notes" && k !== "spending" && k !== "reelList"),
       ),
     ) ||
     (Object.hasOwn(b, "dataLicenses") && !licenseTexts(b.dataLicenses))
   )
     fail("Unsupported backup version, fields or limits.");
+  if (Object.hasOwn(b,"reelList")) {
+    if (b.kind !== "full") fail("Only private full backups include reel lists.");
+    readReelBackup(b.reelList);
+  }
   if (Object.hasOwn(b, "notes")) {
     if (b.kind !== "full") fail("Only full notebook backups may contain personal notes.");
     validateNotes(b.notes);

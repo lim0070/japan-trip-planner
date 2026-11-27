@@ -1936,3 +1936,13 @@ body[data-theme="dark"] .discover-stage #map.regional-map-active {
   .bottom-nav { gap:0; padding-inline:4px; }
   .bottom-nav a { min-width:44px; font-size:10px; }
 }
+
+.spot-lists { margin: 1rem 0; }
+.spot-lists h2 { margin-bottom: .4rem; }
+.reel-list h1 { margin-top: 0; }
+.reel-filters { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: 1rem 0; }
+.reel-filters label, .reel-filters select { min-width: 0; }
+.reel-list [aria-pressed="true"] { outline: 2px solid currentColor; outline-offset: -2px; }
+.reel-source { margin: .75rem 0; }
+.reel-evidence { padding-inline-start: 1.2rem; overflow-wrap: anywhere; }
+.reel-card { overflow-wrap: anywhere; }

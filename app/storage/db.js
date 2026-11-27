@@ -7,6 +7,7 @@ import {
   validateRegistry,
 } from "../core/shopping-sources.js";
 import { bytes } from "../core/shopping-bundle.js";
+import { emptyReels, mergeReels, readReelBackup } from "../core/reel-lists.js";
 import { blank } from "../core/model.js";
 import { mergeNotes, sameSavedNote } from "../core/notes.js";
 import { newLedger } from "../core/spending.js";
@@ -95,6 +96,29 @@ export async function load() {
 }
 const updateBaseKey = tripId => "trip-update-base:" + tripId;
 export const readTripUpdateBase = tripId => read("state", updateBaseKey(tripId));
+const reelsKey = "private-reel-list";
+export const readReels = async () => readReelBackup((await read("state",reelsKey)) ?? emptyReels());
+
+function writeReels(store, apply, success, failure) {
+  const old = store.get(reelsKey);
+  old.onsuccess = () => {
+    try {
+      const saved = apply(readReelBackup(old.result ?? emptyReels()));
+      store.put(saved,reelsKey);
+      success(saved);
+    } catch (error) { failure(error); }
+  };
+}
+export function changeReels(apply) {
+  return new Promise((resolve,reject) => {
+    const tx = db.transaction("state","readwrite");
+    let result, failure;
+    writeReels(tx.objectStore("state"),apply,saved => { result = saved; },
+      error => { failure = error; tx.abort(); });
+    tx.oncomplete = () => resolve(result);
+    tx.onabort = () => reject(failure ?? tx.error ?? Error("The reel list could not be saved."));
+  });
+}
 const notesKey = "personal-notes";
 export const readNotes = async () => validateNotes(await read("state", notesKey) ?? []);
 const spendingKey = tripId => "spending:" + tripId;
@@ -177,7 +201,7 @@ export function changeNote(base, next) {
   });
 }
 
-export function save(value, tripUpdateBases = [], notesToMerge = [], spendingToMerge = []) {
+export function save(value, tripUpdateBases = [], notesToMerge = [], spendingToMerge = [], reelsToMerge = null) {
   validateState(value);
   validateNotes(notesToMerge);
   return new Promise((resolve, reject) => {
@@ -211,6 +235,11 @@ export function save(value, tripUpdateBases = [], notesToMerge = [], spendingToM
       }
       for (const [tripId, baseline] of tripUpdateBases)
         if (tripIds.has(tripId)) store.put(baseline, updateBaseKey(tripId));
+      if (reelsToMerge) {
+        const incoming = readReelBackup(reelsToMerge);
+        writeReels(store, saved => mergeReels(saved,incoming.cards,incoming.decisions),() => {},
+          error => { message = error.message; tx.abort(); });
+      }
       if (notesToMerge.length) {
         const notes = store.get(notesKey);
         notes.onsuccess = () => {
